@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.config_check &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.config_check</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.config_check</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">.lib.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">.lib.system_config.lspci_parser</span> <span class="k">import</span> <span class="n">LspciParser</span>
+
+
+<div class="viewcode-block" id="ConfigCheck"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck">[docs]</a><span class="k">class</span> <span class="nc">ConfigCheck</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ConfigCheck.__init__"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.to_str"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.to_str">[docs]</a>    <span class="k">def</span> <span class="nf">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diff</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes difference between configs</span>
+<span class="sd">        @param diff: Difference between 2 configs</span>
+<span class="sd">        @returns: Str with config differences. NoneType if no differences</span>
+<span class="sd">                  detected</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">diff</span><span class="p">:</span>
+            <span class="n">cfg_error</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">diff</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">cfg_error</span> <span class="o">+=</span> <span class="s2">&quot;Entry: </span><span class="si">%s</span><span class="s2">.</span><span class="se">\n</span><span class="s2">Before: [</span><span class="si">%s</span><span class="s2">]</span><span class="se">\n</span><span class="s2">After: [</span><span class="si">%s</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">key</span><span class="p">,</span>
+                    <span class="n">diff</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">diff</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">cfg_error</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.diff_logs"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.diff_logs">[docs]</a>    <span class="k">def</span> <span class="nf">diff_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diff</span><span class="p">):</span>
+        <span class="c1"># For systemlogs only save differences in results JSON file (e.g. new</span>
+        <span class="c1"># error messages during test execution)</span>
+        <span class="n">log_diff</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">diff</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">diff</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+
+                <span class="c1"># line by line comparison</span>
+
+                <span class="n">lines_0</span> <span class="o">=</span> <span class="n">diff</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">lines_0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">lines_0</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">lines_0</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">lines_0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines_1</span> <span class="o">=</span> <span class="n">diff</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">lines_1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">lines_1</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">lines_1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">lines_1</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">before</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">after</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines_1</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines_0</span><span class="p">):</span>
+                        <span class="n">after</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines_1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="n">lines_1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lines_0</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                        <span class="n">before</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines_0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="n">after</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines_1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># Case where lines_0 has more lines than lines_1:</span>
+                <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines_0</span><span class="p">):</span>
+                    <span class="n">before</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines_0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="n">before_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">before</span><span class="p">)</span>
+                <span class="n">after_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">after</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_config_results</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">after_str</span><span class="p">})</span>
+                <span class="n">this_diff</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="n">before_str</span><span class="p">,</span> <span class="n">after_str</span><span class="p">]}</span>
+                <span class="n">log_diff</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">this_diff</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">log_diff</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.compare_configs"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.compare_configs">[docs]</a>    <span class="k">def</span> <span class="nf">compare_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_config</span><span class="p">,</span> <span class="n">end_config</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">user_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares 2 configs and returns diff</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">filter</span><span class="p">:</span>
+            <span class="c1"># Create copies because the filter modifies the dicts</span>
+            <span class="n">start_config</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">start_config</span><span class="p">)</span>
+            <span class="n">end_config</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">end_config</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Apply filter for start_config&quot;</span><span class="p">)</span>
+            <span class="n">start_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_filters</span><span class="p">(</span><span class="n">start_config</span><span class="p">,</span> <span class="n">user_filter</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Apply filter for end_config&quot;</span><span class="p">)</span>
+            <span class="n">end_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_filters</span><span class="p">(</span><span class="n">end_config</span><span class="p">,</span> <span class="n">user_filter</span><span class="p">)</span>
+
+        <span class="n">deviation_allowed</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="ow">and</span> <span class="s1">&#39;deviation_allowed&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+            <span class="n">deviation_allowed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;deviation_allowed&#39;</span><span class="p">]</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Deviation allowed: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">deviation_allowed</span><span class="p">))</span>
+
+        <span class="n">log_diff</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">diffs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="s1">&#39;systeminfo&#39;</span> <span class="ow">in</span> <span class="n">start_config</span> <span class="ow">and</span> <span class="s1">&#39;systeminfo&#39;</span> <span class="ow">in</span> <span class="n">end_config</span><span class="p">:</span>
+            <span class="n">diffs</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">diff_configs</span><span class="p">(</span>
+                <span class="n">start_config</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">],</span>
+                <span class="n">end_config</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">],</span>
+                <span class="n">deviation_allowed</span><span class="o">=</span><span class="n">deviation_allowed</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;systemlogs&#39;</span> <span class="ow">in</span> <span class="n">start_config</span> <span class="ow">and</span> <span class="s1">&#39;systemlogs&#39;</span> <span class="ow">in</span> <span class="n">end_config</span><span class="p">:</span>
+            <span class="n">log_diff</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span>
+                <span class="n">start_config</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">],</span>
+                <span class="n">end_config</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">log_diff</span><span class="p">:</span>
+            <span class="n">changed_logs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_logs</span><span class="p">(</span><span class="n">log_diff</span><span class="p">)</span>
+            <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">changed_logs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">diffs</span><span class="p">,</span> <span class="n">start_config</span><span class="p">,</span> <span class="n">end_config</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.validate_config"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.validate_config">[docs]</a>    <span class="k">def</span> <span class="nf">validate_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_config</span><span class="p">,</span> <span class="n">end_config</span><span class="p">):</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">err</span> <span class="o">+=</span> <span class="n">LspciParser</span><span class="p">()</span><span class="o">.</span><span class="n">validate_lspci_lnksta_lnkcap</span><span class="p">(</span>
+            <span class="n">start_config</span><span class="p">,</span> <span class="n">end_config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">err</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.save_config_results"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.save_config_results">[docs]</a>    <span class="k">def</span> <span class="nf">save_config_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_config</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_results</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.add_config_results"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.add_config_results">[docs]</a>    <span class="k">def</span> <span class="nf">add_config_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the self.config_results dictionary with additional config</span>
+<span class="sd">        results that will later be saved</span>
+<span class="sd">        @config: Dictionary of key / value configuration information to store</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_results</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.save_config"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.save_config">[docs]</a>    <span class="k">def</span> <span class="nf">save_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saves everything that was added using &#39;add_config_results&#39; in a JSON</span>
+<span class="sd">        file</span>
+<span class="sd">        @param file_path: Path where to save JSON file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;saving system config at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">convert_to_ascii</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="n">conf</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.apply_filters"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.apply_filters">[docs]</a>    <span class="k">def</span> <span class="nf">apply_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">user_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply filters to &#39;cfg&#39; dictionary. Includes 3 types of filters:</span>
+<span class="sd">        1. Global filters as defined in config_filter.json</span>
+<span class="sd">        2. Custom filters if applicable as defined in config_filter.json</span>
+<span class="sd">        3. User filters (if provided)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_select_filters</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">user_filter</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s1">&#39;systemlogs&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_systemlogs</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_sel</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_lspci_vvv</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_other_logs</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;systeminfo&#39;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_systeminfo</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cfg</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._parse_json"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._parse_json">[docs]</a>    <span class="k">def</span> <span class="nf">_parse_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read config_filter.json file in cfg directory and return its parsed</span>
+<span class="sd">        contents</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">lib_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+            <span class="n">json_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lib_path</span><span class="p">,</span> <span class="s1">&#39;cfg&#39;</span><span class="p">,</span> <span class="s1">&#39;config_filter.json&#39;</span><span class="p">)</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">load_json</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># Can only import parutil if we&#39;re in a .par file</span>
+            <span class="kn">import</span> <span class="nn">libfb.py.parutil</span> <span class="k">as</span> <span class="nn">parutil</span>
+            <span class="n">lib_path</span> <span class="o">=</span> <span class="s2">&quot;havoc/autotest_testfiles/validation_utils&quot;</span>
+            <span class="n">json_path</span> <span class="o">=</span> <span class="n">parutil</span><span class="o">.</span><span class="n">get_file_path</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lib_path</span><span class="p">,</span> <span class="s2">&quot;cfg/config_filter.json&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">load_json</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;custom&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parsed</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Config check JSON file requires &#39;</span><span class="si">%s</span><span class="s2">&#39; key&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">parsed</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.get_filters"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.get_filters">[docs]</a>    <span class="k">def</span> <span class="nf">get_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_json</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">all_filters</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._select_filters"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._select_filters">[docs]</a>    <span class="k">def</span> <span class="nf">_select_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">user_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all filters from the json config file and select the ones to apply</span>
+<span class="sd">        for this test run</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_filters</span><span class="p">()</span>
+
+        <span class="n">selected_filters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">selected_filters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_filters</span><span class="p">[</span><span class="s1">&#39;global&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Check for each filter in custom_filters list whether it&#39;s applicable</span>
+        <span class="c1"># for this test</span>
+        <span class="n">custom_filters</span> <span class="o">=</span> <span class="n">all_filters</span><span class="p">[</span><span class="s1">&#39;custom&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">custom</span> <span class="ow">in</span> <span class="n">custom_filters</span><span class="p">:</span>
+            <span class="n">include</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_custom_filter</span><span class="p">(</span><span class="n">custom</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">user_filter</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">include</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_apply_custom_filter</span><span class="p">(</span><span class="n">selected_filters</span><span class="p">,</span> <span class="n">custom</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected_filters</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._apply_custom_filter"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._apply_custom_filter">[docs]</a>    <span class="k">def</span> <span class="nf">_apply_custom_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_filters</span><span class="p">,</span> <span class="n">custom</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each custom filter check whether it applies to this test and if does</span>
+<span class="sd">        then add it to the selected_filters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;filter&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">custom</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;All &#39;custom&#39; JSON entries need a &#39;filter&#39; key&quot;</span><span class="p">)</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;systeminfo&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Setting it to empty means that it will be filtered out</span>
+                <span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">if</span> <span class="s1">&#39;systemlogs&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+                        <span class="c1"># when the filter is &quot;&quot; this indicates the user wants to</span>
+                        <span class="c1"># filter out this item from cfg completely for comparision</span>
+                        <span class="c1"># so no more appending of qualified custom filters</span>
+                        <span class="k">continue</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+                        <span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="nb">list</span>
+                    <span class="p">):</span>
+                        <span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
+                            <span class="n">k</span><span class="p">,</span> <span class="p">[]</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">selected_filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">if</span> <span class="s1">&#39;deviation_allowed&#39;</span> <span class="ow">in</span> <span class="n">custom</span><span class="p">:</span>
+            <span class="n">selected_filters</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;deviation_allowed&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">custom</span><span class="p">[</span><span class="s1">&#39;deviation_allowed&#39;</span><span class="p">]</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._check_custom_filter"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._check_custom_filter">[docs]</a>    <span class="k">def</span> <span class="nf">_check_custom_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">user_filter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For a custom filter check whether it applies to either the settings in</span>
+<span class="sd">        the cfg dictionary or the user selected filters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">include</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s1">&#39;condition&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">custom</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;All &#39;custom&#39; JSON entries need a &#39;condition&#39; key&quot;</span><span class="p">)</span>
+
+        <span class="n">cond</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;systeminfo&#39;</span> <span class="ow">in</span> <span class="n">cfg</span> <span class="ow">and</span> <span class="s1">&#39;systeminfo&#39;</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">:</span>
+            <span class="c1">#</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">cfg_k_lower</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">cond_k_lower</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">cfg_k_lower</span> <span class="o">==</span> <span class="n">cond_k_lower</span><span class="p">:</span>
+                    <span class="c1"># @@@ TODO: This is an &#39;OR&#39; filter, so if at least one</span>
+                    <span class="c1"># of the items is found the filter is included. Might</span>
+                    <span class="c1"># want to support &#39;AND&#39; filters, too</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Including system filter for [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cond_k_lower</span><span class="p">))</span>
+                    <span class="n">include</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+        <span class="k">if</span> <span class="s1">&#39;filter_name&#39;</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">user_filter</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">user_f</span> <span class="ow">in</span> <span class="n">user_filter</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s1">&#39;filter_name&#39;</span> <span class="ow">in</span> <span class="n">user_f</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">cond</span><span class="p">[</span><span class="s1">&#39;filter_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user_f</span><span class="p">[</span><span class="s1">&#39;filter_name&#39;</span><span class="p">]:</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                                <span class="s2">&quot;Including user filter for [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                                    <span class="n">user_f</span><span class="p">[</span><span class="s1">&#39;filter_name&#39;</span><span class="p">]</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="n">include</span> <span class="o">=</span> <span class="kc">True</span>
+                            <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">include</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._filter_systemlogs"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._filter_systemlogs">[docs]</a>    <span class="k">def</span> <span class="nf">_filter_systemlogs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filters the syslog and removes items that are in the filter list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;dmesg_errors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># Parsing kernel log</span>
+        <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;syslog_errors&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;syslog_errors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">return</span> <span class="n">cfg</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cfg</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;syslog_errors&quot;</span><span class="p">]</span>
+        <span class="n">syslog_multiline</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)&#39;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s1">&#39;\n\1&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="n">filtered_syslog</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">regex_singleline</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;^(?P&lt;month&gt;[a-zA-Z]</span><span class="si">{3}</span><span class="s1">)\s+(?P&lt;day&gt;\d\d?)\s&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;(?P&lt;hour&gt;\d\d)\:(?P&lt;minute&gt;\d\d):(?P&lt;second&gt;\d\d)&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;\s+(?P&lt;host&gt;[a-zA-Z0-9.-_]+)\s+(?P&lt;level&gt;[a-zA-Z0-9\/_-]+)&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;:\s+\[\s*(?P&lt;time&gt;[0-9.]+)\]\s+(?P&lt;message&gt;.+)$&#39;</span><span class="p">,</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="n">ignore_string</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="s1">&#39;syslog_errors&#39;</span><span class="p">]</span>
+        <span class="c1"># The call traces that contain the frames mentioned</span>
+        <span class="c1"># in the custom filter &#39;syslog_errors_call_trace&#39;</span>
+        <span class="c1"># are getting removed</span>
+        <span class="n">ignore_trace</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">stack_frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">call_trace_filter_on</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;syslog_errors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">syslog_multiline</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">regex_singleline</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">call_trace_filter_on</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ignore_string</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="n">ignore_trace</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="s2">&quot;Call Trace&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="n">call_trace_filter_on</span><span class="p">:</span>
+                    <span class="n">call_trace_filter_on</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">stack_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;end trace&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="n">call_trace_filter_on</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ignore_string</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">ignore</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ignore</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">call_trace_filter_on</span><span class="p">:</span>
+                <span class="n">filtered_syslog</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_trace</span><span class="p">:</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;syslog_errors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stack_frames</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;syslog_errors&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filtered_syslog</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cfg</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._filter_sel"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._filter_sel">[docs]</a>    <span class="k">def</span> <span class="nf">_filter_sel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filters the SEL log and removes items that are in the filter list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sel_elist&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;sel_elist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">cfg</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;sel_elist&quot;</span><span class="p">]</span>
+        <span class="n">filtered_string</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">regex_singleline</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;^\s*([0-9a-f]+)\s+\|\s+(\d\d)\/(\d\d)\/(?P&lt;year&gt;\d\d\d\d)&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;\s+\|\s+\d\d\:\d\d:\d\d\s+\|\s+(?P&lt;title&gt;[\w\ ]*)\s+\|\s+&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;(?P&lt;desc&gt;[\w\ ]*)\s+\|\s+(?P&lt;state&gt;[\w\ ]*)&#39;</span><span class="p">,</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="c1"># The following entries are not treated as errors</span>
+        <span class="n">ignore_entries</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="s1">&#39;sel_elist&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">regex_singleline</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">ignore_entries</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span> <span class="ow">or</span> \
+                            <span class="n">entry</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;desc&#39;</span><span class="p">):</span>
+                        <span class="n">ignore</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ignore</span><span class="p">:</span>
+                <span class="n">filtered_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> | </span><span class="si">%s</span><span class="s2"> | </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">),</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;desc&#39;</span><span class="p">),</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">filtered_string</span><span class="p">:</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;sel_elist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filtered_string</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systemlogs&quot;</span><span class="p">][</span><span class="s2">&quot;sel_elist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">cfg</span></div>
+
+    <span class="k">def</span> <span class="nf">_filter_lspci_vvv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lspci_vvv&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="s1">&#39;lspci_vvv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">cfg</span>
+
+        <span class="k">if</span> <span class="s1">&#39;lspci_vvv&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]:</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="n">LspciParser</span><span class="p">()</span><span class="o">.</span><span class="n">filter_data</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="s1">&#39;lspci_vvv&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="s1">&#39;lspci_vvv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered</span>
+        <span class="k">return</span> <span class="n">cfg</span>
+
+<div class="viewcode-block" id="ConfigCheck._filter_other_logs"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._filter_other_logs">[docs]</a>    <span class="k">def</span> <span class="nf">_filter_other_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Applies filters to systemlogs entries in configuration data. Removes</span>
+<span class="sd">        items that are in the filter list for the systemlogs entry</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># List of entries that are filtered separately</span>
+        <span class="n">special_filters</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sel_elist&#39;</span><span class="p">,</span> <span class="s1">&#39;syslog_errors&#39;</span><span class="p">,</span> <span class="s1">&#39;lspci_vvv&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">log_key</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">log_key</span> <span class="ow">in</span> <span class="n">special_filters</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">log_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">]:</span>
+                <span class="n">ignore_strings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">log_key</span><span class="p">]</span>
+                <span class="n">log_filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_generic</span><span class="p">(</span>
+                    <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">log_key</span><span class="p">],</span> <span class="n">ignore_strings</span>
+                <span class="p">)</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systemlogs&#39;</span><span class="p">][</span><span class="n">log_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_filtered</span>
+        <span class="k">return</span> <span class="n">cfg</span></div>
+
+    <span class="k">def</span> <span class="nf">_filter_generic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg_item</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
+        <span class="c1"># Initialize to empty string, then only add items that are not</span>
+        <span class="c1"># filtered</span>
+        <span class="n">cfg_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cfg_item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">filters</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">ignore</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="c1"># Found filtered string in line, so ignore this line</span>
+                    <span class="n">ignore</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore</span><span class="p">:</span>
+                <span class="n">cfg_filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg_filtered</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_filter_systeminfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+        <span class="c1"># Some of these values can change during a reboot / powercycle</span>
+        <span class="c1"># Set them to an empty string to filter them out during config compare</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">]</span>
+        <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_systeminfo</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">],</span> <span class="n">filters</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cfg</span>
+
+<div class="viewcode-block" id="ConfigCheck.filter_systeminfo"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.filter_systeminfo">[docs]</a>    <span class="k">def</span> <span class="nf">filter_systeminfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is used to filter the global keys of systeminfo keys from the</span>
+<span class="sd">        collected config keys. The systeminfo dict contains keys with values of</span>
+<span class="sd">        different types such as string, list, or dict. So using this function, we</span>
+<span class="sd">        handle the filtering of the keys depending on the value&#39;s type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_list_diffs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># To check if the filter&#39;s key is present in the collected systeminfo keys.</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="c1"># When the values of the key are in the list form.</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_covert_listdict_to_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">filters</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="c1"># When the vlaues of the key are in the dict form and the filter&#39;s</span>
+                <span class="c1"># values are in the dict form as well.</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_systeminfo</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="c1"># When the vlaues of the key are in the dict form and the filter&#39;s</span>
+                <span class="c1"># values are in the string form.</span>
+                <span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># When the values of the key are in the dict within a string</span>
+                    <span class="c1"># of list.</span>
+                    <span class="n">new_list_diffs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_list_diffs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">new_list_diffs</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
+                        <span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_covert_listdict_to_dict</span><span class="p">(</span>
+                            <span class="n">new_list_diffs</span><span class="p">,</span> <span class="n">filters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                        <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                                <span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="nb">filter</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="nb">filter</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># When the values of the key are in the string form.</span>
+                        <span class="n">cfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">cfg</span></div>
+
+<div class="viewcode-block" id="ConfigCheck._covert_listdict_to_dict"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck._covert_listdict_to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">_covert_listdict_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used to convert the list of dicts to dicts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_list_diffs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfg</span><span class="p">)):</span>
+            <span class="n">new_list_diffs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filter_systeminfo</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">filters</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_list_diffs</span></div>
+
+<div class="viewcode-block" id="ConfigCheck.filter_dmidecode"><a class="viewcode-back" href="../../../../havoc.autotest_testfiles.validation_utils.html#havoc.autotest_testfiles.validation_utils.config_check.ConfigCheck.filter_dmidecode">[docs]</a>    <span class="k">def</span> <span class="nf">filter_dmidecode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dmidecode_list</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filters</span><span class="p">()[</span><span class="s1">&#39;global&#39;</span><span class="p">])</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s1">&#39;dmidecode_bios&#39;</span><span class="p">]</span>
+        <span class="n">filtered_dmidecode_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dmidecode_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                    <span class="n">item</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">filtered_dmidecode_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">filtered_dmidecode_list</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.qsfp_dominfo_lib &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.qsfp_dominfo_lib</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.qsfp_dominfo_lib</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Library for reading DOM information.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># Runs wedge_qsfp_util on the host. Extracts require fields and return</span>
+<span class="c1"># back dictionary. Sample output of the wedge_qsfp_util at P57136534</span>
+<div class="viewcode-block" id="get_qsfp_util_details"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.qsfp_dominfo_lib.get_qsfp_util_details">[docs]</a><span class="k">def</span> <span class="nf">get_qsfp_util_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/wedge_qsfp_util&quot;</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="n">command</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">raw_qsfp_dom</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="s2">&quot;not present&quot;</span> <span class="ow">in</span> <span class="n">raw_qsfp_dom</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Information could not be retrived for port </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">cdr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;TX:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">cdr_support</span> <span class="o">=</span> <span class="n">cdr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;TX:\s+\w+&quot;</span><span class="p">,</span> <span class="n">cdr_support</span><span class="p">)</span>
+        <span class="n">TX_cdr_support</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;RX:\s+\w+&quot;</span><span class="p">,</span> <span class="n">cdr_support</span><span class="p">)</span>
+        <span class="n">RX_cdr_support</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;ID:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Status:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Fault:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Fault&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Temp:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vcc:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Vcc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Rx\sPower:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Rx_Power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Tx\sBias:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Tx_Bias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Reserved\sSet\s3:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Tx_Reserved_Set_3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Reserved\sSet\s4:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Tx_Reserved_Set_4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Reserved\sSet\s5:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Tx_Reserved_Set_5&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vendor\sDefined:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;InterruptFlag_Vendor_Defined&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Temperature:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Supply\s+Voltage:\s+(\d+\.\d+\sV)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;SupplyVoltage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;TX\s+disable\s+bits:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;TX_disable_bits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;RX\s+rate\s+select\s+bits:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;RX_rate_select_bits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Rate\s+select\s+is\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Rate_select&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;TX\s+rate\s+select\s+bits:\s(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;TX_rate_select_bits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Connector:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Connector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Spec\s+compliance:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Spec_compliance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Encoding:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Encoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Nominal\s+Bit\s+Rate:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Nominal_Bit_Rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;MBps&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Ext\s+rate\s+select\s+compliance:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Ext_rate_select_compliance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Device\s+Tech:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Device_Tech&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Ext\s+Module:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Ext_Module&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength\s+tolerance:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Wavelength_tolerance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Max\s+case\s+temp:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Max_case_temp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;CC_BASE:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;CC_BASE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Options:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;DOM\s+Type:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;DOM_Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Enhanced\s+Options:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Enhanced_Options&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Reserved:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Reserved&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;CC_EXT:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;CC_EXT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vendor:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Vendor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vendor\s+PN:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Vendor_PN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vendor\s+Rev:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Vendor_Rev&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vendor\s+SN:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Vendor_SN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Date\s+Code:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;Date_Code&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;CDR bits:\s+(.*)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;CDR_bits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;CDR_Tx_support&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TX_cdr_support</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;CDR_Rx_support&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RX_cdr_support</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Channel\s+1:\s+(\d+\.\d+mW)\s+(\d+\.\d+mA)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_1_rx_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_1_tx_bias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Channel\s+2:\s+(\d+\.\d+mW)\s+(\d+\.\d+mA)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_2_rx_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_2_tx_bias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Channel\s+3:\s+(\d+\.\d+mW)\s+(\d+\.\d+mA)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_3_rx_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_3_tx_bias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Channel\s+4:\s+(\d+\.\d+mW)\s+(\d+\.\d+mA)&#39;</span><span class="p">,</span> <span class="n">raw_qsfp_dom</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_4_rx_power&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">qsfp_dom_dictionary</span><span class="p">[</span><span class="s1">&#39;channel_4_tx_bias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">qsfp_dom_dictionary</span></div>
+
+
+<div class="viewcode-block" id="check_supply_voltage"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.qsfp_dominfo_lib.check_supply_voltage">[docs]</a><span class="k">def</span> <span class="nf">check_supply_voltage</span><span class="p">(</span>
+        <span class="n">supply_voltage</span><span class="p">,</span>
+        <span class="n">supply_voltage_minimum</span><span class="p">,</span>
+        <span class="n">supply_voltage_maximum</span><span class="p">):</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+\.\d+).*&quot;</span><span class="p">,</span> <span class="n">supply_voltage</span><span class="p">)</span>
+    <span class="n">supply_voltage_value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">supply_voltage_minimum</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="n">supply_voltage_value</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">status</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">supply_voltage_value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="n">supply_voltage_maximum</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">status</span></div>
+
+
+<span class="c1"># The function assumes fboss is installed. Return all the port details in the</span>
+<span class="c1"># form of a dictionary. Sample fboss output at P57174442</span>
+<div class="viewcode-block" id="get_port_status"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.qsfp_dominfo_lib.get_port_status">[docs]</a><span class="k">def</span> <span class="nf">get_port_status</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;/usr/local/bin/fboss port status&#39;</span>
+    <span class="n">portstat</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">portstat</span> <span class="o">=</span> <span class="n">portstat</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">port_details</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/\d+/&#39;</span><span class="p">,</span> <span class="n">portstat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">lastport</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+    <span class="c1"># First two lines of the output has fields</span>
+    <span class="n">totalports</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lastport</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">totalports</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">patern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/</span><span class="si">%d</span><span class="s1">/&#39;</span> <span class="o">%</span> <span class="n">i</span>
+        <span class="n">port_details</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">portstat</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\S+&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">port_details</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="s2">&quot;transceiver&quot;</span><span class="p">:</span> <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                    <span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="n">out</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                <span class="p">}</span>
+    <span class="k">return</span> <span class="n">port_details</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

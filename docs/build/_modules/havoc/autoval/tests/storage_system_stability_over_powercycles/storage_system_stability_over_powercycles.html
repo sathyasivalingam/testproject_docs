@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2016-present, Facebook, Inc.</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Description     : This test verifies the system stability by performing various</span>
+<span class="c1">#                   power cycle test and triggering FIO jobs at every</span>
+<span class="c1">#                   cycle iteration.</span>
+<span class="c1"># TestCase IDs    : UHDDT_006</span>
+<span class="c1"># ==============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="StorageSystemStabilityOverPowercycles"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.StorageSystemStabilityOverPowercycles">[docs]</a><span class="k">class</span> <span class="nc">StorageSystemStabilityOverPowercycles</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Storage System Stability over Powercycles</span>
+
+<span class="sd">    This test performs system stability test using fio jobs (write &amp; verify)</span>
+<span class="sd">    over different kinds of power cycle and as part of this test drive</span>
+<span class="sd">    data integrity test is also covered.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="StorageSystemStabilityOverPowercycles.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.StorageSystemStabilityOverPowercycles.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes Storage System Stability Tests.</span>
+
+<span class="sd">        This method initializes the basic configuration for logging</span>
+<span class="sd">        information, read and store the input details</span>
+<span class="sd">        gathered from input file and assigns the variables &quot;cycle_types&quot;,</span>
+<span class="sd">        &quot;write_control_file&quot; and &quot;read_control_file&quot; with the value</span>
+<span class="sd">        from &quot;test_control&quot; dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StorageSystemStabilityOverPowercycles</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">default_cycle_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dc_cycle&quot;</span><span class="p">,</span> <span class="s2">&quot;ac_cycle&quot;</span><span class="p">,</span> <span class="s2">&quot;jbod_power_cycle&quot;</span><span class="p">,</span> <span class="s2">&quot;drive_power_cycle&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;cycle_type&#39;</span><span class="p">,</span>
+            <span class="n">default_cycle_types</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_control_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;write_control_file&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_control_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;read_control_file&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="StorageSystemStabilityOverPowercycles.setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.StorageSystemStabilityOverPowercycles.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prerequistie for Storage System Stability Test.</span>
+
+<span class="sd">        This method creates log directories for the test,</span>
+<span class="sd">        verifies the DUT is accessible by both Inband and OutofBand, stores the</span>
+<span class="sd">        OpenBMC and System configuration before the testcase execution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StorageSystemStabilityOverPowercycles</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span>
+            <span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StorageSystemStabilityOverPowercycles.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.StorageSystemStabilityOverPowercycles.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates Storage System Stability over Powercycles.</span>
+
+<span class="sd">        This method verifies the reachable of DUT and OpenBMC, runs various</span>
+<span class="sd">        power cycle test on host/open bmc and executes the read, write and</span>
+<span class="sd">        verify fio jobs on the host.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When fails in Ping test for OpenBMC.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;storage system stability&quot;</span><span class="p">)</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;ping </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Start the autotests&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cycle_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_types</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;storage/drive/storage_system_stability&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_control_file</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">260000</span>
+            <span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;storage/drive/storage_system_stability&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_control_file</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">260000</span>
+            <span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_cycle_stress</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">cycle_type</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;power cycle the system with </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cycle_type</span><span class="p">))</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;storage/drive/storage_system_stability&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_control_file</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">260000</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StorageSystemStabilityOverPowercycles.power_cycle_stress"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.StorageSystemStabilityOverPowercycles.power_cycle_stress">[docs]</a>    <span class="k">def</span> <span class="nf">power_cycle_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">cycle_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Power cycle Stress</span>
+
+<span class="sd">        This method executes the power test command on DUT/OpenBMC based on</span>
+<span class="sd">        the cycle type.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        host : :obj: &#39;host&#39;</span>
+<span class="sd">            Host on which the power cycle commands to be executed.</span>
+<span class="sd">        cycle_type: String</span>
+<span class="sd">            Type of power cycle to be executed on host/openbmc.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            When fails to reconnect to the host after power cycle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;dc_cycle&#39;</span><span class="p">):</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_reset</span><span class="p">()</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;ac_cycle&#39;</span><span class="p">):</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ac_cycle</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;warm_reboot&#39;</span><span class="p">):</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;reboot&#39;</span><span class="p">):</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;jbod_power_cycle&#39;</span><span class="p">):</span>
+            <span class="n">enclosure_cycle_ctrl_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;jbod_power_cycle_control&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;control&quot;</span>
+            <span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;storage/enclosure/enclosure_powercycle&quot;</span><span class="p">,</span>
+                <span class="n">enclosure_cycle_ctrl_file</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span>
+            <span class="p">)</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;drive_power_cycle&#39;</span><span class="p">):</span>
+            <span class="n">drive_powercycle_ctrl_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;drive_powercycle_control&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;control_1_iteration&quot;</span>
+            <span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;storage/drive/drive_powercycle&quot;</span><span class="p">,</span>
+                <span class="n">drive_powercycle_ctrl_file</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="StorageSystemStabilityOverPowercycles.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.StorageSystemStabilityOverPowercycles.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cleanup for Storage System Stability Tests.</span>
+
+<span class="sd">        This method collects and saves the DUT and OpenBMC Configurations and</span>
+<span class="sd">        compares between the pre and post test configurations, and saves the</span>
+<span class="sd">        test result and command metrics information.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When fails to collect the configuration from DUT and/or OpenBMC and</span>
+<span class="sd">            mismatch values between the pre and post configuration for DUT and</span>
+<span class="sd">            OpenBMC.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StorageSystemStabilityOverPowercycles</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span>
+            <span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.storage_system_stability_over_powercycles.html#havoc.autoval.tests.storage_system_stability_over_powercycles.storage_system_stability_over_powercycles.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">StorageSystemStabilityOverPowercycles</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1295 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models Package &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="havoc.autoval.lib.host.system Package" href="havoc.autoval.lib.host.system.html" />
+    <link rel="prev" title="havoc.autoval.lib.host Package" href="havoc.autoval.lib.host.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">havoc</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="havoc.html">havoc package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="havoc.autoval.html">havoc.autoval Package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.cli.html">havoc.autoval.cli Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.e2e_tests.html">havoc.autoval.e2e_tests Package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="havoc.autoval.lib.html">havoc.autoval.lib Package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a><ul class="current">
+<li class="toctree-l6 current"><a class="current reference internal" href="#">havoc.autoval.lib.host.models Package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_big_basin"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BMCBigBasin</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_bryce_canyon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCBryceCanyon</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_glacierpointv2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCGlacierPointV2</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_lightning"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCLightning</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_lightningv2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BMCLightningV2</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_northdome"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCNorthDome</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_tioga_pass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCTiogaPass</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_wedge"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCWedge</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_yosemite"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCYosemite</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.models.openbmc_yosemitev2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCYosemiteV2</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.system.html">havoc.autoval.lib.host.system Package</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.autotest"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Autotest</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_abstract"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionAbstract</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_dispatcher"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionDispatcher</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionFactory</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.credentials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Credentials</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#cyborg-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Cyborg</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.host"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Host</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#hwc-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">HWC</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.inband"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Inband</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.ipmi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPMI</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.local"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LocalConn</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.oob"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OOB</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.openbmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMC</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.openbmc_rest_api"><code class="xref py py-mod docutils literal notranslate"><span class="pre">REST</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.ssh"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SSH</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.sshpass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SSHPassConn</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.sys_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SysUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#thriftconn-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ThriftConn</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.power.html">havoc.autoval.lib.power Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.html#module-havoc.autoval.lib.test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.tests.html">havoc.autoval.tests Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">havoc</a> &raquo;</li>
+        
+          <li><a href="havoc.html">havoc package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.html">havoc.autoval Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.html">havoc.autoval.lib Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/havoc.autoval.lib.host.models.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="havoc-autoval-lib-host-models-package">
+<h1>havoc.autoval.lib.host.models Package<a class="headerlink" href="#havoc-autoval-lib-host-models-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_big_basin">
+<span id="bmcbigbasin-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">BMCBigBasin</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_big_basin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_big_basin.</code><code class="sig-name descname">BMCBigBasin</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass" title="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.ac_cycle">
+<code class="sig-name descname">ac_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">reboot_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.ac_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.ac_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>This raw command is sled cycle which tends to lose
+connection to oob, Not appropriate for test cases where bmc
+needs to be intact</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.bmc_health_check">
+<code class="sig-name descname">bmc_health_check</code><span class="sig-paren">(</span><em class="sig-param">no_of_gpus=8</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.bmc_health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.bmc_health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if the bmc is up and all GPU are populated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.cycle">
+<code class="sig-name descname">cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">post_health_check=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.get_sdr_sensor_data">
+<code class="sig-name descname">get_sdr_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.get_sdr_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.get_sdr_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.get_slot_info">
+<code class="sig-name descname">get_slot_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.get_slot_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.get_slot_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.run_cycle_command">
+<code class="sig-name descname">run_cycle_command</code><span class="sig-paren">(</span><em class="sig-param">cycle_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_big_basin.html#BMCBigBasin.run_cycle_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.run_cycle_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_bryce_canyon">
+<span id="openbmcbrycecanyon-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCBryceCanyon</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_bryce_canyon" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_bryce_canyon.</code><code class="sig-name descname">OpenBMCBryceCanyon</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc.OpenBMC" title="havoc.autoval.lib.host.openbmc.OpenBMC"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.openbmc.OpenBMC</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bc_ac_cycle">
+<code class="sig-name descname">bc_ac_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.bc_ac_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bc_ac_cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bios_post_flash">
+<code class="sig-name descname">bios_post_flash</code><span class="sig-paren">(</span><em class="sig-param">current_reboot</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.bios_post_flash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bios_post_flash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bmc_health_check">
+<code class="sig-name descname">bmc_health_check</code><span class="sig-paren">(</span><em class="sig-param">last_reboot=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.bmc_health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bmc_health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is to check if all the required daemons like healthd, fscd,
+sensord are running and started atleast2 mins ago.
+This check for services if they started 2 mins ago is to makesure the
+daemons have started and collected the required information atleast one
+time and out havoc tests doesnt fails sensord non-reporting errors</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.clear_boot_order_cmos">
+<code class="sig-name descname">clear_boot_order_cmos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.clear_boot_order_cmos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.clear_boot_order_cmos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.dpb_fru_list">
+<code class="sig-name descname">dpb_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.dpb_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.dpb_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.dpb_sensor_data">
+<code class="sig-name descname">dpb_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.dpb_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.dpb_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.force_reboot">
+<code class="sig-name descname">force_reboot</code><span class="sig-paren">(</span><em class="sig-param">timeout=600</em>, <em class="sig-param">filter_errors=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.force_reboot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.force_reboot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.forced_bmc_reset">
+<code class="sig-name descname">forced_bmc_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.forced_bmc_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.forced_bmc_reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_update_bmc">
+<code class="sig-name descname">fw_update_bmc</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.fw_update_bmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_update_bmc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_update_rom">
+<code class="sig-name descname">fw_update_rom</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.fw_update_rom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_update_rom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_util_scc">
+<code class="sig-name descname">fw_util_scc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.fw_util_scc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_util_scc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_config">
+<code class="sig-name descname">get_config</code><span class="sig-paren">(</span><em class="sig-param">log_dir</em>, <em class="sig-param">test_start_time</em>, <em class="sig-param">start=True</em>, <em class="sig-param">bios_dump_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves all configuration data about this OpenBMC system and returns
+it in a dictionary.</p>
+<p>&#64;param log_dir: Will store logfile contents in this directory
+&#64;param Float test_start_time: epoch time when test begins
+&#64;param start: Indicates whether this is the start or the end of the test
+&#64;param cfg_filter: object that contains config check filters
+&#64;return {}: dictionary with config check info</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_config_details">
+<code class="sig-name descname">get_config_details</code><span class="sig-paren">(</span><em class="sig-param">log_dir</em>, <em class="sig-param">test_start_time</em>, <em class="sig-param">start=True</em>, <em class="sig-param">bios_dump_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_config_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_config_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_critical_services">
+<code class="sig-name descname">get_critical_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_critical_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_critical_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a list of services that are always expected to
+run on the openBMC BryceCanyon System</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_ecc">
+<code class="sig-name descname">get_ecc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_ecc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_ecc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_enclosure_util_error">
+<code class="sig-name descname">get_enclosure_util_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_enclosure_util_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_enclosure_util_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_fru_no">
+<code class="sig-name descname">get_fru_no</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_fru_no"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_fru_no" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_full_fruid_list">
+<code class="sig-name descname">get_full_fruid_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_full_fruid_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_full_fruid_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_full_sensor_data">
+<code class="sig-name descname">get_full_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_full_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_full_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_fw_util_options">
+<code class="sig-name descname">get_fw_util_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_fw_util_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_fw_util_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_slot_info">
+<code class="sig-name descname">get_slot_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.get_slot_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_slot_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.health_check">
+<code class="sig-name descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.health_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_fru_list">
+<code class="sig-name descname">iom_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.iom_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_scc_dpb_fruid">
+<code class="sig-name descname">iom_scc_dpb_fruid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.iom_scc_dpb_fruid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_scc_dpb_fruid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_scc_dpb_sensor">
+<code class="sig-name descname">iom_scc_dpb_sensor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.iom_scc_dpb_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_scc_dpb_sensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_sensor_data">
+<code class="sig-name descname">iom_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.iom_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_all_options">
+<code class="sig-name descname">log_util_all_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.log_util_all_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_all_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_dpb">
+<code class="sig-name descname">log_util_dpb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.log_util_dpb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_dpb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_iom">
+<code class="sig-name descname">log_util_iom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.log_util_iom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_iom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_scc">
+<code class="sig-name descname">log_util_scc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.log_util_scc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_scc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.openbmc_flashcp_prerequisite">
+<code class="sig-name descname">openbmc_flashcp_prerequisite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.openbmc_flashcp_prerequisite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.openbmc_flashcp_prerequisite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.openbmc_flashcp_upgrade_cmd">
+<code class="sig-name descname">openbmc_flashcp_upgrade_cmd</code><span class="sig-paren">(</span><em class="sig-param">subfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.openbmc_flashcp_upgrade_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.openbmc_flashcp_upgrade_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.parse_ecc_errors">
+<code class="sig-name descname">parse_ecc_errors</code><span class="sig-paren">(</span><em class="sig-param">log</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.parse_ecc_errors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.parse_ecc_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check ecc value for checking openbmc current health
+Report any correctable or uncorrectable error logged on the BMC
+as Failure. This check will let us monitor the correctable
+uncorrectable errors</p>
+<p>&#64;param {} log: contains correctable ECC and uncorrectable ECC</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.parse_enclosure_error">
+<code class="sig-name descname">parse_enclosure_error</code><span class="sig-paren">(</span><em class="sig-param">log</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.parse_enclosure_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.parse_enclosure_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enclosure error check.</p>
+<p>&#64;param String log: enclosure errors output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.post_cycle_check">
+<code class="sig-name descname">post_cycle_check</code><span class="sig-paren">(</span><em class="sig-param">filter_errors=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.post_cycle_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.post_cycle_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.reboot">
+<code class="sig-name descname">reboot</code><span class="sig-paren">(</span><em class="sig-param">timeout=600</em>, <em class="sig-param">filter_errors=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.reboot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.reboot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.restart_usb0_interface">
+<code class="sig-name descname">restart_usb0_interface</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.restart_usb0_interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.restart_usb0_interface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.scc_fru_list">
+<code class="sig-name descname">scc_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.scc_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.scc_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.scc_sensor_data">
+<code class="sig-name descname">scc_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.scc_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.scc_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.usb0_access_check">
+<code class="sig-name descname">usb0_access_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.usb0_access_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.usb0_access_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.validate_fan_speed">
+<code class="sig-name descname">validate_fan_speed</code><span class="sig-paren">(</span><em class="sig-param">percentage_got</em>, <em class="sig-param">percentage_given_byuser</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.validate_fan_speed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.validate_fan_speed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.validate_version">
+<code class="sig-name descname">validate_version</code><span class="sig-paren">(</span><em class="sig-param">fw_ver_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.validate_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.validate_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.verify_flash_sensors">
+<code class="sig-name descname">verify_flash_sensors</code><span class="sig-paren">(</span><em class="sig-param">out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_bryce_canyon.html#OpenBMCBryceCanyon.verify_flash_sensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.verify_flash_sensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_glacierpointv2">
+<span id="openbmcglacierpointv2-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCGlacierPointV2</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_glacierpointv2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_glacierpointv2.</code><code class="sig-name descname">OpenBMCGlacierPointV2</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2" title="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2</span></code></a></p>
+<p>Sideband methods to execute on GPV2 server.</p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.device_fru_list">
+<code class="sig-name descname">device_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.device_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.device_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>execute fruid-util command on all the 12 pcie devices on gpv2
+returns fruid from all devices</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_bic">
+<code class="sig-name descname">fw_update_glacierpoint_bic</code><span class="sig-paren">(</span><em class="sig-param">bmc_binary_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.fw_update_glacierpoint_bic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs bic fw-update of the gpv2 switch slot
+Return value of this function is the console output of fw-update command</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_bicbl">
+<code class="sig-name descname">fw_update_glacierpoint_bicbl</code><span class="sig-paren">(</span><em class="sig-param">bmc_binary_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.fw_update_glacierpoint_bicbl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_bicbl" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs bicbl fw-update of the gpv2 switch slot
+Return value of this function is the console output of fw-update command</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_cpld">
+<code class="sig-name descname">fw_update_glacierpoint_cpld</code><span class="sig-paren">(</span><em class="sig-param">bmc_binary_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.fw_update_glacierpoint_cpld"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_cpld" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the cpld fw update for GPv2 switch slot
+Executes the ac_cycle(gpv2 slot)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_pcie_switch">
+<code class="sig-name descname">fw_update_pcie_switch</code><span class="sig-paren">(</span><em class="sig-param">bmc_binary_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.fw_update_pcie_switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_pcie_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the pcie_sw fw update for GPv2 switch slot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_cpld_glacierpoint_fw_version">
+<code class="sig-name descname">get_cpld_glacierpoint_fw_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_cpld_glacierpoint_fw_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_cpld_glacierpoint_fw_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the GPv2 slot CPLD Version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_full_fruid_list">
+<code class="sig-name descname">get_full_fruid_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_full_fruid_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_full_fruid_list" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Extract and return</dt><dd><p>all the YV2 server related fruid
++ GPV2 switch fruid
++ 12 devices fruid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_fw_util_options">
+<code class="sig-name descname">get_fw_util_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_fw_util_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_fw_util_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return YV2 related fw-util + GPv2 slot fw-util</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_glacierpoint_bic_version">
+<code class="sig-name descname">get_glacierpoint_bic_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_glacierpoint_bic_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_glacierpoint_bic_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the GPv2 slot Bridge-IC Version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_glacierpoint_bicbl_version">
+<code class="sig-name descname">get_glacierpoint_bicbl_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_glacierpoint_bicbl_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_glacierpoint_bicbl_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the GPv2 slot Bridge-IC Bootloader Version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_pciesw_fw_version">
+<code class="sig-name descname">get_pciesw_fw_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_pciesw_fw_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_pciesw_fw_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the GPv2 slot pcie_sw Version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_slot_for_gpv2">
+<code class="sig-name descname">get_slot_for_gpv2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.get_slot_for_gpv2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_slot_for_gpv2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Glacier PointV2 is attached to a twinlake yosemitev2 host.
+The pairs are:
+Slot2 host -&gt; Slot1 GPv2
+Slot4 host -&gt; Slot3 GPv2
+Replacing slot id is necessary to run commands on GPv2
+through openbmc</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.gpv2_negative_cycle">
+<code class="sig-name descname">gpv2_negative_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">reboot_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.gpv2_negative_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.gpv2_negative_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check negative test to make sure GPv2 returns error</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.gpv2power">
+<code class="sig-name descname">gpv2power</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">cycle_type</em>, <em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.gpv2power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.gpv2power" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes the cycle tests for GPv2 switch slot.
+12V-cycle, 12V-on and 12V-off are valid for GPv2 slot.
+other cycle types should be tested under negative testing with</p>
+<blockquote>
+<div><p>not supported message.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.log_util_all_options">
+<code class="sig-name descname">log_util_all_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.log_util_all_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.log_util_all_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns log-util output for host slot + GPv2 slot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.log_util_gpv2">
+<code class="sig-name descname">log_util_gpv2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_glacierpointv2.html#OpenBMCGlacierPointV2.log_util_gpv2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.log_util_gpv2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes and returns the log-util output on GPv2 switch slot</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_lightning">
+<span id="openbmclightning-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCLightning</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_lightning" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_lightning.</code><code class="sig-name descname">OpenBMCLightning</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">bmc_host</em>, <em class="sig-param">oob_addr</em>, <em class="sig-param">slot_info=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc.OpenBMC" title="havoc.autoval.lib.host.openbmc.OpenBMC"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.openbmc.OpenBMC</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">bmc_host</em>, <em class="sig-param">oob_addr</em>, <em class="sig-param">slot_info=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.ac_cycle">
+<code class="sig-name descname">ac_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">reboot_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.ac_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.ac_cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.cycle">
+<code class="sig-name descname">cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.fcb_sensor_data">
+<code class="sig-name descname">fcb_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.fcb_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.fcb_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_config_details">
+<code class="sig-name descname">get_config_details</code><span class="sig-paren">(</span><em class="sig-param">log_dir</em>, <em class="sig-param">test_start_time</em>, <em class="sig-param">start=True</em>, <em class="sig-param">bios_dump_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.get_config_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_config_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_critical_services">
+<code class="sig-name descname">get_critical_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.get_critical_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_critical_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a list of services that are always expected to
+run on the openBMC lightening System</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_full_sensor_data">
+<code class="sig-name descname">get_full_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.get_full_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_full_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_slot_info">
+<code class="sig-name descname">get_slot_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.get_slot_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.get_slot_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.is_lightning">
+<code class="sig-name descname">is_lightning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.is_lightning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.is_lightning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.pdpb_sensor_data">
+<code class="sig-name descname">pdpb_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.pdpb_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.pdpb_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.peb_sensor_data">
+<code class="sig-name descname">peb_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.peb_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.peb_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.power_off">
+<code class="sig-name descname">power_off</code><span class="sig-paren">(</span><em class="sig-param">timeout=600</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.power_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.power_off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.power_on">
+<code class="sig-name descname">power_on</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">last_reboot=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.power_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.power_on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.power_reset">
+<code class="sig-name descname">power_reset</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.power_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.power_reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.status">
+<code class="sig-name descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.validate_fan_speed">
+<code class="sig-name descname">validate_fan_speed</code><span class="sig-paren">(</span><em class="sig-param">percentage_actual</em>, <em class="sig-param">percentage_expected</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightning.html#OpenBMCLightning.validate_fan_speed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightning.OpenBMCLightning.validate_fan_speed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_lightningv2">
+<span id="bmclightningv2-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">BMCLightningV2</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_lightningv2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_lightningv2.</code><code class="sig-name descname">BMCLightningV2</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightningv2.html#BMCLightningV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass" title="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightningv2.html#BMCLightningV2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2.get_flash_temperature">
+<code class="sig-name descname">get_flash_temperature</code><span class="sig-paren">(</span><em class="sig-param">output</em>, <em class="sig-param">temp_val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightningv2.html#BMCLightningV2.get_flash_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2.get_flash_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the output from the fbjbod sensor,
+check all the sensors and verify if
+the status of all is “ok”</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2.verify_flash_availability">
+<code class="sig-name descname">verify_flash_availability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_lightningv2.html#BMCLightningV2.verify_flash_availability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_lightningv2.BMCLightningV2.verify_flash_availability" title="Permalink to this definition">¶</a></dt>
+<dd><p>AVA card is a riser card which holds the nvme.
+To check if the AVA card is present it should provide
+sensor util with ok status or with its temperature.
+This method will check for AVA card and then fetch
+its slot number in order to map the nvme it is holding</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_northdome">
+<span id="openbmcnorthdome-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCNorthDome</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_northdome" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_northdome.</code><code class="sig-name descname">OpenBMCNorthDome</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_northdome.html#OpenBMCNorthDome"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2" title="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_northdome.html#OpenBMCNorthDome.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome.filter_err_sel_log">
+<code class="sig-name descname">filter_err_sel_log</code><span class="sig-paren">(</span><em class="sig-param">log</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_northdome.html#OpenBMCNorthDome.filter_err_sel_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome.filter_err_sel_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return SEL entries with errors</p>
+<p>&#64;param String[] log: list of SEL entries
+&#64;return String[]: list of filtered SEL output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome.validate_vboot_util">
+<code class="sig-name descname">validate_vboot_util</code><span class="sig-paren">(</span><em class="sig-param">filter_errors=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_northdome.html#OpenBMCNorthDome.validate_vboot_util"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_northdome.OpenBMCNorthDome.validate_vboot_util" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_tioga_pass">
+<span id="openbmctiogapass-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCTiogaPass</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_tioga_pass" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_tioga_pass.</code><code class="sig-name descname">OpenBMCTiogaPass</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc.OpenBMC" title="havoc.autoval.lib.host.openbmc.OpenBMC"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.openbmc.OpenBMC</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.ac_cycle">
+<code class="sig-name descname">ac_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=120</em>, <em class="sig-param">post_health_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.ac_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.ac_cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>This raw command is sled cycle which tends to lose
+connection to oob, Not appropriate for test cases where bmc
+needs to be intact</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.ac_on_off_fullcycle">
+<code class="sig-name descname">ac_on_off_fullcycle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.ac_on_off_fullcycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.ac_on_off_fullcycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>12V cycles(12V-on/off/cycle) is not
+supported in tiogapass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.bios_post_flash">
+<code class="sig-name descname">bios_post_flash</code><span class="sig-paren">(</span><em class="sig-param">current_reboot</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.bios_post_flash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.bios_post_flash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.clear_boot_order_cmos">
+<code class="sig-name descname">clear_boot_order_cmos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.clear_boot_order_cmos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.clear_boot_order_cmos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.cycle">
+<code class="sig-name descname">cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">reboot_check=True</em>, <em class="sig-param">post_health_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.fw_update_bmc">
+<code class="sig-name descname">fw_update_bmc</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.fw_update_bmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.fw_update_bmc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.fw_update_rom">
+<code class="sig-name descname">fw_update_rom</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.fw_update_rom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.fw_update_rom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_bmcreset_cmd">
+<code class="sig-name descname">get_bmcreset_cmd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_bmcreset_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_bmcreset_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_critical_services">
+<code class="sig-name descname">get_critical_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_critical_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_critical_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a list of services that are always expected to
+run on the openBMC Tiogapass System</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_flash_temperature">
+<code class="sig-name descname">get_flash_temperature</code><span class="sig-paren">(</span><em class="sig-param">output</em>, <em class="sig-param">temp_val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_flash_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_flash_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will take the slot number reported by the
+AVA card, map it to its equivalent nvme and provide
+the temperature of the nvme. Each AVA card will have
+4 slots, max of 4 nvme can be attached.
+At any time if the temperature of the nvme is greater
+then 75 deg celsius it is high threshold value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_fru_no">
+<code class="sig-name descname">get_fru_no</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_fru_no"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_fru_no" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_full_fruid_list">
+<code class="sig-name descname">get_full_fruid_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_full_fruid_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_full_fruid_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_fw_util_options">
+<code class="sig-name descname">get_fw_util_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_fw_util_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_fw_util_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_gpio_lbg_tool_path">
+<code class="sig-name descname">get_gpio_lbg_tool_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_gpio_lbg_tool_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_gpio_lbg_tool_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_slot_info">
+<code class="sig-name descname">get_slot_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.get_slot_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_slot_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.health_check">
+<code class="sig-name descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.health_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.nic_fru_list">
+<code class="sig-name descname">nic_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.nic_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.nic_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.openbmc_flashcp_prerequisite">
+<code class="sig-name descname">openbmc_flashcp_prerequisite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.openbmc_flashcp_prerequisite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.openbmc_flashcp_prerequisite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.openbmc_flashcp_upgrade_cmd">
+<code class="sig-name descname">openbmc_flashcp_upgrade_cmd</code><span class="sig-paren">(</span><em class="sig-param">subfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.openbmc_flashcp_upgrade_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.openbmc_flashcp_upgrade_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.post_cycle_check">
+<code class="sig-name descname">post_cycle_check</code><span class="sig-paren">(</span><em class="sig-param">filter_errors=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.post_cycle_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.post_cycle_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.sled_cycle">
+<code class="sig-name descname">sled_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">post_health_check=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.sled_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.sled_cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.validate_version">
+<code class="sig-name descname">validate_version</code><span class="sig-paren">(</span><em class="sig-param">fw_ver_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.validate_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.validate_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.verify_flash_availability">
+<code class="sig-name descname">verify_flash_availability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.verify_flash_availability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.verify_flash_availability" title="Permalink to this definition">¶</a></dt>
+<dd><p>AVA card is a riser card which holds the nvme.
+To check if the AVA card is present it should provide
+sensor util with ok status or with its temperature.
+This method will check for AVA card and then fetch
+its slot number in order to map the nvme it is holding</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.verify_flash_sensors">
+<code class="sig-name descname">verify_flash_sensors</code><span class="sig-paren">(</span><em class="sig-param">out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_tioga_pass.html#OpenBMCTiogaPass.verify_flash_sensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.verify_flash_sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ava sensors which shows ok status implies
+the ava is available on the server and in turn
+shows the nvme temp status as ok
+which ever shows NA would mean ava card is not
+available</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_wedge">
+<span id="openbmcwedge-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCWedge</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_wedge" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_wedge.</code><code class="sig-name descname">OpenBMCWedge</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc.OpenBMC" title="havoc.autoval.lib.host.openbmc.OpenBMC"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.openbmc.OpenBMC</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.ac_cycle">
+<code class="sig-name descname">ac_cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.ac_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.ac_cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.cycle">
+<code class="sig-name descname">cycle</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.forced_bmc_reset">
+<code class="sig-name descname">forced_bmc_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.forced_bmc_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.forced_bmc_reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.fw_update_cpld">
+<code class="sig-name descname">fw_update_cpld</code><span class="sig-paren">(</span><em class="sig-param">absolute_path</em>, <em class="sig-param">file_name</em>, <em class="sig-param">destination</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.fw_update_cpld"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.fw_update_cpld" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_config_details">
+<code class="sig-name descname">get_config_details</code><span class="sig-paren">(</span><em class="sig-param">log_dir</em>, <em class="sig-param">test_start_time</em>, <em class="sig-param">start=True</em>, <em class="sig-param">bios_dump_filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.get_config_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_config_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_cpld_fw_version">
+<code class="sig-name descname">get_cpld_fw_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.get_cpld_fw_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_cpld_fw_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_system_logs">
+<code class="sig-name descname">get_system_logs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.get_system_logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_system_logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_wedge_model">
+<code class="sig-name descname">get_wedge_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.get_wedge_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_wedge_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.is_wedge">
+<code class="sig-name descname">is_wedge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.is_wedge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.is_wedge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_off">
+<code class="sig-name descname">power_off</code><span class="sig-paren">(</span><em class="sig-param">timeout=600</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.power_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_on">
+<code class="sig-name descname">power_on</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em>, <em class="sig-param">last_reboot=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.power_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_reset">
+<code class="sig-name descname">power_reset</code><span class="sig-paren">(</span><em class="sig-param">timeout=1200</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.power_reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_status">
+<code class="sig-name descname">power_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.power_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.sel_clear">
+<code class="sig-name descname">sel_clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.sel_clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.sel_clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.sensor_data">
+<code class="sig-name descname">sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_wedge.html#OpenBMCWedge.sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_yosemite">
+<span id="openbmcyosemite-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCYosemite</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_yosemite" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_yosemite.</code><code class="sig-name descname">OpenBMCYosemite</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc.OpenBMC" title="havoc.autoval.lib.host.openbmc.OpenBMC"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.openbmc.OpenBMC</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.cmos_clear">
+<code class="sig-name descname">cmos_clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.cmos_clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.cmos_clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_critical_services">
+<code class="sig-name descname">get_critical_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_critical_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_critical_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a list of services that are always expected to
+run on the openBMC Yosemite System</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_fru_no">
+<code class="sig-name descname">get_fru_no</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_fru_no"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_fru_no" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_full_fruid_list">
+<code class="sig-name descname">get_full_fruid_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_full_fruid_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_full_fruid_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_full_sensor_data">
+<code class="sig-name descname">get_full_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_full_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_full_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_full_sensor_data_all_slots">
+<code class="sig-name descname">get_full_sensor_data_all_slots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_full_sensor_data_all_slots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_full_sensor_data_all_slots" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_fw_util_options">
+<code class="sig-name descname">get_fw_util_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_fw_util_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_fw_util_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_fw_versions">
+<code class="sig-name descname">get_fw_versions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_fw_versions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_fw_versions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_slot_info">
+<code class="sig-name descname">get_slot_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_slot_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_slot_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_system_logs">
+<code class="sig-name descname">get_system_logs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.get_system_logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.get_system_logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.health_check">
+<code class="sig-name descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.health_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.nic_fru_list">
+<code class="sig-name descname">nic_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.nic_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.nic_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.spb_fru_list">
+<code class="sig-name descname">spb_fru_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.spb_fru_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.spb_fru_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.spb_sensor_data">
+<code class="sig-name descname">spb_sensor_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.spb_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.spb_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.verify_flash_sensors">
+<code class="sig-name descname">verify_flash_sensors</code><span class="sig-paren">(</span><em class="sig-param">out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemite.html#OpenBMCYosemite.verify_flash_sensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite.verify_flash_sensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.models.openbmc_yosemitev2">
+<span id="openbmcyosemitev2-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMCYosemiteV2</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.models.openbmc_yosemitev2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.models.openbmc_yosemitev2.</code><code class="sig-name descname">OpenBMCYosemiteV2</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite" title="havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.models.openbmc_yosemite.OpenBMCYosemite</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.bic_util_reset_boot_order">
+<code class="sig-name descname">bic_util_reset_boot_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.bic_util_reset_boot_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.bic_util_reset_boot_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.bios_post_flash">
+<code class="sig-name descname">bios_post_flash</code><span class="sig-paren">(</span><em class="sig-param">current_reboot</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.bios_post_flash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.bios_post_flash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.clear_boot_order_cmos">
+<code class="sig-name descname">clear_boot_order_cmos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.clear_boot_order_cmos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.clear_boot_order_cmos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_update_bmc">
+<code class="sig-name descname">fw_update_bmc</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.fw_update_bmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_update_bmc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_update_rom">
+<code class="sig-name descname">fw_update_rom</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">reboot=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.fw_update_rom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_update_rom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_util_ocpdbg">
+<code class="sig-name descname">fw_util_ocpdbg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.fw_util_ocpdbg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_util_ocpdbg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_bios_reset_options">
+<code class="sig-name descname">get_bios_reset_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.get_bios_reset_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_bios_reset_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_critical_services">
+<code class="sig-name descname">get_critical_services</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.get_critical_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_critical_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns a list of services that are always expected to
+run on the openBMC Yosemitev2 System</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_flash_temperature">
+<code class="sig-name descname">get_flash_temperature</code><span class="sig-paren">(</span><em class="sig-param">output</em>, <em class="sig-param">temp_val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.get_flash_temperature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_flash_temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_fw_util_options">
+<code class="sig-name descname">get_fw_util_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.get_fw_util_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_fw_util_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_fw_versions">
+<code class="sig-name descname">get_fw_versions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.get_fw_versions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_fw_versions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.openbmc_flashcp_prerequisite">
+<code class="sig-name descname">openbmc_flashcp_prerequisite</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.openbmc_flashcp_prerequisite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.openbmc_flashcp_prerequisite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.openbmc_flashcp_upgrade_cmd">
+<code class="sig-name descname">openbmc_flashcp_upgrade_cmd</code><span class="sig-paren">(</span><em class="sig-param">subfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.openbmc_flashcp_upgrade_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.openbmc_flashcp_upgrade_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.post_cycle_check">
+<code class="sig-name descname">post_cycle_check</code><span class="sig-paren">(</span><em class="sig-param">filter_errors=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.post_cycle_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.post_cycle_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.validate_version">
+<code class="sig-name descname">validate_version</code><span class="sig-paren">(</span><em class="sig-param">fw_ver_num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.validate_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.validate_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.verify_flash_availability">
+<code class="sig-name descname">verify_flash_availability</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.verify_flash_availability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.verify_flash_availability" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.verify_flash_sensors">
+<code class="sig-name descname">verify_flash_sensors</code><span class="sig-paren">(</span><em class="sig-param">out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/models/openbmc_yosemitev2.html#OpenBMCYosemiteV2.verify_flash_sensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.verify_flash_sensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="havoc.autoval.lib.host.system.html" class="btn btn-neutral float-right" title="havoc.autoval.lib.host.system Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="havoc.autoval.lib.host.html" class="btn btn-neutral float-left" title="havoc.autoval.lib.host Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

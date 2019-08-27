@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.screenwithsol</span> <span class="k">import</span> <span class="n">ScreenWithSOL</span>
+
+<span class="n">SOL_BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">16384</span>  <span class="c1"># SOL buffer size for Leopard is 16KB (16384 bytes).</span>
+<span class="n">SOL_NO_ACTVTY_TIME</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># Seconds</span>
+
+<div class="viewcode-block" id="ReplaySOLBuffer"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.replay_sol_buffer.html#havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer.ReplaySOLBuffer">[docs]</a><span class="k">class</span> <span class="nc">ReplaySOLBuffer</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReplaySOLBuffer.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.replay_sol_buffer.html#havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer.ReplaySOLBuffer.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;This is the Replay SOL Buffer test.&quot;</span><span class="p">)</span>
+        <span class="n">sws</span> <span class="o">=</span> <span class="n">ScreenWithSOL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">sws</span><span class="o">.</span><span class="n">setup_cleanup</span><span class="p">()</span>
+        <span class="n">screenlog</span> <span class="o">=</span> <span class="n">sws</span><span class="o">.</span><span class="n">start_SOL_on_logged_screen_session</span><span class="p">()</span>
+
+        <span class="n">buffer_junk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_SOL_buffer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_SOL_no_activity</span><span class="p">(</span><span class="n">screenlog</span><span class="p">)</span>
+
+        <span class="c1"># The SOL replay is functioning properly if the amount of output</span>
+        <span class="c1"># it produces during a replay is equal to the SOL&#39;s buffer size.</span>
+        <span class="c1"># Sometimes more output than the buffer size occurs. I believe this</span>
+        <span class="c1"># is because the system is normally just logging events to the SOL</span>
+        <span class="c1"># on a regular basis. This is okay.</span>
+        <span class="n">num_chars_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_chars</span><span class="p">(</span><span class="n">screenlog</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">replay_sol_buffer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_SOL_no_activity</span><span class="p">(</span><span class="n">screenlog</span><span class="p">)</span>
+
+        <span class="n">num_chars_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_chars</span><span class="p">(</span><span class="n">screenlog</span><span class="p">)</span>
+
+        <span class="n">junk_found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">screenlog</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">screen_log</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">screen_log</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">buffer_junk</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="c1"># If just one of the two lines of buffer junk exists,</span>
+                    <span class="c1"># that&#39;s good enough.</span>
+                    <span class="n">junk_found</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">junk_found</span><span class="p">,</span>
+                                <span class="s2">&quot;Expected output is in the SOL buffer.&quot;</span><span class="p">)</span>
+
+        <span class="n">sws</span><span class="o">.</span><span class="n">setup_cleanup</span><span class="p">()</span>
+
+        <span class="n">num_chars_diff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_chars_end</span><span class="p">)</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_chars_start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">num_chars_diff</span> <span class="o">&gt;=</span> <span class="n">SOL_BUFFER_SIZE</span><span class="p">,</span>
+                        <span class="p">(</span><span class="s2">&quot;SOL replay produced </span><span class="si">%d</span><span class="s2"> characters/bytes of output. &quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot;Expected &gt;= </span><span class="si">%d</span><span class="s2">.&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">num_chars_diff</span><span class="p">,</span> <span class="n">SOL_BUFFER_SIZE</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ReplaySOLBuffer.fill_SOL_buffer"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.replay_sol_buffer.html#havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer.ReplaySOLBuffer.fill_SOL_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">fill_SOL_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buffer_junk</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">SOL_BUFFER_SIZE</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># trash to fill buff with</span>
+        <span class="n">SOL_console</span> <span class="o">=</span> <span class="s2">&quot;/dev/ttyS1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;echo &#39;</span><span class="si">%s</span><span class="s2">&#39; &gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">buffer_junk</span><span class="p">,</span> <span class="n">SOL_console</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;echo &#39;</span><span class="si">%s</span><span class="s2">&#39; &gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">buffer_junk</span><span class="p">,</span> <span class="n">SOL_console</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">buffer_junk</span></div>
+
+<div class="viewcode-block" id="ReplaySOLBuffer.wait_for_SOL_no_activity"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.replay_sol_buffer.html#havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer.ReplaySOLBuffer.wait_for_SOL_no_activity">[docs]</a>    <span class="k">def</span> <span class="nf">wait_for_SOL_no_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screenlog</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Blocking until no new output is displayed on SOL &quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;for </span><span class="si">%d</span><span class="s2"> consecutive seconds...&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">SOL_NO_ACTVTY_TIME</span><span class="p">))</span>
+        <span class="n">prev_num_chars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_chars</span><span class="p">(</span><span class="n">screenlog</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">SOL_NO_ACTVTY_TIME</span>
+
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="n">cur_num_chars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_chars</span><span class="p">(</span><span class="n">screenlog</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">cur_num_chars</span> <span class="o">!=</span> <span class="n">prev_num_chars</span><span class="p">:</span>
+                <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">SOL_NO_ACTVTY_TIME</span>
+
+            <span class="n">prev_num_chars</span> <span class="o">=</span> <span class="n">cur_num_chars</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># No need to check every microsecond...</span></div>
+
+<div class="viewcode-block" id="ReplaySOLBuffer.get_num_chars"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.replay_sol_buffer.html#havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer.ReplaySOLBuffer.get_num_chars">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">wc_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;wc -c </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">num_chars</span> <span class="o">=</span> <span class="n">wc_output</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_chars</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.replay_sol_buffer.html#havoc.autoval.tests.replay_sol_buffer.replay_sol_buffer.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">ReplaySOLBuffer</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

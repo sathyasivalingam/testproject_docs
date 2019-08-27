@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.fbjbod_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.fbjbod_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.fbjbod_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+<span class="n">WAIT_ENUM</span> <span class="o">=</span> <span class="mi">40</span>  <span class="c1"># seconds to wait for drive enumeration</span>
+<span class="n">POWER_OFF_WAIT</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<div class="viewcode-block" id="FbjbodUtilException"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtilException">[docs]</a><span class="k">class</span> <span class="nc">FbjbodUtilException</span><span class="p">(</span><span class="n">TestError</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="FbjbodUtils"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils">[docs]</a><span class="k">class</span> <span class="nc">FbjbodUtils</span><span class="p">:</span>
+
+<div class="viewcode-block" id="FbjbodUtils.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.get_fbjbod_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.get_fbjbod_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_fbjbod_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param str jbod_device: e.g. /dev/sg37</span>
+<span class="sd">        @param str option: which info to get from the specified jbod</span>
+<span class="sd">        @return {}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fbjbod_info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fbjbod </span><span class="si">%s</span><span class="s2"> --json </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">)</span>
+            <span class="n">fbjbod_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">fbjbod_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fbjbod_output</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fbjbod_info</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span>
+                <span class="s1">&#39;Failed to get FBJBOD output  </span><span class="si">%s</span><span class="s1"> - </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.get_hdd_info"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.get_hdd_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_hdd_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param string jbod_device:</span>
+<span class="sd">        @return {}: drives&#39; info for a given jbod</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hdd_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_fbjbod_output</span><span class="p">(</span><span class="n">jbod_device</span><span class="p">,</span> <span class="s2">&quot;hdd&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_convert_slot_number_int</span><span class="p">(</span><span class="n">hdd_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hdd_info</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.list_all_jbod"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.list_all_jbod">[docs]</a>    <span class="k">def</span> <span class="nf">list_all_jbod</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return {}: dictionary containing all JBOD info</span>
+<span class="sd">            e.g. {</span>
+<span class="sd">                &quot;/dev/sg37&quot;: {&quot;sg_device&quot;: &quot;/dev/sg37&quot;, &quot;name&quot;: &quot;BryceCanyon&quot;, ...}</span>
+<span class="sd">            }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jbods</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_cmd</span><span class="p">(</span><span class="s2">&quot;fbjbod list --json&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">FbjbodUtilException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;command not found&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;No such file&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="c1"># Considering the system doesn&#39;t have any enclosure</span>
+                <span class="k">return</span> <span class="n">jbods</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span><span class="s2">&quot;Getting jbod list failed: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="c1"># When a expander hard reset happens, it&#39;s expected to get</span>
+            <span class="c1"># below lines in output of fbjbod list, need to filter those</span>
+            <span class="c1"># read buffer:  Fixed format, current;  Sense key: Unit Attention</span>
+            <span class="c1"># Additional sense: Power on, reset, or bus device reset occurred</span>
+            <span class="c1"># Refer task T34986632 for more info</span>
+            <span class="k">if</span> <span class="s2">&quot;reset&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;Sense&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="n">output</span> <span class="o">+</span> <span class="n">line</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">jbods</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span><span class="s2">&quot;Failed to get JBOD list: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">jbods</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.get_drive_slot_number"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.get_drive_slot_number">[docs]</a>    <span class="k">def</span> <span class="nf">get_drive_slot_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find JBOD and slot number for a given drive block e.g. sdj</span>
+
+<span class="sd">        @param string block_name: drive block_name</span>
+<span class="sd">        @return tuple(str, int): (jbod, slot_number)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dev</span> <span class="o">=</span> <span class="s2">&quot;/dev/&quot;</span> <span class="o">+</span> <span class="n">block_name</span>
+        <span class="n">jbods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_all_jbod</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">jbods</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">jbod</span> <span class="ow">in</span> <span class="n">jbods</span><span class="p">:</span>
+                <span class="n">hdd_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_hdd_info</span><span class="p">(</span><span class="n">jbod</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">hdd_info</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="n">each</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;devname&#39;</span> <span class="ow">in</span> <span class="n">drive</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">drive</span><span class="p">[</span><span class="s1">&#39;devname&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dev</span><span class="p">):</span>
+                            <span class="k">return</span> <span class="n">jbod</span><span class="p">,</span> <span class="n">drive</span><span class="p">[</span><span class="s2">&quot;slot&quot;</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span><span class="s2">&quot;Unable to map slot for drive &#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drive</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.get_drive_phy_num"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.get_drive_phy_num">[docs]</a>    <span class="k">def</span> <span class="nf">get_drive_phy_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get PhyNum for a jbod drive</span>
+
+<span class="sd">        @param string block_name: drive block_name</span>
+<span class="sd">        @return int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jbod</span><span class="p">,</span> <span class="n">slot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_drive_slot_number</span><span class="p">(</span><span class="n">block_name</span><span class="p">)</span>
+        <span class="n">slot_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slot_info</span><span class="p">(</span><span class="n">jbod</span><span class="p">,</span> <span class="n">slot</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;phy&quot;</span> <span class="ow">in</span> <span class="n">slot_info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;phy&quot;</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span><span class="s2">&quot;Failed to get PhyNum for /dev/</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.get_slot_info"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.get_slot_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">,</span> <span class="n">slot_num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get slot info from output of `fbjbod hdd --json &lt;jbod&gt;`</span>
+
+<span class="sd">        @param str jbod_device: jbod device path; i.e. /dev/sg??</span>
+<span class="sd">        @param int slot_num: slot number</span>
+<span class="sd">        @return {}: dictionary containing slot info</span>
+<span class="sd">        @raise FbjbodUtilException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jbods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_hdd_info</span><span class="p">(</span><span class="n">jbod_device</span><span class="p">)</span>
+        <span class="n">jbod</span> <span class="o">=</span> <span class="n">jbods</span><span class="p">[</span><span class="n">jbod_device</span><span class="p">]</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="n">jbod</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">slot</span><span class="p">[</span><span class="s2">&quot;slot&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">slot_num</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">slot</span>
+        <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span><span class="s2">&quot;Could not find slot </span><span class="si">%d</span><span class="s2"> info in jbod </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">slot_num</span><span class="p">,</span> <span class="n">jbod_device</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.power_on_slot"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.power_on_slot">[docs]</a>    <span class="k">def</span> <span class="nf">power_on_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">,</span> <span class="n">slot_num</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Power on a jbod slot</span>
+
+<span class="sd">        @param str jbod_device: jbod device path; i.e. /dev/sg??</span>
+<span class="sd">        @param int slot_num: slot number</span>
+<span class="sd">        @param int timeout: wait for drive off for this number of seconds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO import RAID related options from Autotest</span>
+        <span class="c1"># refer to Autotest FbjbodUtils poweron_hddslot()</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fbjbod hdd </span><span class="si">%s</span><span class="s2"> --hdd-on </span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;--timeout </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">timeout</span><span class="p">)</span> <span class="k">if</span> <span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">slot_num</span><span class="p">,</span>
+            <span class="n">jbod_device</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.power_off_slot"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.power_off_slot">[docs]</a>    <span class="k">def</span> <span class="nf">power_off_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">,</span> <span class="n">slot_num</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">graceful</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Power off a jbod drive</span>
+
+<span class="sd">        @param str jbod_device: jbod device path; i.e. /dev/sg??</span>
+<span class="sd">        @param int slot_num: slot number</span>
+<span class="sd">        @param int timeout: wait for drive off for this number of seconds</span>
+<span class="sd">        @param boolean graceful: if False, run fbjbod power off command with</span>
+<span class="sd">            the --dirty param</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fbjbod hdd </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> --hdd-off </span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="s2">&quot;--dirty&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">graceful</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="s2">&quot;--timeout </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">timeout</span><span class="p">)</span> <span class="k">if</span> <span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">slot_num</span><span class="p">,</span>
+            <span class="n">jbod_device</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FbjbodUtils.power_cycle_slot"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils.power_cycle_slot">[docs]</a>    <span class="k">def</span> <span class="nf">power_cycle_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbod_device</span><span class="p">,</span> <span class="n">slot_num</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn a slot in a JBOD off, then on</span>
+
+<span class="sd">        @param str jbod_device: jbod device path; i.e. /dev/sg??</span>
+<span class="sd">        @param int slot_num: slot number</span>
+<span class="sd">        @param int timeout: wait for drive on/off for this number of seconds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_off_slot</span><span class="p">(</span><span class="n">jbod_device</span><span class="p">,</span> <span class="n">slot_num</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">POWER_OFF_WAIT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_on_slot</span><span class="p">(</span><span class="n">jbod_device</span><span class="p">,</span> <span class="n">slot_num</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">WAIT_ENUM</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># noqa</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">FbjbodUtilException</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FbjbodUtils._convert_slot_number_int"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fbjbod_utils.FbjbodUtils._convert_slot_number_int">[docs]</a>    <span class="k">def</span> <span class="nf">_convert_slot_number_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jbods</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert fbjbod command output to json will keep all numeric values</span>
+<span class="sd">            as strings. This method convert slot values in jbods dictionary</span>
+<span class="sd">            to integers.</span>
+
+<span class="sd">        @param dict jbods: dictionary of `fbjbod hdd` command output</span>
+<span class="sd">        @return dict:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">jbod</span> <span class="ow">in</span> <span class="n">jbods</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">slot_info</span> <span class="ow">in</span> <span class="n">jbods</span><span class="p">[</span><span class="n">jbod</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;slot&quot;</span><span class="p">]:</span>
+                    <span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;slot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;slot&quot;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;phy&quot;</span><span class="p">]:</span>
+                    <span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;phy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">slot_info</span><span class="p">[</span><span class="s2">&quot;phy&quot;</span><span class="p">])</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

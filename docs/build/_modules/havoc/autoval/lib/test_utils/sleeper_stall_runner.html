@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.sleeper_stall_runner &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.sleeper_stall_runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.sleeper_stall_runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.test_utils_base</span> <span class="k">import</span> <span class="n">TestUtilsBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+
+
+<div class="viewcode-block" id="SleeperStallRunner"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sleeper_stall_runner.SleeperStallRunner">[docs]</a><span class="k">class</span> <span class="nc">SleeperStallRunner</span><span class="p">(</span><span class="n">TestUtilsBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SleeperStallRunner.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sleeper_stall_runner.SleeperStallRunner.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sleep&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep_threshold</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sleep_threshold&quot;</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raise_stop_threshold</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;raise_stop_threshold&quot;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_log_dirs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_dir</span> <span class="o">=</span> <span class="n">log_dir</span><span class="p">[</span><span class="s2">&quot;resultsdir&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">results_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sleep_threshold</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raise_stop_threshold</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SleeperStallRunner.test_setup"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sleeper_stall_runner.SleeperStallRunner.test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="SleeperStallRunner.start_test"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sleeper_stall_runner.SleeperStallRunner.start_test">[docs]</a>    <span class="k">def</span> <span class="nf">start_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;validation_utils.modules.sleeper_stall&quot;</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;start_sleeper_stall&quot;</span>
+        <span class="n">class_name</span> <span class="o">=</span> <span class="s2">&quot;SleeperStall&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_remote_module</span><span class="p">(</span>
+            <span class="n">module</span><span class="p">,</span>
+            <span class="n">method</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">class_name</span><span class="o">=</span><span class="n">class_name</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">runtime</span> <span class="o">+</span> <span class="mi">120</span><span class="p">,</span>
+            <span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SleeperStallRunner.stop_test"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sleeper_stall_runner.SleeperStallRunner.stop_test">[docs]</a>    <span class="k">def</span> <span class="nf">stop_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_dir</span><span class="p">,</span> <span class="s2">&quot;stop_sleeper_stall&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;touch </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_file</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Stopped Sleeper Stall&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SleeperStallRunner.parse_results"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sleeper_stall_runner.SleeperStallRunner.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_file</span><span class="p">()</span>
+        <span class="n">_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">result_handler</span> <span class="o">=</span> <span class="n">ResultHandler</span><span class="p">()</span>
+        <span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">({</span><span class="s2">&quot;sleeper_stall&quot;</span><span class="p">:</span> <span class="n">_json</span><span class="p">})</span>
+        <span class="n">_checks</span> <span class="o">=</span> <span class="n">_json</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;counter&quot;</span><span class="p">)</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_json</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">sleep_threshold</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">ms&quot;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_threshold</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">failed_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">each</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">keys</span> <span class="k">if</span> <span class="n">each</span> <span class="o">&gt;</span> <span class="n">sleep_threshold</span><span class="p">]</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Sleeper Stall check. </span><span class="si">{}</span><span class="s2"> of </span><span class="si">{}</span><span class="s2"> checks were above threshold &quot;</span>
+            <span class="s2">&quot;of </span><span class="si">{}</span><span class="s2">ms:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">failed_keys</span><span class="p">),</span>
+                <span class="n">_checks</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sleep_threshold</span> <span class="o">*</span> <span class="mi">1000</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_json</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">failed_keys</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">failed_keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+
+    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_load_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_dir</span> <span class="o">+</span> <span class="s2">&quot;/sleeper_stall_result.json&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

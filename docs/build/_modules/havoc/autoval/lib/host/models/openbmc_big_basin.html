@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models.openbmc_big_basin &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models.openbmc_big_basin</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.models.openbmc_big_basin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.models.openbmc_tioga_pass</span> <span class="k">import</span> <span class="n">OpenBMCTiogaPass</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">BASE_CMD</span> <span class="o">=</span> <span class="s2">&quot;ipmitool -b 9 -t 0x2c&quot;</span>
+
+<div class="viewcode-block" id="BMCBigBasin"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin">[docs]</a><span class="k">class</span> <span class="nc">BMCBigBasin</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">):</span>
+<div class="viewcode-block" id="BMCBigBasin.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BMCBigBasin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="c1"># Get sensor details from bridgeic for bigbasin</span>
+<div class="viewcode-block" id="BMCBigBasin.get_sdr_sensor_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.get_sdr_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_sdr_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdr&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">BASE_CMD</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BMCBigBasin.get_slot_info"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.get_slot_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;mb&quot;</span></div>
+
+<div class="viewcode-block" id="BMCBigBasin.cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.cycle">[docs]</a>    <span class="k">def</span> <span class="nf">cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">post_health_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># HEAD NODE + BIG BASIN EXPANDER OEM POWER CYCLE COMMAND</span>
+        <span class="c1"># ipmitool raw 0x30 0xe9 0x0F</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_cycle_command</span><span class="p">(</span><span class="s2">&quot;dc_cycle&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BMCBigBasin.ac_cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.ac_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">ac_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">reboot_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1">#  Ac Cycle BB expander</span>
+        <span class="c1"># ipmitool -b 9 -t 0x2c raw 0x36 0x66 0x4c 0x1c 0x00 0x0E</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_cycle_command</span><span class="p">(</span><span class="s2">&quot;ac_cycle&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BMCBigBasin.run_cycle_command"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.run_cycle_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_cycle_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cycle_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># In Bigbasin and ligthening when we do cycle we got to do both on</span>
+        <span class="c1"># expander and host</span>
+        <span class="n">cycle_commands</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ac_cycle&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;host_method&quot;</span><span class="p">:</span> <span class="nb">super</span><span class="p">(</span><span class="n">BMCBigBasin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">,</span>
+                <span class="s2">&quot;bb_command&quot;</span><span class="p">:</span> <span class="s2">&quot;ipmitool -b 9 -t 0x2c raw 0x36 0x66 0x4c 0x1c 0x00 0x0E&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;dc_cycle&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;host_method&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;bb_command&quot;</span><span class="p">:</span> <span class="s2">&quot;ipmitool raw 0x30 0xe9 0x0F&quot;</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Collect gpu data first before running any cycle to compare it after</span>
+        <span class="c1"># power cycle and current reboot that will be used for host_bmc health</span>
+        <span class="c1"># check</span>
+        <span class="n">lspci_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;lspci&quot;</span><span class="p">)</span>
+        <span class="n">gpus</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;3D controller: NVIDIA Corporation&quot;</span><span class="p">,</span> <span class="n">lspci_output</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+
+        <span class="c1"># Run the BigBasin Expander cycle</span>
+        <span class="n">bb_command</span> <span class="o">=</span> <span class="n">cycle_commands</span><span class="p">[</span><span class="n">cycle_type</span><span class="p">][</span><span class="s2">&quot;bb_command&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">bb_command</span><span class="p">)</span>
+
+
+        <span class="c1"># Now wait for 30 secs before running the host cycle</span>
+        <span class="c1"># This is not applicable for DC cycle , as the BigBasin DC cycle command</span>
+        <span class="c1"># will power cycle HEAD NODE + BIG BASIN EXPANDER</span>
+        <span class="n">cycle_func</span> <span class="o">=</span> <span class="n">cycle_commands</span><span class="p">[</span><span class="n">cycle_type</span><span class="p">][</span><span class="s2">&quot;host_method&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cycle_func</span><span class="p">:</span>
+            <span class="c1"># sleep 30Sec between BB and host Cycle</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+            <span class="n">cycle_func</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">post_health_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># First make sure the system is up and runing using dut_health_check</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+
+        <span class="c1"># Now that system is up check gpus using bigbasin bmc_health_check</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_health_check</span><span class="p">(</span><span class="n">no_of_gpus</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">gpus</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BMCBigBasin.bmc_health_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_big_basin.BMCBigBasin.bmc_health_check">[docs]</a>    <span class="k">def</span> <span class="nf">bmc_health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">no_of_gpus</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        check if the bmc is up and all GPU are populated</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">60</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="n">lspci_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;lspci&quot;</span><span class="p">)</span>
+            <span class="n">gpus</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;3D controller: NVIDIA Corporation&quot;</span><span class="p">,</span> <span class="n">lspci_output</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gpus</span><span class="p">)</span> <span class="o">==</span> <span class="n">no_of_gpus</span><span class="p">):</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;All GPUs are not powered up&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

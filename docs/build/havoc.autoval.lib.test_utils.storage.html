@@ -1,0 +1,859 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage Package &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="havoc.autoval.lib.test_utils.storage.nvme Package" href="havoc.autoval.lib.test_utils.storage.nvme.html" />
+    <link rel="prev" title="havoc.autoval.lib.test_utils.fio Package" href="havoc.autoval.lib.test_utils.fio.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">havoc</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="havoc.html">havoc package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="havoc.autoval.html">havoc.autoval Package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.cli.html">havoc.autoval.cli Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.e2e_tests.html">havoc.autoval.e2e_tests Package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="havoc.autoval.lib.html">havoc.autoval.lib Package</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.power.html">havoc.autoval.lib.power Package</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.fio.html">havoc.autoval.lib.test_utils.fio Package</a></li>
+<li class="toctree-l6 current"><a class="current reference internal" href="#">havoc.autoval.lib.test_utils.storage Package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html">havoc.autoval.lib.test_utils.storage.nvme Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sas.html">havoc.autoval.lib.test_utils.storage.sas Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sata.html">havoc.autoval.lib.test_utils.storage.sata Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.drive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Drive</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.drive_firmware_update"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DriveFirmwareUpdate</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.storage_device_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StorageDeviceFactory</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.storage_test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StorageTestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.tape.html">havoc.autoval.lib.test_utils.tape Package</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.attest_test"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Attest_test</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.bg_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BgRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.chef_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chef_utils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.coldstorage_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ColdStorageRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.coldstorage_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ColdStorageUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.convert_nums"><code class="xref py py-mod docutils literal notranslate"><span class="pre">convert_nums</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.cstates_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">CstatesRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.disk_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DiskUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.fanspeedcheck"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fanspeedcheck</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.fbjbod_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FbjbodUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.ffmpeg_decode_cmodel_compare_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FfmpegDecodeCmodelCompareRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FfmpegEncodeCmodelCompareRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.ffmpeg_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FfmpegRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#fibrechannel-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FibreChannel</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.filesystem_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FilesystemUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.fw_update_util"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FwUpdateUtil</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.hdparm_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">HdparmUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.iperf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Iperf</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.lightning_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LightningUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#machinechecker-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Machinechecker</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.mellanox_e2e_lib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mellanox_e2e_lib</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.memtester_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MemtesterRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.mprime_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MprimeRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.pci_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">PciUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.qsfp_dominfo_lib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">qsfp_dominfo_lib</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.screenwithsol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ScreenWithSOL</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sdparm_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SdparmUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sensor_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SensorData</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sensor_threshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_threshold</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sg_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SgUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sleeper_stall_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SleeperStallRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#solitonbeamutils-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SolitonBeamUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.stressapp_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StressappRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.stressng"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Stressng</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.test_utils_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestUtilsBase</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.test_utils_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestUtilsRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.tor_diagnostics_lib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tor_diagnostics_lib</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.yafuflash"><code class="xref py py-mod docutils literal notranslate"><span class="pre">yafuflash</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.html#module-havoc.autoval.lib.test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.tests.html">havoc.autoval.tests Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">havoc</a> &raquo;</li>
+        
+          <li><a href="havoc.html">havoc package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.html">havoc.autoval Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.html">havoc.autoval.lib Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/havoc.autoval.lib.test_utils.storage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="havoc-autoval-lib-test-utils-storage-package">
+<h1>havoc.autoval.lib.test_utils.storage Package<a class="headerlink" href="#havoc-autoval-lib-test-utils-storage-package" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html">havoc.autoval.lib.test_utils.storage.nvme Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.vendor.html">havoc.autoval.lib.test_utils.storage.nvme.vendor Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.vendor.html#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LiteOn</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.vendor.html#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Samsung</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.vendor.html#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Toshiba</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#module-havoc.autoval.lib.test_utils.storage.nvme.nvme_drive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NVMeDrive</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#module-havoc.autoval.lib.test_utils.storage.nvme.nvme_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NVMeDriveFactory</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#module-havoc.autoval.lib.test_utils.storage.nvme.nvme_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NVMeUtils</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sas.html">havoc.autoval.lib.test_utils.storage.sas Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sas.html#module-havoc.autoval.lib.test_utils.storage.sas.sas_drive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SASDrive</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sas.html#module-havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SASDriveSnapshot</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sata.html">havoc.autoval.lib.test_utils.storage.sata Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sata.html#module-havoc.autoval.lib.test_utils.storage.sata.sata_drive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SATADrive</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.drive">
+<span id="drive-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Drive</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.drive" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.drive.</code><code class="sig-name descname">Drive</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_name</em>, <em class="sig-param">config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_name</em>, <em class="sig-param">config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Interface for collecting drive data and validate drive data based on</dt><dd><p>instructions provided in config file</p>
+</dd>
+</dl>
+<p>&#64;param Host host: host object
+&#64;param String block_name: drive name in /dev/ path
+&#64;param String config: json file that control how drive data is collected</p>
+<blockquote>
+<div><p>and validated</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.collect_data">
+<code class="sig-name descname">collect_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.collect_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.collect_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect drive data at this point in time. Should be overridden in sub-classes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.extract_smart_field">
+<code class="sig-name descname">extract_smart_field</code><span class="sig-paren">(</span><em class="sig-param">field</em>, <em class="sig-param">out</em>, <em class="sig-param">pattern</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.extract_smart_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.extract_smart_field" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Find a value for a given field in SMART output. Value of field should</dt><dd><p>be in group 1 of regex pattern</p>
+</dd>
+</dl>
+<p>&#64;param String field:
+&#64;param String out: SMART output
+&#64;param String pattern: regex of field and its value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.get_capacity">
+<code class="sig-name descname">get_capacity</code><span class="sig-paren">(</span><em class="sig-param">unit='byte'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.get_capacity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.get_capacity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.get_firmware_version">
+<code class="sig-name descname">get_firmware_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.get_firmware_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.get_firmware_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.get_last_lba">
+<code class="sig-name descname">get_last_lba</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.get_last_lba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.get_last_lba" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.get_smartctl_output">
+<code class="sig-name descname">get_smartctl_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.get_smartctl_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.get_smartctl_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return output of <cite>smartctl -x</cite> for a drive</p>
+<p>&#64;param String dev: drive name in /dev/ path
+&#64;return string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.get_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether drive is HDD or SSD</p>
+<p>&#64;return String</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Power cycle drive</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.Drive.update_block_name">
+<code class="sig-name descname">update_block_name</code><span class="sig-paren">(</span><em class="sig-param">jbod</em>, <em class="sig-param">slot</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#Drive.update_block_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.Drive.update_block_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param string jbod: JBOD name
+&#64;param int slot: JBOD slot number</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveInterface">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.drive.</code><code class="sig-name descname">DriveInterface</code><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#DriveInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveInterface.NVME">
+<code class="sig-name descname">NVME</code><em class="property"> = 'nvme'</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveInterface.NVME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveInterface.SAS">
+<code class="sig-name descname">SAS</code><em class="property"> = 'sas'</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveInterface.SAS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveInterface.SATA">
+<code class="sig-name descname">SATA</code><em class="property"> = 'sata'</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveInterface.SATA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveType">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.drive.</code><code class="sig-name descname">DriveType</code><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive.html#DriveType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveType.HDD">
+<code class="sig-name descname">HDD</code><em class="property"> = 'hdd'</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveType.HDD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.drive.DriveType.SSD">
+<code class="sig-name descname">SSD</code><em class="property"> = 'ssd'</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive.DriveType.SSD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.drive_firmware_update">
+<span id="drivefirmwareupdate-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">DriveFirmwareUpdate</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.drive_firmware_update" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.drive_firmware_update.</code><code class="sig-name descname">DriveFirmwareUpdate</code><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase" title="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase</span></code></a></p>
+<p>Drive Firmware Update</p>
+<p>Test installing drive firmware and validate installation. Optionally
+perform IO after firmware update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>versions</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – Firmware version to find and install on test drives.</p></li>
+<li><p><strong>cycle</strong> (<em>Integer</em>) – How many times to perform the upgrade/downgrade cycle.</p></li>
+<li><p><strong>verify_io</strong> (<em>Boolean</em>) – If set to True will perform IO on test drives post firmware update.</p></li>
+<li><p><strong>fio_template</strong> (<em>String</em>) – Path to fio_template file to be used.</p></li>
+<li><p><strong>fio_options</strong> (<em>Dictionary</em>) – Mapping of entries to fill in the given template file.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<dl>
+<dt>Sample control file:</dt><dd><dl>
+<dt>{</dt><dd><p>“cycle”: 2,
+“versions”: [“stable”, “latest”],
+“verify_io”: true,
+“fio_template”: “basic_verify.job”,
+“fio_options”: {</p>
+<blockquote>
+<div><p>“RW”:”randrw”,
+“BLKSIZE”:”128k”,
+“SIZE”:”10G”,
+“RUNTIME”:”30m”,
+“DEPTH”:”128”,
+“VERIFY”: “crc32c”</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_bin_path">
+<code class="sig-name descname">_get_bin_path</code><span class="sig-paren">(</span><em class="sig-param">bin_name</em>, <em class="sig-param">drive</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate._get_bin_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_bin_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets Binary file Path.</p>
+<p>This method gets binary file for a firmware in a common location for a
+given model.</p>
+<dl class="simple">
+<dt>Firmware binary path follows this format:</dt><dd><p>&lt;siteutils_firmware_path&gt;/&lt;drive_type&gt;/&lt;vendor&gt;/&lt;MODEL&gt;/fw_binary/&lt;bin_name&gt;</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bin_name</strong> (<em>String</em>) – Binary file name for the corresponding firmware.</p></li>
+<li><p><strong>drive</strong> – The drive’s name present in the host for the specific drive type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>bin_path</strong> – Binary file path for the given firmware.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>String</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_info">
+<code class="sig-name descname">_get_firmware_info</code><span class="sig-paren">(</span><em class="sig-param">version</em>, <em class="sig-param">drive</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate._get_firmware_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets Drive’s Firmware Information.</p>
+<p>This method pulls firmware information from firmware mapping file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version</strong> (<em>String</em>) – Drive’s firmware version value.</p></li>
+<li><p><strong>drive</strong> – The drive’s name present in the host for the specific drive type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fw_info</strong> – Drive’s Firmware information related to the version.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_map">
+<code class="sig-name descname">_get_firmware_map</code><span class="sig-paren">(</span><em class="sig-param">drive</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate._get_firmware_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets Firmware map.</p>
+<p>This method Pulls firmware information from a JSON file in the
+firmware path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>drive</strong> – The drive’s name present in the host for the specific drive type.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fw_info</strong> – Content of drive model’s fw_version_map.json.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dictionary</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestError" title="havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestError"><strong>TestError</strong></a> – When fails to load the json file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_path">
+<code class="sig-name descname">_get_firmware_path</code><span class="sig-paren">(</span><em class="sig-param">drive</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate._get_firmware_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets Firmware Binaries file Path.</p>
+<p>This method uses drive data to determine its firmware directory.
+The returned directory should contains firmware binaries
+and a json file which map a version to a binary file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>drive</strong> – The drive’s name present in the host for the specific drive type.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<dl>
+<dt>Sample fw_version_map.json:</dt><dd><dl>
+<dt>{</dt><dd><dl class="simple">
+<dt>“latest”: {</dt><dd><p>“name”: “EDA72F2Q”,
+“bin”: “EDA72F2Q.bin”,
+“md5”: “”</p>
+</dd>
+</dl>
+<p>},
+“stable”: {</p>
+<blockquote>
+<div><p>“name”: “CXV96F1Q”,
+“bin”: “CXV96F1Q.bin”,
+“md5”: “”</p>
+</div></blockquote>
+<p>},</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>bin_file_path</strong> – Constructed binary file path with vendor and model details.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>String</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestError" title="havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestError"><strong>TestError</strong></a> – When unsupported drive type is mentioned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._run_io">
+<code class="sig-name descname">_run_io</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate._run_io"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._run_io" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and Runs FIO job file.</p>
+<p>This method installs FIO, creates the basic_verify job file and
+runs IO on test drives. After successful FIO run, parses the output
+file for any error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestStepError" title="havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestStepError"><strong>TestStepError</strong></a> – When fails to
+        - Installs FIO
+        - Creates job file
+        - Runs job file
+        - Parsing the output file for FIO.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method gets the test drive details, using firmware information
+from fw_version_map.json, constructs the binary file path, updates the
+firmware based on the binary file path and verifies IO using FIO job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestError" title="havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestError"><strong>TestError</strong></a> – When fails to update the firmware for the drive.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.test_firmware_update">
+<code class="sig-name descname">test_firmware_update</code><span class="sig-paren">(</span><em class="sig-param">drive</em>, <em class="sig-param">fw_versions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate.test_firmware_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.test_firmware_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Firmware update</p>
+<p>This method installs firmware for a drive and verifies if
+installation is successful.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drive</strong> – The drive’s name present in the host for the specific drive type.</p></li>
+<li><p><strong>fw_versions</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – List of firmware to install on DUT.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestStepError" title="havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions.TestStepError"><strong>TestStepError</strong></a> – When comparison fails between expected and actual values of MD5 Checksum and</p></li>
+<li><p><strong>Firmware version values.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.update_drive_firmware">
+<em class="property">abstract </em><code class="sig-name descname">update_drive_firmware</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/drive_firmware_update.html#DriveFirmwareUpdate.update_drive_firmware"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.update_drive_firmware" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.storage_device_factory">
+<span id="storagedevicefactory-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">StorageDeviceFactory</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.storage_device_factory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.storage_device_factory.</code><code class="sig-name descname">StorageDeviceFactory</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_names</em>, <em class="sig-param">config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generate drive objects for the provided block names.</p>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_names</em>, <em class="sig-param">config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param Host host: host object
+&#64;param String[] block_names: list of drive names; e.g. sdb, sdc
+&#64;param String config: json file that controls how drive data is</p>
+<blockquote>
+<div><p>collected and validated</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._cache_nvme_names">
+<code class="sig-name descname">_cache_nvme_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory._cache_nvme_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._cache_nvme_names" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt><cite>nvme list</cite> shows info of all nvme drives on the system. Run this</dt><dd><p>command once and cache its output to avoid repeated call for
+each drive</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._cache_sata_drives_name">
+<code class="sig-name descname">_cache_sata_drives_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory._cache_sata_drives_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._cache_sata_drives_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <cite>lsscsi</cite> command to get all SATA drive names on the system.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._create_drive">
+<code class="sig-name descname">_create_drive</code><span class="sig-paren">(</span><em class="sig-param">block_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory._create_drive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._create_drive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to instantiate drive object with a given /dev/sd* name</p>
+<p>&#64;param Host host: host object
+&#64;param String block_name: drive name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._is_drive_nvme">
+<code class="sig-name descname">_is_drive_nvme</code><span class="sig-paren">(</span><em class="sig-param">block_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory._is_drive_nvme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._is_drive_nvme" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param String block_name: drive name in /dev/ path
+&#64;return boolean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._is_drive_sas">
+<code class="sig-name descname">_is_drive_sas</code><span class="sig-paren">(</span><em class="sig-param">block_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory._is_drive_sas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._is_drive_sas" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param String block_name: drive name
+&#64;return boolean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._is_drive_sata">
+<code class="sig-name descname">_is_drive_sata</code><span class="sig-paren">(</span><em class="sig-param">block_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory._is_drive_sata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory._is_drive_sata" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;param String block_name: drive name in /dev/ path
+&#64;return boolean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory.create">
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_device_factory.html#StorageDeviceFactory.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_device_factory.StorageDeviceFactory.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;return Drive[]: list of drive objects</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.storage_test_base">
+<span id="storagetestbase-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">StorageTestBase</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.storage_test_base" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.DriveValidationException">
+<em class="property">exception </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.storage_test_base.</code><code class="sig-name descname">DriveValidationException</code><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#DriveValidationException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.DriveValidationException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.storage_test_base.</code><code class="sig-name descname">StorageTestBase</code><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase" title="havoc.autoval.lib.test_base.TestBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.test_base.TestBase</span></code></a></p>
+<dl>
+<dt>Base class for testing drives.</dt><dd><ul class="simple">
+<li><p>Create drive objects</p></li>
+<li><p>Compare and validate drive metrics at the end of the test</p></li>
+</ul>
+<dl>
+<dt>Test control params:</dt><dd><p>String[] drives: list of drive names to test: e.g. sdac, sdf,
+String drive_type: hdd, ssd, etc.
+String drive_interface: filter for drives with this interface</p>
+<blockquote>
+<div><p>to test</p>
+</div></blockquote>
+<p>String drive_model: test drives with this given model
+String drive_count: if provided, will validate if the number</p>
+<blockquote>
+<div><p>of test drives equal this value</p>
+</div></blockquote>
+<dl class="simple">
+<dt>String drive_config: json file that controls how drive data is</dt><dd><p>collected and validated</p>
+</dd>
+</dl>
+<p>Boolean validate_bootdrive_smart: whether to validate boot drive
+String validate_firmware: if provided, will check if test drives’</p>
+<blockquote>
+<div><p>firmware matches this value</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._collect_drive_data">
+<code class="sig-name descname">_collect_drive_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase._collect_drive_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._collect_drive_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect current drives’ data for before/after comparison and validation</p>
+<p>&#64;return {}: dictionary that map drive serial number -&gt; drive_snapshot object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._compare_drive_data">
+<code class="sig-name descname">_compare_drive_data</code><span class="sig-paren">(</span><em class="sig-param">validate_config</em>, <em class="sig-param">before_dict</em>, <em class="sig-param">after_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase._compare_drive_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._compare_drive_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Usees instructions from validate_config dictionary and to compare drive</dt><dd><p>SMART data before and after the test</p>
+</dd>
+</dl>
+<p>&#64;param {} validate_config
+&#64;param {} before_dict
+&#64;param {} after_dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._compare_drive_data_field">
+<code class="sig-name descname">_compare_drive_data_field</code><span class="sig-paren">(</span><em class="sig-param">before</em>, <em class="sig-param">actual</em>, <em class="sig-param">field</em>, <em class="sig-param">instr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase._compare_drive_data_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._compare_drive_data_field" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Parse a validate instruction and perform comparison on before vs. actual</dt><dd><p>values of a field. Supported operations:
+‘&lt;’ -&gt; less than
+‘&gt;’ -&gt; greater than
+‘&gt;=’-&gt; greater than equal to
+‘&lt;=’-&gt; less than equal to
+‘=’ -&gt; check equality, similar to ==
+‘-‘ -&gt; in-between range (lower_val is required)
+‘/’ -&gt; multiple options (existence of word in a string)
+‘~’ -&gt; increment the ‘expected’ by “increment_by” and compare</p>
+</dd>
+</dl>
+<p>&#64;param string/numeric before, actual:
+&#64;param string field
+&#64;param string instr: e.g. “&gt;80”, “==”</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._filter_drive_by_attr">
+<code class="sig-name descname">_filter_drive_by_attr</code><span class="sig-paren">(</span><em class="sig-param">drives</em>, <em class="sig-param">attr</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase._filter_drive_by_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._filter_drive_by_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return drives in a list that has an attribute equal a provided value</p>
+<p>&#64;param String attr: attribute to compare
+&#64;param Enum/String value: drive is included if attribute has this value
+&#64;return Drive[]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._remove_partitions">
+<code class="sig-name descname">_remove_partitions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase._remove_partitions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._remove_partitions" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Remove all partitions and unmount all drives, except for boot drive.</dt><dd><p>Running fio on a raw device would fail if attempted on an
+already mounted device. Unmount the filesystem
+before starting the tests.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase.cleanup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.get_test_drives_from_drives">
+<code class="sig-name descname">get_test_drives_from_drives</code><span class="sig-paren">(</span><em class="sig-param">drive_type=None</em>, <em class="sig-param">interface=None</em>, <em class="sig-param">model=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase.get_test_drives_from_drives"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.get_test_drives_from_drives" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter drives that meet provided criteria for testing</p>
+<dl class="simple">
+<dt>&#64;param</dt><dd><p>String drive_type - hdd, ssd, md
+String interface - nvme, sas, sata
+String model - drive model</p>
+</dd>
+</dl>
+<p>&#64;return - dict of logical name -&gt; Drive</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.setup">
+<code class="sig-name descname">setup</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.storage_test_setup">
+<code class="sig-name descname">storage_test_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/storage_test_base.html#StorageTestBase.storage_test_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.storage_test_setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="havoc.autoval.lib.test_utils.storage.nvme.html" class="btn btn-neutral float-right" title="havoc.autoval.lib.test_utils.storage.nvme Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="havoc.autoval.lib.test_utils.fio.html" class="btn btn-neutral float-left" title="havoc.autoval.lib.test_utils.fio Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

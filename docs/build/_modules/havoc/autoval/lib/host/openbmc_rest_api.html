@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.openbmc_rest_api &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.openbmc_rest_api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.openbmc_rest_api</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+
+
+<div class="viewcode-block" id="REST"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.REST">[docs]</a><span class="k">class</span> <span class="nc">REST</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="REST.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.REST.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">):</span>
+        <span class="n">port_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="c1">#if oob_addr is IPV6, then http host should be enclosed with brackets</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">socket</span><span class="o">.</span><span class="n">inet_pton</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET6</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">http_host</span> <span class="o">=</span> <span class="s1">&#39;http://[</span><span class="si">{}</span><span class="s1">]:</span><span class="si">{}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oob_addr</span><span class="p">,</span> <span class="n">port_str</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">http_host</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oob_addr</span><span class="p">,</span> <span class="n">port_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="REST.generate_cmd_log"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.REST.generate_cmd_log">[docs]</a>    <span class="k">def</span> <span class="nf">generate_cmd_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Writes the given string to cmdlog.log</span>
+<span class="sd">        @param: URL : mandatory</span>
+<span class="sd">        status code, output, excpetion are optional</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;URL: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">url</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> Status_code: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> output: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> exception: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">exception</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_cmdlog</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="REST.validate_rest_response"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.REST.validate_rest_response">[docs]</a>    <span class="k">def</span> <span class="nf">validate_rest_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_resp</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        validates status code. If not valid raise an error</span>
+<span class="sd">        if valid, logs into cmdmetrics.json</span>
+<span class="sd">        @param - json_resp, url and start time</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">json_resp</span><span class="o">.</span><span class="n">status_code</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_resp</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_cmd_log</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">status</span><span class="p">),</span> <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Got invalid response code </span><span class="si">{}</span><span class="s2"> for request </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">status</span><span class="p">,</span> <span class="n">url</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ResultHandler</span><span class="o">.</span><span class="n">add_cmd_metric</span><span class="p">(</span>
+                <span class="n">url</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">output</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="REST.get_response"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.REST.get_response">[docs]</a>    <span class="k">def</span> <span class="nf">get_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Runs the REST API GET for a given URL</span>
+<span class="sd">        and calls validate_rest_response to validate the response</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http_host</span> <span class="o">+</span> <span class="n">uri</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_rest_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">start_time</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generate_cmd_log</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span></div></div>
+
+
+<div class="viewcode-block" id="OpenBmcRestAPI"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI">[docs]</a><span class="k">class</span> <span class="nc">OpenBmcRestAPI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">SEL_TIME_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rest</span> <span class="o">=</span> <span class="n">REST</span><span class="p">(</span><span class="n">oob_addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;api&#39;</span><span class="p">:</span> <span class="s1">&#39;api&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;bmc&#39;</span><span class="p">:</span> <span class="s1">&#39;api/bmc&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;logs&#39;</span><span class="p">:</span> <span class="s1">&#39;api/logs&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;sensors&#39;</span><span class="p">:</span> <span class="s1">&#39;api/sensors&#39;</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.get_resources"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_resources">[docs]</a>    <span class="k">def</span> <span class="nf">get_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        gets the top level resources list for a OOB</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;api&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="c1">#returns a list</span>
+        <span class="k">return</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Resources&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.vboot_util"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.vboot_util">[docs]</a>    <span class="k">def</span> <span class="nf">vboot_util</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC vboot info for the OOB</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;bmc&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;vboot&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.is_hardware_enforce"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.is_hardware_enforce">[docs]</a>    <span class="k">def</span> <span class="nf">is_hardware_enforce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC info for the OOB and derives hardware_enforce flag</span>
+<span class="sd">        from the output and returns True if flag=0X01, else False</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">vboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vboot_util</span><span class="p">()</span>
+        <span class="n">hw_enforce</span> <span class="o">=</span> <span class="n">vboot</span><span class="p">[</span><span class="s2">&quot;hardware_enforce&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">hw_enforce</span> <span class="o">==</span> <span class="s1">&#39;0x01&#39;</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.validate_vboot_util"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.validate_vboot_util">[docs]</a>    <span class="k">def</span> <span class="nf">validate_vboot_util</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC info for the OOB and gets vboot status</span>
+<span class="sd">        creates a list from the value-status</span>
+<span class="sd">        converts it to list of integers</span>
+<span class="sd">        validates if number of zeros = 2 in the list</span>
+<span class="sd">        If filter_errors is passed, then number of zeros = 2</span>
+<span class="sd">        If number of zeros = 2, vboot is validated, else it raises an exception</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">err_val</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vboot_util</span><span class="p">()</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">vboot</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span>
+
+        <span class="c1">#converts the string to int list</span>
+        <span class="n">err_code</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)]</span>
+
+        <span class="c1">#get the number of zeros from the error code list</span>
+        <span class="k">for</span> <span class="n">codes</span> <span class="ow">in</span> <span class="n">err_code</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">codes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">err_val</span> <span class="o">=</span> <span class="n">err_val</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">filter_errors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;vboot_failure_code&quot;</span> <span class="ow">in</span> <span class="n">filter_errors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">err_code</span> <span class="o">==</span> <span class="n">filter_errors</span><span class="p">[</span><span class="s2">&quot;vboot_failure_code&quot;</span><span class="p">]:</span>
+                    <span class="n">err_val</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">if</span> <span class="n">err_val</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;vboot-util is validated for success criteria&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Vboot validation not successful with error code </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">err_code</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.get_openbmc_previous_ver_list"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_openbmc_previous_ver_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_openbmc_previous_ver_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC info for the OOB and derives the list of previous openbmc version</span>
+<span class="sd">        list from the output and returns it.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;bmc&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">pre_ver_list</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;u-boot version&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="c1">#returns a list</span>
+        <span class="k">return</span> <span class="n">pre_ver_list</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.get_fw_versions"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_fw_versions">[docs]</a>    <span class="k">def</span> <span class="nf">get_fw_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the FW version for HW components available for the server</span>
+<span class="sd">        returns  a dict.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">fw_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;bmc&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">fw_data</span><span class="p">[</span><span class="s2">&quot;bmc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;OpenBMC Version&quot;</span><span class="p">]</span>
+        <span class="n">fw_data</span><span class="p">[</span><span class="s2">&quot;tpm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;TPM FW version&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fw_data</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.get_available_space"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_available_space">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC info for the OOB and derives the free memory space info</span>
+<span class="sd">        and returns it</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;bmc&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">mem_usage</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;Memory Usage&quot;</span><span class="p">]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Mem: (\d+)K used, (\d+)K free, (\d+)K shrd, (\d+)K buff, (\d+)K c&quot;</span>
+        <span class="n">mem</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">mem_usage</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mem</span><span class="p">:</span>
+            <span class="n">free_space</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mem</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">1000</span>
+            <span class="k">return</span> <span class="n">free_space</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unable to fetch the available space using RESTAPI&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.get_memory_usage"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_memory_usage">[docs]</a>    <span class="k">def</span> <span class="nf">get_memory_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC info for the OOB and derives the memory usage info</span>
+<span class="sd">        like used, free, shared and buff, cached from the output and returns it.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;bmc&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">mem_usage</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;Memory Usage&quot;</span><span class="p">]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Mem: (\d+)K used, (\d+)K free, (\d+)K shrd, (\d+)K buff, (\d+)K c&quot;</span>
+        <span class="n">mem</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">mem_usage</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mem</span><span class="p">:</span>
+            <span class="n">usage</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="n">mem</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                <span class="s2">&quot;free&quot;</span><span class="p">:</span> <span class="n">mem</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                <span class="s2">&quot;shared&quot;</span><span class="p">:</span> <span class="n">mem</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                <span class="s2">&quot;buffer&quot;</span><span class="p">:</span> <span class="n">mem</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+                <span class="s2">&quot;cached&quot;</span><span class="p">:</span> <span class="n">mem</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="c1">#returns a dictionary</span>
+        <span class="k">return</span> <span class="n">usage</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.get_openbmc_mac"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_openbmc_mac">[docs]</a>    <span class="k">def</span> <span class="nf">get_openbmc_mac</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the BMC info for the OOB and derives BMC MAC address returns it</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;bmc&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">mac</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;MAC Addr&quot;</span><span class="p">]</span>
+        <span class="c1">#returns a string</span>
+        <span class="k">return</span> <span class="n">mac</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.log_util_all_options"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.log_util_all_options">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_all_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets log for all the HW components that are stored in BMC</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;logs&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">logs_dict</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">][</span><span class="s2">&quot;Logs&quot;</span><span class="p">]</span>
+        <span class="n">log_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">logs_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">logs_dict</span><span class="p">:</span>
+            <span class="n">fru</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;FRU#&quot;</span><span class="p">]</span>
+            <span class="n">fru_name</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;FRU_NAME&quot;</span><span class="p">]</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;TIME_STAMP&quot;</span><span class="p">]</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;APP_NAME&quot;</span><span class="p">]</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;MESSAGE&quot;</span><span class="p">]</span>
+            <span class="n">msg_line</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">   </span><span class="si">%s</span><span class="s2">   </span><span class="si">%s</span><span class="s2">   </span><span class="si">%s</span><span class="s2">   </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">fru</span><span class="p">,</span> <span class="n">fru_name</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">msg</span>
+            <span class="p">)</span>
+            <span class="n">log_str</span> <span class="o">=</span> <span class="n">log_str</span> <span class="o">+</span> <span class="n">msg_line</span>
+        <span class="n">logs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logs_list</span></div>
+
+<div class="viewcode-block" id="OpenBmcRestAPI.sensor_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets sensor data for all the HW components that are stored in BMC</span>
+<span class="sd">        returns dict of dictionaries</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri_dict</span><span class="p">[</span><span class="s1">&#39;sensors&#39;</span><span class="p">]</span>
+        <span class="n">json_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">sensor_dict</span> <span class="o">=</span> <span class="n">json_output</span><span class="p">[</span><span class="s2">&quot;Information&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">sensor_dict</span></div>
+
+    <span class="c1"># Get PV_BAT value from sensor_data</span>
+<div class="viewcode-block" id="OpenBmcRestAPI.get_pv_bat_sensor_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_pv_bat_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_pv_bat_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pv_bat_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_data</span><span class="p">()[</span><span class="s2">&quot;PV_BAT&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pv_bat_value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">pv_bat_value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unable to get pv_bat_sensor_data&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># Get MB_P3V_BAT value from sensor_data</span>
+<div class="viewcode-block" id="OpenBmcRestAPI.get_p3v3_mb_sensor_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.openbmc_rest_api.OpenBmcRestAPI.get_p3v3_mb_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_p3v3_mb_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">p3v3_mb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensor_data</span><span class="p">()[</span><span class="s2">&quot;P3V3_MB&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">p3v3_mb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">p3v3_mb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unable to get p3v3_mb_value&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

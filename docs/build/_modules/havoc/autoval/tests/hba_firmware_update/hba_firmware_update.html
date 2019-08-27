@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.hba_firmware_update.hba_firmware_update &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.hba_firmware_update.hba_firmware_update</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.hba_firmware_update.hba_firmware_update</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This script calls the autotest local &#39;storage/hba/hba_firmware_update.py&#39;</span>
+<span class="sd">script multile times and updates the hba firmware from</span>
+<span class="sd">n-1 -&gt; n , n-&gt; n+1 , n+1 -&gt;ni with a inband reboot between the upgrades.</span>
+
+<span class="sd">and see if the transition of the update is smooth under the I/O stress and</span>
+<span class="sd">continuous reboots.</span>
+
+<span class="sd">This typically uses three autotest local control files</span>
+<span class="sd">1) control_n-1_version - this updates n-1 verision to n version</span>
+<span class="sd">2) control_n_plus1_version - from n  version to n+1 version</span>
+<span class="sd">3) control_n_version - from n-1 version to n version</span>
+
+<span class="sd">update the /mnt/vol/havoc/autoval/bin/firmware/versions.json file prior to</span>
+<span class="sd">running with the version codes and the firmware version files to update</span>
+
+<span class="sd">save all the bin files in &#39;/mnt/vol/havoc/autoval/bin/firmware/&#39;</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="HbaFirmwareUpdate"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hba_firmware_update.html#havoc.autoval.tests.hba_firmware_update.hba_firmware_update.HbaFirmwareUpdate">[docs]</a><span class="k">class</span> <span class="nc">HbaFirmwareUpdate</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="HbaFirmwareUpdate.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hba_firmware_update.html#havoc.autoval.tests.hba_firmware_update.hba_firmware_update.HbaFirmwareUpdate.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cycle_count</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">=</span> <span class="n">cycle_count</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HbaFirmwareUpdate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HbaFirmwareUpdate.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hba_firmware_update.html#havoc.autoval.tests.hba_firmware_update.hba_firmware_update.HbaFirmwareUpdate.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;hba firmware update test&quot;</span><span class="p">)</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+        <span class="n">num_of_cycles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span>
+        <span class="c1">#int(self.hosts[0][&#39;num_of_cycles&#39;])</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;ping </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">))</span>
+        <span class="n">json_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+            <span class="s1">&#39;/mnt/vol/havoc/autoval/bin/firmware/hba_firmware_versions.json&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;json_data is </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">json_data</span><span class="p">))</span>
+        <span class="n">versions</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">versions</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">][</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
+        <span class="s2">&quot;The firmware version is up to date proceed to testing&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_of_cycles</span><span class="p">):</span>  <span class="c1"># noqa: B007 T25377293 Grandfathered in</span>
+            <span class="c1">########## download n+1 version ##########</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running firmware update to n+1 version&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;storage/hba/hba_firmware_update&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;control_n_plus1_version&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">4500</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;reboot the system&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;check if firmware version is updated&quot;</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">versions</span><span class="p">[</span><span class="s2">&quot;n+1&quot;</span><span class="p">][</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
+            <span class="s2">&quot;firware update  to n+1 version successful&quot;</span><span class="p">)</span>
+
+            <span class="c1">########## download nth version ##########</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
+            <span class="s2">&quot;Run firmware update to nth version&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;storage/hba/hba_firmware_update&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;control_n_version&quot;</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="mi">4500</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;reboot the system&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;check if firmware version is updated&quot;</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">versions</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">][</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
+                    <span class="s2">&quot;firware update  to nth version successful&quot;</span><span class="p">)</span>
+
+            <span class="c1">########## download n-1 version ##########</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;Run firmware update to n-1 version&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;storage/hba/hba_firmware_update&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;control_n-1_version&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">4500</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;reboot the system&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;check if firmware version is updated&quot;</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">versions</span><span class="p">[</span><span class="s2">&quot;n-1&quot;</span><span class="p">][</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
+                    <span class="s2">&quot;firmware update to n-1 version successful&quot;</span><span class="p">)</span>
+
+            <span class="c1">########## download nth version ##########</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;Run firmware update to nth version&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;storage/hba/hba_firmware_update&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;control_n_version&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">4500</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;reboot the system&quot;</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">versions</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">][</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span>
+                    <span class="s2">&quot;firmware update to nth version successful&quot;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="check_version"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hba_firmware_update.html#havoc.autoval.tests.hba_firmware_update.hba_firmware_update.check_version">[docs]</a><span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+    <span class="n">version_output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;lsiutil 0&quot;</span><span class="p">)</span>
+    <span class="n">lastline</span> <span class="o">=</span> <span class="n">version_output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+).*&quot;</span><span class="p">,</span> <span class="n">lastline</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">portnum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;lsiutil command failed&quot;</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;lsiutil -p </span><span class="si">%d</span><span class="s1"> 1&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">portnum</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.*Current active firmware version is\s+(\d+)\s+.*&quot;</span><span class="p">,</span>
+            <span class="n">out</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="n">firmware_version</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">firmware_version</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">version</span> <span class="o">==</span> <span class="n">firmware_version</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hba_firmware_update.html#havoc.autoval.tests.hba_firmware_update.hba_firmware_update.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">HbaFirmwareUpdate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

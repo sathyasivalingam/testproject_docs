@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.connection_dispatcher</span> <span class="k">import</span> <span class="n">ConnectionDispatcher</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This script performs ssh stress</span>
+<span class="sd">  - Parent process creates parallel ssh sessions based on the thread_count specified</span>
+<span class="sd">  - Runs the sensor-util command for the opened ssh session</span>
+<span class="sd">  - Ssh stress runs for specified duartion of time in json file</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="OpenbmcSshStress"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.OpenbmcSshStress">[docs]</a><span class="k">class</span> <span class="nc">OpenbmcSshStress</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenbmcSshStress.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.OpenbmcSshStress.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenbmcSshStress</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;thread_count&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenbmcSshStress.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.OpenbmcSshStress.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; Openbmc ssh stress Test&quot;</span><span class="p">)</span>
+
+        <span class="c1"># calling the ssh_stress function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh_stress</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread_count</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcSshStress.handle_parallel_proc"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.OpenbmcSshStress.handle_parallel_proc">[docs]</a>    <span class="k">def</span> <span class="nf">handle_parallel_proc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threads</span><span class="p">,</span> <span class="n">thread_q</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">exc</span> <span class="o">=</span> <span class="n">thread_q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;SSH connection failed: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">exc</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="OpenbmcSshStress.ssh_stress"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.OpenbmcSshStress.ssh_stress">[docs]</a>    <span class="k">def</span> <span class="nf">ssh_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">thread_count</span><span class="p">):</span>
+        <span class="n">cycle_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;Starting SSH stress test with </span><span class="si">%d</span><span class="s2"> threads for </span><span class="si">%s</span><span class="s2"> secs&quot;</span> <span class="o">%</span>
+            <span class="p">(</span><span class="n">thread_count</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Iteration - </span><span class="si">%d</span><span class="s2">, SSH stress with </span><span class="si">%d</span><span class="s2"> threads&quot;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">cycle_count</span><span class="p">,</span> <span class="n">thread_count</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># Create child processes to run parallel SSH</span>
+            <span class="n">thread_q</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+            <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">thread_count</span><span class="p">):</span>
+                <span class="n">_t</span> <span class="o">=</span> <span class="n">AutovalThread</span><span class="p">(</span>
+                    <span class="n">thread_q</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ssh_login</span><span class="p">,</span>
+                    <span class="n">child</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">_t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_t</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_parallel_proc</span><span class="p">(</span><span class="n">threads</span><span class="p">,</span> <span class="n">thread_q</span><span class="p">)</span>
+            <span class="n">cycle_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Testing finished after </span><span class="si">%d</span><span class="s2"> seconds&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcSshStress.ssh_login"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.OpenbmcSshStress.ssh_login">[docs]</a>    <span class="k">def</span> <span class="nf">ssh_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+        <span class="n">conn_obj</span> <span class="o">=</span> <span class="n">ConnectionDispatcher</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ssh_obj</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">bmc_connection</span>
+        <span class="n">ssh_obj</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;/bin/cat /etc/issue&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_ssh_stress.html#havoc.autoval.tests.openbmc_ssh_stress.openbmc_ssh_stress.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">OpenbmcSshStress</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

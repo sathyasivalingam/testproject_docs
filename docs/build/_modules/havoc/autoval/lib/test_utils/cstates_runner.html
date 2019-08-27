@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.cstates_runner &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.cstates_runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.cstates_runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.test_utils_base</span> <span class="k">import</span> <span class="n">TestUtilsBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+
+
+<div class="viewcode-block" id="CstatesRunner"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner">[docs]</a><span class="k">class</span> <span class="nc">CstatesRunner</span><span class="p">(</span><span class="n">TestUtilsBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This test module put the system in various cstates by setting the latency</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    sequence: a list of cstates [c0, c1, c3, c6, c7]</span>
+<span class="sd">    interval: interval between cstate changes in seconds</span>
+<span class="sd">    runtime: total run time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CstatesRunner.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CstatesRunner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;run_definition&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s1">&#39;c0&#39;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s1">&#39;c1e&#39;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s1">&#39;c3&#39;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s1">&#39;c6&#39;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="s1">&#39;c7&#39;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">],</span>
+            <span class="s1">&#39;runtime&#39;</span><span class="p">:</span> <span class="mi">60</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_definition</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="CstatesRunner.test_setup"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner.test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_definition</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s2">&quot;run_definition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_definition</span></div>
+
+<div class="viewcode-block" id="CstatesRunner.init_latency"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner.init_latency">[docs]</a>    <span class="k">def</span> <span class="nf">init_latency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a list of latency settings based on sequence argument</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states_init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_states</span><span class="p">()</span>
+        <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_init</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">onecpu</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s1">&#39;run_definition&#39;</span><span class="p">]:</span>
+            <span class="n">latency</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">skey</span> <span class="ow">in</span> <span class="n">onecpu</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">onecpu</span><span class="p">[</span><span class="n">skey</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">latency</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">onecpu</span><span class="p">[</span><span class="n">skey</span><span class="p">][</span><span class="s1">&#39;latency&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">latency</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Latency </span><span class="si">%d</span><span class="s2"> for state </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">latency</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Did not find latency for </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">]))</span>
+            <span class="n">state</span><span class="p">[</span><span class="s1">&#39;latency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">latency</span></div>
+
+<div class="viewcode-block" id="CstatesRunner.start_test"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner.start_test">[docs]</a>    <span class="k">def</span> <span class="nf">start_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run sequence of of cstates.</span>
+<span class="sd">        Puts the system in various cstates by writing to</span>
+<span class="sd">        /dev/cpu_dma_latency/</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_latency</span><span class="p">()</span>
+
+        <span class="n">run_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">endtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s1">&#39;runtime&#39;</span><span class="p">]</span>
+
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">endtime</span><span class="p">:</span>
+            <span class="n">setinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s1">&#39;run_definition&#39;</span><span class="p">][</span><span class="n">run_index</span><span class="p">][</span><span class="s1">&#39;interval&#39;</span><span class="p">]</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s1">&#39;run_definition&#39;</span><span class="p">][</span><span class="n">run_index</span><span class="p">][</span><span class="s1">&#39;sequence&#39;</span><span class="p">]</span>
+            <span class="n">latency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s1">&#39;run_definition&#39;</span><span class="p">][</span><span class="n">run_index</span><span class="p">][</span><span class="s1">&#39;latency&#39;</span><span class="p">]</span>
+            <span class="c1"># increment sequence</span>
+            <span class="n">run_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">run_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="p">[</span><span class="s1">&#39;run_definition&#39;</span><span class="p">]):</span>
+                <span class="n">run_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">if</span> <span class="n">latency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;***** Starting sequence. </span><span class="si">%d</span><span class="s2"> seconds remaining *****&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">endtime</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;***** Sequence </span><span class="si">%s</span><span class="s2"> - Latency </span><span class="si">%d</span><span class="s2"> - </span><span class="si">%s</span><span class="s2"> sec *****&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">latency</span><span class="p">,</span> <span class="n">setinterval</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">latency</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;echo </span><span class="si">%s</span><span class="s2"> &gt; /dev/cpu_dma_latency&quot;</span> <span class="o">%</span> <span class="n">latency</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">setinterval</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;cstates test completed successfully&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CstatesRunner.get_states"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner.get_states">[docs]</a>    <span class="k">def</span> <span class="nf">get_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines the latency for each cstat.</span>
+<span class="sd">        @TODO - Add support for other types of CPU</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;/sys/devices/system/cpu/&quot;</span><span class="p">]</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;recursive_file_list&quot;</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="s2">&quot;validation_utils.lib.generic_utils&quot;</span>
+        <span class="n">class_name</span> <span class="o">=</span> <span class="s2">&quot;GenericUtils&quot;</span>
+
+        <span class="n">_host</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_host</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">file_paths</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_remote_module</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">_host</span><span class="p">)</span>
+
+        <span class="n">matched_files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\btime\b|\bname\b|\blatency\b&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">file_name</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">matched_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">matched_files</span><span class="p">:</span>
+            <span class="n">file_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;cat </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s1">&#39;POLL&#39;</span> <span class="ow">in</span> <span class="n">file_output</span><span class="p">:</span>
+                <span class="n">file_output</span> <span class="o">=</span> <span class="s1">&#39;C0-POLL&#39;</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">keys</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+                <span class="n">states</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">keys</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">states</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="mi">5</span><span class="p">]]:</span>
+                <span class="n">states</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="mi">5</span><span class="p">]][</span><span class="n">keys</span><span class="p">[</span><span class="mi">7</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">states</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="mi">5</span><span class="p">]][</span><span class="n">keys</span><span class="p">[</span><span class="mi">7</span><span class="p">]][</span><span class="n">keys</span><span class="p">[</span><span class="mi">8</span><span class="p">]]</span> <span class="o">=</span> <span class="n">file_output</span>
+        <span class="k">return</span> <span class="n">states</span></div>
+
+<div class="viewcode-block" id="CstatesRunner.parse_results"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.cstates_runner.CstatesRunner.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

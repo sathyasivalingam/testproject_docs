@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.power.power_cap &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.power.power_cap</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.power.power_cap</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">havoc.autoval.lib.test_utils.convert_nums</span> <span class="k">as</span> <span class="nn">cn</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<div class="viewcode-block" id="PowerCap"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap">[docs]</a><span class="k">class</span> <span class="nc">PowerCap</span><span class="p">():</span>
+
+<div class="viewcode-block" id="PowerCap.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">use_inband</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_inband</span> <span class="o">=</span> <span class="n">use_inband</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction_time_limit</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span> <span class="o">=</span> <span class="s2">&quot;-t 0x2c -b 0x6 raw &quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sys_chk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="s2">&quot;fru list&quot;</span><span class="p">)</span>
+        <span class="n">leopard</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Leopard&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sys_chk</span><span class="p">)</span>
+        <span class="n">wiwynn</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Wiwynn&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sys_chk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">leopard</span> <span class="ow">and</span> <span class="n">wiwynn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="PowerCap.power_cap_off"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.power_cap_off">[docs]</a>    <span class="k">def</span> <span class="nf">power_cap_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xda 0x01 0x00&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x2e 0xc0 0x57 0x1 0x0 0x4 0x0 0x1&quot;</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="PowerCap.power_cap_on"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.power_cap_on">[docs]</a>    <span class="k">def</span> <span class="nf">power_cap_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xda 0x01 0x01&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x2e 0xc0 0x57 0x1 0x0 0x5 0x0 0x1&quot;</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="PowerCap.is_power_cap_on"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.is_power_cap_on">[docs]</a>    <span class="k">def</span> <span class="nf">is_power_cap_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        returns - True if power cap is on, False if off.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="c1"># cmd = self.base_cmd</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xdb 0x01&quot;</span>
+            <span class="n">sys_chk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">sys_chk</span> <span class="o">==</span> <span class="s1">&#39;01&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x2e 0xc2 0x57 0x01 0x00 0x00 0x01&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">bytes_list</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">target_byte</span> <span class="o">=</span> <span class="n">bytes_list</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+            <span class="c1"># Bit number 5 (index 4) in this byte tells</span>
+            <span class="c1"># us if the power cap is enabled.</span>
+            <span class="n">decimal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_byte</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+            <span class="n">binary</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">decimal</span><span class="p">)</span>
+            <span class="n">bit</span> <span class="o">=</span> <span class="n">binary</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">bit</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="PowerCap.set_power_limit"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.set_power_limit">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watts</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the power limit in Watts. Must be an integer number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xda 0x03 0xaa 0x00&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;setting power limit to </span><span class="si">%d</span><span class="s2"> watts&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">watts</span><span class="p">))</span>
+            <span class="n">wbytes</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">int_to_bytes</span><span class="p">(</span><span class="n">watts</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">pwr_limit_hex</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">wbytes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wbytes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;pwr_limit_hex: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pwr_limit_hex</span><span class="p">))</span>
+
+            <span class="n">ctlbytes</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">int_to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">correction_time_limit</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="n">cor_time_hex</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ctlbytes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ctlbytes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="n">ctlbytes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">ctlbytes</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cor_time_hex: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cor_time_hex</span><span class="p">))</span>
+
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x2e 0xc1 0x57 0x01 0x00 0x10 0x01 0x10 &quot;</span> <span class="o">+</span> \
+               <span class="s2">&quot;0x00 </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> 0x00 0x00 0x1e 0x00&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pwr_limit_hex</span><span class="p">,</span> <span class="n">cor_time_hex</span><span class="p">)</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="PowerCap.get_power_limit"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.get_power_limit">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xdb 0x03&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">bytes_list</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">pwr_lsb</span> <span class="o">=</span> <span class="n">bytes_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">pwr_msb</span> <span class="o">=</span> <span class="n">bytes_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">byte_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pwr_lsb</span><span class="p">,</span> <span class="n">pwr_msb</span><span class="p">)</span>
+            <span class="n">pwr_limit</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">bytes_to_ints</span><span class="p">(</span><span class="n">byte_str</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x2e 0xc2 0x57 0x01 0x00 0x00 0x01&quot;</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">bytes_list</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+            <span class="n">pwr_lsb</span> <span class="o">=</span> <span class="n">bytes_list</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+            <span class="n">pwr_msb</span> <span class="o">=</span> <span class="n">bytes_list</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+            <span class="n">byte_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pwr_lsb</span><span class="p">,</span> <span class="n">pwr_msb</span><span class="p">)</span>
+            <span class="n">pwr_limit</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">bytes_to_ints</span><span class="p">(</span><span class="n">byte_str</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pwr_limit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="PowerCap.set_correction_time_limit"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.power_cap.PowerCap.set_correction_time_limit">[docs]</a>    <span class="k">def</span> <span class="nf">set_correction_time_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">milliseconds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the time allowed for system to reach power limit in milliseconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction_time_limit</span> <span class="o">=</span> <span class="n">milliseconds</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_ipmitool_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_inband</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

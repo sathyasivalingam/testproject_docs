@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.rebootest_lightning.rebootest_lightning &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.rebootest_lightning.rebootest_lightning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.rebootest_lightning.rebootest_lightning</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="RebootTest"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.RebootTest">[docs]</a><span class="k">class</span> <span class="nc">RebootTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reboot a Lightning server many times and check that all storage devices</span>
+<span class="sd">    are still present when it comes back up.</span>
+
+<span class="sd">    Parameters (set in test control file):</span>
+<span class="sd">        reboots: number of reboots</span>
+<span class="sd">        reboot_time: time allowed for the server to reboot - note that it often</span>
+<span class="sd">            takes a while for the server to come back up</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RebootTest.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.RebootTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RebootTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">REBOOTS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;reboots&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">REBOOT_TIME</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;reboot_time&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="RebootTest.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.RebootTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># a U.2 server is half the size of an M.2 one</span>
+        <span class="n">server_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_lightning_server_type</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Server type: &quot;</span> <span class="o">+</span> <span class="n">server_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">server_type</span> <span class="o">==</span> <span class="s1">&#39;M2&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LANES_EXPECTED</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                <span class="s1">&#39;x16&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="n">server_type</span> <span class="o">==</span> <span class="s1">&#39;U2&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LANES_EXPECTED</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+                <span class="s1">&#39;x16&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">((</span><span class="s2">&quot;Warning: could not identify Lightning server type.&quot;</span>
+                           <span class="s2">&quot; Assuming M.2.&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">LANES_EXPECTED</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                <span class="s1">&#39;x16&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Storing dmesg and counter logs in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Starting test.  Server will reboot &quot;</span> <span class="o">+</span>
+                              <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REBOOTS</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; times.  Time allowed &quot;</span> <span class="o">+</span>
+                              <span class="s2">&quot;for each reboot: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REBOOT_TIME</span><span class="p">))</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="s1">&#39;{:%Y%m</span><span class="si">%d</span><span class="s1">_%H%M}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">evcntr_logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="n">start_time</span> <span class="o">+</span> <span class="s1">&#39;_evcntr.log&#39;</span><span class="p">)</span>
+        <span class="n">dmesg_logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="n">start_time</span> <span class="o">+</span> <span class="s1">&#39;_dmesg.log&#39;</span><span class="p">)</span>
+
+        <span class="n">devices_expected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_nvme_devs</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REBOOTS</span><span class="p">):</span>
+            <span class="c1"># reboot the server and check that it comes back up fast enough</span>
+            <span class="n">reboot_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">(</span><span class="n">shutdown_cmd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">REBOOT_TIME</span><span class="p">)</span>
+            <span class="n">time_elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">reboot_time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Spin wait = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time_elapsed</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_less_equal</span><span class="p">(</span><span class="n">time_elapsed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REBOOT_TIME</span><span class="p">,</span>
+                                     <span class="s2">&quot;Server came back up soon enough.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># get and store event counter log</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">evcntr_logfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                <span class="n">evcntr_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;switchtec evcntr -r /dev/switchtec0&quot;</span><span class="p">)</span>
+                <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">evcntr_output</span><span class="p">)</span>
+
+            <span class="c1"># get and store dmesg log</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dmesg_logfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                <span class="n">dmesg_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;dmesg | grep -i aer&quot;</span><span class="p">)</span>
+                <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dmesg_output</span><span class="p">)</span>
+
+            <span class="c1"># make sure we have the right number of lanes</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_lightning_lanes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LANES_EXPECTED</span><span class="p">)</span>
+
+            <span class="c1"># make sure we have the right number of NVMe storage devices</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">devices_actual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_nvme_devs</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">devices_actual</span><span class="p">,</span> <span class="n">devices_expected</span><span class="p">,</span>
+                                <span class="s2">&quot;Correct number (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">devices_expected</span><span class="p">)</span> <span class="o">+</span>
+                                <span class="s2">&quot;) of NVMe storage devices found.&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Finished cycle &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="RebootTest.get_lightning_server_type"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.RebootTest.get_lightning_server_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_lightning_server_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;sshpass -p &quot;0penBmc&quot; ssh root@&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39;fe80::ff:fe00:1</span><span class="si">%u</span><span class="s1">sb0&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &quot;cat /var/tmp/ssd_sku_info&quot;&#39;</span>
+        <span class="n">ssd_sku_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ssd_sku_info</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s1">&#39;no such identity&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="s1">&#39;Warning&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RebootTest.check_lightning_lanes"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.RebootTest.check_lightning_lanes">[docs]</a>    <span class="k">def</span> <span class="nf">check_lightning_lanes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lanes_expected_dict</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">pci_devs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;lspci -vvv&#39;</span><span class="p">)</span>
+        <span class="n">pci_devs</span> <span class="o">=</span> <span class="n">pci_devs</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">lanes</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">pci_devs</span> <span class="k">if</span> <span class="s1">&#39;LnkSta:&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">lane_size</span><span class="p">,</span> <span class="n">lanes_expected</span> <span class="ow">in</span> <span class="n">lanes_expected_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">lanes_actual</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lanes</span> <span class="k">if</span> <span class="n">lane_size</span> <span class="ow">in</span> <span class="n">line</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">lanes_actual</span><span class="p">,</span> <span class="n">lanes_expected</span><span class="p">,</span>
+                                <span class="s2">&quot;Correct number (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lanes_expected</span><span class="p">)</span> <span class="o">+</span>
+                                <span class="s2">&quot;) of &quot;</span> <span class="o">+</span> <span class="n">lane_size</span> <span class="o">+</span> <span class="s2">&quot; lanes found.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RebootTest.count_nvme_devs"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.RebootTest.count_nvme_devs">[docs]</a>    <span class="k">def</span> <span class="nf">count_nvme_devs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nvme_devs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;lsblk -i&#39;</span><span class="p">)</span>
+        <span class="n">nvme_devs</span> <span class="o">=</span> <span class="n">nvme_devs</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">device_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">nvme_devs</span> <span class="k">if</span> <span class="s1">&#39;nvme&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">device_count</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.rebootest_lightning.html#havoc.autoval.tests.rebootest_lightning.rebootest_lightning.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">RebootTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

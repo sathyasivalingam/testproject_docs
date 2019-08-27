@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.test_utils_base</span> <span class="k">import</span> <span class="n">TestUtilsBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner">[docs]</a><span class="k">class</span> <span class="nc">FfmpegEncodeCmodelCompareRunner</span><span class="p">(</span><span class="n">TestUtilsBase</span><span class="p">):</span>
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_output</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd_options</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">300</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bitrates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssimys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">infile</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.test_setup"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.run_ffmpeg_encode_cmodel_compare"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.run_ffmpeg_encode_cmodel_compare">[docs]</a>    <span class="k">def</span> <span class="nf">run_ffmpeg_encode_cmodel_compare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_cmd_line</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">command_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">command_output</span></div>
+
+    <span class="k">def</span> <span class="nf">_gen_cmd_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;video_tools/jim_y4ms/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*264&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;.y4m&quot;</span><span class="p">,</span> <span class="s2">&quot;_B</span><span class="si">%s</span><span class="s2">.h264&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*265&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span><span class="p">)</span><span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;.y4m&quot;</span><span class="p">,</span> <span class="s2">&quot;_B</span><span class="si">%s</span><span class="s2">.hevc&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*hevc&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span><span class="p">)</span><span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;.y4m&quot;</span><span class="p">,</span> <span class="s2">&quot;_B</span><span class="si">%s</span><span class="s2">.hevc&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*vp9&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span><span class="p">)</span><span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;.y4m&quot;</span><span class="p">,</span> <span class="s2">&quot;_B</span><span class="si">%s</span><span class="s2">.ivf&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unsupported test encoder_lib </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span><span class="p">))</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">+</span> <span class="s2">&quot; -i &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">infile</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd_options</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_log_dirs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">[</span><span class="s2">&quot;resultsdir&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span>
+
+        <span class="k">return</span> <span class="n">cmd</span>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.generate_args"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.generate_args">[docs]</a>    <span class="k">def</span> <span class="nf">generate_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        fixes the timeout, input and output file args to be run with ffmpeg cmd</span>
+
+<span class="sd">        @param args: a list of key/value pairs provided by user</span>
+<span class="sd">        @return: returns a list of key/value pairs of the updated arguments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;encoder&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;-c:v&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">encoder_lib</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;bitrate&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;-timeout&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;stream&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">infile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">(),</span> <span class="n">value</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;-vk-params&quot;</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;bitrate=x&quot;</span><span class="p">,</span> <span class="s2">&quot;bitrate=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitrate</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span> <span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cmd_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cmd_options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.start_test"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.start_test">[docs]</a>    <span class="k">def</span> <span class="nf">start_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_ffmpeg_encode_cmodel_compare</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;stream completed successfully&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.parse_results"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses the videocorrectness log</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ouput_logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">+</span> <span class="s2">&quot;_encode.log&quot;</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ouput_logfile</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
+            <span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_output</span><span class="p">)</span>
+
+        <span class="n">test_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_output</span><span class="p">)</span>
+        <span class="n">passed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">test_results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result_handler</span> <span class="o">=</span> <span class="n">ResultHandler</span><span class="p">()</span>
+            <span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">(</span><span class="n">test_results</span><span class="p">)</span>
+            <span class="n">passed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">passed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Did not find &#39;PASS&#39; status in output&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.parse_values"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.parse_values">[docs]</a>    <span class="k">def</span> <span class="nf">parse_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_output</span><span class="p">):</span>
+        <span class="n">test_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">bitrate</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">ssim_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cmd_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;kb/s:([0-9]+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">bitrate</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;frame=\s+([0-9]+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">frames</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;fps=\s+([0-9]+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">fps</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;bitrate=\s+([0-9]+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">bitrate</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;speed=\s+([0-9]+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">speed</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;MEAN PSNR.*SSIM Y:([0-9]+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">ssim_y</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_log_dirs</span><span class="p">()</span>
+        <span class="n">encode_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">log_dir</span><span class="p">[</span><span class="s2">&quot;resultsdir&quot;</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="n">encode_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">encode_name</span><span class="p">)</span>
+        <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_frames&#39;</span> <span class="o">%</span> <span class="n">encode_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">frames</span>
+        <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_bitrate&#39;</span> <span class="o">%</span> <span class="n">encode_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">bitrate</span>
+        <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_fps&#39;</span> <span class="o">%</span> <span class="n">encode_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fps</span>
+        <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_speed&#39;</span> <span class="o">%</span> <span class="n">encode_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_ssim_y&#39;</span> <span class="o">%</span> <span class="n">encode_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssim_y</span>
+        <span class="k">return</span> <span class="n">test_results</span></div>
+
+<div class="viewcode-block" id="FfmpegEncodeCmodelCompareRunner.diff_check"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner.FfmpegEncodeCmodelCompareRunner.diff_check">[docs]</a>    <span class="k">def</span> <span class="nf">diff_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_log_dirs</span><span class="p">()</span>
+        <span class="n">ref_file_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">log_dir</span><span class="p">[</span><span class="s2">&quot;resultsdir&quot;</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="n">ref_file_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;_mve&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ref_file_name</span><span class="p">)</span>
+        <span class="n">tool_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">()</span>
+        <span class="n">enc_ref_file_path</span> <span class="o">=</span> <span class="s2">&quot;video_tools/brcm_mve_encoded_ref_files/&quot;</span>
+        <span class="n">ref_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tool_path</span><span class="p">,</span> <span class="n">enc_ref_file_path</span> <span class="o">+</span> <span class="n">ref_file_name</span><span class="p">)</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span>
+        <span class="n">diff_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;diff -s -q </span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ref_file</span><span class="p">,</span> <span class="n">out_file</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">diff_output</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

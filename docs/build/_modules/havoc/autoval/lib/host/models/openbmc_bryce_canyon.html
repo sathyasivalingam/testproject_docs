@@ -1,0 +1,568 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models.openbmc_bryce_canyon &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models.openbmc_bryce_canyon</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.models.openbmc_bryce_canyon</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.filesystem_actions</span> <span class="k">import</span> <span class="n">FilesystemActions</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.openbmc</span> <span class="k">import</span> <span class="n">OpenBMC</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.sshpass</span> <span class="k">import</span> <span class="n">SSHPassConn</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.credentials</span> <span class="k">import</span> <span class="n">Credentials</span>
+
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon">[docs]</a><span class="k">class</span> <span class="nc">OpenBMCBryceCanyon</span><span class="p">(</span><span class="n">OpenBMC</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs_actions</span> <span class="o">=</span> <span class="n">FilesystemActions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_filter</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;enclosure_err&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">&quot;\(No Error\)&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;BMC CPU Utilization too high&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;Server sensor health is bad&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;Error Counter: \d{1,2}&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;Error Code\s\w{1,2}:&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.health_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.health_check">[docs]</a>    <span class="k">def</span> <span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Determine if it&#39;s a OpenBMC Triton/BryceCanyon</span>
+        <span class="n">search_pattern</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Triton&quot;</span><span class="p">,</span> <span class="s2">&quot;BryceCanyon&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">search_pattern</span><span class="p">:</span>
+            <span class="n">is_openbmcbrycecanyon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_openbmc_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_openbmcbrycecanyon</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_openbmcbrycecanyon</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No OpenBMC Bryce Canyon device detected&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Detected server Bryce Canyon&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_critical_services"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_critical_services">[docs]</a>    <span class="k">def</span> <span class="nf">get_critical_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method returns a list of services that are always expected to</span>
+<span class="sd">        run on the openBMC BryceCanyon System</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;sensord&#39;</span><span class="p">,</span> <span class="s1">&#39;healthd&#39;</span><span class="p">,</span> <span class="s1">&#39;fscd&#39;</span><span class="p">]</span></div>
+
+    <span class="c1"># OEM Related</span>
+<div class="viewcode-block" id="OpenBMCBryceCanyon.clear_boot_order_cmos"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.clear_boot_order_cmos">[docs]</a>    <span class="k">def</span> <span class="nf">clear_boot_order_cmos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#cmd = &quot;/usr/local/bin/bios-util server  --boot_order enable --clear_CMOS&quot;</span>
+        <span class="c1">#self.bmc_host.run(cmd)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clear_boot_order_cmos</span><span class="p">(</span><span class="s2">&quot;server&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_reset</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.parse_ecc_errors"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.parse_ecc_errors">[docs]</a>    <span class="k">def</span> <span class="nf">parse_ecc_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check ecc value for checking openbmc current health</span>
+<span class="sd">        Report any correctable or uncorrectable error logged on the BMC</span>
+<span class="sd">        as Failure. This check will let us monitor the correctable</span>
+<span class="sd">        uncorrectable errors</span>
+
+<span class="sd">        @param {} log: contains correctable ECC and uncorrectable ECC</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">correctable_ecc</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+        <span class="n">uncorrectable_ecc</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">correctable_ecc</span> <span class="o">!=</span> <span class="s2">&quot;00&quot;</span> <span class="ow">or</span> <span class="n">uncorrectable_ecc</span> <span class="o">!=</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Correctable_ecc - </span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> Uncorrectable_ecc - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">correctable_ecc</span><span class="p">,</span> <span class="n">uncorrectable_ecc</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.parse_enclosure_error"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.parse_enclosure_error">[docs]</a>    <span class="k">def</span> <span class="nf">parse_enclosure_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enclosure error check.</span>
+
+<span class="sd">        @param String log: enclosure errors output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Stopping test due to enclosure error(s): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_slot_info"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_slot_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;server&quot;</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_fru_no"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_fru_no">[docs]</a>    <span class="k">def</span> <span class="nf">get_fru_no</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Monolake servers FRU is 1 by default</span>
+        <span class="k">return</span> <span class="s2">&quot;1&quot;</span></div>
+
+    <span class="c1"># @Override OpenBMC</span>
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_config"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_config">[docs]</a>    <span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">log_dir</span><span class="p">,</span>
+        <span class="n">test_start_time</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">bios_dump_filter</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="n">config_dict</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span>
+            <span class="n">log_dir</span><span class="p">,</span>
+            <span class="n">test_start_time</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+            <span class="n">bios_dump_filter</span><span class="o">=</span><span class="n">bios_dump_filter</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_ecc_errors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_ecc</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_enclosure_error</span><span class="p">(</span><span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;enclosure_err&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">config_dict</span></div>
+
+    <span class="c1"># @Override OpenBMC</span>
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_config_details"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_config_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_details</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">log_dir</span><span class="p">,</span>
+        <span class="n">test_start_time</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">bios_dump_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">config_dict</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_config_details</span><span class="p">(</span>
+            <span class="n">log_dir</span><span class="p">,</span> <span class="n">test_start_time</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">bios_dump_filter</span><span class="o">=</span><span class="n">bios_dump_filter</span>
+        <span class="p">)</span>
+        <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;enclosure_err&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_enclosure_util_error</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">config_dict</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_ecc"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_ecc">[docs]</a>    <span class="k">def</span> <span class="nf">get_ecc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># check for correctable and uncorrectable ecc</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/sbin/devmem 0x1e6e0050&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.openbmc_flashcp_upgrade_cmd"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.openbmc_flashcp_upgrade_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">openbmc_flashcp_upgrade_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subfile</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/sbin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;flashcp -v /tmp/</span><span class="si">%s</span><span class="s2"> /dev/mtd5&quot;</span> <span class="o">%</span> <span class="n">subfile</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.verify_flash_sensors"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.verify_flash_sensors">[docs]</a>    <span class="k">def</span> <span class="nf">verify_flash_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.*?SMART\w*&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\(ok\)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.openbmc_flashcp_prerequisite"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.openbmc_flashcp_prerequisite">[docs]</a>    <span class="k">def</span> <span class="nf">openbmc_flashcp_prerequisite</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.bios_post_flash"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bios_post_flash">[docs]</a>    <span class="k">def</span> <span class="nf">bios_post_flash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_reboot</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.validate_fan_speed"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.validate_fan_speed">[docs]</a>    <span class="k">def</span> <span class="nf">validate_fan_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percentage_got</span><span class="p">,</span> <span class="n">percentage_given_byuser</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">percentage_given_byuser</span><span class="p">)</span> <span class="o">==</span> <span class="n">percentage_got</span><span class="p">):</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Percentage successfully set to desired value&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to set fan speed to desired value&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.scc_sensor_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.scc_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">scc_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sensor-util scc&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sensor-util scc&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.dpb_sensor_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.dpb_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">dpb_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sensor-util dpb&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sensor-util dpb&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.iom_sensor_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">iom_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sensor-util iom&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sensor-util iom&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.iom_scc_dpb_sensor"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_scc_dpb_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">iom_scc_dpb_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iom_sensor_data</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scc_sensor_data</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dpb_sensor_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.iom_fru_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_fru_list">[docs]</a>    <span class="k">def</span> <span class="nf">iom_fru_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;fruid-util iom&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fruid-util iom&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.scc_fru_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.scc_fru_list">[docs]</a>    <span class="k">def</span> <span class="nf">scc_fru_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;fruid-util scc&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fruid-util scc&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.dpb_fru_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.dpb_fru_list">[docs]</a>    <span class="k">def</span> <span class="nf">dpb_fru_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;fruid-util dpb&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fruid-util dpb&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.iom_scc_dpb_fruid"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.iom_scc_dpb_fruid">[docs]</a>    <span class="k">def</span> <span class="nf">iom_scc_dpb_fruid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iom_fru_list</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scc_fru_list</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dpb_fru_list</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_full_fruid_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_full_fruid_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_fruid_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_full_fruid_list</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">iom_scc_dpb_fruid</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_full_sensor_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_full_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_full_sensor_data</span><span class="p">()</span>
+
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">iom_scc_dpb_sensor</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.log_util_iom"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_iom">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_iom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;log-util iom --print&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.log_util_dpb"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_dpb">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_dpb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;log-util dpb --print&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.log_util_scc"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_scc">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_scc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;log-util scc --print&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.log_util_all_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.log_util_all_options">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_all_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">log_util_all_options</span><span class="p">()</span>
+        <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_util_iom</span><span class="p">())</span>
+        <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_util_dpb</span><span class="p">())</span>
+        <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_util_scc</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">logs</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_enclosure_util_error"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_enclosure_util_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_enclosure_util_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/enclosure-util --error&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.bc_ac_cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bc_ac_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">bc_ac_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/sbin/i2cset -y 6 0x10 0xd9 c&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Ac cycling now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Waiting for the host to reconnect&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_cycle_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.fw_util_scc"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_util_scc">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exponential</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fw_util_scc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util scc --version&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.get_fw_util_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.get_fw_util_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_fw_util_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fw_util_bmc_nic_slot</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fw_util_scc</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.fw_update_bmc"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_update_bmc">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_bmc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">reboot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/cat /etc/issue&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+\.\d+&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1.6</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util bmc --update --bmc </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">reboot</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util iom --update --bmc </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.fw_update_rom"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.fw_update_rom">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_rom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">reboot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/cat /etc/issue&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+\.\d+&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1.6</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util bmc --update --rom </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">reboot</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util iom --update --rom </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.validate_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.validate_version">[docs]</a>    <span class="k">def</span> <span class="nf">validate_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fw_ver_num</span><span class="p">):</span>
+        <span class="c1"># Validate the version to be updated</span>
+        <span class="c1"># If version &gt; 1.0, then use fw-util command</span>
+        <span class="c1"># else use flashcp method</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+\.\d+&quot;</span><span class="p">,</span> <span class="n">fw_ver_num</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">match_string</span> <span class="ow">in</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">match_string</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.post_cycle_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.post_cycle_check">[docs]</a>    <span class="k">def</span> <span class="nf">post_cycle_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_vboot_util</span><span class="p">(</span><span class="n">filter_errors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.restart_usb0_interface"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.restart_usb0_interface">[docs]</a>    <span class="k">def</span> <span class="nf">restart_usb0_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ifconfig usb0 down&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ifconfig usb0 up&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.usb0_access_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.usb0_access_check">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">usb0_access_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">passwd</span><span class="p">)</span> <span class="o">=</span> <span class="n">Credentials</span><span class="p">()</span><span class="o">.</span><span class="n">get_openbmc_credentials</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
+        <span class="n">bmc_host</span> <span class="o">=</span> <span class="n">SSHPassConn</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_usb0_ip</span><span class="p">(),</span>
+            <span class="n">source_host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">passwd</span>
+        <span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/uptime&quot;</span>
+        <span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.bmc_health_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.bmc_health_check">[docs]</a>    <span class="k">def</span> <span class="nf">bmc_health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_reboot</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">bmc_health_check</span><span class="p">(</span><span class="n">last_reboot</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">usb0_access_check</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.reboot"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.reboot">[docs]</a>    <span class="k">def</span> <span class="nf">reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">reboot</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="p">,</span> <span class="n">filter_errors</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.forced_bmc_reset"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.forced_bmc_reset">[docs]</a>    <span class="k">def</span> <span class="nf">forced_bmc_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">forced_bmc_reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="OpenBMCBryceCanyon.force_reboot"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_bryce_canyon.OpenBMCBryceCanyon.force_reboot">[docs]</a>    <span class="k">def</span> <span class="nf">force_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCBryceCanyon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">force_reboot</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="p">,</span> <span class="n">filter_errors</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

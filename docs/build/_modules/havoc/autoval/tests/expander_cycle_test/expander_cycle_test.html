@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.expander_cycle_test.expander_cycle_test &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.expander_cycle_test.expander_cycle_test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.expander_cycle_test.expander_cycle_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.system.system_config</span> <span class="k">import</span> <span class="n">SystemConfig</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="ExpanderCycleTest"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest">[docs]</a><span class="k">class</span> <span class="nc">ExpanderCycleTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ExpanderCycleTest.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExpanderCycleTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;cycle_count&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_expander</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;with_expander&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;bridge_setting&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;error_filter&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpu_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;gpu_count&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fail_stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;fail_stop&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;cycle_type&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ac_command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;ac_command&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.exception_handler"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.exception_handler">[docs]</a>    <span class="k">def</span> <span class="nf">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">muststop</span><span class="p">):</span>
+        <span class="c1"># parse the error string and increment error counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;Error number </span><span class="si">%d</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_str</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="c1"># muststop disregard fail_stop value, it stop the program when critical</span>
+        <span class="c1"># failures happen: power on/off, GPU not detected, etc.</span>
+        <span class="k">if</span> <span class="n">muststop</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">err_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># get failure stop status</span>
+            <span class="n">fail_stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail_stop</span>
+            <span class="c1"># if we want to stop executing on non-critical errors</span>
+            <span class="k">if</span> <span class="n">fail_stop</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">err_str</span><span class="p">)</span>
+            <span class="c1"># if we don&#39;t want to stop on non-critical errors</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.check_expander_status"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.check_expander_status">[docs]</a>    <span class="k">def</span> <span class="nf">check_expander_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="c1"># generate cmd to check power on succeeded on expander box</span>
+        <span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">bridge_setting</span> <span class="o">+</span> <span class="s1">&#39; power status&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pass_condition</span> <span class="o">=</span> <span class="s1">&#39;Chassis Power is &#39;</span> <span class="o">+</span> <span class="n">status</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="o">==</span> <span class="n">pass_condition</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.expander_on"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.expander_on">[docs]</a>    <span class="k">def</span> <span class="nf">expander_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># get bridge setting</span>
+        <span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span>
+        <span class="c1"># generate cmd to power on expander box</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">bridge_setting</span> <span class="o">+</span> <span class="s1">&#39; power on&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s1">&#39;Expander Box: &#39;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># check if change is triggered</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_expander_status</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="s2">&quot;Failed to power on expander&quot;</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.expander_off"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.expander_off">[docs]</a>    <span class="k">def</span> <span class="nf">expander_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># get bridge setting</span>
+        <span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span>
+        <span class="c1"># generate cmd to power off expander box</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">bridge_setting</span> <span class="o">+</span> <span class="s1">&#39; power off&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s1">&#39;Expander Box: &#39;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># check if change is triggered</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_expander_status</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="s2">&quot;Failed to power off expander&quot;</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.check_headnode_status"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.check_headnode_status">[docs]</a>    <span class="k">def</span> <span class="nf">check_headnode_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39; power status&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pass_condition</span> <span class="o">=</span> <span class="s1">&#39;Chassis Power is &#39;</span> <span class="o">+</span> <span class="n">status</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="o">==</span> <span class="n">pass_condition</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.headnode_off"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.headnode_off">[docs]</a>    <span class="k">def</span> <span class="nf">headnode_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="n">powered_off</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_headnode_status</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">powered_off</span><span class="p">,</span> <span class="s2">&quot;headnode Node: off&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.headnode_on"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.headnode_on">[docs]</a>    <span class="k">def</span> <span class="nf">headnode_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># this is a long wait, be patient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+        <span class="n">powered_on</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_headnode_status</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">powered_on</span><span class="p">,</span> <span class="s2">&quot;headnode Node: on&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.run_check"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.run_check">[docs]</a>    <span class="k">def</span> <span class="nf">run_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># get bridge setting</span>
+        <span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span>
+        <span class="c1"># get errors to filter in dmesg</span>
+        <span class="n">error_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_filter</span>
+        <span class="c1"># get GPU count</span>
+        <span class="n">gpu_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpu_count</span>
+        <span class="c1"># if there are matching number of GPUs</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;lspci | grep NVIDIA&quot;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_lines</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;NVIDIA&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">num_lines</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">gpu_count</span><span class="p">),</span>
+                                        <span class="s1">&#39;Total number of GPU: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># non-critical error, no need to stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># getting dmesg log</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;dmesg | grep -i error&#39;</span>
+        <span class="k">if</span> <span class="n">error_filter</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">error_filter</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39; | grep -v &#39;</span> <span class="o">+</span> <span class="n">item</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_lines</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">num_lines</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Kernel error: </span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                                        <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># non-critical error, no need to stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># generate cmd to check errors on head node</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;ipmitool sel elist | grep error&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_lines</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">num_lines</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+                                        <span class="s1">&#39;Error in head node: </span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># non-critical error, no need to sto</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># generate cmd to check errors on expander box</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;ipmitool &#39;</span> <span class="o">+</span> <span class="n">bridge_setting</span> <span class="o">+</span> <span class="s1">&#39; sel elist | grep error&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_lines</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">num_lines</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+                                        <span class="s1">&#39;Error in expander box: </span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># non-critical error, no need to sto</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="c1"># config filter used to test on different servers</span>
+<div class="viewcode-block" id="ExpanderCycleTest.get_cycle_config_filter"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.get_cycle_config_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_cycle_config_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cfg_filter</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># specify filter name here, define your filter in config_filter.json</span>
+        <span class="c1"># path: havoc/autotest_testfiles/validation_utils/cfg/config_filter.json</span>
+        <span class="n">cfg_filter</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;filter_name&#39;</span><span class="p">:</span> <span class="s1">&#39;expanderpowercycle&#39;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">cfg_filter</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.ac_cycle_expander"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.ac_cycle_expander">[docs]</a>    <span class="k">def</span> <span class="nf">ac_cycle_expander</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ac_command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ac_command</span>
+        <span class="c1"># get bridge setting</span>
+        <span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span>
+        <span class="c1"># generate cmd to power on expander box</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">bridge_setting</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">ac_command</span>
+        <span class="c1"># should have some sort of check on out, currently no return value from</span>
+        <span class="c1"># running this command, additional change remain to be added in DVT</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Expander Box AC Cycle: &#39;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># timeout for bmc unit should be evaluated, subject to change in DVT</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">180</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_expander_status</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="s2">&quot;Failed to AC cycle expander&quot;</span>
+            <span class="c1"># critical error, must stop</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExpanderCycleTest.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.ExpanderCycleTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bridge_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bridge_setting</span>
+        <span class="n">cycle_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span><span class="p">)</span>
+        <span class="n">with_expander</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_expander</span>
+        <span class="n">cycle_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_type</span>
+
+        <span class="c1"># clear initial dmesg through ipmitool on head node</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;dmesg -C&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># clear initial elist through ipmitool on head node</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;ipmitool sel clear&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># clear initial elist through ipmitool on expander box</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;ipmitool &#39;</span> <span class="o">+</span> <span class="n">bridge_setting</span> <span class="o">+</span> <span class="s1">&#39; sel clear&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;Found the following errors:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="c1"># get initial configuration that will be diffed later</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cfg_init</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># critical error, getting config_check failed</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># config filter called here</span>
+        <span class="n">cfg_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cycle_config_filter</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">rounds</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cycle_count</span><span class="p">):</span>  <span class="c1"># noqa: B007 T25377293 Grandfathered in</span>
+            <span class="c1"># expander should be on before test start</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">expander_on</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">cycle_type</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;DC&quot;</span><span class="p">:</span>
+                <span class="c1"># power cycle expander and head node</span>
+                <span class="k">if</span> <span class="n">with_expander</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">expander_off</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">headnode_off</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">expander_on</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">headnode_on</span><span class="p">()</span>
+                <span class="c1"># power cycle only head node</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">headnode_off</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">headnode_on</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="n">cycle_type</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;AC&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ac_cycle_expander</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">headnode_off</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">headnode_on</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unknown value:</span><span class="si">%s</span><span class="s1"> for cycle_type&#39;</span> <span class="o">%</span> <span class="n">cycle_type</span><span class="p">)</span>
+            <span class="c1"># run checks at the end</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_check</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cfg2</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># critical error, getting config_check failed</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">SystemConfig</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span><span class="n">cfg_init</span><span class="p">,</span> <span class="n">cfg2</span><span class="p">,</span> <span class="n">cfg_filter</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># non-critical error, no need to stop</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># in the end, if no critical errors ever happened, show whatever</span>
+        <span class="c1"># non-critical erros encountered</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_counter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">err_str</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.expander_cycle_test.html#havoc.autoval.tests.expander_cycle_test.expander_cycle_test.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">ExpanderCycleTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

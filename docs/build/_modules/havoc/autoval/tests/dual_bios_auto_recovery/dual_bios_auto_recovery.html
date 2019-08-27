@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.system.system_config</span> <span class="k">import</span> <span class="n">SystemConfig</span>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery">[docs]</a><span class="k">class</span> <span class="nc">DualBiosAutoRecovery</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    TODO:</span>
+<span class="sd">    - The run_yafuflash_oob() method is used in a few test cases already.</span>
+<span class="sd">      Someone should put this into a library so all test cases can use it!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrupt_bin</span><span class="p">,</span> <span class="n">bios_image_a</span><span class="p">,</span> <span class="n">bios_image_b</span><span class="p">,</span>
+            <span class="n">Yafuflash_zip</span><span class="p">,</span> <span class="n">bios_tool_tar</span><span class="p">,</span>
+            <span class="n">bios_cfg_frb2_enabled</span><span class="p">,</span> <span class="n">bios_cfg_frb2_disabled</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DualBiosAutoRecovery</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_bin</span> <span class="o">=</span> <span class="n">corrupt_bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_a</span> <span class="o">=</span> <span class="n">bios_image_a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_b</span> <span class="o">=</span> <span class="n">bios_image_b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Yafuflash_zip</span> <span class="o">=</span> <span class="n">Yafuflash_zip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_tool_tar</span> <span class="o">=</span> <span class="n">bios_tool_tar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_cfg_frb2_enabled</span> <span class="o">=</span> <span class="n">bios_cfg_frb2_enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_cfg_frb2_disabled</span> <span class="o">=</span> <span class="n">bios_cfg_frb2_disabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_dep_rootdir</span> <span class="o">=</span> <span class="s2">&quot;/mnt/vol/havoc/autoval/bin/leopard_fw/&quot;</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;This is the Dual BIOS OOB Upgrade Test&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Setup: Make sure auto BIOS recovery is off. If it&#39;s left on,</span>
+        <span class="c1"># sometimes when using Yafuflash, it will trigger the ABR to occur,</span>
+        <span class="c1"># which prevents the system from booting and this test fails.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">set_dual_bios_auto_recovery</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">set_sel_log_filter</span><span class="p">(</span><span class="n">critical_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_files</span><span class="p">()</span>
+
+        <span class="c1"># Programming secondary B -&gt; boot up</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Programming Golden BIOS to ver </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flash_golden_bios_oob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bios_image_a</span><span class="p">)</span>
+
+        <span class="c1"># Programming to primary A -&gt; boot up</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Programming the Primary BIOS to ver </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_b</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flash_bios_oob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bios_image_b</span><span class="p">)</span>
+        <span class="n">cur_primary_bios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bios_info</span><span class="p">()</span>
+        <span class="n">good_primary_bios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_b</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.BIN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">cur_primary_bios</span> <span class="o">==</span> <span class="n">good_primary_bios</span><span class="p">,</span>
+                <span class="s2">&quot;Primary BIOS Version Check&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Clear the SEL logs so that we know all records are from this test only</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">sel_clear</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">set_dual_bios_auto_recovery</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_auto_recovery_timer_in_bios</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Flashing primary BIOS with corrupted binary.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_yafuflash_oob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_dep_rootdir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">corrupt_bin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="s2">&quot;Primary BIOS has been flashed with a corrupt binary file&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Give Yafuflash time to finish &quot;cleaning up&quot;. This should really only</span>
+        <span class="c1"># take a second, but we&#39;ll give it 30 to be EXTRA sure. If we don&#39;t</span>
+        <span class="c1"># give it this time, then powering on the system will auto-fail, even</span>
+        <span class="c1"># if the system COULD successfully boot on (which it shouldn&#39;t).</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Attempting to power on system. This should fail.&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa: B001 T25377293 Grandfathered in</span>
+            <span class="c1"># We want to system to fail at powering on -- means BIOS is corrupt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="s2">&quot;Host failed to power on because of corrupted BIOS&quot;</span><span class="p">)</span>
+
+        <span class="c1"># After failing to power on, the watchdog should trigger in at most 20</span>
+        <span class="c1"># mins. Then it should take ~3 mins to copy golden BIOS to primary BIOS.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Waiting 25 minutes to let BIOS auto recovery occur&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+        <span class="n">cur_primary_bios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bios_info</span><span class="p">()</span>
+        <span class="n">expected_primary_bios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_a</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.BIN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">cur_primary_bios</span> <span class="o">==</span> <span class="n">expected_primary_bios</span><span class="p">,</span>
+                    <span class="s2">&quot;Auto recovery copied the golden BIOS to the primary BIOS&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_sel_logs</span><span class="p">()</span>
+
+        <span class="c1"># Clean up. Disable the automatic BIOS recovery.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">set_dual_bios_auto_recovery</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_auto_recovery_timer_in_bios</span><span class="p">(</span><span class="n">enable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.setup_files"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.setup_files">[docs]</a>    <span class="k">def</span> <span class="nf">setup_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Check if the files exist, if so copy it to resultsdir</span>
+        <span class="n">file_dep</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bios_image_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_image_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Yafuflash_zip</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">onefile</span> <span class="ow">in</span> <span class="n">file_dep</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_dep_rootdir</span><span class="p">,</span> <span class="n">onefile</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;file </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">onefile</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+
+        <span class="n">yafuflash_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Yafuflash_zip</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;unzip </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Yafuflash_zip</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cp </span><span class="si">%s</span><span class="s2">/Linux_x86_64/* .&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">yafuflash_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;chmod +x *&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.flash_bios_oob"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.flash_bios_oob">[docs]</a>    <span class="k">def</span> <span class="nf">flash_bios_oob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_yafuflash_oob</span><span class="p">(</span><span class="n">bin_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.flash_golden_bios_oob"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.flash_golden_bios_oob">[docs]</a>    <span class="k">def</span> <span class="nf">flash_golden_bios_oob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_yafuflash_oob</span><span class="p">(</span><span class="n">bin_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Dual-BIOS-Update Stage 2: Copying to Golden BIOS&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="s2">&quot;raw 0x30 0x42 0x55 0x66&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Dual-BIOS-Update Stage 3: </span><span class="se">\</span>
+<span class="s2">                Wait for 300s for copy to complete&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Dual-BIOS-Update Stage 4: Power On&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.run_yafuflash_oob"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.run_yafuflash_oob">[docs]</a>    <span class="k">def</span> <span class="nf">run_yafuflash_oob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_file</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./Yafuflash -nw -u USERID -p PASSW0RD -vyes -host </span><span class="si">%s</span><span class="s2"> -bios </span><span class="si">%s</span><span class="s2">&quot;</span> \
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">,</span> <span class="n">bin_file</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="s2">&quot;Successfully&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">,</span>
+                <span class="s2">&quot;flashing BIOS ver </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">bin_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.get_bios_info"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.get_bios_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_bios_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;systeminfo&#39;</span><span class="p">][</span><span class="s1">&#39;bios_version&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.set_auto_recovery_timer_in_bios"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.set_auto_recovery_timer_in_bios">[docs]</a>    <span class="k">def</span> <span class="nf">set_auto_recovery_timer_in_bios</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function enables/disables the FRB-2 timer in the BIOS.</span>
+<span class="sd">        The FRB-2 timer waits a specified amount of time to see if the system</span>
+<span class="sd">        POSTs. If the system does not post in this time, the auto BIOS</span>
+<span class="sd">        recovery is triggered. This recovery flashes the Golden BIOS image</span>
+<span class="sd">        onto the primary BIOS image.</span>
+
+<span class="sd">        We can run SCELINUX, give it a host and a BIOS config file, and it will</span>
+<span class="sd">        apply that BIOS configuration to that host.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Copy over bios files and unarchive them</span>
+        <span class="n">bios_file</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_dep_rootdir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_tool_tar</span><span class="p">)</span>
+        <span class="n">bios_tools_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_tool_tar</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tar.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">bios_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;/bin/tar xvf &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span>
+                <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_tool_tar</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">enable</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_dep_rootdir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_cfg_frb2_enabled</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+            <span class="n">bios_cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_cfg_frb2_enabled</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_dep_rootdir</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_cfg_frb2_disabled</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+            <span class="n">bios_cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_cfg_frb2_disabled</span>
+
+        <span class="c1"># Make SCELNX executable</span>
+        <span class="n">scelnx_path</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">bios_tools_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>
+                       <span class="s1">&#39;SCELNX_64&#39;</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">scelnx_path</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">scelnx_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">)):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;chmod +x &#39;</span> <span class="o">+</span> <span class="n">scelnx_path</span><span class="p">)</span>
+
+        <span class="c1"># Now run SCELNX and apply the bios settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Setting FRB-2 Timer in the BIOS.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">scelnx_path</span> <span class="o">+</span> <span class="s1">&#39; /i /s &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">bios_cfg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;FRB-2 Timer has been set in the BIOS&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Rebooting system to apply BIOS changes.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_reset</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DualBiosAutoRecovery.verify_sel_logs"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.DualBiosAutoRecovery.verify_sel_logs">[docs]</a>    <span class="k">def</span> <span class="nf">verify_sel_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sel_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_sel_entries</span><span class="p">()</span>
+        <span class="n">auto_recovery_start</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">auto_recovery_end</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">sel_entries</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;Sensor Number&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ef&quot;</span> <span class="ow">and</span>
+                   <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;Event Data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;010201&quot;</span><span class="p">):</span>
+                    <span class="n">auto_recovery_start</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;Sensor Number&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ef&quot;</span> <span class="ow">and</span>
+                   <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;Event Data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;010202&quot;</span><span class="p">):</span>
+                    <span class="n">auto_recovery_end</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># If any of these keys don&#39;t exist in the sel_entries, then</span>
+                <span class="c1"># it must be an OEM entry. Just ignore it.</span>
+                <span class="k">continue</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">auto_recovery_start</span> <span class="ow">and</span> <span class="n">auto_recovery_end</span><span class="p">,</span>
+                        <span class="s2">&quot;SEL logs confirm that the auto BIOS recovery occured.&quot;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.dual_bios_auto_recovery.html#havoc.autoval.tests.dual_bios_auto_recovery.dual_bios_auto_recovery.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">DualBiosAutoRecovery</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

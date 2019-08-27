@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.connection_factory</span> <span class="k">import</span> <span class="n">ConnectionFactory</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This script opens sol-util &lt;slotx&gt; command.</span>
+<span class="sd">Ac cycle and Dc cycle are performed on the host from another</span>
+<span class="sd">session and validate that opened sol-util output has no impact.</span>
+<span class="sd">The test is supported only on openbmc platforms</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="OpenbmcSolutilStress"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.OpenbmcSolutilStress">[docs]</a><span class="k">class</span> <span class="nc">OpenbmcSolutilStress</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenbmcSolutilStress.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.OpenbmcSolutilStress.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenbmcSolutilStress</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenbmcSolutilStress.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.OpenbmcSolutilStress.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Openbmc sol util stress test&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">localhost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="n">slot_no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_slot_info</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sol_stress</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span> <span class="n">slot_no</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcSolutilStress.sol_stress"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.OpenbmcSolutilStress.sol_stress">[docs]</a>    <span class="k">def</span> <span class="nf">sol_stress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">slot_no</span><span class="p">):</span>
+        <span class="n">cycle_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Starting sol util stress&quot;</span><span class="p">)</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">duration</span>
+        <span class="c1"># Get all PID&#39;s of mTerm_client which is used by sol-util</span>
+        <span class="n">existing_mterm_pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mterm_process_id</span><span class="p">(</span><span class="n">slot_no</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Starting sol util session in background&quot;</span><span class="p">)</span>
+        <span class="n">_thread</span><span class="p">,</span> <span class="n">queue</span> <span class="o">=</span> <span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh_login</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">,</span> <span class="n">slot_no</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">new_mterm_pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mterm_process_id</span><span class="p">(</span><span class="n">slot_no</span><span class="p">)</span>
+        <span class="n">new_mterm_pids</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">pid</span> <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">new_mterm_pids</span> <span class="k">if</span> <span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing_mterm_pids</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">new_mterm_pids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;no new mTerm_client process found.&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Iteration - </span><span class="si">%d</span><span class="s2">, starting &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cycle_count</span><span class="p">))</span>
+            <span class="n">cycle_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># perform ac-cycle, dc-cycle on host</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ac_on_off_fullcycle</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Power cycles completed on host&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">_thread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">(),</span>
+                <span class="s2">&quot;Sol util is still active and testing finished after </span><span class="si">%d</span><span class="s2"> seconds&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">duration</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">new_mterm_pids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;kill -9 </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pid</span><span class="p">)</span>
+        <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">([(</span><span class="n">_thread</span><span class="p">,</span> <span class="n">queue</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="OpenbmcSolutilStress.get_mterm_process_id"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.OpenbmcSolutilStress.get_mterm_process_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_mterm_process_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot_no</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;slot&quot;</span> <span class="ow">in</span> <span class="n">slot_no</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ps | grep &#39;mTerm_client </span><span class="si">%s</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="n">slot_no</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| grep -v grep | awk &#39;{print$1}&#39;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ps | grep mTerm_client | grep -v grep | awk &#39;{print$1}&#39;&quot;</span>
+        <span class="n">mterm_pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mterm_pids</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenbmcSolutilStress.ssh_login"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.OpenbmcSolutilStress.ssh_login">[docs]</a>    <span class="k">def</span> <span class="nf">ssh_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">,</span> <span class="n">slot_no</span><span class="p">):</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/sol-util </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">slot_no</span>
+        <span class="c1">#define the duration the thread should be active for</span>
+        <span class="c1">#adding 15min for host-reset process to settle down or until ps gets killed</span>
+        <span class="n">thread_duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">+</span> <span class="mi">900</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span>
+            <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">thread_duration</span><span class="p">,</span>
+            <span class="n">get_pty</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_solutil_stress.html#havoc.autoval.tests.openbmc_solutil_stress.openbmc_solutil_stress.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">OpenbmcSolutilStress</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.stressng &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.stressng</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.stressng</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">stress-ng, version 0.07.29</span>
+
+<span class="sd">Usage: stress-ng [OPTION [ARG]]</span>
+
+<span class="sd">General control options:</span>
+<span class="sd">      --aggressive         enable all aggressive options</span>
+<span class="sd">-a N, --all N              start N workers of each stress test</span>
+<span class="sd">-b N, --backoff N          wait of N microseconds before work starts</span>
+<span class="sd">      --class name         specify a class of stressors, use with --sequential</span>
+<span class="sd">-n,   --dry-run            do not run</span>
+<span class="sd">-h,   --help               show help</span>
+<span class="sd">      --ignite-cpu         alter kernel controls to make CPU run hot</span>
+<span class="sd">-k,   --keep-name          keep stress worker names to be &#39;stress-ng&#39;</span>
+<span class="sd">      --log-brief          less verbose log messages</span>
+<span class="sd">      --log-file filename  log messages to a log file</span>
+<span class="sd">      --maximize           enable maximum stress options</span>
+<span class="sd">-M,   --metrics            print pseudo metrics of activity</span>
+<span class="sd">      --metrics-brief      enable metrics and only show non-zero results</span>
+<span class="sd">      --minimize           enable minimal stress options</span>
+<span class="sd">      --no-madvise         don&#39;t use random madvise options for each mmap</span>
+<span class="sd">      --no-rand-seed       seed random numbers with the same constant</span>
+<span class="sd">      --page-in            touch allocated pages that are not in core</span>
+<span class="sd">      --pathological       enable stressors that are known to hang a machine</span>
+<span class="sd">      --perf               display perf statistics</span>
+<span class="sd">-q,   --quiet              quiet output</span>
+<span class="sd">-r,   --random N           start N random workers</span>
+<span class="sd">      --sched type         set scheduler type</span>
+<span class="sd">      --sched-prio N       set scheduler priority level N</span>
+<span class="sd">      --sequential N       run all stressors one by one, invoking N of them</span>
+<span class="sd">      --stressors          show available stress tests</span>
+<span class="sd">      --syslog             log messages to the syslog</span>
+<span class="sd">      --taskset            use specific CPUs (set CPU affinity)</span>
+<span class="sd">      --temp-path          specify path for temporary directories and files</span>
+<span class="sd">      --thrash             force all pages in causing swap thrashing</span>
+<span class="sd">-t N, --timeout N          timeout after N seconds</span>
+<span class="sd">      --timer-slack        enable timer slack mode</span>
+<span class="sd">      --times              show run time summary at end of the run</span>
+<span class="sd">      --tz                 collect temperatures from thermal zones (Linux only)</span>
+<span class="sd">-v,   --verbose            verbose output</span>
+<span class="sd">      --verify             verify results (not available on all tests)</span>
+<span class="sd">-V,   --version            show version</span>
+<span class="sd">-Y,   --yaml               output results to YAML formatted filed</span>
+<span class="sd">-x,   --exclude            list of stressors to exclude (not run)</span>
+
+<span class="sd">Stressor specific options:</span>
+<span class="sd">      --affinity N         start N workers that rapidly change CPU affinity</span>
+<span class="sd">      --affinity-ops N     stop after N affinity bogo operations</span>
+<span class="sd">      --affinity-rand      change affinity randomly rather than sequentially</span>
+<span class="sd">      --af-alg N           start N workers that stress AF_ALG socket domain</span>
+<span class="sd">      --af-alg-ops N       stop after N af-alg bogo operations</span>
+<span class="sd">      --aio N              start N workers that issue async I/O requests</span>
+<span class="sd">      --aio-ops N          stop after N bogo async I/O requests</span>
+<span class="sd">      --aio-requests N     number of async I/O requests per worker</span>
+<span class="sd">      --aiol N             start N workers that exercise Linux async I/O</span>
+<span class="sd">      --aiol-ops N         stop after N bogo Linux aio async I/O requests</span>
+<span class="sd">      --aiol-requests N    number of Linux aio async I/O requests per worker</span>
+<span class="sd">      --apparmor           start N workers exercising AppArmor interfaces</span>
+<span class="sd">      --apparmor-ops       stop after N bogo AppArmor worker bogo operations</span>
+<span class="sd">      --atomic             start N workers exercising GCC atomic operations</span>
+<span class="sd">      --atomic-ops         stop after N bogo atomic bogo operations</span>
+<span class="sd">-B N, --bigheap N          start N workers that grow the heap using calloc()</span>
+<span class="sd">      --bigheap-ops N      stop after N bogo bigheap operations</span>
+<span class="sd">      --bigheap-growth N   grow heap by N bytes per iteration</span>
+<span class="sd">      --bind-mount N       start N workers exercising bind mounts</span>
+<span class="sd">      --bind-mount-ops N   stop after N bogo bind mount operations</span>
+<span class="sd">      --brk N              start N workers performing rapid brk calls</span>
+<span class="sd">      --brk-ops N          stop after N brk bogo operations</span>
+<span class="sd">      --brk-notouch        don&#39;t touch (page in) new data segment page</span>
+<span class="sd">      --bsearch N          start N workers that exercise a binary search</span>
+<span class="sd">      --bsearch-ops N      stop after N binary search bogo operations</span>
+<span class="sd">      --bsearch-size N     number of 32 bit integers to bsearch</span>
+<span class="sd">-C N, --cache N            start N CPU cache thrashing workers</span>
+<span class="sd">      --cache-ops N        stop after N cache bogo operations</span>
+<span class="sd">      --cache-prefetch     prefetch on memory reads/writes</span>
+<span class="sd">      --cache-flush        flush cache after every memory write (x86 only)</span>
+<span class="sd">      --cache-fence        serialize stores</span>
+<span class="sd">      --cache-level N      only exercise specified cache</span>
+<span class="sd">      --cache-ways N       only fill specified number of cache ways</span>
+<span class="sd">      --cap N              start N workers exercsing capget</span>
+<span class="sd">      --cap-ops N          stop cap workers after N bogo capget operations</span>
+<span class="sd">      --chdir N            start N workers thrashing chdir on many paths</span>
+<span class="sd">      --chdir-ops N        stop chdir workers after N bogo chdir operations</span>
+<span class="sd">      --chdir-dirs N       select number of directories to exercise chdir on</span>
+<span class="sd">      --chmod N            start N workers thrashing chmod file mode bits</span>
+<span class="sd">      --chmod-ops N        stop chmod workers after N bogo operations</span>
+<span class="sd">      --chown N            start N workers thrashing chown file ownership</span>
+<span class="sd">      --chown-ops N        stop chown workers after N bogo operations</span>
+<span class="sd">      --chroot N           start N workers thrashing chroot</span>
+<span class="sd">      --chroot-ops N       stop chhroot workers after N bogo operations</span>
+<span class="sd">      --clock N            start N workers thrashing clocks and POSIX timers</span>
+<span class="sd">      --clock-ops N        stop clock workers after N bogo operations</span>
+<span class="sd">      --clone N            start N workers that rapidly create and reap clones</span>
+<span class="sd">      --clone-ops N        stop after N bogo clone operations</span>
+<span class="sd">      --clone-max N        set upper limit of N clones per worker</span>
+<span class="sd">      --context N          start N workers exercising user context</span>
+<span class="sd">      --context-ops N      stop context workers after N bogo operations</span>
+<span class="sd">      --copy-file N        start N workers that copy file data</span>
+<span class="sd">      --copy-file-ops N    stop after N copy bogo operations</span>
+<span class="sd">      --copy-file-bytes N  specify size of file to be copied</span>
+<span class="sd">-c N, --cpu N              start N workers spinning on sqrt(rand())</span>
+<span class="sd">      --cpu-ops N          stop after N cpu bogo operations</span>
+<span class="sd">-l P, --cpu-load P         load CPU by P %%, 0=sleep, 100=full load (see -c)</span>
+<span class="sd">      --cpu-load-slice S   specify time slice during busy load</span>
+<span class="sd">      --cpu-method m       specify stress cpu method m, default is all</span>
+<span class="sd">      --cpu-online N       start N workers offlining/onlining the CPUs</span>
+<span class="sd">      --cpu-online-ops N   stop after N offline/online operations</span>
+<span class="sd">      --crypt N            start N workers performing password encryption</span>
+<span class="sd">      --crypt-ops N        stop after N bogo crypt operations</span>
+<span class="sd">      --daemon N           start N workers creating multiple daemons</span>
+<span class="sd">      --daemon-ops N       stop when N daemons have been created</span>
+<span class="sd">      --dccp N             start N workers exercising network DCCP I/O</span>
+<span class="sd">      --dccp-domain D      specify DCCP domain, default is ipv4</span>
+<span class="sd">      --dccp-ops N         stop after N DCCP  bogo operations</span>
+<span class="sd">      --dccp-opts option   DCCP data send options [send|sendmsg|sendmmsg]</span>
+<span class="sd">      --dccp-port P        use DCCP ports P to P + number of workers - 1</span>
+<span class="sd">-D N, --dentry N           start N dentry thrashing stressors</span>
+<span class="sd">      --dentry-ops N       stop after N dentry bogo operations</span>
+<span class="sd">      --dentry-order O     specify unlink order (reverse, forward, stride)</span>
+<span class="sd">      --dentries N         create N dentries per iteration</span>
+<span class="sd">      --dir N              start N directory thrashing stressors</span>
+<span class="sd">      --dir-ops N          stop after N directory bogo operations</span>
+<span class="sd">      --dir-dirs N         select number of directories to exercise dir on</span>
+<span class="sd">      --dirdeep N          start N directory depth stressors</span>
+<span class="sd">      --dirdeep-ops N      stop after N directory depth bogo operations</span>
+<span class="sd">      --dnotify N          start N workers exercising dnotify events</span>
+<span class="sd">      --dnotify-ops N      stop dnotify workers after N bogo operations</span>
+<span class="sd">      --dup N              start N workers exercising dup/close</span>
+<span class="sd">      --dup-ops N          stop after N dup/close bogo operations</span>
+<span class="sd">      --epoll N            start N workers doing epoll handled socket activity</span>
+<span class="sd">      --epoll-ops N        stop after N epoll bogo operations</span>
+<span class="sd">      --epoll-port P       use socket ports P upwards</span>
+<span class="sd">      --epoll-domain D     specify socket domain, default is unix</span>
+<span class="sd">      --eventfd N          start N workers stressing eventfd read/writes</span>
+<span class="sd">      --eventfd-ops N      stop eventfd workers after N bogo operations</span>
+<span class="sd">      --exec N             start N workers spinning on fork() and exec()</span>
+<span class="sd">      --exec-ops N         stop after N exec bogo operations</span>
+<span class="sd">      --exec-max P         create P workers per iteration, default is 1</span>
+<span class="sd">      --fallocate N        start N workers fallocating 16MB files</span>
+<span class="sd">      --fallocate-ops N    stop after N fallocate bogo operations</span>
+<span class="sd">      --fallocate-bytes N  specify size of file to allocate</span>
+<span class="sd">      --fanotify N         start N workers exercising fanotify events</span>
+<span class="sd">      --fanotify-ops N     stop fanotify workers after N bogo operations</span>
+<span class="sd">      --fault N            start N workers producing page faults</span>
+<span class="sd">      --fault-ops N        stop after N page fault bogo operations</span>
+<span class="sd">      --fcntl N            start N workers exercising fcntl commands</span>
+<span class="sd">      --fcntl-ops N        stop after N fcntl bogo operations</span>
+<span class="sd">      --fiemap N           start N workers exercising the FIEMAP ioctl</span>
+<span class="sd">      --fiemap-ops N       stop after N FIEMAP ioctl bogo operations</span>
+<span class="sd">      --fiemap-bytes N     specify size of file to fiemap</span>
+<span class="sd">      --fifo N             start N workers exercising fifo I/O</span>
+<span class="sd">      --fifo-ops N         stop after N fifo bogo operations</span>
+<span class="sd">      --fifo-readers N     number of fifo reader stessors to start</span>
+<span class="sd">      --filename N         start N workers exercising filenames</span>
+<span class="sd">      --filename-ops N     stop after N filename bogo operations</span>
+<span class="sd">      --filename-opts opt  specify allowed filename options</span>
+<span class="sd">      --flock N            start N workers locking a single file</span>
+<span class="sd">      --flock-ops N        stop after N flock bogo operations</span>
+<span class="sd">-f N, --fork N             start N workers spinning on fork() and exit()</span>
+<span class="sd">      --fork-ops N         stop after N fork bogo operations</span>
+<span class="sd">      --fork-max P         create P workers per iteration, default is 1</span>
+<span class="sd">      --fp-error N         start N workers exercising floating point errors</span>
+<span class="sd">      --fp-error-ops N     stop after N fp-error bogo operations</span>
+<span class="sd">      --fstat N            start N workers exercising fstat on files</span>
+<span class="sd">      --fstat-ops N        stop after N fstat bogo operations</span>
+<span class="sd">      --fstat-dir path     fstat files in the specified directory</span>
+<span class="sd">      --full N             start N workers exercising /dev/full</span>
+<span class="sd">      --full-ops N         stop after N /dev/full bogo I/O operations</span>
+<span class="sd">      --futex N            start N workers exercising a fast mutex</span>
+<span class="sd">      --futex-ops N        stop after N fast mutex bogo operations</span>
+<span class="sd">      --get N              start N workers exercising the get*() system calls</span>
+<span class="sd">      --get-ops N          stop after N get bogo operations</span>
+<span class="sd">      --getdent N          start N workers reading directories using getdents</span>
+<span class="sd">      --getdent-ops N      stop after N getdents bogo operations</span>
+<span class="sd">      --getrandom N        start N workers fetching random data via getrandom()</span>
+<span class="sd">      --getrandom-ops N    stop after N getrandom bogo operations</span>
+<span class="sd">      --handle N           start N workers exercising name_to_handle_at</span>
+<span class="sd">      --handle-ops N       stop after N handle bogo operations</span>
+<span class="sd">-d N, --hdd N              start N workers spinning on write()/unlink()</span>
+<span class="sd">      --hdd-ops N          stop after N hdd bogo operations</span>
+<span class="sd">      --hdd-bytes N        write N bytes per hdd worker (default is 1GB)</span>
+<span class="sd">      --hdd-opts list      specify list of various stressor options</span>
+<span class="sd">      --hdd-write-size N   set the default write size to N bytes</span>
+<span class="sd">      --heapsort N         start N workers heap sorting 32 bit random integers</span>
+<span class="sd">      --heapsort-ops N     stop after N heap sort bogo operations</span>
+<span class="sd">      --heapsort-size N    number of 32 bit integers to sort</span>
+<span class="sd">      --hsearch N          start N workers that exercise a hash table search</span>
+<span class="sd">      --hsearch-ops N      stop afer N hash search bogo operations</span>
+<span class="sd">      --hsearch-size N     number of integers to insert into hash table</span>
+<span class="sd">      --icache N           start N CPU instruction cache thrashing workers</span>
+<span class="sd">      --icache-ops N       stop after N icache bogo operations</span>
+<span class="sd">      --icmp-flood N       start N ICMP packet flood workers</span>
+<span class="sd">      --icmp-flood-ops N   stop after N ICMP bogo operations (ICMP packets)</span>
+<span class="sd">      --inotify N          start N workers exercising inotify events</span>
+<span class="sd">      --inotify-ops N      stop inotify workers after N bogo operations</span>
+<span class="sd">-i N, --io N               start N workers spinning on sync()</span>
+<span class="sd">      --io-ops N           stop sync I/O after N io bogo operations</span>
+<span class="sd">      --iomix N            start N workers that have a mix of I/O operations</span>
+<span class="sd">      --iomix-bytes N      write N bytes per iomix worker (default is 1GB)</span>
+<span class="sd">      --iomix-ops N        stop iomix workers after N iomix bogo operations</span>
+<span class="sd">      --ionice-class C     specify ionice class (idle, besteffort, realtime)</span>
+<span class="sd">      --ionice-level L     specify ionice level (0 max, 7 min)</span>
+<span class="sd">      --ioprio N           start N workers exercising set/get iopriority</span>
+<span class="sd">      --ioprio-ops N       stop after N io bogo iopriority operations</span>
+<span class="sd">      --itimer N           start N workers exercising interval timers</span>
+<span class="sd">      --itimer-ops N       stop after N interval timer bogo operations</span>
+<span class="sd">      --kcmp N             start N workers exercising kcmp</span>
+<span class="sd">      --kcmp-ops N         stop after N kcmp bogo operations</span>
+<span class="sd">      --key N              start N workers exercising key operations</span>
+<span class="sd">      --key-ops N          stop after N key bogo operations</span>
+<span class="sd">      --kill N             start N workers killing with SIGUSR1</span>
+<span class="sd">      --kill-ops N         stop after N kill bogo operations</span>
+<span class="sd">      --klog N             start N workers exercising kernel syslog interface</span>
+<span class="sd">      --klog -ops N        stop after N klog bogo operations</span>
+<span class="sd">      --lease N            start N workers holding and breaking a lease</span>
+<span class="sd">      --lease-ops N        stop after N lease bogo operations</span>
+<span class="sd">      --lease-breakers N   number of lease breaking workers to start</span>
+<span class="sd">      --link N             start N workers creating hard links</span>
+<span class="sd">      --link-ops N         stop after N link bogo operations</span>
+<span class="sd">      --lockbus N          start N workers locking a memory increment</span>
+<span class="sd">      --lockbus-ops N      stop after N lockbus bogo operations</span>
+<span class="sd">      --locka N            start N workers locking a file via advisory locks</span>
+<span class="sd">      --locka-ops N        stop after N locka bogo operations</span>
+<span class="sd">      --lockf N            start N workers locking a single file via lockf</span>
+<span class="sd">      --lockf-ops N        stop after N lockf bogo operations</span>
+<span class="sd">      --lockf-nonblock     don&#39;t block if lock cannot be obtained, re-try</span>
+<span class="sd">      --lockofd N          start N workers using open file description locking</span>
+<span class="sd">      --lockofd-ops N      stop after N lockofd bogo operations</span>
+<span class="sd">      --longjmp N          start N workers exercising setjmp/longjmp</span>
+<span class="sd">      --longjmp-ops N      stop after N longjmp bogo operations</span>
+<span class="sd">      --lsearch N          start N workers that exercise a linear search</span>
+<span class="sd">      --lsearch-ops N      stop after N linear search bogo operations</span>
+<span class="sd">      --lsearch-size N     number of 32 bit integers to lsearch</span>
+<span class="sd">      --madvise N          start N workers exercising madvise on memory</span>
+<span class="sd">      --madvise-ops N      stop after N bogo madvise operations</span>
+<span class="sd">      --malloc N           start N workers exercising malloc/realloc/free</span>
+<span class="sd">      --malloc-bytes N     allocate up to N bytes per allocation</span>
+<span class="sd">      --malloc-max N       keep up to N allocations at a time</span>
+<span class="sd">      --malloc-ops N       stop after N malloc bogo operations</span>
+<span class="sd">      --malloc-thresh N    threshold where malloc uses mmap instead of sbrk</span>
+<span class="sd">      --matrix N           start N workers exercising matrix operations</span>
+<span class="sd">      --matrix-ops N       stop after N maxtrix bogo operations</span>
+<span class="sd">      --matrix-method m    specify matrix stress method m, default is all</span>
+<span class="sd">      --matrix-size N      specify the size of the N x N matrix</span>
+<span class="sd">      --membarrier N       start N workers performing membarrier system calls</span>
+<span class="sd">      --membarrier-ops N   stop after N membarrier bogo operations</span>
+<span class="sd">      --memcpy N           start N workers performing memory copies</span>
+<span class="sd">      --memcpy-ops N       stop after N memcpy bogo operations</span>
+<span class="sd">      --memfd N            start N workers allocating memory with memfd_create</span>
+<span class="sd">      --memfd-bytes N      allocate N bytes for each stress iteration</span>
+<span class="sd">      --memfd-fds N        number of memory fds to open per stressors</span>
+<span class="sd">      --memfd-ops N        stop after N memfd bogo operations</span>
+<span class="sd">      --mergesort N        start N workers merge sorting 32 bit random integers</span>
+<span class="sd">      --mergesort-ops N    stop after N merge sort bogo operations</span>
+<span class="sd">      --mergesort-size N   number of 32 bit integers to sort</span>
+<span class="sd">      --mincore N          start N workers exercising mincore</span>
+<span class="sd">      --mincore-ops N      stop after N mincore bogo operations</span>
+<span class="sd">      --mincore-random     randomly select pages rather than linear scan</span>
+<span class="sd">      --mknod N            start N workers that exercise mknod</span>
+<span class="sd">      --mknod-ops N        stop after N mknod bogo operations</span>
+<span class="sd">      --mlock N            start N workers exercising mlock/munlock</span>
+<span class="sd">      --mlock-ops N        stop after N mlock bogo operations</span>
+<span class="sd">      --mmap N             start N workers stressing mmap and munmap</span>
+<span class="sd">      --mmap-ops N         stop after N mmap bogo operations</span>
+<span class="sd">      --mmap-async         using asynchronous msyncs for file based mmap</span>
+<span class="sd">      --mmap-bytes N       mmap and munmap N bytes for each stress iteration</span>
+<span class="sd">      --mmap-file          mmap onto a file using synchronous msyncs</span>
+<span class="sd">      --mmap-mprotect      enable mmap mprotect stressing</span>
+<span class="sd">      --mmapfork N         start N workers stressing many forked mmaps/munmaps</span>
+<span class="sd">      --mmapfork-ops N     stop after N mmapfork bogo operations</span>
+<span class="sd">      --mmapmany N         start N workers stressing many mmaps and munmaps</span>
+<span class="sd">      --mmapmany-ops N     stop after N mmapmany bogo operations</span>
+<span class="sd">      --mremap N           start N workers stressing mremap</span>
+<span class="sd">      --mremap-ops N       stop after N mremap bogo operations</span>
+<span class="sd">      --mremap-bytes N     mremap N bytes maximum for each stress iteration</span>
+<span class="sd">      --msg N              start N workers stressing System V messages</span>
+<span class="sd">      --msg-ops N          stop msg workers after N bogo messages</span>
+<span class="sd">      --msync N            start N workers syncing mmap&#39;d data with msync</span>
+<span class="sd">      --msync-ops N        stop msync workers after N bogo msyncs</span>
+<span class="sd">      --msync-bytes N      size of file and memory mapped region to msync</span>
+<span class="sd">      --mq N               start N workers passing messages using POSIX messages</span>
+<span class="sd">      --mq-ops N           stop mq workers after N bogo messages</span>
+<span class="sd">      --mq-size N          specify the size of the POSIX message queue</span>
+<span class="sd">      --netlink-proc N     start N workers exercising netlink process events</span>
+<span class="sd">      --netlink-proc-ops N stop netlink-proc workers after N bogo events</span>
+<span class="sd">      --nice N             start N workers that randomly re-adjust nice levels</span>
+<span class="sd">      --nice-ops N         stop after N nice bogo operations</span>
+<span class="sd">      --nop N              start N workers that burn cycles with no-ops</span>
+<span class="sd">      --nop-ops N          stop after N nop bogo no-op operations</span>
+<span class="sd">      --null N             start N workers writing to /dev/null</span>
+<span class="sd">      --null-ops N         stop after N /dev/null bogo write operations</span>
+<span class="sd">      --numa N             start N workers stressing NUMA interfaces</span>
+<span class="sd">      --numa-ops N         stop after N NUMA bogo operations</span>
+<span class="sd">      --oom-pipe N         start N workers exercising large pipes</span>
+<span class="sd">      --oom-pipe-ops N     stop after N oom-pipe bogo operations</span>
+<span class="sd">      --opcode N           start N workers exercising random opcodes</span>
+<span class="sd">      --opcode-ops N       stop after N opcode bogo operations</span>
+<span class="sd">-o,   --open N             start N workers exercising open/close</span>
+<span class="sd">      --open-ops N         stop after N open/close bogo operations</span>
+<span class="sd">      --personality N      start N workers that change their personality</span>
+<span class="sd">      --personality-ops N  stop after N bogo personality calls</span>
+<span class="sd">-p N, --pipe N             start N workers exercising pipe I/O</span>
+<span class="sd">      --pipe-ops N         stop after N pipe I/O bogo operations</span>
+<span class="sd">      --pipe-data-size N   set pipe size of each pipe write to N bytes</span>
+<span class="sd">      --pipe-size N        set pipe size to N bytes</span>
+<span class="sd">-P N, --poll N             start N workers exercising zero timeout polling</span>
+<span class="sd">      --poll-ops N         stop after N poll bogo operations</span>
+<span class="sd">      --procfs N           start N workers reading portions of /proc</span>
+<span class="sd">      --procfs-ops N       stop procfs workers after N bogo read operations</span>
+<span class="sd">      --pthread N          start N workers that create multiple threads</span>
+<span class="sd">      --pthread-ops N      stop pthread workers after N bogo threads created</span>
+<span class="sd">      --pthread-max P      create P threads at a time by each worker</span>
+<span class="sd">      --ptrace N           start N workers that trace a child using ptrace</span>
+<span class="sd">      --ptrace-ops N       stop ptrace workers after N system calls are traced</span>
+<span class="sd">      --pty N              start N workers that exercise pseudoterminals</span>
+<span class="sd">      --pty-ops N          stop pty workers after N pty bogo operations</span>
+<span class="sd">      --pty-max N          attempt to open a maximum of N ptys</span>
+<span class="sd">-Q,   --qsort N            start N workers qsorting 32 bit random integers</span>
+<span class="sd">      --qsort-ops N        stop after N qsort bogo operations</span>
+<span class="sd">      --qsort-size N       number of 32 bit integers to sort</span>
+<span class="sd">      --quota N            start N workers exercising quotactl commands</span>
+<span class="sd">      --quota -ops N       stop after N quotactl bogo operations</span>
+<span class="sd">      --rdrand N           start N workers exercising rdrand (x86 only)</span>
+<span class="sd">      --rdrand-ops N       stop after N rdrand bogo operations</span>
+<span class="sd">      --readahead N        start N workers exercising file readahead</span>
+<span class="sd">      --readahead-bytes N  size of file to readahead on (default is 1GB)</span>
+<span class="sd">      --readahead-ops N    stop after N readahead bogo operations</span>
+<span class="sd">      --remap N            start N workers exercising page remappings</span>
+<span class="sd">      --remap-ops N        stop after N remapping bogo operations</span>
+<span class="sd">-R,   --rename N           start N workers exercising file renames</span>
+<span class="sd">      --rename-ops N       stop after N rename bogo operations</span>
+<span class="sd">      --resources N        start N workers consuming system resources</span>
+<span class="sd">      --resources-ops N    stop after N resource bogo operations</span>
+<span class="sd">      --rlimit N           start N workers that exceed rlimits</span>
+<span class="sd">      --rlimit-ops N       stop after N rlimit bogo operations</span>
+<span class="sd">      --rmap N             start N workers that stress reverse mappings</span>
+<span class="sd">      --rmap-ops N         stop after N rmap bogo operations</span>
+<span class="sd">      --rtc N              start N workers that exercise the RTC interfaces</span>
+<span class="sd">      --rtc-ops N          stop after N RTC bogo operations</span>
+<span class="sd">      --schedpolicy N      start N workers that exercise scheduling policy</span>
+<span class="sd">      --schedpolicy-ops N  stop after N scheduling policy bogo operations</span>
+<span class="sd">      --sctp N             start N workers performing SCTP send/receives</span>
+<span class="sd">      --sctp-ops N         stop after N SCTP bogo operations</span>
+<span class="sd">      --sctp-domain D      specify sctp domain, default is ipv4</span>
+<span class="sd">      --sctp-port P        use SCTP ports P to P + number of workers - 1</span>
+<span class="sd">      --seal N             start N workers performing fcntl SEAL commands</span>
+<span class="sd">      --seal-ops N         stop after N SEAL bogo operations</span>
+<span class="sd">      --seccomp N          start N workers performing seccomp call filtering</span>
+<span class="sd">      --seccomp-ops N      stop after N seccomp bogo operations</span>
+<span class="sd">      --seek N             start N workers performing random seek r/w IO</span>
+<span class="sd">      --seek-ops N         stop after N seek bogo operations</span>
+<span class="sd">      --seek-punch         punch random holes in file to stress extents</span>
+<span class="sd">      --seek-size N        length of file to do random I/O upon</span>
+<span class="sd">      --sem N              start N workers doing semaphore operations</span>
+<span class="sd">      --sem-ops N          stop after N semaphore bogo operations</span>
+<span class="sd">      --sem-procs N        number of processes to start per worker</span>
+<span class="sd">      --sem-sysv N         start N workers doing System V semaphore operations</span>
+<span class="sd">      --sem-sysv-ops N     stop after N System V sem bogo operations</span>
+<span class="sd">      --sem-sysv-procs N   number of processes to start per worker</span>
+<span class="sd">      --sendfile N         start N workers exercising sendfile</span>
+<span class="sd">      --sendfile-ops N     stop after N bogo sendfile operations</span>
+<span class="sd">      --sendfile-size N    size of data to be sent with sendfile</span>
+<span class="sd">      --shm N              start N workers that exercise POSIX shared memory</span>
+<span class="sd">      --shm-ops N          stop after N POSIX shared memory bogo operations</span>
+<span class="sd">      --shm-bytes N        allocate/free N bytes of POSIX shared memory</span>
+<span class="sd">      --shm-segs N         allocate N POSIX shared memory segments per iteration</span>
+<span class="sd">      --shm-sysv N         start N workers that exercise System V shared memory</span>
+<span class="sd">      --shm-sysv-ops N     stop after N shared memory bogo operations</span>
+<span class="sd">      --shm-sysv-bytes N   allocate and free N bytes of shared memory per loop</span>
+<span class="sd">      --shm-sysv-segs N    allocate N shared memory segments per iteration</span>
+<span class="sd">      --sigfd N            start N workers reading signals via signalfd reads</span>
+<span class="sd">      --sigfd-ops N        stop after N bogo signalfd reads</span>
+<span class="sd">      --sigfpe N           start N workers generating floating point math faults</span>
+<span class="sd">      --sigfpe-ops N       stop after N bogo floating point math faults</span>
+<span class="sd">      --sigpending N       start N workers exercising sigpending</span>
+<span class="sd">      --sigpending-ops N   stop after N sigpending bogo operations</span>
+<span class="sd">      --sigq N             start N workers sending sigqueue signals</span>
+<span class="sd">      --sigq-ops N         stop after N siqqueue bogo operations</span>
+<span class="sd">      --sigsegv N          start N workers generating segmentation faults</span>
+<span class="sd">      --sigsegv-ops N      stop after N bogo segmentation faults</span>
+<span class="sd">      --sigsuspend N       start N workers exercising sigsuspend</span>
+<span class="sd">      --sigsuspend-ops N   stop after N bogo sigsuspend wakes</span>
+<span class="sd">      --sleep N            start N workers performing various duration sleeps</span>
+<span class="sd">      --sleep-ops N        stop after N bogo sleep operations</span>
+<span class="sd">      --sleep-max P        create P threads at a time by each worker</span>
+<span class="sd">-S N, --sock N             start N workers exercising socket I/O</span>
+<span class="sd">      --sock-domain D      specify socket domain, default is ipv4</span>
+<span class="sd">      --sock-nodelay       disable Nagle algorithm, send data immediately</span>
+<span class="sd">      --sock-ops N         stop after N socket bogo operations</span>
+<span class="sd">      --sock-opts option   socket options [send|sendmsg|sendmmsg]</span>
+<span class="sd">      --sock-port P        use socket ports P to P + number of workers - 1</span>
+<span class="sd">      --sock-type T        socket type (stream, seqpacket)</span>
+<span class="sd">      --sockfd N           start N workers sending file descriptors over sockets</span>
+<span class="sd">      --sockfd-ops N       stop after N sockfd bogo operations</span>
+<span class="sd">      --sockfd-port P      use socket fd ports P to P + number of workers - 1</span>
+<span class="sd">      --sockpair N         start N workers exercising socket pair I/O activity</span>
+<span class="sd">      --sockpair-ops N     stop after N socket pair bogo operations</span>
+<span class="sd">      --spawn              start N workers spawning stress-ng using posix_spawn</span>
+<span class="sd">      --spawn-ops N        stop after N spawn bogo operations</span>
+<span class="sd">      --splice N           start N workers reading/writing using splice</span>
+<span class="sd">      --splice-ops N       stop after N bogo splice operations</span>
+<span class="sd">      --splice-bytes N     number of bytes to transfer per splice call</span>
+<span class="sd">      --stack N            start N workers generating stack overflows</span>
+<span class="sd">      --stack-ops N        stop after N bogo stack overflows</span>
+<span class="sd">      --stack-fill         fill stack, touches all new pages</span>
+<span class="sd">      --stackmmap N        start N workers exercising a filebacked stack</span>
+<span class="sd">      --stackmmap-ops N    stop after N bogo stackmmap operations</span>
+<span class="sd">      --str N              start N workers exercising lib C string functions</span>
+<span class="sd">      --str-method func    specify the string function to stress</span>
+<span class="sd">      --str-ops N          stop after N bogo string operations</span>
+<span class="sd">      --stream N           start N workers exercising memory bandwidth</span>
+<span class="sd">      --stream-ops N       stop after N bogo stream operations</span>
+<span class="sd">      --stream-l3-size N   specify the L3 cache size of the CPU</span>
+<span class="sd">-s N, --switch N           start N workers doing rapid context switches</span>
+<span class="sd">      --switch-ops N       stop after N context switch bogo operations</span>
+<span class="sd">      --symlink N          start N workers creating symbolic links</span>
+<span class="sd">      --symlink-ops N      stop after N symbolic link bogo operations</span>
+<span class="sd">      --sync-file N        start N workers exercise sync_file_range</span>
+<span class="sd">      --sync-file-ops N    stop after N sync_file_range bogo operations</span>
+<span class="sd">      --sync-file-bytes N  size of file to be sync&#39;d</span>
+<span class="sd">      --sysinfo N          start N workers reading system information</span>
+<span class="sd">      --sysinfo-ops N      stop after sysinfo bogo operations</span>
+<span class="sd">      --sysfs N            start N workers reading files from /sys</span>
+<span class="sd">      --sysfs-ops N        stop after sysfs bogo operations</span>
+<span class="sd">      --tee N              start N workers exercising the tee system call</span>
+<span class="sd">      --tee-ops N          stop after N tee bogo operations</span>
+<span class="sd">-T N, --timer N            start N workers producing timer events</span>
+<span class="sd">      --timer-ops N        stop after N timer bogo events</span>
+<span class="sd">      --timer-freq F       run timer(s) at F Hz, range 1 to 1000000000</span>
+<span class="sd">      --timer-rand         enable random timer frequency</span>
+<span class="sd">      --timerfd N          start N workers producing timerfd events</span>
+<span class="sd">      --timerfd-ops N      stop after N timerfd bogo events</span>
+<span class="sd">      --timerfd-freq F     run timer(s) at F Hz, range 1 to 1000000000</span>
+<span class="sd">      --timerfd-rand       enable random timerfd frequency</span>
+<span class="sd">      --tlb-shootdown N    start N workers that force TLB shootdowns</span>
+<span class="sd">      --tlb-shootdown-ops Nstop after N TLB shootdown bogo ops</span>
+<span class="sd">      --tmpfs N            start N workers mmap&#39;ing a file on tmpfs</span>
+<span class="sd">      --tmpfs-ops N        stop after N tmpfs bogo ops</span>
+<span class="sd">      --tsc N              start N workers reading the TSC (x86 only)</span>
+<span class="sd">      --tsc-ops N          stop after N TSC bogo operations</span>
+<span class="sd">      --tsearch N          start N workers that exercise a tree search</span>
+<span class="sd">      --tsearch-ops N      stop after N tree search bogo operations</span>
+<span class="sd">      --tsearch-size N     number of 32 bit integers to tsearch</span>
+<span class="sd">      --udp N              start N workers performing UDP send/receives</span>
+<span class="sd">      --udp-ops N          stop after N udp bogo operations</span>
+<span class="sd">      --udp-domain D       specify domain, default is ipv4</span>
+<span class="sd">      --udp-lite           use the UDP-Lite (RFC 3828) protocol</span>
+<span class="sd">      --udp-port P         use ports P to P + number of workers - 1</span>
+<span class="sd">      --udp-flood N        start N workers that performs a UDP flood attack</span>
+<span class="sd">      --udp-flood-ops N    stop after N udp flood bogo operations</span>
+<span class="sd">      --udp-flood-domain D specify domain, default is ipv4</span>
+<span class="sd">      --unshare N          start N workers exercising resource unsharing</span>
+<span class="sd">      --unshare-ops N      stop after N bogo unshare operations</span>
+<span class="sd">-u N, --urandom N          start N workers reading /dev/urandom</span>
+<span class="sd">      --urandom-ops N      stop after N urandom bogo read operations</span>
+<span class="sd">      --userfaultfd N      start N page faulting workers with userspace handling</span>
+<span class="sd">      --userfaultfd-ops N  stop after N page faults have been handled</span>
+<span class="sd">      --utime N            start N workers updating file timestamps</span>
+<span class="sd">      --utime-ops N        stop after N utime bogo operations</span>
+<span class="sd">      --utime-fsync        force utime meta data sync to the file system</span>
+<span class="sd">      --vecmath N          start N workers performing vector math ops</span>
+<span class="sd">      --vecmath-ops N      stop after N vector math bogo operations</span>
+<span class="sd">      --vfork N            start N workers spinning on vfork() and exit()</span>
+<span class="sd">      --vfork-ops N        stop after N vfork bogo operations</span>
+<span class="sd">      --vfork-max P        create P processes per iteration, default is 1</span>
+<span class="sd">      --vforkmany N        start N workers spawning many vfork children</span>
+<span class="sd">      --vforkmany-ops N    stop after spawning N vfork children</span>
+<span class="sd">-m N, --vm N               start N workers spinning on anonymous mmap</span>
+<span class="sd">      --vm-bytes N         allocate N bytes per vm worker (default 256MB)</span>
+<span class="sd">      --vm-hang N          sleep N seconds before freeing memory</span>
+<span class="sd">      --vm-keep            redirty memory instead of reallocating</span>
+<span class="sd">      --vm-ops N           stop after N vm bogo operations</span>
+<span class="sd">      --vm-locked          lock the pages of the mapped region into memory</span>
+<span class="sd">      --vm-method m        specify stress vm method m, default is all</span>
+<span class="sd">      --vm-populate        populate (prefault) page tables for a mapping</span>
+<span class="sd">      --vm-rw N            start N vm read/write process_vm* copy workers</span>
+<span class="sd">      --vm-rw-bytes N      transfer N bytes of memory per bogo operation</span>
+<span class="sd">      --vm-rw-ops N        stop after N vm process_vm* copy bogo operations</span>
+<span class="sd">      --vm-splice N        start N workers reading/writing using vmsplice</span>
+<span class="sd">      --vm-splice-ops N    stop after N bogo splice operations</span>
+<span class="sd">      --vm-splice-bytes N  number of bytes to transfer per vmsplice call</span>
+<span class="sd">      --wait N             start N workers waiting on child being stop/resumed</span>
+<span class="sd">      --wait-ops N         stop after N bogo wait operations</span>
+<span class="sd">      --wcs N              start N workers on lib C wide char string functions</span>
+<span class="sd">      --wcs-method func    specify the wide character string function to stress</span>
+<span class="sd">      --wcs-ops N          stop after N bogo wide character string operations</span>
+<span class="sd">      --xattr N            start N workers stressing file extended attributes</span>
+<span class="sd">      --xattr-ops N        stop after N bogo xattr operations</span>
+<span class="sd">-y N, --yield N            start N workers doing sched_yield() calls</span>
+<span class="sd">      --yield-ops N        stop after N bogo yield operations</span>
+<span class="sd">      --zero N             start N workers reading /dev/zero</span>
+<span class="sd">      --zero-ops N         stop after N /dev/zero bogo read operations</span>
+<span class="sd">      --zlib N             start N workers compressing data with zlib</span>
+<span class="sd">      --zlib-ops N         stop after N zlib bogo compression operations</span>
+<span class="sd">      --zlib-method m      specify stress zlib random data generation method</span>
+<span class="sd">      --zombie N           start N workers that rapidly create and reap zombies</span>
+<span class="sd">      --zombie-ops N       stop after N bogo zombie fork operations</span>
+<span class="sd">      --zombie-max N       set upper limit of N zombies per worker</span>
+
+<span class="sd">Example: stress-ng --cpu 8 --io 4 --vm 2 --vm-bytes 128M --fork 4 --timeout 10s</span>
+
+<span class="sd">Note: Sizes can be suffixed with B,K,M,G and times with s,m,h,d,y</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Stressng"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.stressng.Stressng">[docs]</a><span class="k">class</span> <span class="nc">Stressng</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Stressng.install_stressng"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.stressng.Stressng.install_stressng">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">install_stressng</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">executable</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">sys_utils</span><span class="o">.</span><span class="n">get_executable_path</span><span class="p">(</span><span class="s2">&quot;stress-ng&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">executable</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;yum -y install stress-ng&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Stressng.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.stressng.Stressng.execute">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">cmd_options</span><span class="p">,</span> <span class="n">stressng_timeout</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;stress-ng </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd_options</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --timeout=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stressng_timeout</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">command_output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">stressng_timeout</span> <span class="o">+</span> <span class="mi">120</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;command out :- </span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">command_output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">command_output</span></div>
+
+<div class="viewcode-block" id="Stressng.check_stressng_cmd_success"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.stressng.Stressng.check_stressng_cmd_success">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">check_stressng_cmd_success</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="s2">&quot;successful run completed&quot;</span> <span class="ow">in</span> <span class="n">cmd_out</span><span class="p">,</span>
+            <span class="s2">&quot;Check Stressng completed successfully. &quot;</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

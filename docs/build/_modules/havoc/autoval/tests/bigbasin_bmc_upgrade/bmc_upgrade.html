@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.system.system_config</span> <span class="k">import</span> <span class="n">SystemConfig</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  This script is used for bmc firmware update based on the parameters passed.</span>
+<span class="sd">  The user is expected to place the tools used for upgrade in the path</span>
+<span class="sd">  /mnt/vol/havoc/autoval/bin/bigbasin/bmc. The need to also extract any zip /</span>
+<span class="sd">  tar file that contains the update tool or script and firmware binary</span>
+
+<span class="sd">  The following parameters are passed to the script through json file that is</span>
+<span class="sd">  stored in /mnt/vol/havoc/autoval/bin/bigbasin/bmc.</span>
+<span class="sd">    method - Refers to the upgrade method to use (inband or OOB)</span>
+<span class="sd">    dev_type - Refers to the device to which udpate need to be performed</span>
+<span class="sd">    tool_name - Refers to the tool that performs upgrade (bin or script)</span>
+<span class="sd">    golden_fw_tool_path - Refers to the update tool for golden fw</span>
+<span class="sd">    new_fw_tool_path - Refers to the update tool for new fw</span>
+<span class="sd">    fw_filepath - Refers to the path to the fimware binary files</span>
+<span class="sd">    golden_fw_file - Refers to the golder firmware binary file</span>
+<span class="sd">    new_fw_file - Refers to the new firmware binary file</span>
+<span class="sd">    golden_fw_ver - Refers to the golden firmware version</span>
+<span class="sd">    new_fw_ver - Refers to the new firmware version</span>
+<span class="sd">    fw_update_count - Refers to the number of update iterations requested</span>
+
+<span class="sd">  We check the current firmware version installed to decide the firmware to</span>
+<span class="sd">  be updated on the first iteration. We continue alternating between golden</span>
+<span class="sd">  and new firmware for the given number of fw_udpate_count.</span>
+
+<span class="sd">  Before and after each iteration, we check whether the system responds to</span>
+<span class="sd">  bmc commands in cmd_list both inband and OOB</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="BmcUpgrade"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade">[docs]</a><span class="k">class</span> <span class="nc">BmcUpgrade</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="BmcUpgrade.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BmcUpgrade</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;dev_type&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updateinfo_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;json_file&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BmcUpgrade.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;BMC Upgrade Test&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Commands to be checked before and after BMC upgrade via inband and OOB</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mc info&quot;</span><span class="p">,</span> <span class="s2">&quot;sel elist&quot;</span><span class="p">,</span> <span class="s2">&quot;sdr&quot;</span><span class="p">,</span> <span class="s2">&quot;power status&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_json_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateinfo_file</span><span class="p">)</span>
+        <span class="n">cycle_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fw_update_count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Target to upgrade BMC </span><span class="si">%d</span><span class="s2"> times&quot;</span> <span class="o">%</span> <span class="n">cycle_count</span><span class="p">)</span>
+
+        <span class="n">golden_fw_tool_abs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_tool_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tool_name</span><span class="p">)</span>
+        <span class="n">new_fw_tool_abs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_fw_tool_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tool_name</span><span class="p">)</span>
+
+        <span class="n">file_dep</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_file</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_file</span><span class="p">,</span>
+            <span class="n">golden_fw_tool_abs</span><span class="p">,</span>
+            <span class="n">new_fw_tool_abs</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">fw_ver</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_ver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_ver</span><span class="p">]</span>
+        <span class="n">tool_path</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_tool_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_tool_path</span><span class="p">]</span>
+
+        <span class="c1"># Check if the files are are present</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">file_dep</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;File </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+
+        <span class="n">bmc_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bmc_ver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+        <span class="c1"># if golden firmware version is already present, swap update order</span>
+        <span class="k">if</span> <span class="n">bmc_ver</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_ver</span><span class="p">:</span>
+            <span class="n">file_dep</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_file</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_file</span><span class="p">,</span>
+                <span class="n">new_fw_tool_abs</span><span class="p">,</span>
+                <span class="n">golden_fw_tool_abs</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">fw_ver</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">new_fw_ver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_ver</span><span class="p">]</span>
+            <span class="n">tool_path</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">new_fw_tool_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_tool_path</span><span class="p">]</span>
+
+        <span class="n">upgrade_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cycle_count</span><span class="p">):</span>
+            <span class="n">file_select</span> <span class="o">=</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span>
+            <span class="nb">iter</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%d</span><span class="s2"> - starting&quot;</span> <span class="o">%</span> <span class="nb">iter</span><span class="p">)</span>
+
+            <span class="n">bmc_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bmc_ver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Iter:</span><span class="si">%d</span><span class="s2"> BMC fw version - Current:</span><span class="si">%s</span><span class="s2"> Updating:</span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">bmc_ver</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">])</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_bmc_cmds_inband</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_bmc_cmds_oob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+
+            <span class="c1"># Checking for jbog and tiogapass server</span>
+            <span class="k">if</span> <span class="n">upgrade_method</span> <span class="o">==</span> <span class="s2">&quot;inb&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;jbog&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="s2">&quot; sel clear&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;Iter: </span><span class="si">%d</span><span class="s2"> JBOG inband BMC update to ver </span><span class="si">%s</span><span class="s2">&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">])</span>
+                    <span class="p">)</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tool_name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running Command </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                        <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="n">tool_path</span><span class="p">[</span><span class="n">file_select</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                        <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Flashing BMC ver </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;tioga&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;Iter: </span><span class="si">%d</span><span class="s2"> tioga inband BMC update to ver </span><span class="si">%s</span><span class="s2">&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">])</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ipmitool sel clear&quot;</span><span class="p">)</span>
+                    <span class="c1"># retreive the directory and the binary to pass on for the command</span>
+                    <span class="n">get_file</span> <span class="o">=</span> <span class="n">file_dep</span><span class="p">[</span><span class="n">file_select</span><span class="p">]</span>
+                    <span class="n">get_file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">get_file</span><span class="p">))[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">get_file_binary</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">get_file</span><span class="p">))</span>
+                    <span class="n">get_file_path</span> <span class="o">=</span> <span class="n">get_file_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">get_file_binary</span>
+                    <span class="n">system_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_server_type</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">system_type</span><span class="p">,</span> <span class="s2">&quot;Detected system type&quot;</span><span class="p">)</span>
+                    <span class="c1"># BMC upgrade via LPC bus port</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./</span><span class="si">%s</span><span class="s2"> if=../</span><span class="si">%s</span><span class="s2"> option=l lpcport=0x2e cs=1 flashtype=2&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tool_name</span><span class="p">,</span>
+                        <span class="n">get_file_path</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;BMC upgrade via LPC bus port connection </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                        <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">7200</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="n">tool_path</span><span class="p">[</span><span class="n">file_select</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                        <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Flashing BMC ver </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;dev_type </span><span class="si">%s</span><span class="s2"> not supported&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;leopard&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upgrade_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Iter: </span><span class="si">%d</span><span class="s2"> Leopard inband BMC update to ver </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="c1"># We need to handle leopard bmc update here</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;./</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tool_name</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">,</span>
+                    <span class="n">file_dep</span><span class="p">[</span><span class="n">file_select</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running Command </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localself</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="n">tool_path</span><span class="p">[</span><span class="n">file_select</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;leopard&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upgrade_method</span> <span class="o">==</span> <span class="s2">&quot;inb&quot;</span><span class="p">):</span>
+                <span class="c1"># We need to handle leopard oob bmc update here</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Leopard inb BMC update not supported&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;jbog&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">upgrade_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">):</span>
+                <span class="c1"># We need to handle jbog oob bmc update here</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;JBOG OOB BMC update not supported&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;Invalid input dev:</span><span class="si">%s</span><span class="s2">/upgrade:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">,</span> <span class="n">upgrade_method</span><span class="p">),</span>
+                <span class="p">)</span>
+
+            <span class="c1"># vaidate update operation status by checking current bmc version</span>
+            <span class="n">command_status</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">command_status</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+                    <span class="n">bmc_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bmc_ver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+                    <span class="n">command_status</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">command_status</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Check bmc version can be retrieved after upgrade&quot;</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">bmc_ver</span> <span class="o">==</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">],</span>
+                <span class="s2">&quot;Iter: </span><span class="si">%d</span><span class="s2"> BMC fw ver - Expected </span><span class="si">%s</span><span class="s2">, Found </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">[</span><span class="n">file_select</span><span class="p">],</span> <span class="n">bmc_ver</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="n">cfg_init</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">cfg_init</span><span class="p">,</span> <span class="s2">&quot;Config check&quot;</span><span class="p">)</span>
+
+            <span class="c1"># We are not validating sel_elist at this time as we need understand</span>
+            <span class="c1"># the expected behavior and enhance script later</span>
+            <span class="c1"># self.validate_condition(True, &quot;1:%s&quot; %</span>
+            <span class="c1">#                        cfg_init[&quot;systemlogs&quot;])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_bmc_cmds_inband</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_bmc_cmds_oob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dev_type</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%d</span><span class="s2"> - complete&quot;</span> <span class="o">%</span> <span class="nb">iter</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BmcUpgrade.get_bmc_ver"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.get_bmc_ver">[docs]</a>    <span class="k">def</span> <span class="nf">get_bmc_ver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;jbog&quot;</span><span class="p">:</span>
+            <span class="n">ver_inb</span> <span class="o">=</span> <span class="s2">&quot;ipmitool -b 9 -t 0x2c mc info&quot;</span>
+        <span class="k">elif</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;leopard&quot;</span> <span class="ow">or</span> <span class="s2">&quot;tioga&quot;</span><span class="p">:</span>
+            <span class="n">ver_inb</span> <span class="o">=</span> <span class="s2">&quot;ipmitool mc info&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Device type </span><span class="si">%s</span><span class="s2"> not supported&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_type</span><span class="p">))</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ver_inb</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;Firmware Revision\s+:\s(\w+.\w+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">state</span></div>
+
+<div class="viewcode-block" id="BmcUpgrade.check_bmc_cmds_inband"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.check_bmc_cmds_inband">[docs]</a>    <span class="k">def</span> <span class="nf">check_bmc_cmds_inband</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev_type</span><span class="p">):</span>
+        <span class="n">cmd_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmd_list</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;jbog&quot;</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool -b 9 -t 0x2c </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;leopard&quot;</span> <span class="ow">or</span> <span class="s2">&quot;tioga&quot;</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Device type </span><span class="si">%s</span><span class="s2"> not supported&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_type</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running Cmd: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BmcUpgrade.check_bmc_cmds_oob"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.check_bmc_cmds_oob">[docs]</a>    <span class="k">def</span> <span class="nf">check_bmc_cmds_oob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev_type</span><span class="p">):</span>
+        <span class="n">cmd_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmd_list</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;jbog&quot;</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;-b 9 -t 0x2c </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;leopard&quot;</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="n">cmd_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="c1"># Ignoring oob commands for tioga since they are not supported</span>
+            <span class="k">elif</span> <span class="n">dev_type</span> <span class="o">==</span> <span class="s2">&quot;tioga&quot;</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Device type </span><span class="si">%s</span><span class="s2"> not supported&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_type</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+    <span class="c1"># Retrieve the Manufacturer &quot;Quanta or Wiwynn&quot;</span>
+<div class="viewcode-block" id="BmcUpgrade.get_server_type"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.get_server_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_server_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool fru&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;Product Manufacturer \s+:(.+)$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">server_model</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">server_model</span></div>
+
+<div class="viewcode-block" id="BmcUpgrade.get_json_data"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.get_json_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_json_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">):</span>
+        <span class="c1"># Parse the parameters to be used in this test from json file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+            <span class="n">datadict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tool_name</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;tool_name&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_tool_path</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;golden_fw_tool_path&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_tool_path</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;new_fw_tool_path&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fw_filepath</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;fw_filepath&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_file</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;golden_fw_file&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_file</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;new_fw_file&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">golden_fw_ver</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;golden_fw_ver&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_fw_ver</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;new_fw_ver&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fw_update_count</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;fw_update_count&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BmcUpgrade.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.BmcUpgrade.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BmcUpgrade</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">cfg_filter</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;openbmc_version&quot;</span><span class="p">,</span> <span class="s2">&quot;product_data&quot;</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.bigbasin_bmc_upgrade.html#havoc.autoval.tests.bigbasin_bmc_upgrade.bmc_upgrade.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">BmcUpgrade</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

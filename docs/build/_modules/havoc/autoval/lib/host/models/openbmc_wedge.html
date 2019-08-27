@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models.openbmc_wedge &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models.openbmc_wedge</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.models.openbmc_wedge</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.openbmc</span> <span class="k">import</span> <span class="n">OpenBMC</span>
+
+
+<div class="viewcode-block" id="OpenBMCWedge"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge">[docs]</a><span class="k">class</span> <span class="nc">OpenBMCWedge</span><span class="p">(</span><span class="n">OpenBMC</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OpenBMCWedge.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCWedge</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.is_wedge"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.is_wedge">[docs]</a>    <span class="k">def</span> <span class="nf">is_wedge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.get_config_details"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_config_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_config_details</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">log_dir</span><span class="p">,</span>
+        <span class="n">test_start_time</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">bios_dump_filter</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="n">config_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">config_dict</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.get_system_logs"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_system_logs">[docs]</a>    <span class="k">def</span> <span class="nf">get_system_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /var/log/messages&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.get_cpld_fw_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_cpld_fw_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpld_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/i2c-adapter/i2c-12/12-0031/cpld_rev&quot;</span>
+        <span class="n">maj_ver</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/i2c-adapter/i2c-12/12-0031/cpld_sub_rev&quot;</span>
+        <span class="n">min_ver</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">.</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">maj_ver</span><span class="p">,</span> <span class="n">min_ver</span><span class="p">)</span></div>
+
+    <span class="c1"># Determine the wedge model - Wedge 40, Wedge 100 or Wedge 100S.</span>
+<div class="viewcode-block" id="OpenBMCWedge.get_wedge_model"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.get_wedge_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_wedge_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">switch_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">cpu_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;dmidecode |grep cpu -i&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.*Intel.*CPU.*\s+C2550\s+.*&#39;</span><span class="p">,</span> <span class="n">cpu_output</span><span class="p">):</span>
+            <span class="n">switch_model</span> <span class="o">=</span> <span class="s1">&#39;wedge40&#39;</span>
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.*Intel.*CPU.*\s+E3845\s+.*&#39;</span><span class="p">,</span> <span class="n">cpu_output</span><span class="p">):</span>
+            <span class="n">switch_model</span> <span class="o">=</span> <span class="s1">&#39;wedge100&#39;</span>
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.*Intel.*CPU.*\s+D1508\s+.*&#39;</span><span class="p">,</span> <span class="n">cpu_output</span><span class="p">):</span>
+            <span class="n">switch_model</span> <span class="o">=</span> <span class="s1">&#39;wedge100s&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">switch_model</span> <span class="o">=</span> <span class="s1">&#39;Unknown Wedge&#39;</span>
+
+        <span class="k">return</span> <span class="n">switch_model</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.fw_update_cpld"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.fw_update_cpld">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_cpld</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openbmc_copyfiles</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">destination</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;bash -l -c &#39;export&quot;</span>
+            <span class="s2">&quot; PATH=$PATH:/usr/local/bin;cpld_upgrade.sh </span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">destination</span><span class="p">,</span> <span class="n">file_name</span><span class="p">))</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC command - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># For any exception, set return code as 0 and continue test.</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">return_code</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">pass</span>
+        <span class="c1"># 0 for success, all other return codes are consider failure</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">return_code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;cpld update failed:- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">res</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="c1"># Connection gets reset so wait for reconnect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Rebooting OpenBMC&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">stdout</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.sensor_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/sensors&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="c1"># No sel_clear function support in Wedge OpenBMC. Hence returning True</span>
+<div class="viewcode-block" id="OpenBMCWedge.sel_clear"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.sel_clear">[docs]</a>    <span class="k">def</span> <span class="nf">sel_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="c1"># Power Status of Slot</span>
+<div class="viewcode-block" id="OpenBMCWedge.power_status"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_status">[docs]</a>    <span class="k">def</span> <span class="nf">power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/wedge_power.sh status&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="c1"># DC Cycle</span>
+<div class="viewcode-block" id="OpenBMCWedge.cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.cycle">[docs]</a>    <span class="k">def</span> <span class="nf">cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/wedge_power.sh reset&quot;</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;DC Cycling now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> failed, trying to reconnect anyhow&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
+
+    <span class="c1"># Power Reset</span>
+<div class="viewcode-block" id="OpenBMCWedge.power_reset"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_reset">[docs]</a>    <span class="k">def</span> <span class="nf">power_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span></div>
+
+    <span class="c1"># AC Cycle</span>
+<div class="viewcode-block" id="OpenBMCWedge.ac_cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.ac_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">ac_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/wedge_power.sh reset -s&quot;</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;AC Cycling now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># Command failed, system might either be rebooting already or</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> failed, trying to reconnect anyhow&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.power_on"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_on">[docs]</a>    <span class="k">def</span> <span class="nf">power_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">last_reboot</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/wedge_power.sh on&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering on now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">last_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.power_off"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.power_off">[docs]</a>    <span class="k">def</span> <span class="nf">power_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/wedge_power.sh off&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering OFF now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">timeout</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="c1"># Sleep for some time to let shutdown complete</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to power down system&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Power Down complete&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCWedge.forced_bmc_reset"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_wedge.OpenBMCWedge.forced_bmc_reset">[docs]</a>    <span class="k">def</span> <span class="nf">forced_bmc_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

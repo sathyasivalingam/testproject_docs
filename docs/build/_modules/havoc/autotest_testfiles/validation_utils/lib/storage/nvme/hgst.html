@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">validation_utils.lib.storage.smart_validation_abstract</span> <span class="k">import</span> \
+    <span class="n">SmartValidationAbstract</span>
+<span class="kn">from</span> <span class="nn">validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">validation_utils.lib.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="HGST"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST">[docs]</a><span class="k">class</span> <span class="nc">HGST</span><span class="p">(</span><span class="n">SmartValidationAbstract</span><span class="p">):</span>
+<div class="viewcode-block" id="HGST.__init__"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">external_json</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockname</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detection</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_before</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_after</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">device</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HGST.get_data"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">detection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detection</span>
+        <span class="n">report_before</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_before</span>
+        <span class="n">report_after</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_after</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">detection</span><span class="p">:</span>
+            <span class="n">smart</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_smart</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">detection</span><span class="p">[</span><span class="s1">&#39;SMART&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">smart</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">smart</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">report_before</span><span class="p">:</span>
+                <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_report</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">report_before</span><span class="p">[</span><span class="s2">&quot;generate_report_before&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">report_before</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_report</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">report_after</span><span class="p">[</span><span class="s2">&quot;generate_report_after&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span>
+                <span class="n">config_before</span> <span class="o">=</span> <span class="n">report_before</span><span class="p">[</span><span class="s2">&quot;generate_report_before&quot;</span><span class="p">]</span>
+                <span class="n">config_after</span> <span class="o">=</span> <span class="n">report_after</span><span class="p">[</span><span class="s2">&quot;generate_report_after&quot;</span><span class="p">]</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">report_after</span><span class="p">)</span>
+                <span class="n">waf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WAF</span><span class="p">(</span><span class="n">config_before</span><span class="p">,</span> <span class="n">config_after</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">waf</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report_before</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;logical_drive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;HGST&#39;</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;serial_number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_device_type</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;interface&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;nvme&#39;</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="HGST.validate_results"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST.validate_results">[docs]</a>    <span class="k">def</span> <span class="nf">validate_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="HGST.validate_rules"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST.validate_rules">[docs]</a>    <span class="k">def</span> <span class="nf">validate_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compare</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">compare</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">criteria_1</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span>
+            <span class="s1">&#39;media_and_data_integrity_errors&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;total_uncorrected_write_errors&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;total_uncorrected_read_errors&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;total_uncorrected_erase_errors&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="n">criteria_2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;life_gauge&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;available_spare&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">key1</span><span class="p">,</span> <span class="n">val1</span> <span class="ow">in</span> <span class="n">criteria_1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">key2</span><span class="p">,</span> <span class="n">val2</span> <span class="ow">in</span> <span class="n">criteria_2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;ERROR: </span><span class="si">%s</span><span class="s2"> is </span><span class="si">%s</span><span class="s2">, higher than threshold </span><span class="se">\</span>
+<span class="s2">                        of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key1</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">val1</span><span class="p">)</span>
+                    <span class="n">threshold_error1</span> <span class="o">=</span> <span class="n">error</span>
+                    <span class="n">threshold_error2</span> <span class="o">=</span> <span class="n">error</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">key1</span> <span class="ow">and</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="n">val1</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">threshold_error1</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">key2</span> <span class="o">==</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">val2</span> <span class="o">==</span> <span class="n">val</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">threshold_error2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HGST.to_config_dict"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST.to_config_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_config_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">HGST</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_config_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="s2">&quot;generate-report&quot;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+        <span class="c1"># Example output:</span>
+        <span class="c1"># {&quot;get-capacity&quot;:</span>
+        <span class="c1">#   {&quot;/dev/nvme0n1&quot;:</span>
+        <span class="c1">#       {&quot;capacity&quot;:&quot;1.6TB&quot;,&quot;num_channels&quot;:16}</span>
+        <span class="c1">#   }}</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">decoded</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">log</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">log</span>
+
+    <span class="k">def</span> <span class="nf">_get_smart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="s2">&quot;get-smart&quot;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+        <span class="n">smart</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">smart</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">smart</span>
+
+    <span class="k">def</span> <span class="nf">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">dev</span> <span class="o">=</span> <span class="n">device</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/opt/HGST/hdm/bin/hdm --output-format </span><span class="se">\</span>
+<span class="s2">            json </span><span class="si">%s</span><span class="s2"> -p /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">decoded</span>
+
+<div class="viewcode-block" id="HGST._WAF"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST._WAF">[docs]</a>    <span class="k">def</span> <span class="nf">_WAF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_before</span><span class="p">,</span> <span class="n">config_after</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HOST and NAND write bytes are captured before and after</span>
+<span class="sd">        test to determine total logical &amp; physical write bytes.</span>
+<span class="sd">        NAND total write will then divide to NAND total write</span>
+<span class="sd">        to calcuate Flash Wrirte Amplification.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">compare</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span><span class="n">config_before</span><span class="p">,</span> <span class="n">config_after</span><span class="p">)</span>
+
+        <span class="n">waf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">host_write_before</span> <span class="o">=</span> <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;host_write_blocks&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">host_write_after</span> <span class="o">=</span> <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;host_write_blocks&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">host_delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">host_write_after</span> <span class="o">-</span> <span class="n">host_write_before</span><span class="p">)</span>
+        <span class="n">waf</span><span class="p">[</span><span class="s2">&quot;host_total_write_blocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">host_delta</span>
+
+        <span class="n">nand_write_before</span> <span class="o">=</span> <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;nand_write_blocks&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nand_write_after</span> <span class="o">=</span> <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;nand_write_blocks&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">nand_delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">nand_write_after</span> <span class="o">-</span> <span class="n">nand_write_before</span><span class="p">)</span>
+        <span class="n">waf</span><span class="p">[</span><span class="s2">&quot;nand_total_write_blocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nand_delta</span>
+
+        <span class="n">WAF</span> <span class="o">=</span> <span class="p">(</span><span class="n">nand_delta</span> <span class="o">/</span> <span class="n">host_delta</span><span class="p">)</span>
+        <span class="n">waf</span><span class="p">[</span><span class="s2">&quot;write_Amplification&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">WAF</span>
+        <span class="k">return</span> <span class="n">waf</span></div>
+
+<div class="viewcode-block" id="HGST.compare_attributes"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.hgst.HGST.compare_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">compare_attributes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">smart_data_before</span><span class="p">,</span> <span class="n">smart_data_after</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">json_data</span>
+    <span class="p">):</span>
+        <span class="k">return</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

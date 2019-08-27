@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.system_fw_update.system_fw_update &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.system_fw_update.system_fw_update</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.system_fw_update.system_fw_update</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.fw_update_util</span> <span class="k">import</span> <span class="n">FwUpdateUtil</span>
+
+
+<div class="viewcode-block" id="FwUpdateTest"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_fw_update.html#havoc.autoval.tests.system_fw_update.system_fw_update.FwUpdateTest">[docs]</a><span class="k">class</span> <span class="nc">FwUpdateTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="FwUpdateTest.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_fw_update.html#havoc.autoval.tests.system_fw_update.system_fw_update.FwUpdateTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FwUpdateTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg_filter</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="FwUpdateTest.setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_fw_update.html#havoc.autoval.tests.system_fw_update.system_fw_update.FwUpdateTest.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FwUpdateTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateTest.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_fw_update.html#havoc.autoval.tests.system_fw_update.system_fw_update.FwUpdateTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The test performs firmwre upgrade/downgrade and toggle between the</span>
+<span class="sd">        &#39;latest&#39; and &#39;previous&#39; know firmware versions (by default) to the</span>
+<span class="sd">         no of times specified.</span>
+
+<span class="sd">        If upgrade_to is provided as input then firmware is upgraded to</span>
+<span class="sd">        specified firmwre. If downgrade_to downgraded to specified firmware.</span>
+<span class="sd">        By default firmware upgrade&#39;s/downgrade&#39;s to latest and previous.</span>
+
+<span class="sd">        If the specific latest/previous firmware version is provided as test</span>
+<span class="sd">        input then test update or downgrade to the specific version.</span>
+
+<span class="sd">        The firmware upgrade should take place in following order.</span>
+<span class="sd">            1st: BMC</span>
+<span class="sd">            2nd: BIC</span>
+<span class="sd">            3rd: CPLD</span>
+<span class="sd">            4th: UEFI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">cycle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cycle&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fw_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">:</span>
+            <span class="c1"># Skip any keys like run_id etc havoc added by default.</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="n">fw_type</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">update_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="n">fw_type</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">fw_to_upgrade</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="n">fw_type</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;upgrade_to&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">fw_to_downgrade</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="n">fw_type</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;downgrade_to&quot;</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">_cycle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="n">fw_type</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cycle&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_cycle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cycle</span> <span class="o">=</span> <span class="n">_cycle</span>
+            <span class="c1"># Downgrade only case</span>
+            <span class="k">if</span> <span class="n">fw_to_downgrade</span> <span class="ow">and</span> <span class="n">cycle</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">bool_swap_fw</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bool_swap_fw</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fw_to_downgrade</span><span class="p">:</span>
+                <span class="n">fw_to_downgrade</span> <span class="o">=</span> <span class="s2">&quot;previous&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">fw_to_upgrade</span><span class="p">:</span>
+                <span class="n">fw_to_upgrade</span> <span class="o">=</span> <span class="s2">&quot;latest&quot;</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Running </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> firmware update&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fw_type</span><span class="p">,</span> <span class="n">update_method</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">_iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cycle</span><span class="p">):</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running cycle - </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_iter</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">bool_swap_fw</span><span class="p">:</span>
+                    <span class="n">update_to</span> <span class="o">=</span> <span class="n">fw_to_downgrade</span>
+                    <span class="n">bool_swap_fw</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">update_to</span> <span class="o">=</span> <span class="n">fw_to_upgrade</span>
+                    <span class="n">bool_swap_fw</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="s2">&quot;bios&quot;</span> <span class="ow">in</span> <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">bios_update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">update_method</span><span class="p">,</span>
+                        <span class="n">_iter</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">,</span>
+                        <span class="n">update_to</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="s2">&quot;openbmc&quot;</span> <span class="ow">in</span> <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">openbmc_fw_update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">update_method</span><span class="p">,</span>
+                        <span class="n">_iter</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">,</span>
+                        <span class="n">update_to</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bic&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-bic&quot;</span><span class="p">):</span>
+                    <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">bic_update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">update_method</span><span class="p">,</span>
+                        <span class="n">_iter</span><span class="p">,</span>
+                        <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                        <span class="n">update_to</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bicbl&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-bicbl&quot;</span><span class="p">):</span>
+                    <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">bicbl_update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">update_method</span><span class="p">,</span>
+                        <span class="n">_iter</span><span class="p">,</span>
+                        <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                        <span class="n">update_to</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;cpld&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-cpld&quot;</span><span class="p">):</span>
+                    <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">cpld_update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">update_method</span><span class="p">,</span>
+                        <span class="n">_iter</span><span class="p">,</span>
+                        <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                        <span class="n">update_to</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;pcie_sw&quot;</span><span class="p">:</span>
+                    <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">pciesw_update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                        <span class="n">update_method</span><span class="p">,</span>
+                        <span class="n">_iter</span><span class="p">,</span>
+                        <span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                        <span class="n">update_to</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                        <span class="s2">&quot;Unsupported </span><span class="si">%s</span><span class="s2"> firmware upgrade found &quot;</span> <span class="o">%</span> <span class="n">fw_type</span>
+                    <span class="p">)</span>
+            <span class="c1"># Revert back the cycle count for other firmwares.</span>
+            <span class="n">cycle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cycle&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">test_matrix</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_test_matrix</span><span class="p">()</span>
+            <span class="n">result_handler</span> <span class="o">=</span> <span class="n">ResultHandler</span><span class="p">()</span>
+            <span class="n">result_handler</span><span class="o">.</span><span class="n">update_test_results</span><span class="p">(</span><span class="n">test_matrix</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cfg_filter</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_cfg_check_filter_list</span><span class="p">(</span><span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="p">)</span>
+            <span class="c1"># Deleting the fw folder within the timestamp folder after each</span>
+            <span class="c1"># fw-test type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_try_cleanup_dirs</span><span class="p">(</span><span class="n">fw_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="FwUpdateTest.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_fw_update.html#havoc.autoval.tests.system_fw_update.system_fw_update.FwUpdateTest.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">FwUpdateTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span>
+            <span class="n">cfg_filter</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg_filter</span><span class="p">),</span>
+            <span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">config_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">config_data</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_try_cleanup_dirs</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_try_cleanup_dirs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fw_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Deleting the timestamp folder i.e., Folder created on the BMC</span>
+            <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">check_and_delete_directory_contents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># This might fail on some systems that don&#39;t have BMC access, don&#39;t</span>
+            <span class="c1"># fail the test because of it</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Failed to delete folder on BMC&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_fw_update.html#havoc.autoval.tests.system_fw_update.system_fw_update.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">FwUpdateTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

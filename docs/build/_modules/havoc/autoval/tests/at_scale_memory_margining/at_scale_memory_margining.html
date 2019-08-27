@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="n">src_one_path</span> <span class="o">=</span> <span class="s2">&quot;/mnt/vol/havoc/autotest/bin/561970_Intel_MMA_for_Purley_Rev15/&quot;</span>
+<span class="n">src_two_path</span> <span class="o">=</span> <span class="s2">&quot;/mnt/vol/havoc/autotest/bin/startup.nsh&quot;</span>
+<span class="n">dst_path</span> <span class="o">=</span> <span class="s2">&quot;/boot/efi/&quot;</span>
+
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck">[docs]</a><span class="k">class</span> <span class="nc">AtScaleMemMarginCheck</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_mma</span><span class="o">=</span><span class="n">src_one_path</span><span class="p">,</span> <span class="n">file_mma</span><span class="o">=</span><span class="n">src_two_path</span><span class="p">,</span>
+                 <span class="n">dst_files</span><span class="o">=</span><span class="n">dst_path</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AtScaleMemMarginCheck</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;bios_settings&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s1">&#39;margin_guidelins&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_bios_setting_modified</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">are_files_copied_successfully</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_mma_test_executed_successfully</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_sanity_check_successfully</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_rx_tx_above_gudeline</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_cmd_ctl_above_gudeline</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dir_mma</span> <span class="o">=</span> <span class="n">dir_mma</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_mma</span> <span class="o">=</span> <span class="n">file_mma</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dst_files</span> <span class="o">=</span> <span class="n">dst_files</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_bios_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span>
+            <span class="s2">&quot;original_bios_dump.txt&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AtScaleMemMarginCheck</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;At Scale Memory Bus Signal Margining Test&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Taking original BIOS dump backup&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_bios_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_bios_settings_dump</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_bios_path</span>
+        <span class="p">)</span>
+        <span class="c1"># This will update bios_settings, execute MMA test,</span>
+        <span class="c1"># and parse result data against Pass/Fail criteria</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Updating the bios with changes&quot;</span><span class="p">)</span>
+        <span class="c1"># This will update bios_settings if any settings modified</span>
+        <span class="n">temp_bios_dump</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="s2">&quot;temp_bios_dump.txt&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bios_changes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">update_bios_settings</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bios_settings</span><span class="p">,</span>
+            <span class="n">temp_bios_dump</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">copy_mma_files</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_mma_test_executed_successfully</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute_mma_test</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_mma_test_executed_successfully</span><span class="p">,</span>
+                                <span class="s2">&quot;MMA test exectuion completed&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_sanity_check_successfully</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_parse_sanity_check</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_sanity_check_successfully</span><span class="p">,</span>
+                                <span class="s2">&quot;Sanity check completed. Margin is between 0 and 255&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin_rx_tx_dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin_cmd_ctl_dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_rx_tx_above_gudeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_guideline_rx_tx_validate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_rx_tx_above_gudeline</span><span class="p">,</span>
+                                <span class="s2">&quot;All RX and TX parameters meet Intel guidelines.&quot;</span>
+                                <span class="s2">&quot;You</span><span class="se">\&#39;</span><span class="s2">ve passed the memory bus signal margining test!&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_cmd_ctl_above_gudeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_guideline_cmd_ctl_validate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_rx_tx_above_gudeline</span><span class="p">,</span>
+                                <span class="s2">&quot;All CMD and CTL parameters meet Intel guidelines.&quot;</span>
+                                <span class="s2">&quot;You</span><span class="se">\&#39;</span><span class="s2">ve passed the memory bus signal margining test!&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># Copy mma files to /boot/efi</span>
+<div class="viewcode-block" id="AtScaleMemMarginCheck.copy_mma_files"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.copy_mma_files">[docs]</a>    <span class="k">def</span> <span class="nf">copy_mma_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cp -r </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dir_mma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_files</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cp </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_mma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_files</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+    <span class="c1"># Set boot priority to EFI shell, reboot, and execute MMA test</span>
+<div class="viewcode-block" id="AtScaleMemMarginCheck.execute_mma_test"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.execute_mma_test">[docs]</a>    <span class="k">def</span> <span class="nf">execute_mma_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/efibootmgr-remount -n 0001&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;Efibootmgr set to EFI shell&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing MMA test......&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="c1"># Check result file exists and do a sanity check of data</span>
+<div class="viewcode-block" id="AtScaleMemMarginCheck.data_parse_sanity_check"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.data_parse_sanity_check">[docs]</a>    <span class="k">def</span> <span class="nf">data_parse_sanity_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test_dir</span> <span class="o">=</span> <span class="s2">&quot;/boot/efi/561970_Intel_MMA_for_Purley_Rev15/results&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cp RMT_01.tsv </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="n">test_dir</span><span class="p">)</span>
+        <span class="n">boot_dir</span> <span class="o">=</span> <span class="s2">&quot;/boot/efi&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rm -rf 561970_Intel_MMA_for_Purley_Rev15&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="n">boot_dir</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sudo chmod 777 RMT_01.tsv&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_manufacturer</span><span class="p">()</span>
+
+    <span class="c1"># Check if it is Quanta or Wiwynn platform. Restore BIOS default settings.</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="o">==</span> <span class="s2">&quot;Quanta&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x52 0x83 0x01 0x02 0x03 0x00 0x04&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="o">==</span> <span class="s2">&quot;Wiwynn&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x52 0x83&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/efibootmgr-remount -n 0004&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;RMT_01.tsv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;RMT_DATA.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">27</span><span class="p">:])</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;RMT_DATA.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\t+&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">))</span>
+            <span class="n">margin</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="ow">in</span> <span class="n">margin</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">low</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> :Margin </span><span class="si">{}</span><span class="s2"> is not between 0 and 255&quot;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">header</span><span class="p">,</span>
+                          <span class="n">low</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">high</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> :Margin </span><span class="si">{}</span><span class="s2"> is not between 0 and 255&quot;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">header</span><span class="p">,</span>
+                          <span class="n">high</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span></div>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    # Orangize result file based on Result Type 0, 1, 2, 3, 4 ,5</span>
+<span class="sd">    # 0: Per-rank Rx and Tx timing/Vref</span>
+<span class="sd">    # 1: Per-rank Cmd and Ctl timing/Vref</span>
+<span class="sd">    # 2: Per-lane Rx and Tx timing/Vref</span>
+<span class="sd">    # 3: Per-rank Rx and Tx timing/Vref, Turnarounds stress</span>
+<span class="sd">    # 4: Rx and Tx timing/Vref, margin range</span>
+<span class="sd">    # 5: Cmd and Ctl timing/Vref, margin range</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="AtScaleMemMarginCheck.encode_dict"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.encode_dict">[docs]</a>    <span class="k">def</span> <span class="nf">encode_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">):</span>
+        <span class="n">ks</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ks</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codec</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_dict</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">codec</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codec</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.margin_rx_tx_dict"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.margin_rx_tx_dict">[docs]</a>    <span class="k">def</span> <span class="nf">margin_rx_tx_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;RMT_DATA.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">l_no</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">l_no</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\t+&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">))</span>
+            <span class="n">header_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_dict</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="n">margin</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">mma_result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">json_mma_result</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">header_encode</span><span class="p">[</span><span class="s1">&#39;bits&#39;</span><span class="p">][</span><span class="s1">&#39;ResultType&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+                <span class="n">mma_margin</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="s1">&#39;RxDqs-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;RxDqs+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;RxV-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;RxV+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;TxDqs-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;TxDqs+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;TxV-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;TxV+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])])</span>
+                <span class="n">mma_margin_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_dict</span><span class="p">(</span><span class="n">mma_margin</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">mma_margin_encode</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">header_encode</span><span class="p">[</span><span class="s1">&#39;bits&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+                <span class="n">json_mma_result</span><span class="p">[</span><span class="s2">&quot;mma_result</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l_no</span><span class="p">)]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">header_encode</span><span class="p">)</span>
+                <span class="n">mma_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">header_encode</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">(</span><span class="n">json_mma_result</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;mma_rx_tx_margin.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mma_result</span><span class="p">:</span>
+                        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.margin_cmd_ctl_dict"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.margin_cmd_ctl_dict">[docs]</a>    <span class="k">def</span> <span class="nf">margin_cmd_ctl_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;RMT_DATA.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">l_no</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">l_no</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\t+&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">))</span>
+            <span class="n">header_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_dict</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="n">margin</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">mma_result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">json_mma_result</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">header_encode</span><span class="p">[</span><span class="s1">&#39;bits&#39;</span><span class="p">][</span><span class="s1">&#39;ResultType&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+                <span class="n">mma_margin</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="s1">&#39;Cmd-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;Cmd+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;CmdV-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;CmdV+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;Ctl-&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="p">(</span><span class="s1">&#39;Ctl+&#39;</span><span class="p">,</span> <span class="n">margin</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])])</span>
+                <span class="n">mma_margin_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_dict</span><span class="p">(</span><span class="n">mma_margin</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mma_margin_encode</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">header_encode</span><span class="p">[</span><span class="s1">&#39;bits&#39;</span><span class="p">][</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="n">mma_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">header_encode</span><span class="p">)</span>
+                <span class="n">json_mma_result</span><span class="p">[</span><span class="s2">&quot;mma_result</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l_no</span><span class="p">)]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">header_encode</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">(</span><span class="n">json_mma_result</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;mma_cmd_ctl_margin.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mma_result</span><span class="p">:</span>
+                        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span></div>
+
+    <span class="c1"># Validate MMA parameters</span>
+<div class="viewcode-block" id="AtScaleMemMarginCheck.mma_parameter_validate"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.mma_parameter_validate">[docs]</a>    <span class="k">def</span> <span class="nf">mma_parameter_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">message_one</span><span class="p">,</span>
+                               <span class="n">file_lines</span><span class="p">,</span> <span class="n">parameter_key</span><span class="p">,</span> <span class="n">parameter_value</span><span class="p">):</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file_lines</span><span class="p">:</span>
+            <span class="n">margin</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">))</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">parameter_key</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">margin</span><span class="p">[</span><span class="s1">&#39;bits&#39;</span><span class="p">][</span><span class="n">parameter_key</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_greater</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">parameter_value</span><span class="p">,</span>
+                                  <span class="n">message</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_lines</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">v</span><span class="p">))]),</span>
+                                  <span class="n">message_one</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">v</span><span class="p">),</span>
+                                  <span class="n">parameter_value</span><span class="p">))</span></div>
+
+    <span class="c1"># Validate Rx/Tx results against Intel Guidelines</span>
+<div class="viewcode-block" id="AtScaleMemMarginCheck.margin_guideline_rx_tx_validate"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.margin_guideline_rx_tx_validate">[docs]</a>    <span class="k">def</span> <span class="nf">margin_guideline_rx_tx_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;mma_rx_tx_margin.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Evaulating </span><span class="si">{}</span><span class="s2"> Validating parameter&quot;</span>
+        <span class="n">msg_1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> minimum value </span><span class="si">{}</span><span class="s2"> is above Intel guideline </span><span class="si">{}</span><span class="s2">&quot;</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;RxDqs-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;RxDqs_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;RxDqs+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;RxDqs_high&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;TxDqs-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;TxDqs_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;TxDqs+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;TxDqs_high&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;RxV-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;RxV_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;RxV+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;RxV_high&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;TxV-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;TxV_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;TxV+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;TxV_high&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.margin_guideline_cmd_ctl_validate"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.margin_guideline_cmd_ctl_validate">[docs]</a>    <span class="k">def</span> <span class="nf">margin_guideline_cmd_ctl_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;mma_cmd_ctl_margin.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Evaulating </span><span class="si">{}</span><span class="s2"> Validating parameter&quot;</span>
+        <span class="n">msg_1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> minimum value </span><span class="si">{}</span><span class="s2"> is above Intel guideline </span><span class="si">{}</span><span class="s2">&quot;</span>
+
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;Cmd-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;Cmd_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;Cmd+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;Cmd_high&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;CmdV-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;CmdV_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;CmdV+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;CmdV_high&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;Ctl-&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;Ctl_low&#39;</span><span class="p">])</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;Ctl+&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mma_parameter_validate</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg_1</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">margin_guidelins</span><span class="p">[</span><span class="s1">&#39;Ctl_high&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="AtScaleMemMarginCheck.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.AtScaleMemMarginCheck.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">custom_filter</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_mma_test_executed_successfully</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;MMA execution completed.So,skipping BMC config chk&quot;</span><span class="p">)</span>
+            <span class="n">custom_filter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;log_util&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bios_changes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Reverting back the original BIOS settings&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">update_bios_setting_from_dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_bios_path</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AtScaleMemMarginCheck</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span>
+            <span class="n">cfg_filter</span><span class="o">=</span><span class="n">custom_filter</span><span class="p">,</span>
+            <span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.at_scale_memory_margining.html#havoc.autoval.tests.at_scale_memory_margining.at_scale_memory_margining.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">AtScaleMemMarginCheck</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

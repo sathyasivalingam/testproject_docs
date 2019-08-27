@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage.nvme.vendor Package &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="havoc.autoval.lib.test_utils.storage.sas Package" href="havoc.autoval.lib.test_utils.storage.sas.html" />
+    <link rel="prev" title="havoc.autoval.lib.test_utils.storage.nvme Package" href="havoc.autoval.lib.test_utils.storage.nvme.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">havoc</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="havoc.html">havoc package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="havoc.autoval.html">havoc.autoval Package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.cli.html">havoc.autoval.cli Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.e2e_tests.html">havoc.autoval.e2e_tests Package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="havoc.autoval.lib.html">havoc.autoval.lib Package</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.power.html">havoc.autoval.lib.power Package</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.fio.html">havoc.autoval.lib.test_utils.fio Package</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.html">havoc.autoval.lib.test_utils.storage Package</a><ul class="current">
+<li class="toctree-l7 current"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html">havoc.autoval.lib.test_utils.storage.nvme Package</a><ul class="current">
+<li class="toctree-l8 current"><a class="current reference internal" href="#">havoc.autoval.lib.test_utils.storage.nvme.vendor Package</a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LiteOn</span></code> Module</a></li>
+<li class="toctree-l9"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Samsung</span></code> Module</a></li>
+<li class="toctree-l9"><a class="reference internal" href="#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Toshiba</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l8"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#module-havoc.autoval.lib.test_utils.storage.nvme.nvme_drive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NVMeDrive</span></code> Module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#module-havoc.autoval.lib.test_utils.storage.nvme.nvme_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NVMeDriveFactory</span></code> Module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#module-havoc.autoval.lib.test_utils.storage.nvme.nvme_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NVMeUtils</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sas.html">havoc.autoval.lib.test_utils.storage.sas Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.sata.html">havoc.autoval.lib.test_utils.storage.sata Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.html#module-havoc.autoval.lib.test_utils.storage.drive"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Drive</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.html#module-havoc.autoval.lib.test_utils.storage.drive_firmware_update"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DriveFirmwareUpdate</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.html#module-havoc.autoval.lib.test_utils.storage.storage_device_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StorageDeviceFactory</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.test_utils.storage.html#module-havoc.autoval.lib.test_utils.storage.storage_test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StorageTestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.tape.html">havoc.autoval.lib.test_utils.tape Package</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.attest_test"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Attest_test</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.bg_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BgRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.chef_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chef_utils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.coldstorage_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ColdStorageRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.coldstorage_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ColdStorageUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.convert_nums"><code class="xref py py-mod docutils literal notranslate"><span class="pre">convert_nums</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.cstates_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">CstatesRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.disk_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DiskUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.fanspeedcheck"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fanspeedcheck</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.fbjbod_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FbjbodUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.ffmpeg_decode_cmodel_compare_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FfmpegDecodeCmodelCompareRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.ffmpeg_encode_cmodel_compare_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FfmpegEncodeCmodelCompareRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.ffmpeg_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FfmpegRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#fibrechannel-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FibreChannel</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.filesystem_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FilesystemUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.fw_update_util"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FwUpdateUtil</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.hdparm_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">HdparmUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.iperf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Iperf</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.lightning_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LightningUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#machinechecker-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Machinechecker</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.mellanox_e2e_lib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mellanox_e2e_lib</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.memtester_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MemtesterRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.mprime_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MprimeRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.pci_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">PciUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.qsfp_dominfo_lib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">qsfp_dominfo_lib</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.screenwithsol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ScreenWithSOL</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sdparm_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SdparmUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sensor_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SensorData</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sensor_threshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_threshold</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sg_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SgUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.sleeper_stall_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SleeperStallRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#solitonbeamutils-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SolitonBeamUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.stressapp_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StressappRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.stressng"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Stressng</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.test_utils_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestUtilsBase</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.test_utils_runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestUtilsRunner</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.tor_diagnostics_lib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tor_diagnostics_lib</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.test_utils.html#module-havoc.autoval.lib.test_utils.yafuflash"><code class="xref py py-mod docutils literal notranslate"><span class="pre">yafuflash</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.html#module-havoc.autoval.lib.test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.tests.html">havoc.autoval.tests Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">havoc</a> &raquo;</li>
+        
+          <li><a href="havoc.html">havoc package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.html">havoc.autoval Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.html">havoc.autoval.lib Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.test_utils.storage.html">havoc.autoval.lib.test_utils.storage Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.test_utils.storage.nvme.html">havoc.autoval.lib.test_utils.storage.nvme Package</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage.nvme.vendor Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/havoc.autoval.lib.test_utils.storage.nvme.vendor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="havoc-autoval-lib-test-utils-storage-nvme-vendor-package">
+<h1>havoc.autoval.lib.test_utils.storage.nvme.vendor Package<a class="headerlink" href="#havoc-autoval-lib-test-utils-storage-nvme-vendor-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon">
+<span id="liteon-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">LiteOn</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.</code><code class="sig-name descname">LiteOn</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_name</em>, <em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive" title="havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_bit_error_ratio_param">
+<code class="sig-name descname">get_bit_error_ratio_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_bit_error_ratio_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_bit_error_ratio_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_log_page_directory">
+<code class="sig-name descname">get_log_page_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_log_page_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_log_page_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_manufacturer">
+<code class="sig-name descname">get_manufacturer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_manufacturer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_nand_write_param">
+<code class="sig-name descname">get_nand_write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_nand_write_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_nand_write_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_smart_log">
+<code class="sig-name descname">get_smart_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_smart_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_smart_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_vs_internal_log">
+<code class="sig-name descname">get_vs_internal_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_vs_internal_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_vs_internal_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_vs_smart_log">
+<code class="sig-name descname">get_vs_smart_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/liteon.html#LiteOn.get_vs_smart_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.get_vs_smart_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.VID">
+<code class="sig-name descname">VID</code><em class="property"> = 5284</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.liteon.LiteOn.VID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung">
+<span id="samsung-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Samsung</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.</code><code class="sig-name descname">Samsung</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_name</em>, <em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/samsung.html#Samsung"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive" title="havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_bit_error_ratio_param">
+<code class="sig-name descname">get_bit_error_ratio_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/samsung.html#Samsung.get_bit_error_ratio_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_bit_error_ratio_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_manufacturer">
+<code class="sig-name descname">get_manufacturer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/samsung.html#Samsung.get_manufacturer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_nand_write_param">
+<code class="sig-name descname">get_nand_write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/samsung.html#Samsung.get_nand_write_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_nand_write_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_smart_log">
+<code class="sig-name descname">get_smart_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/samsung.html#Samsung.get_smart_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_smart_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_vs_smart_add_log">
+<code class="sig-name descname">get_vs_smart_add_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/samsung.html#Samsung.get_vs_smart_add_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.get_vs_smart_add_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.VID">
+<code class="sig-name descname">VID</code><em class="property"> = 5197</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.samsung.Samsung.VID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba">
+<span id="toshiba-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Toshiba</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.</code><code class="sig-name descname">Toshiba</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">block_name</em>, <em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/toshiba.html#Toshiba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive" title="havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_bit_error_ratio_param">
+<code class="sig-name descname">get_bit_error_ratio_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/toshiba.html#Toshiba.get_bit_error_ratio_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_bit_error_ratio_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_manufacturer">
+<code class="sig-name descname">get_manufacturer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/toshiba.html#Toshiba.get_manufacturer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_nand_write_param">
+<code class="sig-name descname">get_nand_write_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/toshiba.html#Toshiba.get_nand_write_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_nand_write_param" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_smart_log">
+<code class="sig-name descname">get_smart_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/toshiba.html#Toshiba.get_smart_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_smart_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_vs_smart_add_log">
+<code class="sig-name descname">get_vs_smart_add_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/test_utils/storage/nvme/vendor/toshiba.html#Toshiba.get_vs_smart_add_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.get_vs_smart_add_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.VID">
+<code class="sig-name descname">VID</code><em class="property"> = 4473</em><a class="headerlink" href="#havoc.autoval.lib.test_utils.storage.nvme.vendor.toshiba.Toshiba.VID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="havoc.autoval.lib.test_utils.storage.sas.html" class="btn btn-neutral float-right" title="havoc.autoval.lib.test_utils.storage.sas Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="havoc.autoval.lib.test_utils.storage.nvme.html" class="btn btn-neutral float-left" title="havoc.autoval.lib.test_utils.storage.nvme Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

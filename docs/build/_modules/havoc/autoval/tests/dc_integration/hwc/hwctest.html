@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.dc_integration.hwc.hwctest &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.dc_integration.hwc.hwctest</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.dc_integration.hwc.hwctest</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+<div class="viewcode-block" id="HwcTest"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest">[docs]</a><span class="k">class</span> <span class="nc">HwcTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="HwcTest.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HwcTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ignore_list&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hwc_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;hwc_options&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.execute"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running hwc test&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">localhost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+
+        <span class="c1"># List of commands that are tested:</span>
+        <span class="c1"># power_off</span>
+        <span class="c1"># power_on</span>
+        <span class="c1"># power_status</span>
+        <span class="c1"># power_reset</span>
+        <span class="c1"># log</span>
+        <span class="c1"># log_clear</span>
+        <span class="c1"># bmc_time</span>
+        <span class="c1"># bmc_version</span>
+        <span class="c1"># bic_version</span>
+        <span class="c1"># sensors</span>
+        <span class="c1"># power_reset_sled</span>
+        <span class="c1"># power_soft</span>
+        <span class="c1"># reset_cmos</span>
+        <span class="c1"># reset_oob</span>
+        <span class="c1"># full_ac_reset</span>
+        <span class="c1"># ping</span>
+        <span class="c1"># led_off_on</span>
+        <span class="c1"># reset_cmos_noreboot</span>
+
+        <span class="c1"># @@@ TODO: Skipping this for now as we don&#39;t have a good way to automate:</span>
+        <span class="c1"># set_bios_boot</span>
+
+        <span class="c1"># By default, this test runs ping, power_off_on, power_reset</span>
+        <span class="c1"># It also checks for power_status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_ping</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_power_off_on</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_power_reset</span><span class="p">()</span>
+
+        <span class="n">hwc_type</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;bmc_time&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bmc_time</span><span class="p">,</span>
+            <span class="s1">&#39;bmc_version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bmc_version</span><span class="p">,</span>
+            <span class="s1">&#39;bic_version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bic_version</span><span class="p">,</span>
+            <span class="s1">&#39;sensors&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sensors</span><span class="p">,</span>
+            <span class="s1">&#39;power_soft&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_power_soft</span><span class="p">,</span>
+            <span class="s1">&#39;full_ac_reset&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_full_ac_reset</span><span class="p">,</span>
+            <span class="s1">&#39;power_reset_sled&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_power_reset_sled</span><span class="p">,</span>
+            <span class="s1">&#39;reset_cmos&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_reset_cmos</span><span class="p">,</span>
+            <span class="s1">&#39;reset_oob&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_reset_oob</span><span class="p">,</span>
+            <span class="s1">&#39;get_log&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_log</span><span class="p">,</span>
+            <span class="s1">&#39;dimms&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_bad_dimms</span><span class="p">,</span>
+            <span class="s1">&#39;led_off_on&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_led_off_on</span><span class="p">,</span>
+            <span class="s1">&#39;reset_cmos_noreboot&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_reset_cmos_noreboot</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Runs for other options, provided in the hwc_options list</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hwc_options</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">options</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hwc_options</span><span class="p">:</span>
+                <span class="n">hwc_type</span><span class="p">[</span><span class="n">options</span><span class="p">]()</span></div>
+
+    <span class="n">error_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="s2">&quot;err_code&quot;</span><span class="p">,</span> <span class="s2">&quot;timed out&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="HwcTest.get_bmc_time"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.get_bmc_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_bmc_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;get_time&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Bmc time - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.get_bmc_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.get_bmc_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_bmc_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;get_version&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Bmc Version - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.get_bic_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.get_bic_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_bic_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;get_bic_version&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Bic Version - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.power_status"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.power_status">[docs]</a>    <span class="k">def</span> <span class="nf">power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">timeout</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;power_status&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">timeout</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_in</span><span class="p">(</span>
+            <span class="n">expected</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span>
+            <span class="s2">&quot;Validate that system is currently powered </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_off_on"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_power_off_on">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_off_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;power_off&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;OFF&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;uptime&quot;</span><span class="p">],</span> <span class="s2">&quot;Validate that system is down&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;power_on&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_reset"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_power_reset">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;power_reset&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_log"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_log">[docs]</a>    <span class="k">def</span> <span class="nf">test_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+        <span class="c1"># @@@ TODO: We could inject some messages into the log and verify that</span>
+        <span class="c1"># they show up here, but I&#39;m not sure about the best way to do this</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;log_clear&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_in</span><span class="p">(</span>
+            <span class="s2">&quot;Hardware log cleared&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span>
+            <span class="s2">&quot;Check that the hardware log was cleared&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span></div>
+
+        <span class="c1"># @@@ TODO: Noticed that on some systems (Leopard) there&#39;s always the</span>
+        <span class="c1"># following entry in the log, even after running log_clear:</span>
+        <span class="c1"># OEM SEL Status |  | Asserted</span>
+        <span class="c1"># self.validate_condition(</span>
+        <span class="c1">#    &quot;No event logs found&quot; in out,</span>
+        <span class="c1">#    &quot;Log is cleared: %s&quot; % (out)</span>
+        <span class="c1">#)</span>
+
+<div class="viewcode-block" id="HwcTest.test_full_ac_reset"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_full_ac_reset">[docs]</a>    <span class="k">def</span> <span class="nf">test_full_ac_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;full_ac_reset&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_reset_sled"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_power_reset_sled">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_reset_sled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;power_reset_sled&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_reset_cmos"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_reset_cmos">[docs]</a>    <span class="k">def</span> <span class="nf">test_reset_cmos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;reset_cmos&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_reset_oob"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_reset_oob">[docs]</a>    <span class="k">def</span> <span class="nf">test_reset_oob</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;reset_oob&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc</span><span class="o">.</span><span class="n">check_usb0</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc</span><span class="o">.</span><span class="n">bmc_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.get_sensors"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.get_sensors">[docs]</a>    <span class="k">def</span> <span class="nf">get_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;sensors&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Sensors output - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_soft"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_power_soft">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_soft</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;power_soft&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_status</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s2">&quot;ON&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_bad_dimms"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_bad_dimms">[docs]</a>    <span class="k">def</span> <span class="nf">test_bad_dimms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;log_clear&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inject_dimms_error</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;dimms&quot;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\:\sDIMM_\w+,\sDIMM_\w+,\sDIMM_\w+,\sDIMM_\w+&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Bad Dimms - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;HWC failed to capture error&quot;</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;log_clear&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_ping"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_ping">[docs]</a>    <span class="k">def</span> <span class="nf">test_ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;ping&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Ping - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_led_off_on"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_led_off_on">[docs]</a>    <span class="k">def</span> <span class="nf">test_led_off_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;led_off&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;LED OFF - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_led_on</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_led_on"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_led_on">[docs]</a>    <span class="k">def</span> <span class="nf">test_led_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;led_on&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;LED ON - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_reset_cmos_noreboot"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.test_reset_cmos_noreboot">[docs]</a>    <span class="k">def</span> <span class="nf">test_reset_cmos_noreboot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_hwc_command</span><span class="p">(</span><span class="s2">&quot;reset_cmos_noreboot&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Reset CMOS noreboot - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="HwcTest.validate_output"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.validate_output">[docs]</a>    <span class="k">def</span> <span class="nf">validate_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">field</span> <span class="ow">in</span> <span class="n">out</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Failed to execute the command&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_in</span><span class="p">(</span>
+                <span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="p">,</span> <span class="s2">&quot;Check for known messages&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_hwc_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="n">base_cmd</span> <span class="o">=</span> <span class="s2">&quot;hwc&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">base_cmd</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+
+        <span class="c1"># @@@ TODO: Currently hwc requires an actual user account, it doesn&#39;t</span>
+        <span class="c1"># accept service users.</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="s2">&quot;export FB_UNIXNAME=janseidel&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">user</span> <span class="o">+</span> <span class="s2">&quot; &amp;&amp; &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+<div class="viewcode-block" id="HwcTest.cleanup"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.HwcTest.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HwcTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">cfg_filter</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;log_util&#39;</span><span class="p">])</span></div></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../../havoc.autoval.tests.dc_integration.hwc.html#havoc.autoval.tests.dc_integration.hwc.hwctest.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">HwcTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

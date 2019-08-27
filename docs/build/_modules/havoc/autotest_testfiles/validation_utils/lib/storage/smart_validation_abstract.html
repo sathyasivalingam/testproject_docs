@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">..autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">..autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">..disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+
+
+<div class="viewcode-block" id="SmartValidationAbstract"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract">[docs]</a><span class="k">class</span> <span class="nc">SmartValidationAbstract</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="SmartValidationAbstract.get_data"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.to_config_dict"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.to_config_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_config_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;logical_drive&quot;</span><span class="p">]</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;flash_manufacturer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;manufacturer&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">config</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.compare_attributes"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.compare_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">compare_attributes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">smart_data_before</span><span class="p">,</span> <span class="n">smart_data_after</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">json_data</span>
+    <span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.validate_results"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.validate_results">[docs]</a>    <span class="k">def</span> <span class="nf">validate_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_smart_errors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">optimal_values</span><span class="p">,</span> <span class="n">delta_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_benchmark_and_save_values</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_file</span>
+        <span class="p">)</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blockname</span><span class="p">)</span>
+        <span class="n">all_errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_smart_data_with_benchmark</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">optimal_values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">all_errors</span><span class="p">:</span>
+            <span class="n">smart_error</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Found Errors in smart data diff:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">smart_error</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">all_smart_errors</span> <span class="o">=</span> <span class="n">smart_error</span>
+        <span class="n">all_errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_smart_data_for_delta</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">delta_values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">all_errors</span><span class="p">:</span>
+            <span class="n">smart_error</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Found Errors in smart data diff:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">smart_error</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">all_smart_errors</span><span class="p">:</span>
+                <span class="n">all_smart_errors</span> <span class="o">+=</span> <span class="n">smart_error</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_smart_errors</span> <span class="o">=</span> <span class="n">smart_error</span>
+        <span class="k">if</span> <span class="n">all_smart_errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">all_smart_errors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.evaluate_expression"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.evaluate_expression">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_expression</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">lower_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">increment_by</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The function takes expected and actual value and perform comparison</span>
+<span class="sd">        between them. Logical operators supported are:</span>
+<span class="sd">        &#39;&lt;&#39; -&gt; less then</span>
+<span class="sd">        &#39;&gt;&#39; -&gt; greater then</span>
+<span class="sd">        &#39;&gt;=&#39;-&gt; greater then equal to</span>
+<span class="sd">        &#39;&lt;=&#39;-&gt; less then equal to</span>
+<span class="sd">        &#39;=&#39; -&gt; check equality, similar to ==</span>
+<span class="sd">        &#39;-&#39; -&gt; inbetween range (lower_val is require)</span>
+<span class="sd">        &#39;/&#39; -&gt; multiple options (existence of word in a string)</span>
+<span class="sd">        &#39;~&#39; -&gt; increment the &#39;expected&#39; by &quot;increment_by&quot; and compare</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opr_match</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;gt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span> <span class="s2">&quot;lt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;gteq&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;lteq&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;/&quot;</span><span class="p">:</span> <span class="s2">&quot;isIn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;~&quot;</span><span class="p">:</span> <span class="s2">&quot;incrementby&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;=&quot;</span><span class="p">:</span> <span class="s2">&quot;isEqual&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">lower_val</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="s2">&quot;&gt;&quot;</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="s2">&quot;&lt;&quot;</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;incrementby&quot;</span><span class="p">:</span>
+            <span class="n">expected</span> <span class="o">=</span> <span class="n">expected</span> <span class="o">+</span> <span class="n">increment_by</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="s2">&quot;&lt;&quot;</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;isIn&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">expected</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_in</span><span class="p">(</span><span class="n">each</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;isEqual&quot;</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr</span> <span class="ow">in</span> <span class="n">opr_match</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No matching operator found to evalute&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.get_correct_drive_object"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.get_correct_drive_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_correct_drive_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive_serial</span><span class="p">,</span> <span class="n">drive_list</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">drv</span> <span class="ow">in</span> <span class="n">drive_list</span><span class="p">:</span>
+            <span class="n">serial</span> <span class="o">=</span> <span class="n">drv</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;serial_number&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">drive_serial</span> <span class="o">==</span> <span class="n">serial</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;found drive SN with </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">drive_serial</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">drv</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to get correct mapping for SN - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drive_serial</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.parse_benchmark_and_save_values"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.parse_benchmark_and_save_values">[docs]</a>    <span class="k">def</span> <span class="nf">parse_benchmark_and_save_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data_collection</span><span class="p">,</span> <span class="n">check_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         This function is for saving all smart data of all the attributes</span>
+<span class="sd">         passed in the checklist file and extract and save them from</span>
+<span class="sd">         smart_data_collection dictionary that has all storage smart data</span>
+<span class="sd">         and return back the optimal values to be checked and the save all smart</span>
+<span class="sd">         data that has to checked after test for no change</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="n">optimal_values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">delta_values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">check_list</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;check&quot;</span><span class="p">:</span>
+                <span class="n">smart_key</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">metric</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">metric_dict</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">metric_dict</span><span class="p">[</span><span class="s2">&quot;Min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">metric_dict</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">smart_key</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)</span> <span class="ow">in</span> <span class="n">optimal_values</span><span class="p">:</span>
+                        <span class="n">optimal_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">optimal_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)][</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_dict</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">optimal_values</span><span class="p">[</span><span class="n">smart_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">optimal_values</span><span class="p">[</span><span class="n">smart_key</span><span class="p">][</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_dict</span>
+            <span class="k">elif</span> <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;delta&quot;</span><span class="p">:</span>
+                <span class="n">smart_key</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">metric</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">tolerance</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tolerance</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">smart_key</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)</span> <span class="ow">in</span> <span class="n">delta_values</span><span class="p">:</span>
+                        <span class="n">delta_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">metric_dict</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">metric_dict</span><span class="p">[</span><span class="s2">&quot;Min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                        <span class="n">smart_data_collection</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)][</span><span class="n">metric</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">metric_dict</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                        <span class="n">smart_data_collection</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)][</span><span class="n">metric</span><span class="p">]</span>
+                    <span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">tolerance</span><span class="p">)</span>
+                    <span class="n">delta_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">smart_key</span><span class="p">)][</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_dict</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">smart_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">delta_values</span><span class="p">:</span>
+                        <span class="n">delta_values</span><span class="p">[</span><span class="n">smart_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">metric_dict</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">metric_dict</span><span class="p">[</span><span class="s2">&quot;Min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">smart_data_collection</span><span class="p">[</span><span class="n">smart_key</span><span class="p">]</span>
+                    <span class="n">metric_dict</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">smart_data_collection</span><span class="p">[</span><span class="n">smart_key</span><span class="p">])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span>
+                        <span class="n">tolerance</span>
+                    <span class="p">)</span>
+                    <span class="n">delta_values</span><span class="p">[</span><span class="n">smart_key</span><span class="p">][</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_dict</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">optimal_values</span><span class="p">,</span> <span class="n">delta_values</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.validate_smart_data_with_benchmark"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.validate_smart_data_with_benchmark">[docs]</a>    <span class="k">def</span> <span class="nf">validate_smart_data_with_benchmark</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data_collection</span><span class="p">,</span> <span class="n">optimal_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is does all the checking of smart validation</span>
+<span class="sd">        1) check if the drive smart counters are with in the range of the</span>
+<span class="sd">           optimal values and errors out if there is any discrepancies and give</span>
+<span class="sd">           all the details of what went wrong</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">all_errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simple_validate</span><span class="p">(</span><span class="n">smart_data_collection</span><span class="p">,</span> <span class="n">optimal_values</span><span class="p">,</span> <span class="n">all_errors</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_errors</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.validate_smart_data_for_delta"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.validate_smart_data_for_delta">[docs]</a>    <span class="k">def</span> <span class="nf">validate_smart_data_for_delta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data_collection</span><span class="p">,</span> <span class="n">optimal_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This Method is to check if the user mentioned smart values dint change</span>
+<span class="sd">        over testing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simple_validate</span><span class="p">(</span><span class="n">smart_data_collection</span><span class="p">,</span> <span class="n">optimal_values</span><span class="p">,</span> <span class="n">all_errors</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_errors</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.simple_validate"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.simple_validate">[docs]</a>    <span class="k">def</span> <span class="nf">simple_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">optimal_dict</span><span class="p">,</span> <span class="n">all_errors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This Method is used for validating the smart data of each drive with</span>
+<span class="sd">        benchmarks to be checked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">optimal_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">this_rule</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">this_rule</span><span class="p">[</span><span class="s2">&quot;Min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">each</span><span class="p">][</span><span class="s2">&quot;Min&quot;</span><span class="p">]</span>
+                <span class="n">this_rule</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">each</span><span class="p">][</span><span class="s2">&quot;Max&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">all_errors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">check_current_in_range</span><span class="p">(</span>
+                            <span class="n">this_rule</span><span class="p">,</span>
+                            <span class="n">smart_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)][</span><span class="n">each</span><span class="p">],</span>
+                            <span class="n">key</span><span class="p">,</span>
+                            <span class="n">each</span><span class="p">,</span>
+                            <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;serial_number&quot;</span><span class="p">],</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">all_errors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">check_current_in_range</span><span class="p">(</span>
+                            <span class="n">this_rule</span><span class="p">,</span>
+                            <span class="n">smart_data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                            <span class="n">key</span><span class="p">,</span>
+                            <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;serial_number&quot;</span><span class="p">],</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.check_current_in_range"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.check_current_in_range">[docs]</a>    <span class="k">def</span> <span class="nf">check_current_in_range</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">current_range</span><span class="p">,</span> <span class="n">current_value</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drive_serial_num</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used to check if a smart counter is with in the optimal</span>
+<span class="sd">        range user passed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_range</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">]):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;Drive SerialNumber </span><span class="si">%s</span><span class="s2">, Max value for </span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">drive_serial_num</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span> <span class="s2">&quot;Expected: </span><span class="si">%s</span><span class="s2">. Actual: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">current_range</span><span class="p">[</span><span class="s2">&quot;Max&quot;</span><span class="p">],</span> <span class="n">current_value</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_range</span><span class="p">[</span><span class="s2">&quot;Min&quot;</span><span class="p">]):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;Drive SerialNumber </span><span class="si">%s</span><span class="s2">, Min value for </span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">drive_serial_num</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">counter</span><span class="p">):</span> <span class="s2">&quot;Expected: </span><span class="si">%s</span><span class="s2">. Actual: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">current_range</span><span class="p">[</span><span class="s2">&quot;Min&quot;</span><span class="p">],</span> <span class="n">current_value</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">errors</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.update_firmware"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.update_firmware">[docs]</a>    <span class="k">def</span> <span class="nf">update_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">versions</span><span class="p">,</span> <span class="n">upgrade</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fw_slot</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;update_firmware not implemented for this type of storage device&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.validate_drive_data"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.validate_drive_data">[docs]</a>    <span class="k">def</span> <span class="nf">validate_drive_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ext_json</span><span class="p">,</span> <span class="n">after_json</span><span class="p">,</span> <span class="n">before_json</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function takes reference json and use it to evalute results</span>
+<span class="sd">        obtained after the test. It also compare results before and after the</span>
+<span class="sd">        test &quot;&quot;&quot;</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">ext_json</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Check value for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">field</span>
+                <span class="n">actual</span> <span class="o">=</span> <span class="n">after_json</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">before_json</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">before</span> <span class="o">=</span> <span class="n">before_json</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                <span class="n">expected</span> <span class="o">=</span> <span class="n">ext_json</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                <span class="c1"># Search for mathematical operator in fields. Each operator</span>
+                <span class="c1"># functionality is listed in evaluate_expression</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;==|&gt;|&lt;|/|-|~|&gt;=|&lt;=|=&quot;</span><span class="p">,</span> <span class="n">ext_json</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+                    <span class="n">opr</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span> <span class="o">=</span> <span class="n">expected</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_expression</span><span class="p">(</span>
+                            <span class="n">actual</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">higher</span><span class="p">),</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">lower_val</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+                        <span class="n">increment</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">opr</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_expression</span><span class="p">(</span>
+                            <span class="n">actual</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">increment_by</span><span class="o">=</span><span class="n">increment</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                        <span class="n">expected</span> <span class="o">=</span> <span class="n">expected</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_expression</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;==&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_expression</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">expected</span> <span class="o">=</span> <span class="n">expected</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">expected</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                            <span class="n">expected</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+                            <span class="ow">and</span> <span class="n">actual</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span>
+                        <span class="p">):</span>
+                            <span class="n">actual</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">actual</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_expression</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                        <span class="s2">&quot;No matching operator found in </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">ext_json</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                    <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="n">errors</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">raise_on_fail</span> <span class="ow">and</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">errors</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.get_usage_type"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.get_usage_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_usage_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dram_size_max</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;drive&quot;</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.get_drive_capacity_details"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.get_drive_capacity_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_drive_capacity_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return dictionary of avialable space, total physical disk space,</span>
+<span class="sd">           total sectors&quot;&quot;&quot;</span>
+        <span class="n">drive_details</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_drive_capacity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blockname</span><span class="p">)</span>
+        <span class="n">drive_details</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;TB&quot;</span><span class="p">:</span> <span class="n">total</span><span class="p">[</span><span class="s2">&quot;TB&quot;</span><span class="p">],</span> <span class="s2">&quot;GB&quot;</span><span class="p">:</span> <span class="n">total</span><span class="p">[</span><span class="s2">&quot;GB&quot;</span><span class="p">]}</span>
+        <span class="n">drive_details</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_drive_capacity</span><span class="p">(</span><span class="n">blockname</span><span class="p">,</span> <span class="n">fdisk</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">drive_details</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.writecache_get"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.writecache_get">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_get</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.writecache_disable"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.writecache_disable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.writecache_enable"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.writecache_enable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.read_lookahead_get"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.read_lookahead_get">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_get</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.read_lookahead_disable"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.read_lookahead_disable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="SmartValidationAbstract.read_lookahead_enable"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.smart_validation_abstract.SmartValidationAbstract.read_lookahead_enable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

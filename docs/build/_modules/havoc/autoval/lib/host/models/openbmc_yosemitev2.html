@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models.openbmc_yosemitev2 &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models.openbmc_yosemitev2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.models.openbmc_yosemitev2</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.models.openbmc_yosemite</span> <span class="k">import</span> <span class="n">OpenBMCYosemite</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2">[docs]</a><span class="k">class</span> <span class="nc">OpenBMCYosemiteV2</span><span class="p">(</span><span class="n">OpenBMCYosemite</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenBMCYosemiteV2.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCYosemiteV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.openbmc_flashcp_prerequisite"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.openbmc_flashcp_prerequisite">[docs]</a>    <span class="k">def</span> <span class="nf">openbmc_flashcp_prerequisite</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.get_bios_reset_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_bios_reset_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_bios_reset_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="c1"># T32828335 - Boot options changing on Yosemite V2 after cmos clearance</span>
+            <span class="c1"># TODO: Remove comment  when isssue is fixed on Yosemite V2.</span>
+            <span class="c1"># TODO since &#39;bios_util&#39; command is not working as expected</span>
+            <span class="c1"># putting in a workaround</span>
+            <span class="s1">&#39;bic_util&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bic_util_reset_boot_order</span>
+        <span class="p">}</span></div>
+
+    <span class="c1"># OEM Related</span>
+<div class="viewcode-block" id="OpenBMCYosemiteV2.bic_util_reset_boot_order"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.bic_util_reset_boot_order">[docs]</a>    <span class="k">def</span> <span class="nf">bic_util_reset_boot_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;bic-util </span><span class="si">{}</span><span class="s2"> 0xe0 0x25 0x15 0xa0 0x00&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slot_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_cmd_metric</span><span class="p">(</span>
+            <span class="s2">&quot;reconnect after </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">),</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.openbmc_flashcp_upgrade_cmd"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.openbmc_flashcp_upgrade_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">openbmc_flashcp_upgrade_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subfile</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/sbin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;flashcp -v /tmp/</span><span class="si">%s</span><span class="s2"> /dev/mtd5&quot;</span> <span class="o">%</span> <span class="n">subfile</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="c1"># OEM Related</span>
+<div class="viewcode-block" id="OpenBMCYosemiteV2.clear_boot_order_cmos"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.clear_boot_order_cmos">[docs]</a>    <span class="k">def</span> <span class="nf">clear_boot_order_cmos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#cmd = &quot;/usr/local/bin/bios-util mb --boot_order enable --clear_CMOS&quot;</span>
+        <span class="c1">#self.bmc_host.run(cmd)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCYosemiteV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clear_boot_order_cmos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slot_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.get_fw_versions"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_fw_versions">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exponential</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_fw_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">fru</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bmc&quot;</span><span class="p">,</span> <span class="s2">&quot;nic&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">slot_info</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util </span><span class="si">%s</span><span class="s2"> --version&quot;</span> <span class="o">%</span> <span class="n">fru</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_fw_data</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.get_critical_services"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_critical_services">[docs]</a>    <span class="k">def</span> <span class="nf">get_critical_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method returns a list of services that are always expected to</span>
+<span class="sd">        run on the openBMC Yosemitev2 System</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;sensord&#39;</span><span class="p">,</span> <span class="s1">&#39;healthd&#39;</span><span class="p">,</span> <span class="s1">&#39;fscd&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.verify_flash_sensors"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.verify_flash_sensors">[docs]</a>    <span class="k">def</span> <span class="nf">verify_flash_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="c1">#Currently not supported on YV2</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.validate_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.validate_version">[docs]</a>    <span class="k">def</span> <span class="nf">validate_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fw_ver_num</span><span class="p">):</span>
+        <span class="c1"># Validate the version to be updated</span>
+        <span class="c1"># If version &gt; 3.0, then use fw-util command</span>
+        <span class="c1"># else use flashcp method</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+\.\d+&quot;</span><span class="p">,</span> <span class="n">fw_ver_num</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">match_string</span> <span class="ow">in</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">match_string</span> <span class="o">&gt;=</span> <span class="mf">3.0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.fw_update_bmc"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_update_bmc">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_bmc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">reboot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util bmc --update --bmc </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reboot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.fw_update_rom"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_update_rom">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_rom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">reboot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util bmc --update --rom </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reboot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.post_cycle_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.post_cycle_check">[docs]</a>    <span class="k">def</span> <span class="nf">post_cycle_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_vboot_util</span><span class="p">(</span><span class="n">filter_errors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.bios_post_flash"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.bios_post_flash">[docs]</a>    <span class="k">def</span> <span class="nf">bios_post_flash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_reboot</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1800</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">():</span>
+            <span class="c1"># Turn the power on</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmos_clear</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_powered_12V_on</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.fw_util_ocpdbg"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.fw_util_ocpdbg">[docs]</a>    <span class="k">def</span> <span class="nf">fw_util_ocpdbg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/fw-util ocpdbg --version&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCYosemiteV2.get_fw_util_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_fw_util_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_fw_util_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCYosemiteV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fw_util_bmc_nic_slot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+    <span class="c1">#Flash Temp check currently not supported</span>
+<div class="viewcode-block" id="OpenBMCYosemiteV2.verify_flash_availability"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.verify_flash_availability">[docs]</a>    <span class="k">def</span> <span class="nf">verify_flash_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+    <span class="c1">#Flash Temp check currently not supported</span>
+<div class="viewcode-block" id="OpenBMCYosemiteV2.get_flash_temperature"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_yosemitev2.OpenBMCYosemiteV2.get_flash_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">get_flash_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">temp_val</span><span class="p">):</span>
+        <span class="k">return</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

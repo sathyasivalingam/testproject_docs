@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.generic_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.generic_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.generic_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">libfb.py.parutil</span> <span class="k">as</span> <span class="nn">parutil</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="GenericUtils"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils">[docs]</a><span class="k">class</span> <span class="nc">GenericUtils</span><span class="p">:</span>
+<div class="viewcode-block" id="GenericUtils.extract"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.extract">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span>
+        <span class="n">file_path_to_extract</span><span class="p">,</span>
+        <span class="n">directory_to_extract_to</span><span class="p">,</span>
+        <span class="n">omit_archive_top_directory</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method is used to extract files with .tar.gz .zip and .tar.bz2</span>
+<span class="sd">        extensions and save to the directory_to_extract folder</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">        file_path_to_extract : the archived file path</span>
+<span class="sd">        directory_to_extract_to : directory path to which the unarchived content</span>
+<span class="sd">                                  has to be saved</span>
+<span class="sd">        omit_archive_top_directory : if user wants to omit the top directory of</span>
+<span class="sd">                                     archived data and copy contents below it to</span>
+<span class="sd">                                     directory_to_extract_to</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">file_opener</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">file_path_to_extract</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.zip&#39;</span><span class="p">):</span>
+            <span class="n">file_handle</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span>
+        <span class="k">elif</span> <span class="n">file_path_to_extract</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span>
+            <span class="s1">&#39;.tar.gz&#39;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="n">file_path_to_extract</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.tgz&#39;</span><span class="p">):</span>
+            <span class="n">file_handle</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">,</span> <span class="s1">&#39;r:*&#39;</span>
+        <span class="k">elif</span> <span class="n">file_path_to_extract</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span>
+            <span class="s1">&#39;.tar.bz2&#39;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="n">file_path_to_extract</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.tbz&#39;</span><span class="p">):</span>
+            <span class="n">file_handle</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">,</span> <span class="s1">&#39;r:bz2&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Could not extract `</span><span class="si">%s</span><span class="s2">` as no appropriate extractor is found&quot;</span> <span class="o">%</span>
+                <span class="n">file_path_to_extract</span>
+            <span class="p">)</span>
+
+        <span class="n">GenericUtils</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="n">directory_to_extract_to</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">file_opener</span> <span class="o">=</span> <span class="n">file_handle</span><span class="p">(</span><span class="n">file_path_to_extract</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+            <span class="n">file_opener</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">directory_to_extract_to</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">omit_archive_top_directory</span><span class="p">:</span>
+                <span class="n">archived_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path_to_extract</span><span class="p">)</span>
+                <span class="n">unarchived_root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">directory_to_extract_to</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">archived_file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">files_list</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">unarchived_root_dir</span><span class="p">)</span>
+                <span class="n">file_paths</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unarchived_root_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">files_list</span>
+                <span class="p">]</span>
+                <span class="k">for</span> <span class="n">each_file</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">:</span>
+                    <span class="n">_path</span><span class="p">,</span> <span class="n">_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">each_file</span><span class="p">)</span>
+                    <span class="n">_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_to_extract_to</span><span class="p">,</span> <span class="n">_file</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">_file</span><span class="p">):</span>
+                        <span class="n">GenericUtils</span><span class="o">.</span><span class="n">delete_file</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">each_file</span><span class="p">,</span> <span class="n">directory_to_extract_to</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">unarchived_root_dir</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unable to Extract file (</span><span class="si">%s</span><span class="s2">) &quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">_e</span><span class="p">))</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">file_opener</span><span class="p">:</span>
+                <span class="n">file_opener</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GenericUtils.gzip_file"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.gzip_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gzip_file</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target_file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">orig_file</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">target_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zipped_file</span><span class="p">:</span>
+                <span class="n">zipped_file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">orig_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericUtils.create_dir"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.create_dir">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">force_recreate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create directory path.</span>
+<span class="sd">        @param path: Path to create</span>
+<span class="sd">        @return: None. Throws exception on error. Ignores error if directory</span>
+<span class="sd">        already exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">umask</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">elif</span> <span class="n">force_recreate</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div>
+
+<div class="viewcode-block" id="GenericUtils.delete_file"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.delete_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param path: Path to delete</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>  <span class="c1"># remove the file</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>  <span class="c1"># remove dir and all contains</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="s2">&quot;file </span><span class="si">{}</span><span class="s2"> is not a file or dir.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="GenericUtils.convert_to_ascii"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.convert_to_ascii">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">convert_to_ascii</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dic</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes all special characters from the provided nested structure</span>
+<span class="sd">           and return the structure which is safe to perform json.dump.</span>
+<span class="sd">           Return Empty dictionary if nothing to convert. Fix for T19755704.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">convert_to_ascii</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">dic</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">convert_to_ascii</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">dic</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">dic</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">dic</span></div>
+
+<div class="viewcode-block" id="GenericUtils.flatten_dict"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.flatten_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">flatten_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform a nested dict of lists into a flat dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">flatten_dict</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prefix</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">prefix</span><span class="p">:</span>
+                    <span class="n">_prefix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">_&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_prefix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">flatten_dict</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_prefix</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">values</span></div>
+
+<div class="viewcode-block" id="GenericUtils.parse_csv"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.parse_csv">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse_csv</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Parsing results from </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="p">))</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            CSV file expected to have 1 header row with column names, first</span>
+<span class="sd">            column of other rows is the job name. Example:</span>
+<span class="sd">            Jobname,Read_IOPS,Read_BW,Write_IOPS,Write_BW,Mean_Read_Latency</span>
+<span class="sd">            RandomRead_QD1_run1,30302.4,121209,0.0,0</span>
+<span class="sd">            RandomRead_QD2_run1,54747.1,218988,0.0,0</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+                <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+                <span class="n">found_headers</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">found_headers</span><span class="p">:</span>
+                        <span class="n">found_headers</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="n">headers</span> <span class="o">=</span> <span class="n">row</span>
+                        <span class="k">continue</span>
+                    <span class="c1"># Start at row[1] to skip job name, which we use as the key</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">headers</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="n">results</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="GenericUtils.load_validate_config"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.load_validate_config">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load_validate_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ext_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cfg_dir</span><span class="o">=</span><span class="s2">&quot;cfg&quot;</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Function will load validation file placed in cfg directory and</span>
+<span class="sd">           return in the form of json. If external file is provided</span>
+<span class="sd">           function return json object of external file</span>
+<span class="sd">           FilesystemActions().get_file_path() takes care of unzipping</span>
+<span class="sd">           the par file if it was not so before and then it returns abs path&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ext_file_path</span><span class="p">:</span>
+            <span class="n">lib_path</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lib_path</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">))</span>
+            <span class="n">ext_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">cfg_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ext_file_path</span><span class="p">):</span>
+                <span class="n">cfg_dir</span> <span class="o">=</span> <span class="s2">&quot;havoc/autotest_testfiles/validation_utils/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cfg_dir</span>
+                <span class="n">cfg_dir</span> <span class="o">=</span> <span class="n">parutil</span><span class="o">.</span><span class="n">get_file_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg_dir</span><span class="p">))</span>
+                <span class="n">ext_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ext_file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">ext_fileop</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ext_file_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
+                <span class="n">ext_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ext_fileop</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ext_data</span> <span class="o">=</span> <span class="n">ext_fileop</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ext_data</span></div>
+
+<div class="viewcode-block" id="GenericUtils.recursive_file_list"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.generic_utils.GenericUtils.recursive_file_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">recursive_file_list</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to walk over the root directory hierarchy and return the</span>
+<span class="sd">        list of absolute paths for each file in the directory tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="n">path_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">path_list</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

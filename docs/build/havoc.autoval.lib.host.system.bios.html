@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.system.bios Package &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="havoc.autoval.lib.host.system.bios.models Package" href="havoc.autoval.lib.host.system.bios.models.html" />
+    <link rel="prev" title="havoc.autoval.lib.host.system Package" href="havoc.autoval.lib.host.system.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">havoc</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="havoc.html">havoc package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="havoc.autoval.html">havoc.autoval Package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.cli.html">havoc.autoval.cli Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.e2e_tests.html">havoc.autoval.e2e_tests Package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="havoc.autoval.lib.html">havoc.autoval.lib Package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.models.html">havoc.autoval.lib.host.models Package</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="havoc.autoval.lib.host.system.html">havoc.autoval.lib.host.system Package</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">havoc.autoval.lib.host.system.bios Package</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html">havoc.autoval.lib.host.system.bios.models Package</a></li>
+<li class="toctree-l8"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.bios.system_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemBios</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html">havoc.autoval.lib.host.system.models Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.html#module-havoc.autoval.lib.host.system.system"><code class="xref py py-mod docutils literal notranslate"><span class="pre">System</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.html#module-havoc.autoval.lib.host.system.system_abstract"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemAbstract</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.html#module-havoc.autoval.lib.host.system.system_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemConfig</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.html#module-havoc.autoval.lib.host.system.system_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemFactory</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.html#module-havoc.autoval.lib.host.system.system_legacy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemLegacy</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.html#module-havoc.autoval.lib.host.system.system_no_bmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemNoBMC</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.autotest"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Autotest</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_abstract"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionAbstract</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_dispatcher"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionDispatcher</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionFactory</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.credentials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Credentials</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#cyborg-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Cyborg</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.host"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Host</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#hwc-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">HWC</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.inband"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Inband</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.ipmi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPMI</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.local"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LocalConn</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.oob"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OOB</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.openbmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMC</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.openbmc_rest_api"><code class="xref py py-mod docutils literal notranslate"><span class="pre">REST</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.ssh"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SSH</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.sshpass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SSHPassConn</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.sys_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SysUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#thriftconn-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ThriftConn</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.power.html">havoc.autoval.lib.power Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.html#module-havoc.autoval.lib.test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.tests.html">havoc.autoval.tests Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">havoc</a> &raquo;</li>
+        
+          <li><a href="havoc.html">havoc package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.html">havoc.autoval Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.html">havoc.autoval.lib Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.host.system.html">havoc.autoval.lib.host.system Package</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.system.bios Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/havoc.autoval.lib.host.system.bios.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="havoc-autoval-lib-host-system-bios-package">
+<h1>havoc.autoval.lib.host.system.bios Package<a class="headerlink" href="#havoc-autoval-lib-host-system-bios-package" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html">havoc.autoval.lib.host.system.bios.models Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.bryce_canyon_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BryceCanyonBios</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.dl380gen10_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DL380Gen10Bios</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.tioga_pass_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TiogaPassBios</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.wedge_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WedgeBios</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.yosemite_v2_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">YosemiteV2Bios</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.bios.system_bios">
+<span id="systembios-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemBios</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.bios.system_bios" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.bios.system_bios.</code><code class="sig-name descname">SystemBios</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios._get_einj_bios_settings_filename">
+<code class="sig-name descname">_get_einj_bios_settings_filename</code><span class="sig-paren">(</span><em class="sig-param">manufacturer</em>, <em class="sig-param">model</em>, <em class="sig-param">fs_actions</em>, <em class="sig-param">einj_settings_path</em>, <em class="sig-param">current_bios_ver</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios._get_einj_bios_settings_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios._get_einj_bios_settings_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>To get the BIOS setting’s file name for the respective platform, depending
+on the device’s BOIS version.
+If the BIOS version of the device is old</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>einj_bios_settings_&lt;model&gt;_&lt;manufacturer&gt;_old.json</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><ul class="simple">
+<li><p>einj_bios_settings_&lt;model&gt;_&lt;manufacturer&gt;.json</p></li>
+</ul>
+</dd>
+<dt>E.G:</dt><dd><p>einj_bios_settings_tiogapass_quanta.json</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.archive_bios_dump">
+<code class="sig-name descname">archive_bios_dump</code><span class="sig-paren">(</span><em class="sig-param">source_file</em>, <em class="sig-param">destination_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.archive_bios_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.archive_bios_dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.bios_inband_update">
+<code class="sig-name descname">bios_inband_update</code><span class="sig-paren">(</span><em class="sig-param">dut_dir</em>, <em class="sig-param">source_binary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.bios_inband_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.bios_inband_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.bios_update">
+<code class="sig-name descname">bios_update</code><span class="sig-paren">(</span><em class="sig-param">binary_path</em>, <em class="sig-param">binary_name</em>, <em class="sig-param">tool_path</em>, <em class="sig-param">toolname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.bios_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.bios_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_binary_contents">
+<code class="sig-name descname">check_binary_contents</code><span class="sig-paren">(</span><em class="sig-param">binary_loc</em>, <em class="sig-param">raise_error=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_binary_contents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_binary_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function check the extracted binary package if it contain
+require run_script. run_script is mandatory for bios upgrade.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_bios_settings">
+<code class="sig-name descname">check_bios_settings</code><span class="sig-paren">(</span><em class="sig-param">parsed_new_bios</em>, <em class="sig-param">expected_settings</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_bios_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_bios_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function checks if all the expected settings are properly set by
+by looking into the parsed bios settings and confirms if everything is
+set correctly and raises an error if the settings do not match</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_error_injection_supported_types">
+<code class="sig-name descname">check_error_injection_supported_types</code><span class="sig-paren">(</span><em class="sig-param">error_types_to_inject</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_error_injection_supported_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_error_injection_supported_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_if_einj_supported_in_kernel">
+<code class="sig-name descname">check_if_einj_supported_in_kernel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_if_einj_supported_in_kernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_if_einj_supported_in_kernel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_if_error_type_supported">
+<code class="sig-name descname">check_if_error_type_supported</code><span class="sig-paren">(</span><em class="sig-param">error_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_if_error_type_supported"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_if_error_type_supported" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_if_idk_running">
+<code class="sig-name descname">check_if_idk_running</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_if_idk_running"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_if_idk_running" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if IDK core server running. If not, start IDK server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_inj_mem">
+<code class="sig-name descname">check_inj_mem</code><span class="sig-paren">(</span><em class="sig-param">sel_log_before</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_inj_mem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_inj_mem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_log_for_einj">
+<code class="sig-name descname">check_log_for_einj</code><span class="sig-paren">(</span><em class="sig-param">err_type</em>, <em class="sig-param">sel_log_before</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.check_log_for_einj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.check_log_for_einj" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if error is injected, from the bmc logs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.compare_acpi_dump">
+<code class="sig-name descname">compare_acpi_dump</code><span class="sig-paren">(</span><em class="sig-param">acpi_dump_file_before</em>, <em class="sig-param">acpi_dump_file_after</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.compare_acpi_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.compare_acpi_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function compares each line of acpi dumps and return the
+table whose values differ</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.compare_lspci_dump">
+<code class="sig-name descname">compare_lspci_dump</code><span class="sig-paren">(</span><em class="sig-param">acpi_dump_file_before</em>, <em class="sig-param">acpi_dump_file_after</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.compare_lspci_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.compare_lspci_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function compares each line of acpi dumps and return the
+table whose values differ</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.compare_msr_by_group">
+<code class="sig-name descname">compare_msr_by_group</code><span class="sig-paren">(</span><em class="sig-param">msr_before</em>, <em class="sig-param">msr_after</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.compare_msr_by_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.compare_msr_by_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Comparison for the MSRs.
+For each MSR register group,</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><dl class="simple">
+<dt>Check the MSR Status Registers first</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>If not 0, then compare the MSR Addr/Misc to seek for differences.</dt><dd><p>– If differences found, log the difference as failure</p>
+</dd>
+</dl>
+</li>
+<li><p>If 0, then ignore the MSR Addr/Misc comparison</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Check and compare the MSR Control Registers and log the difference
+as failure if any</p></li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.copy_binaries_dut">
+<code class="sig-name descname">copy_binaries_dut</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.copy_binaries_dut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.copy_binaries_dut" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.copy_idk_binaries">
+<code class="sig-name descname">copy_idk_binaries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.copy_idk_binaries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.copy_idk_binaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy IDK bin from the location given in config file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.create_acpi_dump">
+<code class="sig-name descname">create_acpi_dump</code><span class="sig-paren">(</span><em class="sig-param">acpi_dump_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.create_acpi_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.create_acpi_dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.cycle_post_bios_upgrade">
+<code class="sig-name descname">cycle_post_bios_upgrade</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.cycle_post_bios_upgrade"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.cycle_post_bios_upgrade" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.dump_bios_settings">
+<code class="sig-name descname">dump_bios_settings</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.dump_bios_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.dump_bios_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>## Function to set/get BIOS setting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.dump_setting_to_file">
+<code class="sig-name descname">dump_setting_to_file</code><span class="sig-paren">(</span><em class="sig-param">bios_dump_parsed</em>, <em class="sig-param">wfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.dump_setting_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.dump_setting_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Method will put all the bios settings from dictionary
+into a formatted text file where SCELNX tool can pickup
+and import the settings</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.generate_pcie_port_address">
+<code class="sig-name descname">generate_pcie_port_address</code><span class="sig-paren">(</span><em class="sig-param">slot</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.generate_pcie_port_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.generate_pcie_port_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_address_map">
+<code class="sig-name descname">get_address_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_address_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_address_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get the address map from idk client
+&#64;return - addr_map - Dict with address and a map tuple
+5-tuple such as (1 1 2 0 1) mapped to a system address 0X304000C100
+{u’(1 0 1 0 0 )’: u‘0X3040000000’,u’(1 1 2 0 0 )’: u‘0X3040000100’}</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_available_error_types">
+<code class="sig-name descname">get_available_error_types</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_available_error_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_available_error_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of available error types.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_diff">
+<code class="sig-name descname">get_bios_diff</code><span class="sig-paren">(</span><em class="sig-param">bios_before</em>, <em class="sig-param">bios_after</em>, <em class="sig-param">bios_filter=None</em>, <em class="sig-param">save_after_bios=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_bios_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_diff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_full_info">
+<code class="sig-name descname">get_bios_full_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_bios_full_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_full_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_settings_dump">
+<code class="sig-name descname">get_bios_settings_dump</code><span class="sig-paren">(</span><em class="sig-param">file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_bios_settings_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_settings_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>## Function to get BIOS Dump.
+# &#64;ret  - Location of the dump file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_vendor">
+<code class="sig-name descname">get_bios_vendor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_bios_vendor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_vendor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_ver">
+<code class="sig-name descname">get_bios_ver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_bios_ver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bios_ver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bus_device_fun">
+<code class="sig-name descname">get_bus_device_fun</code><span class="sig-paren">(</span><em class="sig-param">port_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_bus_device_fun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_bus_device_fun" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_current_boot_sequence">
+<code class="sig-name descname">get_current_boot_sequence</code><span class="sig-paren">(</span><em class="sig-param">curr_bios_dump=None</em>, <em class="sig-param">boot_options_tokens=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_current_boot_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_current_boot_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>## Use boot_options_tokens passed by users to identify the boot sequence
+## setting and return.
+# &#64;param curr_bios_dump - Use this bios settings dump to check the sequence
+# &#64;param boot_options_tokens - These are the setup question and token
+#                              number to look for if not passed use the
+#                              default question and token number
+# &#64;return - Boot sequence as list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_diff_in_msr_groups">
+<code class="sig-name descname">get_diff_in_msr_groups</code><span class="sig-paren">(</span><em class="sig-param">msr_before</em>, <em class="sig-param">msr_after</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_diff_in_msr_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_diff_in_msr_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>MSR registers (400h ~ 44Fh) are grouped.
+Each group contains 4 registers</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Control  (400h + x*4h)</p></li>
+<li><p>Status   (401h + x*4h)</p></li>
+<li><p>Addr     (402h + x*4h)</p></li>
+<li><p>Misc     (403h + x*4h)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_dut_dir">
+<code class="sig-name descname">get_dut_dir</code><span class="sig-paren">(</span><em class="sig-param">toolpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_dut_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_dut_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_ec_ver">
+<code class="sig-name descname">get_ec_ver</code><span class="sig-paren">(</span><em class="sig-param">tool</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_ec_ver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_ec_ver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_einj_bios_settings">
+<code class="sig-name descname">get_einj_bios_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_einj_bios_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_einj_bios_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_mmap">
+<code class="sig-name descname">get_mmap</code><span class="sig-paren">(</span><em class="sig-param">arg</em>, <em class="sig-param">mem_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_mmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_mmap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_port_ids">
+<code class="sig-name descname">get_port_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_port_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_port_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_working_dir">
+<code class="sig-name descname">get_working_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.get_working_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.get_working_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.inject_mem_error">
+<code class="sig-name descname">inject_mem_error</code><span class="sig-paren">(</span><em class="sig-param">mem_einj_type</em>, <em class="sig-param">mem_addr_map=None</em>, <em class="sig-param">validate_injection=True</em>, <em class="sig-param">make=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.inject_mem_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.inject_mem_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.inject_pcie_error">
+<code class="sig-name descname">inject_pcie_error</code><span class="sig-paren">(</span><em class="sig-param">pcie_einj_type</em>, <em class="sig-param">port_id_list=None</em>, <em class="sig-param">validate_injection=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.inject_pcie_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.inject_pcie_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.install_acpidump">
+<code class="sig-name descname">install_acpidump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.install_acpidump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.install_acpidump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.modify_bios_dump">
+<code class="sig-name descname">modify_bios_dump</code><span class="sig-paren">(</span><em class="sig-param">bios_settings</em>, <em class="sig-param">bios_dump_location</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.modify_bios_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.modify_bios_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>## Function to modify the given bios_settings in the dump file
+#  This function will check for options after the matched “Setup Question”.
+#  and also the token number to exactly match the setting
+#  when we find a matching pattern for any setting the change will be
+#  set as passed and the then the setting will be dumped as SCELNX dump
+#  file
+#  returns the changed dump file , and both old and new bios settings</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.modify_bios_options">
+<code class="sig-name descname">modify_bios_options</code><span class="sig-paren">(</span><em class="sig-param">options_list</em>, <em class="sig-param">change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.modify_bios_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.modify_bios_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method enables the option user wants and disables the older enabled
+option</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.parse_bios_dump_file">
+<code class="sig-name descname">parse_bios_dump_file</code><span class="sig-paren">(</span><em class="sig-param">rfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.parse_bios_dump_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.parse_bios_dump_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.parse_dump_file">
+<code class="sig-name descname">parse_dump_file</code><span class="sig-paren">(</span><em class="sig-param">dump_file</em>, <em class="sig-param">seperator_patter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.parse_dump_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.parse_dump_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.rdmsr">
+<code class="sig-name descname">rdmsr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.rdmsr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.rdmsr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.start_idk_client">
+<code class="sig-name descname">start_idk_client</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.start_idk_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.start_idk_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the IDK core client</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.start_idk_server">
+<code class="sig-name descname">start_idk_server</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.start_idk_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.start_idk_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the IDK core server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.toggle_option">
+<code class="sig-name descname">toggle_option</code><span class="sig-paren">(</span><em class="sig-param">line</em>, <em class="sig-param">option</em>, <em class="sig-param">rofile</em>, <em class="sig-param">i_f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.toggle_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.toggle_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Method reads each line in option and setup the options user
+selected and deselect any option that is different from user selection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.update_bios_setting_from_dump">
+<code class="sig-name descname">update_bios_setting_from_dump</code><span class="sig-paren">(</span><em class="sig-param">file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.update_bios_setting_from_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.update_bios_setting_from_dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.bios.system_bios.SystemBios.update_bios_settings">
+<code class="sig-name descname">update_bios_settings</code><span class="sig-paren">(</span><em class="sig-param">bios_settings</em>, <em class="sig-param">dump_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/bios/system_bios.html#SystemBios.update_bios_settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.bios.system_bios.SystemBios.update_bios_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>## Function to update  BIOS setting.
+# &#64;param bios_settings - Dictonary with BIOS_Option:option
+#       Supported options - enable/disable/minimum/maximum/auto
+# &#64;ret  - BIOS_SETTING_UPDATED/BIOS_SETTING_UPDATE_FAILED/NO_CHANGE.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="havoc.autoval.lib.host.system.bios.models.html" class="btn btn-neutral float-right" title="havoc.autoval.lib.host.system.bios.models Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="havoc.autoval.lib.host.system.html" class="btn btn-neutral float-left" title="havoc.autoval.lib.host.system Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

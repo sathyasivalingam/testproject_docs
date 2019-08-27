@@ -1,0 +1,661 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_base &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">havoc.autoval.lib.test_utils.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+
+<span class="kn">from</span> <span class="nn">havoc.lib.filesystem_actions</span> <span class="k">import</span> <span class="n">FilesystemActions</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.cli.cli_parser</span> <span class="k">import</span> <span class="n">AutoValCLI</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.oob</span> <span class="k">import</span> <span class="n">OOB</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TestError</span><span class="p">,</span>
+    <span class="n">TestStepError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.config_check</span> <span class="k">import</span> <span class="n">ConfigCheck</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.system.system_config</span> <span class="k">import</span> <span class="n">SystemConfig</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.bg_runner</span> <span class="k">import</span> <span class="n">BgRunner</span>
+
+
+<div class="viewcode-block" id="TestBase"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase">[docs]</a><span class="nd">@six</span><span class="o">.</span><span class="n">add_metaclass</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TestBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">resultsdir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestBase.__init__"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y %H:%M:%S&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">AutoValCLI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span> <span class="o">=</span> <span class="n">ResultHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">debug</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;hosts&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs_actions</span> <span class="o">=</span> <span class="n">FilesystemActions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_test_control_settings</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">test_control</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">site_settings</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_site_settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">create_resultsdir</span><span class="p">(</span>
+            <span class="n">logdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logdir&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">hostname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;hostname&quot;</span><span class="p">],</span>
+            <span class="n">testname</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">test_start_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_start_time</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg_check_filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cfg_check_filter&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_config_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestBase.lifecycle"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.lifecycle">[docs]</a>    <span class="k">def</span> <span class="nf">lifecycle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs through the Test lifecycle:</span>
+<span class="sd">        setup -&gt; execute -&gt; cleanup</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setup_execute_cleanup</span><span class="p">(),</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_test_summary</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestBase.print_test_summary"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.print_test_summary">[docs]</a>    <span class="k">def</span> <span class="nf">print_test_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">failed_steps</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_failed_test_steps</span><span class="p">()</span>
+        <span class="n">passed_steps</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_passed_test_steps</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed_steps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;TEST PASSED&quot;</span>
+            <span class="n">failed_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;TEST FAILED&quot;</span>
+            <span class="n">failed_str</span> <span class="o">=</span> <span class="s2">&quot; (Step Number </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">failed_steps</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;+++Test Summary:</span><span class="se">\n</span><span class="s2">Passed Steps: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">Failed Steps: </span><span class="si">{}{}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Test Result : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">passed_steps</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed_steps</span><span class="p">),</span> <span class="n">failed_str</span><span class="p">,</span> <span class="n">status</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">add_sel_message</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_setup_execute_cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Starting test </span><span class="si">{}</span><span class="s2"> on </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="p">,</span>
+                    <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_h</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span> <span class="k">for</span> <span class="n">_h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setup_execute</span><span class="p">(),</span>
+        <span class="k">except</span> <span class="n">TestStepError</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Add a failed test step for any exception that&#39;s not a</span>
+            <span class="c1"># TestStepError</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+        <span class="c1"># Special case where test steps failed but were using</span>
+        <span class="c1"># &quot;raise_on_fail=False&quot;</span>
+        <span class="n">failed_steps</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_failed_test_steps</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">failed_steps</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Test steps failed&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TestBase._setup_execute"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase._setup_execute">[docs]</a>    <span class="k">def</span> <span class="nf">_setup_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We should always set oob mode before creating our first host because</span>
+<span class="sd">        OOB.mode variable is used</span>
+<span class="sd">            - to choose the method (OpenBMC or HWC) to determine host type</span>
+<span class="sd">            - to create OOB objects (HWC) within OOB.py</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">OOB</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;oob_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;ssh&quot;</span><span class="p">))</span>
+        <span class="n">OOB</span><span class="o">.</span><span class="n">set_ssh_fallback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;oob_mode_ssh_fallback&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">update_config_filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg_check_filter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ping_host</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestBase.ping_host"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.ping_host">[docs]</a>    <span class="k">def</span> <span class="nf">ping_host</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">],</span> <span class="s2">&quot;connected to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ping</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;ping OOB successful&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestBase.setup"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inband_config_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_log_directories</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;failed to create log directories.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">add_sel_message</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_name</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_crash_dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">localhost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span>
+        <span class="n">pkg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_rpm_info</span><span class="p">(</span><span class="s2">&quot;fb-havoc-autoval&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pkg</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Running AutoVal version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pkg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_check</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;+++Initializing BMC system config&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_before_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_start_time</span><span class="p">,</span>
+                <span class="n">start</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">inband_config_check</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;+++Initializing system config&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span><span class="p">,</span> <span class="s2">&quot;System Config check&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_bg_operations</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestBase.execute"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.execute">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="TestBase.cleanup"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cfg_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">inband_cfg_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">config_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">config_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">bios_dump_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">inband_config_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg_filter</span><span class="p">:</span>
+            <span class="n">cfg_filter</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inband_cfg_filter</span><span class="p">:</span>
+            <span class="n">inband_cfg_filter</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_post_inband_bmc_config_check</span><span class="p">(</span>
+                <span class="n">config_check</span><span class="p">,</span>
+                <span class="n">cfg_filter</span><span class="p">,</span>
+                <span class="n">bios_dump_filter</span><span class="p">,</span>
+                <span class="n">inband_cfg_filter</span><span class="p">,</span>
+                <span class="n">inband_config_check</span>
+            <span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_host_cleanup</span><span class="p">(</span><span class="n">config_check</span><span class="p">,</span> <span class="n">config_data</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_save_results</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_save_cmd_metrics</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestBase.on_fail"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.on_fail">[docs]</a>    <span class="k">def</span> <span class="nf">on_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">caterr</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Last step of the test lifecycle()</span>
+<span class="sd">        This can be overridden by the test</span>
+<span class="sd">        to perform additional processing on test failure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backup_sys_logs</span><span class="p">(</span><span class="n">config_check</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_crash_dump</span><span class="p">,</span>
+                    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">caterr</span><span class="p">],</span>
+                    <span class="s2">&quot;Check for CrashDump during the Test&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Encountered error during on failure processing (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">_e</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">raise</span></div>
+
+    <span class="k">def</span> <span class="nf">_host_cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_check</span><span class="p">,</span> <span class="n">config_data</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">reconnect</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">config_check</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_save_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">config_data</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">collect_debug_logs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_stop_bg_operations</span><span class="p">()</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">on_fail</span><span class="p">(</span><span class="n">config_check</span><span class="p">)</span>
+                    <span class="n">SiteUtils</span><span class="o">.</span><span class="n">cleanup_log_directories</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_post_inband_bmc_config_check</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config_check</span><span class="p">,</span>
+        <span class="n">cfg_filter</span><span class="p">,</span>
+        <span class="n">bios_dump_filter</span><span class="p">,</span>
+        <span class="n">inband_cfg_filter</span><span class="p">,</span>
+        <span class="n">inband_config_check</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">config_check</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_post_bmc_config_check</span><span class="p">(</span><span class="n">cfg_filter</span><span class="p">,</span> <span class="n">bios_dump_filter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inband_config_check</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_post_inband_config_check</span><span class="p">(</span><span class="n">inband_cfg_filter</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_post_bmc_config_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg_filter</span><span class="p">,</span> <span class="n">bios_dump_filter</span><span class="p">):</span>
+        <span class="n">bmc_key_diff</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_start_time</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">bios_dump_filter</span><span class="o">=</span><span class="n">bios_dump_filter</span>
+        <span class="p">)</span>
+
+        <span class="n">bmc_key_diff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc_before_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">bmc_key_diff</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Key(s) </span><span class="si">%s</span><span class="s2"> are missing in either of the </span><span class="se">\</span>
+<span class="s2">configs and will be excluded from comparison&quot;</span> <span class="o">%</span> <span class="n">bmc_key_diff</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bmc_key_diff</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_before_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_empty_list</span><span class="p">(</span>
+            <span class="n">bmc_key_diff</span><span class="p">,</span>
+            <span class="s2">&quot;No missing keys in bmc config&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_post_config_check</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_before_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">,</span> <span class="n">cfg_filter</span><span class="p">,</span> <span class="s2">&quot;BMC&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_post_inband_config_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inband_cfg_filter</span><span class="p">):</span>
+        <span class="n">inband_key_diff</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">get_system_config</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dump_location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dut_tmpdir</span>
+        <span class="p">)</span>
+        <span class="n">inband_key_diff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">inband_key_diff</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Key(s) </span><span class="si">%s</span><span class="s2"> are missing in either of the </span><span class="se">\</span>
+<span class="s2">configs and will be excluded from comparison&quot;</span> <span class="o">%</span> <span class="n">inband_key_diff</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">inband_key_diff</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_empty_list</span><span class="p">(</span>
+            <span class="n">inband_key_diff</span><span class="p">,</span>
+            <span class="s2">&quot;No missing keys in inband config&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">diff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span> <span class="o">=</span> <span class="n">ConfigCheck</span><span class="p">()</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span><span class="p">,</span>
+            <span class="n">user_filter</span><span class="o">=</span><span class="n">inband_cfg_filter</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_empty_diff</span><span class="p">(</span>
+            <span class="n">diff</span><span class="p">,</span> <span class="s2">&quot;Verified inband system config before / after test&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_post_config_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before_dict</span><span class="p">,</span> <span class="n">after_dict</span><span class="p">,</span> <span class="n">cfg_filter</span><span class="p">,</span> <span class="n">_type</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cfg_filter</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">before_dict</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">before_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">after_dict</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">after_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">before_dict</span> <span class="ow">and</span> <span class="n">after_dict</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">before_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">after_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Number of keys before / after the test are not equal&quot;</span><span class="p">)</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span><span class="n">before_dict</span><span class="p">,</span> <span class="n">after_dict</span><span class="p">)</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configcheck</span><span class="o">.</span><span class="n">diff_logs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_empty_diff</span><span class="p">(</span>
+                <span class="n">diff</span><span class="p">,</span> <span class="s2">&quot;Verified </span><span class="si">%s</span><span class="s2"> system config before / after test&quot;</span> <span class="o">%</span> <span class="n">_type</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Before / after configs are not presented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_save_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">config_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Runs the config check (only on the first host) and stores the results</span>
+        <span class="c1"># in a known location so that they can be logged to Scribe by Havoc</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config_data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">host</span><span class="o">.</span><span class="n">oob_only</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span><span class="p">:</span>
+                    <span class="n">cfg</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">get_system_config</span><span class="p">(</span>
+                        <span class="n">host</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dump_location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dut_tmpdir</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="s2">&quot;systeminfo&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+                        <span class="n">config_data</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;systeminfo&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;systeminfo&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span><span class="p">:</span>
+                        <span class="n">config_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span><span class="p">[</span><span class="s2">&quot;systeminfo&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;log_util&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">:</span>
+                <span class="c1"># Remove log-util data as it contains full output since system</span>
+                <span class="c1"># was provisioned which is way too much</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">[</span><span class="s2">&quot;log_util&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">config_data</span><span class="p">:</span>
+                <span class="n">config_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">config_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span>
+
+        <span class="k">if</span> <span class="n">config_data</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_test_results_file_path</span><span class="p">(</span><span class="s2">&quot;config_results.json&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;saving config results at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
+            <span class="n">config_data</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">convert_to_ascii</span><span class="p">(</span><span class="n">config_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fs_actions</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">config_data</span><span class="p">,</span> <span class="n">json_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TestBase.get_test_results_file_path"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase.get_test_results_file_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_test_results_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">file_path</span></div>
+
+    <span class="k">def</span> <span class="nf">_save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_test_results_file_path</span><span class="p">(</span><span class="s2">&quot;test_results.json&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;saving results at - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">save_results</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_test_results_file_path</span><span class="p">(</span><span class="s2">&quot;test_steps.json&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">save_steps</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># Allows to directly call methods on the test object that are defined</span>
+        <span class="c1"># in AutovalUtils module</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TestBase._initialize_test_control_settings"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase._initialize_test_control_settings">[docs]</a>    <span class="k">def</span> <span class="nf">_initialize_test_control_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_control</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get common test control settings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span> <span class="o">=</span> <span class="n">test_control</span>
+        <span class="c1"># Sleeper stall expect the values to passed as dictionary</span>
+        <span class="c1"># eg {&quot;sleeper_stall&quot;:{&quot;sleep&quot;: 0.1, &quot;sleep_threshold&quot;: 0.15}}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleeper_stall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sleeper_stall&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">continue_test_on_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;continue_test_on_error&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">continue_test_on_error</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">continue_test_on_error</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">havoc_run_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;run_id&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_initialize_config_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_before_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_after_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_before_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inband_config_after_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configcheck</span> <span class="o">=</span> <span class="n">ConfigCheck</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_save_cmd_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_test_results_file_path</span><span class="p">(</span><span class="s2">&quot;cmd_metrics.json&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">save_cmd_metrics</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TestBase._create_log_directories"><a class="viewcode-back" href="../../../../havoc.autoval.lib.html#havoc.autoval.lib.test_base.TestBase._create_log_directories">[docs]</a>    <span class="k">def</span> <span class="nf">_create_log_directories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        dut_logdir --&gt; Log dir at DUT and achieve at the end the test. Used to</span>
+<span class="sd">                       store critical data on the test server during test.</span>
+<span class="sd">        dut_tmpdir --&gt; tmp dir at DUT and deleted at the end of the test.</span>
+<span class="sd">                       store non critical data on the test server during test</span>
+
+<span class="sd">        control_server_logdir --&gt; Log dir at control server and achieve at the</span>
+<span class="sd">                                  end the test. store any critical data on the</span>
+<span class="sd">                                  control server.</span>
+<span class="sd">        control_server_tmpdir --&gt; tmp dir at control server and deleted at the</span>
+<span class="sd">                                  end the of the test. store non critical data</span>
+<span class="sd">                                  on the control server.</span>
+
+<span class="sd">        tmpdir --&gt; tmp dir at glusterfs (resultsdir) and deleted at the end</span>
+<span class="sd">                   the test.</span>
+<span class="sd">        system_log_dir --&gt; system_log directory to save system specific logs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create DUT logs directory which will be archive to</span>
+        <span class="c1"># resultsdir at the end of the test</span>
+        <span class="n">SiteUtils</span><span class="o">.</span><span class="n">create_logdirs</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logdir&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">host</span><span class="p">,</span>
+            <span class="n">testname</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">test_start_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_start_time</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dut_logdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_dut_logdir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dut_tmpdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_dut_tmpdir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_server_logdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_control_server_logdir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">control_server_tmpdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_control_server_tmpdir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_system_logdir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_tmpdir</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_start_bg_operations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bg_monitor_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bg_monitor&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bg_monitor_args</span><span class="p">:</span>
+            <span class="n">BgRunner</span><span class="o">.</span><span class="n">setup_bg_runners</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">bg_monitor_args</span><span class="p">)</span>
+            <span class="n">BgRunner</span><span class="o">.</span><span class="n">start_bg_runners</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_stop_bg_operations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">BgRunner</span><span class="o">.</span><span class="n">stop_bg_runners</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Failure in BG operations </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">_e</span><span class="p">))</span>
+            <span class="k">raise</span>
+
+
+    <span class="k">def</span> <span class="nf">_backup_sys_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_check</span><span class="p">):</span>
+        <span class="c1"># In case of test Fail, backup the systemlogs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config_check</span><span class="p">:</span>
+            <span class="n">SystemConfig</span><span class="o">.</span><span class="n">get_system_config</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dump_location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dut_tmpdir</span>
+            <span class="p">)</span>
+        <span class="n">dump_location</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/*&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut_tmpdir</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">copy_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">dump_location</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

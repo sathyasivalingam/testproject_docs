@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.ssh &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.ssh</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.ssh</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">paramiko</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">select</span>
+
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Timer</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.connection_abstract</span> <span class="k">import</span> <span class="n">ConnectionAbstract</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">CmdError</span><span class="p">,</span>
+    <span class="ne">TimeoutError</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.connection_utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">ConnectionUtils</span><span class="p">,</span> <span class="n">CmdResult</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SSHResult"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHResult">[docs]</a><span class="k">class</span> <span class="nc">SSHResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Result object for all ssh commands</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SSHResult.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHResult.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">return_code</span><span class="p">,</span>
+        <span class="n">stdout</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">timed_out</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_code</span> <span class="o">=</span> <span class="n">return_code</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">ConnectionUtils</span><span class="o">.</span><span class="n">str_encode</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">ConnectionUtils</span><span class="o">.</span><span class="n">str_encode</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">timed_out</span> <span class="o">=</span> <span class="n">timed_out</span></div></div>
+
+
+<div class="viewcode-block" id="SSH"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSH">[docs]</a><span class="k">class</span> <span class="nc">SSH</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SSH.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSH.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span>
+        <span class="n">connection_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">allow_agent</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="s1">&#39;root&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_key_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_ssh_key_path</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection_timeout</span> <span class="o">=</span> <span class="n">connection_timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_agent</span> <span class="o">=</span> <span class="n">allow_agent</span>
+
+        <span class="c1"># Remove the file from the list if it does not exist.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_key_path</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ssh_cert_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_key_path</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ssh_cert_file</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_key_path</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ssh_cert_file</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;paramiko&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span></div>
+
+    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_connect_to_host</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span> <span class="o">=</span> <span class="n">paramiko</span><span class="o">.</span><span class="n">SSHClient</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">load_system_host_keys</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">set_missing_host_key_policy</span><span class="p">(</span><span class="n">paramiko</span><span class="o">.</span><span class="n">AutoAddPolicy</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span>
+            <span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_user</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_password</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connection_timeout</span><span class="p">,</span>
+            <span class="n">banner_timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_port</span><span class="p">,</span>
+            <span class="n">key_filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ssh_key_path</span><span class="p">,</span>
+            <span class="n">allow_agent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_allow_agent</span>
+        <span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ssh</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Used for &quot;with&quot;-style connections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_to_host</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="c1"># Used for &quot;with&quot;-style connections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_disconnect</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SSH.raise_timeout"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSH.raise_timeout">[docs]</a>    <span class="k">def</span> <span class="nf">raise_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;SSH command [</span><span class="si">%s</span><span class="s2">] timed out after [</span><span class="si">%d</span><span class="s2">] seconds&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_disconnect</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="SSHCommand"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHCommand">[docs]</a><span class="k">class</span> <span class="nc">SSHCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the actual SSH command on an &#39;SSH&#39; type object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SSHCommand.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHCommand.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ssh</span><span class="p">,</span>
+        <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+        <span class="n">get_pty</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span> <span class="o">=</span> <span class="n">ssh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_pty</span> <span class="o">=</span> <span class="n">get_pty</span></div>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Used for &quot;with&quot;-style commands</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_debug</span><span class="p">(</span>
+            <span class="s2">&quot;Running [</span><span class="si">%s</span><span class="s2">] with timeout [</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">return_code</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">thread_queue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="c1"># Using a timer to disconnect the SSH session once timeout is reached.</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">raise_timeout</span><span class="p">,</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">thread_queue</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">return_code</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exec</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">timer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">thread_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">SSHResult</span><span class="p">(</span>
+            <span class="n">return_code</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">stderr</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_exec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cmd</span><span class="p">,</span> <span class="n">get_pty</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pty</span><span class="p">)</span>
+
+        <span class="c1"># channel is shared for stdin, stdout and stderr</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">stdout</span><span class="o">.</span><span class="n">channel</span>
+        <span class="n">stdout_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stderr_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># since we&#39;re not using stdin and nor do we write</span>
+        <span class="n">stdin</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">shutdown_write</span><span class="p">()</span>
+
+        <span class="c1"># read stdout/stderr in order to prevent read block hangs</span>
+        <span class="n">stdout_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">in_buffer</span><span class="p">)))</span>
+
+        <span class="c1"># read chunk-by-chunk to prevent stalls</span>
+        <span class="c1"># &#39;channel.closed&#39; checks if channel was closed prematurely,</span>
+        <span class="c1"># and there is no data in the buffers.</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">channel</span><span class="o">.</span><span class="n">closed</span> <span class="ow">or</span> <span class="n">channel</span><span class="o">.</span><span class="n">recv_ready</span><span class="p">()</span> <span class="ow">or</span> <span class="n">channel</span><span class="o">.</span><span class="n">recv_stderr_ready</span><span class="p">():</span>
+            <span class="n">got_chunk</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="p">(</span><span class="n">readq</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="n">channel</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[])</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">readq</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">recv_ready</span><span class="p">():</span>
+                    <span class="n">stdout_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">in_buffer</span><span class="p">)))</span>
+                    <span class="n">got_chunk</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">recv_stderr_ready</span><span class="p">():</span>
+                    <span class="c1"># make sure to read stderr to prevent stall</span>
+                    <span class="n">stderr_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">channel</span><span class="o">.</span><span class="n">recv_stderr</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">in_stderr_buffer</span><span class="p">))</span>
+                    <span class="p">)</span>
+                    <span class="n">got_chunk</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="ow">not</span> <span class="n">got_chunk</span> <span class="ow">and</span> <span class="n">channel</span><span class="o">.</span><span class="n">exit_status_ready</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">channel</span><span class="o">.</span><span class="n">recv_stderr_ready</span><span class="p">()</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">channel</span><span class="o">.</span><span class="n">recv_ready</span><span class="p">()</span>
+            <span class="p">):</span>
+                <span class="n">channel</span><span class="o">.</span><span class="n">shutdown_read</span><span class="p">()</span>
+                <span class="n">channel</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">break</span>
+
+        <span class="n">stderr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">stdout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">stdin</span><span class="p">,</span>
+            <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stdout_chunks</span><span class="p">),</span>
+            <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stderr_chunks</span><span class="p">),</span>
+            <span class="n">channel</span><span class="o">.</span><span class="n">recv_exit_status</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SSHConn"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn">[docs]</a><span class="k">class</span> <span class="nc">SSHConn</span><span class="p">(</span><span class="n">ConnectionAbstract</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SSH Connection class implementing the ConnectionAbstract abstract base class</span>
+<span class="sd">    for a common interface between different connection types (Thrift, SSH, ...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SSHConn.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">skip_health_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">allow_agent</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">22</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allow_agent</span> <span class="o">=</span> <span class="n">allow_agent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">skip_health_check</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip_health_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># @@@ TODO: ??? What to put here?</span>
+        <span class="c1"># self.instance = HostAddr(self.hostname, self.port)</span>
+        <span class="c1"># @@@ TODO: Should check health of connection here unless</span>
+        <span class="c1"># &quot;skip_health_check&quot; is set</span>
+        <span class="k">return</span>
+
+<div class="viewcode-block" id="SSHConn.run"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+        <span class="n">working_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">get_pty</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">working_directory</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cd </span><span class="si">%s</span><span class="s2"> &amp;&amp; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">SSH</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">allow_agent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">allow_agent</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">ssh</span><span class="p">:</span>
+            <span class="n">_cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd</span><span class="p">]</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">SSHCommand</span><span class="p">(</span><span class="n">ssh</span><span class="p">,</span> <span class="n">_cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">get_pty</span><span class="p">)</span> <span class="k">as</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+                <span class="n">_out</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log_cmd_metrics</span><span class="p">(</span>
+                    <span class="n">cmd</span><span class="p">,</span>
+                    <span class="n">start_time</span><span class="p">,</span>
+                    <span class="n">duration</span><span class="p">,</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">,</span>
+                    <span class="n">_out</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">_out</span> <span class="o">=</span> <span class="n">ConnectionUtils</span><span class="o">.</span><span class="n">str_encode</span><span class="p">(</span><span class="n">_out</span><span class="p">)</span>
+                <span class="n">ConnectionUtils</span><span class="o">.</span><span class="n">log_cmdlog</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">,</span> <span class="n">_out</span><span class="p">,</span> <span class="n">custom_logfile</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ignore_status</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Command returned non-zero exit status on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span>
+                    <span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">CmdError</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">get_result_obj</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">CmdResult</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">_out</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SSHConn.read_file"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">decode_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># Reads file_path and returns its contents as string</span>
+
+        <span class="k">with</span> <span class="n">SSH</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">ssh</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sftp</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">open_sftp</span><span class="p">()</span>
+                <span class="n">remote_file</span> <span class="o">=</span> <span class="n">sftp</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">remote_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="n">remote_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">decode_ascii</span><span class="p">:</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">ConnectionUtils</span><span class="o">.</span><span class="n">str_encode</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to read file </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">content</span></div>
+
+<div class="viewcode-block" id="SSHConn.get_file"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn.get_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="c1"># Copies file_path from remote system to target on local system</span>
+
+        <span class="k">with</span> <span class="n">SSH</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">ssh</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sftp</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">open_sftp</span><span class="p">()</span>
+                <span class="n">sftp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to get file </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SSHConn.put_file"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn.put_file">[docs]</a>    <span class="k">def</span> <span class="nf">put_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="c1"># Copies file_path from remote system to target on local system</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span>
+            <span class="s2">&quot;Copying </span><span class="si">%s</span><span class="s2"> to remote host at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">SSH</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">ssh</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">sftp</span> <span class="o">=</span> <span class="n">ssh</span><span class="o">.</span><span class="n">_ssh</span><span class="o">.</span><span class="n">open_sftp</span><span class="p">()</span>
+                <span class="n">sftp</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to put file </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SSHConn.scp_file"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ssh.SSHConn.scp_file">[docs]</a>    <span class="k">def</span> <span class="nf">scp_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">source_location</span><span class="p">,</span> <span class="n">file_tocopy</span><span class="p">,</span>
+        <span class="n">destination_location</span>
+    <span class="p">):</span>
+        <span class="c1"># calculates and validates the checksum of the file</span>
+        <span class="c1"># and then copies the file from source to destination using scp</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;Copying the required version to the OpenBMC&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                <span class="s2">&quot; md5sum </span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source_location</span><span class="p">,</span> <span class="n">file_tocopy</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">md5sum_before_copy</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;sshpass -p &#39;</span><span class="si">%s</span><span class="s2">&#39; scp -6 -o StrictHostKeyChecking=no&quot;</span>
+                    <span class="s2">&quot; -o UserKnownHostsFile=/dev/null </span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">source_location</span><span class="p">,</span> <span class="n">file_tocopy</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> root@[\</span><span class="si">%s</span><span class="s2">\]:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">destination_location</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">append_string</span> <span class="o">=</span> <span class="s2">&quot;-6&quot;</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;sshpass -p &#39;</span><span class="si">%s</span><span class="s2">&#39; scp -o StrictHostKeyChecking=no&quot;</span>
+                    <span class="s2">&quot; -o UserKnownHostsFile=/dev/null </span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">source_location</span><span class="p">,</span> <span class="n">file_tocopy</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> root@</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">destination_location</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">append_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1"># after copy check md5sum on the system</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;sshpass -p &#39;</span><span class="si">%s</span><span class="s2">&#39; ssh </span><span class="si">%s</span><span class="s2"> -o StrictHostKeyChecking=no&quot;</span>
+                <span class="s2">&quot; -o UserKnownHostsFile=/dev/null&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">append_string</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> root@</span><span class="si">%s</span><span class="s1"> &quot;md5sum </span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">destination_location</span><span class="p">,</span> <span class="n">file_tocopy</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">md5sum_after_copy</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">md5sum_before_copy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">md5sum_after_copy</span><span class="p">)):</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;checksum matches&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">file_tocopy</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="p">(</span><span class="s2">&quot;checksum doesnt match, its not safe to proceed&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to scp file </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">file_tocopy</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

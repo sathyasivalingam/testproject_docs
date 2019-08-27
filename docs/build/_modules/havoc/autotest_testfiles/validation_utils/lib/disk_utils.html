@@ -1,0 +1,1268 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.disk_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.disk_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.disk_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">stat</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">.autoval_exceptions</span> <span class="k">import</span> <span class="n">CmdError</span><span class="p">,</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">.fbjbod_utils</span> <span class="k">import</span> <span class="n">FbjbodUtils</span>
+<span class="kn">from</span> <span class="nn">.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">.md_utils</span> <span class="k">import</span> <span class="n">MDUtils</span>
+<span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+
+
+<div class="viewcode-block" id="DiskUtils"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils">[docs]</a><span class="k">class</span> <span class="nc">DiskUtils</span><span class="p">:</span>
+
+<div class="viewcode-block" id="DiskUtils.get_storage_devices"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_storage_devices">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_storage_devices</span><span class="p">(</span>
+        <span class="n">drive_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">power_on_all_slots</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns all drives based on the value of parameter</span>
+<span class="sd">        @param drive_type Type of the storage device to return[ssd/hdd]</span>
+<span class="sd">        @param power_on_all_slots if set True</span>
+<span class="sd">          Powers on all jobd drives</span>
+<span class="sd">          Disk type  Available types are &quot;hdd/ssd/ md&quot;</span>
+
+<span class="sd">        @return</span>
+<span class="sd">               [sda,sdb,sdc,.......]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find all storage devices (i.e. ssds and hdds) removing boot drive</span>
+        <span class="c1"># and any other drives that are not considered as storage device</span>
+        <span class="n">devices_info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">drive_type</span> <span class="o">==</span> <span class="s2">&quot;ssd&quot;</span><span class="p">:</span>
+            <span class="n">devices_info</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_devices</span><span class="p">(</span>
+                <span class="n">ssd_only</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">power_on_all_slots</span><span class="o">=</span><span class="n">power_on_all_slots</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">drive_type</span> <span class="o">==</span> <span class="s2">&quot;hdd&quot;</span><span class="p">:</span>
+            <span class="n">devices_info</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_devices</span><span class="p">(</span>
+                <span class="n">hdd_only</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">power_on_all_slots</span><span class="o">=</span><span class="n">power_on_all_slots</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">drive_type</span> <span class="o">==</span> <span class="s2">&quot;md&quot;</span><span class="p">:</span>
+            <span class="n">devices_info</span> <span class="o">=</span> <span class="n">MDUtils</span><span class="o">.</span><span class="n">list_md_arrays</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">devices_info</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_devices</span><span class="p">(</span>
+                <span class="n">power_on_all_slots</span><span class="o">=</span><span class="n">power_on_all_slots</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">devices_info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">devices</span>
+
+        <span class="k">if</span> <span class="n">devices_info</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">devices_info</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="n">devices</span></div>
+
+    <span class="c1">## Returns all drives from the Enclosure/RAID and Direct Attached drives</span>
+    <span class="c1"># @return List of drives with detail information</span>
+<div class="viewcode-block" id="DiskUtils._get_storage_devices"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils._get_storage_devices">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_storage_devices</span><span class="p">(</span>
+        <span class="n">ssd_only</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hdd_only</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">power_on_all_slots</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Case 1:</span>
+<span class="sd">          Returns all storage devices discoved using the below rules</span>
+<span class="sd">          Step 1: Check if there is I/O controller/Raid controller for the</span>
+<span class="sd">                  storage devices Megacli/fbjbod/array-controller based on the</span>
+<span class="sd">                  type of controller and get the external devices from them</span>
+
+<span class="sd">          Step 2: If there Is no controller get the block-devices from lsblk and</span>
+<span class="sd">                 Identify the bootdrive remove remove from list</span>
+
+<span class="sd">          Step 3: If there is a call for ssd/hdd devices exclusively we will</span>
+<span class="sd">                  filter only the hdd/ssd from the device list obtained</span>
+<span class="sd">        Case 2:</span>
+<span class="sd">          Check for all block devices identified using lsblk command and remove</span>
+<span class="sd">          boot drive from the list and filter for SSD/HDD if user specifies</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ssd_only</span><span class="p">:</span>
+            <span class="n">extra_flag</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+            <span class="n">device_type</span> <span class="o">=</span> <span class="s2">&quot;ssd&quot;</span>
+        <span class="k">elif</span> <span class="n">hdd_only</span><span class="p">:</span>
+            <span class="n">extra_flag</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+            <span class="n">device_type</span> <span class="o">=</span> <span class="s2">&quot;hdd&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">extra_flag</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\d&quot;</span>
+            <span class="n">device_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">encl_devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_expander_devices</span><span class="p">(</span>
+            <span class="n">device_type</span><span class="p">,</span> <span class="n">power_on_all_slots</span><span class="p">,</span> <span class="n">extra_flag</span>
+        <span class="p">)</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_lsblk_devices</span><span class="p">(</span>
+            <span class="n">device_type</span><span class="p">,</span> <span class="n">extra_flag</span><span class="p">,</span> <span class="n">encl_devices</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">devices</span></div>
+
+    <span class="c1">## Returns all drives from the Enclosure/RAID</span>
+    <span class="c1"># @return List of drives with detail information</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_storage_expander_devices</span><span class="p">(</span><span class="n">device_type</span><span class="p">,</span> <span class="n">power_on_all_slots</span><span class="p">,</span> <span class="n">extra_flag</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_devices_via_expander</span><span class="p">(</span>
+                <span class="n">power_on_all_slots</span><span class="o">=</span><span class="n">power_on_all_slots</span>
+            <span class="p">)</span>
+            <span class="c1">## If no drives found in enclosure, considering the system dosn&#39;t have</span>
+            <span class="c1"># enclousre and returning the direct attached drives</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="n">devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_get_storage_lsblk_devices</span><span class="p">(</span>
+                    <span class="n">device_type</span><span class="p">,</span> <span class="n">extra_flag</span><span class="p">,</span> <span class="n">devices</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">devices</span>
+            <span class="k">if</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">dev</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">type_of_device</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_device_type</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+                    <span class="n">value</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_of_device</span>
+                    <span class="n">devices</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+                <span class="k">if</span> <span class="n">device_type</span><span class="p">:</span>
+                    <span class="n">devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_filter_device_type</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">device_type</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">devices</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to get drives: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_filter_device_type</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">device_type</span><span class="p">):</span>
+        <span class="n">devices2</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dev</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">device_type</span> <span class="o">==</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]:</span>
+                    <span class="n">devices2</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span> <span class="o">=</span> <span class="n">devices</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">devices2</span>
+
+    <span class="c1">## Function to get all  drives from system listed in lsblk</span>
+    <span class="c1"># @return List of drives with detail information</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_storage_lsblk_devices</span><span class="p">(</span><span class="n">device_type</span><span class="p">,</span> <span class="n">extra_flag</span><span class="p">,</span> <span class="n">encl_devices</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsblk -l -o NAME,TYPE,ROTA,SIZE,MODEL,MOUNTPOINT&quot;</span>
+            <span class="n">lsblk</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">lsblk_devices</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Filtering the boot drive from the list</span>
+            <span class="n">boot_drive</span> <span class="o">=</span> <span class="s2">&quot;rootfs&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">boot_drive</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_boot_drive</span><span class="p">(</span><span class="n">lsblk</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No boot drive detected, assuming ramdisk&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Skip first line as it only contains the table header</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lsblk</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(\w+)\s*disk\s*</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extra_flag</span><span class="p">),</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">lsblk_devices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">boot_drive</span> <span class="ow">in</span> <span class="n">lsblk_devices</span><span class="p">:</span>
+                <span class="n">lsblk_devices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">boot_drive</span><span class="p">)</span>
+
+            <span class="n">devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_add_drive_details_from_encl</span><span class="p">(</span>
+                <span class="n">lsblk_devices</span><span class="p">,</span> <span class="n">encl_devices</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">device_type</span><span class="p">:</span>
+                <span class="n">devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">_filter_device_type</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="n">device_type</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">devices</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to get drives: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_add_drive_details_from_encl</span><span class="p">(</span><span class="n">lsblk_devices</span><span class="p">,</span> <span class="n">encl_devices</span><span class="p">):</span>
+        <span class="c1"># Populate drive details from the enclosure if the drives are from jbod/raid</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">to_populate_disk</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">lsblk_device</span> <span class="ow">in</span> <span class="n">lsblk_devices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">encl_devices</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">encl_devices</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">lsblk_device</span> <span class="o">==</span> <span class="n">dev</span><span class="p">:</span>
+                        <span class="n">devices</span><span class="p">[</span><span class="n">lsblk_device</span><span class="p">]</span> <span class="o">=</span> <span class="n">encl_devices</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+                        <span class="n">to_populate_disk</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">to_populate_disk</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">to_populate_disk</span><span class="p">:</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">device</span><span class="p">[</span><span class="s2">&quot;slot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+                <span class="n">device</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_device_type</span><span class="p">(</span><span class="n">lsblk_device</span><span class="p">)</span>
+                <span class="n">device</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
+                <span class="n">devices</span><span class="p">[</span><span class="n">lsblk_device</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="k">return</span> <span class="n">devices</span>
+
+    <span class="c1">## This function is to get all the external storage devices that are</span>
+    <span class="c1"># attached to Machine via expanders</span>
+    <span class="c1"># @param  power_on_all_slots : bool</span>
+    <span class="c1">#         when power_on_all_slots is True the drives slots that are powered</span>
+    <span class="c1">#         off will be ignored else. the drive slots will be powered on and</span>
+    <span class="c1">#         wait for enumeration before we pull the the list of devices</span>
+<div class="viewcode-block" id="DiskUtils._get_storage_devices_via_expander"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils._get_storage_devices_via_expander">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_storage_devices_via_expander</span><span class="p">(</span><span class="n">power_on_all_slots</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        devices = []</span>
+<span class="sd">        # Get all disk details using the fbjbod</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure if all the drive slots are powered on, if they are not</span>
+        <span class="c1"># power_on the slot wait for the drive to enumerate</span>
+        <span class="k">if</span> <span class="n">power_on_all_slots</span><span class="p">:</span>
+            <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweron_allhddslot</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_all_jbod_drives</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">total_no_of_slots</span> <span class="o">=</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_all_jbodslot_count</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">total_no_of_slots</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span> <span class="ow">and</span> <span class="n">power_on_all_slots</span><span class="p">:</span>
+                <span class="c1"># Even after the power-on of powered-off drives if they don&#39;t</span>
+                <span class="c1"># enumerated its a failure or drive missing in slots</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Looks like not all the drives in the expander slots are&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; Enumerated - Expected: </span><span class="si">%d</span><span class="s2">, Found: </span><span class="si">%d</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">total_no_of_slots</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">devices</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_boot_drive"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_boot_drive">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_boot_drive</span><span class="p">(</span><span class="n">lsblk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Assuming the /boot mount point is for boot drive.</span>
+        <span class="c1"># the respective drive is taken as boot drive</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lsblk</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsblk -l -o NAME,TYPE,ROTA,SIZE,MODEL,MOUNTPOINT&quot;</span>
+            <span class="n">lsblk</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">dev_match</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lsblk</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(\w+)\s+(disk|part).*\/boot$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="c1"># Grep for HDD/SSD Block and NVME namespace</span>
+                <span class="n">dev_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(nvme\d+n\d+|sd[a-z]*)&quot;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dev_match</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No boot drive detected&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dev_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.enable_iostats"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.enable_iostats">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">enable_iostats</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/sys/block/</span><span class="si">%s</span><span class="s2">/queue/iostats&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="s2">&quot;echo 1 &gt; &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;enabling iostats failed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_device_type"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_device_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_device_type</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/block/</span><span class="si">%s</span><span class="s2">/queue/rotational&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">check_device</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">check_device</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ssd&quot;</span>
+        <span class="k">elif</span> <span class="n">check_device</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;hdd&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown device type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">check_device</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_interface_type"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_interface_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_interface_type</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_inq /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">inquiry_output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.*Vendor\s+identification:\s+(\w+)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">inquiry_output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">interface_type</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">interface_type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Could not get interface type of device </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_device_size"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_device_size">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_device_size</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsblk -b -o NAME,TYPE,SIZE /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">\s+disk\s+(\d+)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Did not find device size for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_free_space_on_drive_partition"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_free_space_on_drive_partition">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_free_space_on_drive_partition</span><span class="p">(</span><span class="n">drive_partition</span><span class="p">,</span> <span class="n">size_in_unit</span><span class="o">=</span><span class="s2">&quot;K&quot;</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;df -ah --block-size=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">size_in_unit</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="c1"># match the regex for available size</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">\s+\d+</span><span class="si">%s</span><span class="s2">\s+\d+</span><span class="si">%s</span><span class="s2">\s+(\d+)</span><span class="si">%s</span><span class="s2">\s+\d+</span><span class="si">%s</span><span class="s2">\s+\/mnt\/havoc_</span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;/dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">drive_partition</span><span class="p">),</span>
+                <span class="n">size_in_unit</span><span class="p">,</span>
+                <span class="n">size_in_unit</span><span class="p">,</span>
+                <span class="n">size_in_unit</span><span class="p">,</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">),</span>
+                <span class="n">drive_partition</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;No match for free space found for partition </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">drive_partition</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_size_of_directory"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_size_of_directory">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_size_of_directory</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">size_in_unit</span><span class="o">=</span><span class="s2">&quot;K&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">size_in_unit</span> <span class="o">==</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;du -shb </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dir_path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;du -sh --block-size=</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">size_in_unit</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+)&quot;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;No match for directory size found, check if directory exists&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_drive_last_lba"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_drive_last_lba">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_drive_last_lba</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_readcap /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Last logical block address=(\d+)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to find last lba for /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.create_partitions"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.create_partitions">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_partitions</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">partition_pct</span><span class="p">,</span> <span class="n">gpt</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates multiple  partitions</span>
+<span class="sd">        @param dict with part percentage</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_pct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">part_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">gpt</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">partitions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pct</span> <span class="ow">in</span> <span class="n">partition_pct</span><span class="p">:</span>
+            <span class="n">part_num</span> <span class="o">=</span> <span class="n">part_num</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">end_pct</span> <span class="o">=</span> <span class="n">start_pct</span> <span class="o">+</span> <span class="n">pct</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">create_partition</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">part_num</span><span class="p">,</span> <span class="n">start_pct</span><span class="p">,</span> <span class="n">end_pct</span><span class="p">,</span> <span class="n">gpt</span><span class="p">)</span>
+            <span class="n">start_pct</span> <span class="o">=</span> <span class="n">end_pct</span>
+            <span class="n">gpt</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">partitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">device</span> <span class="o">+</span> <span class="s2">&quot;p&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">part_num</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">partitions</span></div>
+
+<div class="viewcode-block" id="DiskUtils.create_partition"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.create_partition">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_partition</span><span class="p">(</span>
+        <span class="n">device</span><span class="p">,</span>
+        <span class="n">part_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">start_pct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">end_pct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">gpt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">script</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">script_args</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a partition using the parted utility.</span>
+<span class="sd">        @param device: Device on which to create partition</span>
+<span class="sd">        @part_num: Number of partition (see P* in example below)</span>
+<span class="sd">        @start_pct: Start offset in percentage</span>
+<span class="sd">        @end_pct: End offset in percentage</span>
+<span class="sd">        @gpt: See to True to create GPT</span>
+<span class="sd">        @script: Run everything that follows as a script</span>
+
+<span class="sd">        Example use case:</span>
+<span class="sd">        parted -a optimal /dev/sds mktable gpt --script mkpart P1 0% 5%</span>
+<span class="sd">        parted -a optimal /dev/sds --script mkpart P2 5% 20%</span>
+<span class="sd">        parted -a optimal /dev/sds --script mkpart P3 20% 100%</span>
+<span class="sd">        parted -s /dev/nvme0n1 unit b mkpart primary 128</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># unmount the device before it is partioned</span>
+        <span class="c1"># unmounts if mounted else just ignore</span>
+        <span class="n">mount</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">is_mounted</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mount</span><span class="p">:</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">umount</span><span class="p">(</span><span class="n">mount</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">script</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;parted -s /dev/</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">script_args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;parted -a optimal /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">gpt</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; mktable gpt&quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --script mkpart P</span><span class="si">%d</span><span class="s2"> </span><span class="si">%d%%</span><span class="s2"> </span><span class="si">%d%%</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">part_num</span><span class="p">,</span> <span class="n">start_pct</span><span class="p">,</span> <span class="n">end_pct</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to create partition: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="c1"># Wait till the partition created</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;partprobe&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_partition_numbers"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_partition_numbers">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_partition_numbers</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">update_partitions</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets partition numbers for given device (e.g. 1, 2, 3)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">update_partitions</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;partprobe&quot;</span><span class="p">)</span>
+            <span class="c1"># Partitions are taking more time to come up, adding sleep</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsblk -i /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># Example:</span>
+        <span class="c1"># sdad     65:208  0 953.9G  0 disk</span>
+        <span class="c1"># -sdad1  65:209  0  47.7G  0 part</span>
+        <span class="c1"># -sdad2  65:210  0 143.1G  0 part</span>
+        <span class="c1"># -sdad3  65:211  0 763.1G  0 part</span>
+        <span class="n">partitions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">[a-zA-Z]*(\d+).*part&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">partitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">partitions</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_partition_names"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_partition_names">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_partition_names</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">update_partitions</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets partition names for given device (sdad3, nvme1n1p1)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">update_partitions</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;partprobe&quot;</span><span class="p">)</span>
+            <span class="c1"># Partitions are taking more time to come up, adding sleep</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsblk -i /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">partitions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">\S+).*part&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">partitions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">partitions</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_update_partition_info</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Update partition information</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;hdparm -z /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">CmdError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;resource busy&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                    <span class="c1"># Retry if resource is busy</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to update partition: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to update partitions on device </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">))</span>
+
+<div class="viewcode-block" id="DiskUtils.remove_partition"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.remove_partition">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">remove_partition</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">part_num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes partition using the parted utility</span>
+<span class="sd">        @param device: Device on which to remove partition</span>
+<span class="sd">        @part_num: Number of partition</span>
+<span class="sd">        Example: parted /dev/sdae rm 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># unmount the device before it is partioned</span>
+        <span class="c1"># unmounts if mounted else just ignore</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;try unmounting the device </span><span class="si">%s</span><span class="s2"> if any mounts&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">))</span>
+        <span class="n">umount_command</span> <span class="o">=</span> <span class="s2">&quot;umount /dev/</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">part_num</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">umount_command</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;parted -a optimal /dev/</span><span class="si">%s</span><span class="s2"> rm </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">part_num</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;may not reflect&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;the partition is removed&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to remove partition: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.setup_md_raid0"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.setup_md_raid0">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">setup_md_raid0</span><span class="p">(</span>
+        <span class="n">devices</span><span class="p">,</span>
+        <span class="n">raiddevice</span><span class="o">=</span><span class="s2">&quot;md125&quot;</span><span class="p">,</span>
+        <span class="n">fstype</span><span class="o">=</span><span class="s2">&quot;xfs&quot;</span><span class="p">,</span>
+        <span class="n">mount_point</span><span class="o">=</span><span class="s2">&quot;/mnt/havoc_md125&quot;</span><span class="p">,</span>
+        <span class="n">stripe_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param devices: list of devices for RAID</span>
+<span class="sd">        @param raiddevice: devname to mdadm</span>
+<span class="sd">        @param fstype: file system type, default xfs</span>
+<span class="sd">        @param mount_point: mouting point</span>
+<span class="sd">        @param stripe_size: stripe size in KB</span>
+<span class="sd">        @return None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First delete existing mdraid array</span>
+        <span class="n">MDUtils</span><span class="o">.</span><span class="n">remove_md_array</span><span class="p">(</span><span class="n">raiddevice</span><span class="p">)</span>
+
+        <span class="c1"># Remove unwanted partitions</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">ismount</span><span class="p">(</span><span class="n">mount_point</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Umounting </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mount_point</span><span class="p">)</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">umount</span><span class="p">(</span><span class="n">mount_point</span><span class="p">)</span>
+        <span class="n">partition_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">MDUtils</span><span class="o">.</span><span class="n">disable_md_automount</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Removing partiptions from device </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dev</span><span class="p">)</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">remove_all_partitions</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+            <span class="n">dev_size_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^\d+\s+\d+\s+(\d+)\s+</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+            <span class="n">proc_f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/partitions&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">proc_f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">dev_size_re</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">dev_size_bytes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="mi">1024</span>
+            <span class="n">proc_f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">create_partition</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">script_args</span><span class="o">=</span><span class="s2">&quot;mklabel gpt&quot;</span><span class="p">)</span>
+            <span class="c1"># start 1Mib or stripe size to make aligned</span>
+            <span class="n">start_position</span> <span class="o">=</span> <span class="n">stripe_size</span> <span class="o">*</span> <span class="mi">1024</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">create_partition</span><span class="p">(</span>
+                <span class="n">dev</span><span class="p">,</span>
+                <span class="n">script</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">script_args</span><span class="o">=</span><span class="s2">&quot;unit b mkpart primary </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">start_position</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">dev_size_bytes</span> <span class="o">-</span> <span class="n">start_position</span><span class="p">)),</span>
+            <span class="p">)</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">create_partition</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">script_args</span><span class="o">=</span><span class="s2">&quot;set 1 raid&quot;</span><span class="p">)</span>
+            <span class="n">partition_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_partition_names</span><span class="p">(</span><span class="n">dev</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Creating RAID in partitions </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">partition_list</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Now create raid volume and load XFS</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+        <span class="n">raid_parms</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="s2">&quot;/dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">raiddevice</span><span class="p">,</span>
+            <span class="s2">&quot;chunk&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">stripe_size</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">raid_device</span> <span class="o">=</span> <span class="n">MDUtils</span><span class="o">.</span><span class="n">create_md_array</span><span class="p">(</span><span class="n">raid_parms</span><span class="p">,</span> <span class="n">partition_list</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;MD created: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">raid_device</span><span class="p">)</span>
+        <span class="n">log_stripe_unit</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_physical_block_size</span><span class="p">(</span><span class="n">raiddevice</span><span class="p">)</span>
+        <span class="n">DiskUtils</span><span class="o">.</span><span class="n">create_filesystem</span><span class="p">(</span>
+            <span class="n">raiddevice</span><span class="p">,</span>
+            <span class="n">fstype</span><span class="p">,</span>
+            <span class="s2">&quot;-K -i size=2048 -d su=</span><span class="si">%s</span><span class="s2">,sw=2 -l su=</span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="n">stripe_size</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">log_stripe_unit</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Mount raid onto /mnt/havoc_md125</span>
+        <span class="n">DiskUtils</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span>
+            <span class="n">raiddevice</span><span class="p">,</span> <span class="n">mount_point</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;noatime,nodiratime,discard,nobarrier&quot;</span>
+        <span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_df_info</span><span class="p">(</span><span class="n">raiddevice</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.remove_all_partitions"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.remove_all_partitions">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">remove_all_partitions</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">partition_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">remove_raid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes all partitions for a given device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove any prior raid</span>
+        <span class="k">if</span> <span class="n">remove_raid</span><span class="p">:</span>
+            <span class="n">MDUtils</span><span class="o">.</span><span class="n">remove_all_md_arrays</span><span class="p">()</span>
+        <span class="n">partition_nums</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_partition_numbers</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">partition_update</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">part_num</span> <span class="ow">in</span> <span class="n">partition_nums</span><span class="p">:</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">remove_partition</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">part_num</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.clean_filesystem"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.clean_filesystem">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">clean_filesystem</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">mount</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;dd if=/dev/zero of=/dev/</span><span class="si">%s</span><span class="s2"> bs=1M count=2&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mount</span><span class="p">:</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">umount</span><span class="p">(</span><span class="n">mount</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.create_filesystem"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.create_filesystem">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_filesystem</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ext4&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">mount</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates filesystem with give FS type</span>
+<span class="sd">        @param device: Device on which to create filesystem</span>
+<span class="sd">        @param type: FS type. Default: ext4</span>
+<span class="sd">        @return Output of mkfs command. Throws exception on error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;xfs&quot;</span><span class="p">:</span>
+            <span class="n">force</span> <span class="o">=</span> <span class="s2">&quot;-f&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">force</span> <span class="o">=</span> <span class="s2">&quot;-F&quot;</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;mkfs.</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mount</span><span class="p">:</span>
+            <span class="n">DiskUtils</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span>
+                <span class="n">device</span><span class="p">,</span> <span class="n">mount</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;noatime,nodiratime,discard,nobarrier&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="DiskUtils.cleanup_md_raid0"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.cleanup_md_raid0">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cleanup_md_raid0</span><span class="p">(</span><span class="n">partition_list</span><span class="p">,</span> <span class="n">raiddevice</span><span class="o">=</span><span class="s2">&quot;md125&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Deletes RAID volume of a given list of drives</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;umount /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">raiddevice</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">MDUtils</span><span class="o">.</span><span class="n">remove_md_array</span><span class="p">(</span><span class="n">raiddevice</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">partition_list</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                <span class="s2">&quot;parted -s /dev/</span><span class="si">%s</span><span class="s2"> rm 1&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">partition</span><span class="p">),</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.is_mounted"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.is_mounted">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_mounted</span><span class="p">(</span><span class="n">dev</span><span class="p">):</span>
+        <span class="n">mounts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dev</span> <span class="o">=</span> <span class="s2">&quot;/dev/&quot;</span> <span class="o">+</span> <span class="n">dev</span>
+        <span class="k">for</span> <span class="n">fil</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/mounts&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">fil</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                <span class="n">fil</span> <span class="o">=</span> <span class="n">fil</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">mounts</span><span class="p">[</span><span class="n">fil</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">fil</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">mounts</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mounts</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DiskUtils.umount"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.umount">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">umount</span><span class="p">(</span><span class="n">mnt_point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Unmount given mount point</span>
+<span class="sd">        @param mnt_point: Mount point to unmount</span>
+<span class="sd">        @return: None. Throws exception on error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">ismount</span><span class="p">(</span><span class="n">mnt_point</span><span class="p">):</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;umount -fl </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mnt_point</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;rmdir </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mnt_point</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.mount"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.mount">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mount</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">mnt_point</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mount device at mnt_point. First unmounts mount point if it already</span>
+<span class="sd">        exists. Creates mnt_point directory if it doesn&#39;t exist.</span>
+<span class="sd">        @param device: Device to mount</span>
+<span class="sd">        @param mnt_point: Mount point to use</span>
+<span class="sd">        @param options: Mount options to use. Default: None</span>
+<span class="sd">        @return: None. Throws exception on error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">ismount</span><span class="p">(</span><span class="n">mnt_point</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">DiskUtils</span><span class="o">.</span><span class="n">umount</span><span class="p">(</span><span class="n">mnt_point</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">GenericUtils</span><span class="o">.</span><span class="n">create_dir</span><span class="p">(</span><span class="n">mnt_point</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;mount &quot;</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-o </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;/dev/</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">mnt_point</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.fstrim"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.fstrim">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fstrim</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fstrim -v </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_df_info"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_df_info">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_df_info</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves df -T output for device and parses it into dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;df -B 1 -T /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="c1"># Example output:</span>
+        <span class="c1"># Filesystem     Type     1B-blocks     Used    Available Use% Mounted</span>
+        <span class="c1"># /dev/sdg       ext4 1008004698112 75046912 956702400512   1%</span>
+        <span class="c1"># /mnt/havoc_sdg</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">|devtmpfs)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">device</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;1b_blocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;used&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;available&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;use_pct&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mounted_on&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to get df info&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="DiskUtils.create_file"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.create_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="s2">&quot;fallocate&quot;</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s2">&quot;1k&quot;</span><span class="p">,</span> <span class="n">additional_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">tool</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fallocate&quot;</span><span class="p">,</span> <span class="s2">&quot;dd&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;tool &#39;</span><span class="si">%d</span><span class="s2">&#39; not supported&quot;</span> <span class="o">%</span> <span class="n">tool</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tool</span> <span class="o">==</span> <span class="s2">&quot;fallocate&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fallocate -l </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">elif</span> <span class="n">tool</span> <span class="o">==</span> <span class="s2">&quot;dd&quot;</span><span class="p">:</span>
+            <span class="n">blocks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_bytes</span><span class="p">(</span><span class="n">bs</span><span class="p">))</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;dd if=/dev/urandom of=</span><span class="si">%s</span><span class="s2"> bs=</span><span class="si">%s</span><span class="s2"> count=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">blocks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">additional_options</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">additional_options</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="DiskUtils.ramdisk"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.ramdisk">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">ramdisk</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="s2">&quot;tmpfs&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/mnt/havoc_test_ramdisk&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            path: absolute path of ramdisk</span>
+<span class="sd">            size: size of ramdisk (e.g. &quot;32g&quot;)</span>
+<span class="sd">            fs: tmpfs, ramfs</span>
+<span class="sd">            action: &quot;create&quot; or &quot;delete&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;create&quot;</span> <span class="o">==</span> <span class="n">action</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                <span class="s2">&quot;umount </span><span class="si">%s</span><span class="s2">; rm -rf </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">path</span><span class="p">),</span> <span class="n">get_return_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;mkdir -p </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">)</span>
+            <span class="n">_out</span><span class="p">,</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                <span class="s2">&quot;ls </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">,</span> <span class="n">get_return_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to create ramdisk&quot;</span><span class="p">)</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;mount -t </span><span class="si">%s</span><span class="s2"> -o mode=1777,size=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="n">command</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;delete&quot;</span> <span class="o">==</span> <span class="n">action</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;rm -rf </span><span class="si">%s</span><span class="s2">/*&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;umount </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;rm -rf </span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="n">path</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Action </span><span class="si">%s</span><span class="s2"> not supported&quot;</span> <span class="o">%</span> <span class="n">action</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_md5sum"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_md5sum">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_md5sum</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;md5sum </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\S+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to find md5sum in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_storage_link_spd"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_storage_link_spd">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_storage_link_spd</span><span class="p">():</span>
+        <span class="c1"># Check link speed between end points</span>
+        <span class="n">stg_comp</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;sas&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;edge_exp&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;sata_tgt&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;sas_tgt&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;sas_ini_tgt&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="p">}</span>
+        <span class="n">sas_target</span><span class="p">,</span> <span class="n">sata_target</span><span class="p">,</span> <span class="n">sas_initiator</span><span class="p">,</span> <span class="n">edge_expander</span><span class="p">,</span> <span class="n">sas_initiator_target</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">[]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -p 1 -a 16,0&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">line_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">line_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^B___T\s+SASAddress\s+PhyNum\s+Handle\s+Parent\s+Type&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="k">break</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="n">line_num</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+SAS\s+Initiator$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+\w+\s+(\w+)\s+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">sas_initiator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Edge Expander$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+\w+\s+\w+\s+(\w+)\s+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">edge_expander</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+SATA\s+Target$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+\w+\s+\w+\s+\w+\s+\w+\s+(\w+)\s+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">sata_target</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+SAS\s+Target$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+\w+\s+\w+\s+\w+\s+\w+\s+(\w+)\s+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">sas_target</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;SAS Initiator and Target$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\s+\w+\s+\w+\s+\w+\s+\w+\s+(\w+)\s+&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">sas_initiator_target</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">line_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">line_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;Type\s+NumPhys\s+PhyNum\s+Handle\s+&quot;</span>
+                    <span class="sa">r</span><span class="s2">&quot;PhyNum\s+Handle\s+Port\s+Speed$&quot;</span>
+                <span class="p">),</span>
+                <span class="n">line</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="k">break</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="n">line_num</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Enclosure\s+Handle\s+Slots\s+SASAddress&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">speed</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">handle</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">sas_initiator</span><span class="p">:</span>
+                    <span class="n">stg_comp</span><span class="p">[</span><span class="s2">&quot;sas&quot;</span><span class="p">][</span><span class="n">handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span>
+                <span class="k">if</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">edge_expander</span><span class="p">:</span>
+                    <span class="n">stg_comp</span><span class="p">[</span><span class="s2">&quot;edge_exp&quot;</span><span class="p">][</span><span class="n">handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span>
+                <span class="k">if</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">sata_target</span><span class="p">:</span>
+                    <span class="n">stg_comp</span><span class="p">[</span><span class="s2">&quot;sata_tgt&quot;</span><span class="p">][</span><span class="n">handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span>
+                <span class="k">if</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">sas_target</span><span class="p">:</span>
+                    <span class="n">stg_comp</span><span class="p">[</span><span class="s2">&quot;sas_tgt&quot;</span><span class="p">][</span><span class="n">handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span>
+                <span class="k">if</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">sas_initiator_target</span><span class="p">:</span>
+                    <span class="n">stg_comp</span><span class="p">[</span><span class="s2">&quot;sas_ini_tgt&quot;</span><span class="p">][</span><span class="n">handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="k">return</span> <span class="n">stg_comp</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_link_spd"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_link_spd">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_link_spd</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="c1"># get device symbolic link, ie:</span>
+        <span class="c1"># /sys/block/sdb/device -&gt; ../../devices/pci...</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;find /sys/block/</span><span class="si">%s</span><span class="s2">/device -type l -ls&quot;</span> <span class="o">%</span> <span class="n">device</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;ata[0-9]+&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+            <span class="c1"># device is ata, catch port ref from link string. ie:</span>
+            <span class="c1"># .../devices/pci0000:00/0000:00:1f.2/ata1/host0/...</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;ata([0-9]+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+            <span class="c1"># get link speed from OS</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/ata_link/link</span><span class="si">%s</span><span class="s2">/sata_spd&quot;</span> <span class="o">%</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;end_device-[0-9]+\:[0-9]+\:[0-9]+&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+            <span class="c1"># device is sas end device, catch C:B:T from link string. ie:</span>
+            <span class="c1"># ...host6/port-6:1/expander-6:1/port-6:1:9/end_device-6:1:9/...</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;end_device-([0-9]+)\:([0-9]+)\:([0-9]+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+            <span class="c1"># SAS expander topology means there may be a target/phy missmatch</span>
+            <span class="c1"># from C:B:T we can get phy identifier</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/sas_device/end_device-&quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/phy_identifier&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+            <span class="n">Phy</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">Phy</span><span class="p">:</span>
+                <span class="c1"># get link speed from OS, addressed as phy-C:B:Phy</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/sas_phy/phy-</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Phy</span><span class="p">)</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;negotiated_linkrate&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Cant identify phy from scsi target &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+            <span class="c1"># there is a symbolic link for the device, but it doesnt match the</span>
+            <span class="c1"># prior format. If the device is attached through a sas hba,</span>
+            <span class="c1"># we can get the end_device C:B:T from the sas_address</span>
+            <span class="c1">#   1. grab the sas_address from /sys/block/sdX/device/sas_address</span>
+            <span class="c1">#   2. search sys for a matching sas_address with end_device defined</span>
+            <span class="c1">#   3. procede like the sas case with end_device</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/block/</span><span class="si">%s</span><span class="s2">/device/sas_address&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="n">sas_add</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+            <span class="c1"># hopefully we have a sas_address now</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">sas_add</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;cant find a sas address for device </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span><span class="p">)</span>
+
+            <span class="c1"># 2 search /sys for the an end_device with matching sas_address</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;find /sys -type f -name &#39;sas_address&#39; -print0 | &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;xargs -0 grep </span><span class="si">%s</span><span class="s2"> | grep -m 1 end_device&quot;</span> <span class="o">%</span> <span class="n">sas_add</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;cant find a sas end_device with &quot;</span> <span class="o">+</span> <span class="s2">&quot;a sas address of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sas_add</span>
+                <span class="p">)</span>
+
+            <span class="c1"># 3 match an end_device and procede like the sas case</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;end_device-([0-9]+)\:([0-9]+)\:([0-9]+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">C</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">B</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+                <span class="c1"># SAS expander topology means there may be a</span>
+                <span class="c1"># target/phy missmatch</span>
+                <span class="c1"># from C:B:T we can get phy identifier</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/sas_device/end_device-&quot;</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/phy_identifier&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+                <span class="n">Phy</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">Phy</span><span class="p">:</span>
+                    <span class="c1"># get link speed from OS, addressed as phy-C:B:Phy</span>
+                    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/sas_phy/phy-</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Phy</span><span class="p">)</span>
+                    <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;negotiated_linkrate&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                        <span class="s2">&quot;Cant find phy address for &quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;scsi end device </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;cand parse a sas end device from </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t parse phy/port from symbolic link </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to get link speed with command </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_hba_slots"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_hba_slots">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_hba_slots</span><span class="p">():</span>
+        <span class="n">hba_slots</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">DiskUtils</span><span class="o">.</span><span class="n">regular_exp</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d)\sMPT Ports found&quot;</span><span class="p">,</span> <span class="s2">&quot;lsiutil 0&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">hba_slots</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_hba_fw"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_hba_fw">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_hba_fw</span><span class="p">(</span><span class="n">hba</span><span class="p">):</span>
+        <span class="n">hba_fw</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">regular_exp</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;Firmware image&#39;s version is MPTFW-(\d+.\d+.\d+.\d+)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lsiutil -p</span><span class="si">%d</span><span class="s2"> -a 0 1&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hba</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">hba_fw</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_seb_fw"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_seb_fw">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_seb_fw</span><span class="p">(</span><span class="n">jbod_device</span><span class="p">):</span>
+        <span class="n">seb_fw</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">regular_exp</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;fw version\s*(\w+-\d+.\d+.\d+.\d+)&quot;</span><span class="p">,</span> <span class="s2">&quot;fbjbod info </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">jbod_device</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">seb_fw</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_bios_fw"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_bios_fw">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_bios_fw</span><span class="p">():</span>
+        <span class="n">bios_fw</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">regular_exp</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;Version:\s+(\w+.\w+)&quot;</span><span class="p">,</span> <span class="s2">&quot;dmidecode -t bios | head&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">bios_fw</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_bmc_fw"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_bmc_fw">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_bmc_fw</span><span class="p">():</span>
+        <span class="n">bmc_fw</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">regular_exp</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;Firmware Revision\s+:\s+(\d+.\d+)&quot;</span><span class="p">,</span> <span class="s2">&quot;ipmitool mc info&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">bmc_fw</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_hba_version"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_hba_version">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_hba_version</span><span class="p">(</span><span class="n">kernel_ver</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kernel_ver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kernel_ver</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;uname -r&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kernel_ver</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;modinfo mpt3sas&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;modinfo mpt2sas&quot;</span>
+        <span class="n">hba_ver</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">regular_exp</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;version:\s+(\d+.\d+.\d+.\d+)&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hba_ver</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_drive_capacity"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_drive_capacity">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_drive_capacity</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">fdisk</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fdisk</span><span class="p">:</span>
+            <span class="n">drive_details</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fdisk -l /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dev</span>
+            <span class="n">cmd_out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Disk\s+/\w+/\w+:\s+(.*?)&quot;</span> <span class="sa">r</span><span class="s2">&quot;,\s+(.\d+\s+\w+),\s+(.\d+\s+\w+)&quot;</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">size_str</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s2">&quot;i&quot;</span> <span class="ow">in</span> <span class="n">size_str</span><span class="p">:</span>
+                    <span class="n">size_str</span> <span class="o">=</span> <span class="n">size_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">size</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">size_str</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">drive_details</span><span class="p">[</span><span class="s2">&quot;size_actual&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">unit</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">)}</span>
+                <span class="n">size_bytes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;bytes&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">drive_details</span><span class="p">[</span><span class="s2">&quot;bytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">size_bytes</span>
+                <span class="n">sector</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;sectors&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">drive_details</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sector</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Warning: Failed to get drive details for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dev</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">drive_details</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">read_cap_ouput</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;sg_readcap /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev</span><span class="p">))</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;.*Last\s+logical\s+block\s+address=(\d+)\s+.*Device\s+size:\s+(\d+)&quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;\s+bytes,\s+\d+.\d\s+MiB,\s+\d+.\d+\s+GB&quot;</span><span class="p">,</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">read_cap_ouput</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;GB&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+                <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;TB&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+                <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;MB&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+                <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;bytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;last_lba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">metrics</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t read the capacity of device </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_bytes"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_bytes">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_bytes</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+)(\w+)&quot;</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;kib&quot;</span> <span class="ow">or</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;kb&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;mib&quot;</span> <span class="ow">or</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;mb&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;gib&quot;</span> <span class="ow">or</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;g&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;gb&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;tib&quot;</span> <span class="ow">or</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;t&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">&lt;&lt;</span> <span class="mi">40</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;tb&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span> <span class="o">*</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unable to convert </span><span class="si">%s%s</span><span class="s2"> to bytes&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">unit</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.is_block_device"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.is_block_device">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_block_device</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_ISBLK</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_physical_block_size"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_physical_block_size">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_physical_block_size</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/block/</span><span class="si">%s</span><span class="s2">/queue/physical_block_size&quot;</span> <span class="o">%</span> <span class="n">device</span>
+        <span class="n">physical_block_size</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">physical_block_size</span></div>
+
+<div class="viewcode-block" id="DiskUtils.regular_exp"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.regular_exp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">regular_exp</span><span class="p">(</span><span class="n">reg_ex</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">reg_ex</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No pattern </span><span class="si">%s</span><span class="s2"> match&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pattern</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DiskUtils.get_random_offset"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.disk_utils.DiskUtils.get_random_offset">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_random_offset</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">testsize</span><span class="p">,</span> <span class="n">blksize</span><span class="o">=</span><span class="mi">4096</span><span class="p">):</span>
+        <span class="n">rand_offset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_drive_capacity</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">fdisk</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">&quot;bytes&quot;</span><span class="p">]</span>
+        <span class="n">blksize</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_bytes</span><span class="p">(</span><span class="n">blksize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;%&quot;</span> <span class="ow">in</span> <span class="n">testsize</span><span class="p">:</span>
+            <span class="n">test_bytes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">testsize</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">capacity</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">test_bytes</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_bytes</span><span class="p">(</span><span class="n">testsize</span><span class="p">)</span>
+        <span class="n">max_offset</span> <span class="o">=</span> <span class="n">capacity</span> <span class="o">-</span> <span class="n">test_bytes</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">max_offset</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">rand_offset</span><span class="p">)</span>
+        <span class="c1"># Generate random offset</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_offset</span><span class="p">)</span>
+        <span class="n">rand_offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">rand</span><span class="p">)</span> <span class="o">/</span> <span class="n">blksize</span><span class="p">)</span> <span class="o">*</span> <span class="n">blksize</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">rand_offset</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

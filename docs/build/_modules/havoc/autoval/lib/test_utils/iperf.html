@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.iperf &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.iperf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.iperf</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+
+<span class="n">iperf_out</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">DEFAULT_PORT</span> <span class="o">=</span> <span class="mi">5201</span>
+<span class="n">ETH_TOOL_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;mlx&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;rx_discards_phy&quot;</span><span class="p">,</span> <span class="s2">&quot;rx_packets_phy&quot;</span><span class="p">,</span> <span class="s2">&quot;tx_packets_phy&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;link_down_events_phy&quot;</span><span class="p">,</span> <span class="s2">&quot;rx_out_of_buffer&quot;</span><span class="p">,</span> <span class="s2">&quot;rx_packets&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;tx_packets&quot;</span><span class="p">,</span> <span class="s2">&quot;rx_bytes&quot;</span><span class="p">,</span> <span class="s2">&quot;tx_bytes&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;bnxt&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;rx_fcs_err_frames&quot;</span><span class="p">,</span> <span class="s2">&quot;rx_align_err_frames&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Supported iperf3 options:- iperf3 homepage at: http://software.es.net/iperf/</span>
+<span class="sd">  Server or Client:</span>
+<span class="sd">  -p, --port      #         server port to listen on/connect to</span>
+<span class="sd">  -f, --format    [kmgKMG]  format to report: Kbits, Mbits, KBytes, MBytes</span>
+<span class="sd">  -i, --interval  #         seconds between periodic bandwidth reports</span>
+<span class="sd">  -F, --file name           xmit/recv the specified file</span>
+<span class="sd">  -A, --affinity n/n,m      set CPU affinity</span>
+<span class="sd">  -B, --bind      &lt;host&gt;    bind to a specific interface</span>
+<span class="sd">  -V, --verbose             more detailed output</span>
+<span class="sd">  -J, --json                output in JSON format</span>
+<span class="sd">  --logfile f               send output to a log file</span>
+<span class="sd">  --forceflush              force flushing output at every interval</span>
+<span class="sd">  -d, --debug               emit debugging output</span>
+<span class="sd">  -v, --version             show version information and quit</span>
+<span class="sd">  -h, --help                show this message and quit</span>
+<span class="sd">Server specific:</span>
+<span class="sd">  -s, --server              run in server mode</span>
+<span class="sd">  -D, --daemon              run the server as a daemon</span>
+<span class="sd">  -I, --pidfile file        write PID file</span>
+<span class="sd">  -1, --one-off             handle one client connection then exit</span>
+<span class="sd">Client specific:</span>
+<span class="sd">  -c, --client    &lt;host&gt;    run in client mode, connecting to &lt;host&gt;</span>
+<span class="sd">  -u, --udp                 use UDP rather than TCP</span>
+<span class="sd">  -b, --bandwidth #[KMG][/#] target bandwidth in bits/sec (0 for unlimited)</span>
+<span class="sd">                            (default 1 Mbit/sec for UDP, unlimited for TCP)</span>
+<span class="sd">                            (optional slash and packet count for burst mode)</span>
+<span class="sd">  --fq-rate #[KMG]          enable fair-queuing based socket pacing in</span>
+<span class="sd">                            bits/sec (Linux only)</span>
+<span class="sd">  -t, --time      #         time in seconds to transmit for (default 10 secs)</span>
+<span class="sd">  -n, --bytes     #[KMG]    number of bytes to transmit (instead of -t)</span>
+<span class="sd">  -k, --blockcount #[KMG]   number of blocks (packets) to transmit (instead of -t or -n)</span>
+<span class="sd">  -l, --len       #[KMG]    length of buffer to read or write</span>
+<span class="sd">                            (default 128 KB for TCP, dynamic or 1 for UDP)</span>
+<span class="sd">  --cport         &lt;port&gt;    bind to a specific client port (</span>
+<span class="sd">                            TCP and UDP, default: ephemeral port)</span>
+<span class="sd">  -P, --parallel  #         number of parallel client streams to run</span>
+<span class="sd">  -R, --reverse             run in reverse mode (server sends, client receives)</span>
+<span class="sd">  -w, --window    #[KMG]    set window size / socket buffer size</span>
+<span class="sd">  -C, --congestion &lt;algo&gt;   set TCP congestion control algorithm (</span>
+<span class="sd">                            Linux and FreeBSD only)</span>
+<span class="sd">  -M, --set-mss   #         set TCP/SCTP maximum segment size (MTU - 40 bytes)</span>
+<span class="sd">  -N, --no-delay            set TCP/SCTP no delay, disabling Nagle&#39;s Algorithm</span>
+<span class="sd">  -4, --version4            only use IPv4</span>
+<span class="sd">  -6, --version6            only use IPv6</span>
+<span class="sd">  -S, --tos N               set the IP &#39;type of service&#39;</span>
+<span class="sd">  -L, --flowlabel N         set the IPv6 flow label (only supported on Linux)</span>
+<span class="sd">  -Z, --zerocopy            use a &#39;zero copy&#39; method of sending data</span>
+<span class="sd">  -O, --omit N              omit the first n seconds</span>
+<span class="sd">  -T, --title str           prefix every output line with this string</span>
+<span class="sd">  --get-server-output       get results from server</span>
+<span class="sd">  --udp-counters-64bit      use 64-bit counters in UDP test packets</span>
+
+<span class="sd">[KMG] indicates options that support a K/M/G suffix for kilo-, mega-, or giga-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Iperf"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf">[docs]</a><span class="k">class</span> <span class="nc">Iperf</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="n">ports</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Iperf.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Iperf</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Iperf.execute_1server_nclients"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.execute_1server_nclients">[docs]</a>    <span class="k">def</span> <span class="nf">execute_1server_nclients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiate iperf server on 1 server and clients on others.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capture_ethtool_output</span><span class="p">(</span><span class="n">hosts</span><span class="p">,</span> <span class="s2">&quot;-S&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">bck_test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_tests</span><span class="p">:</span>
+            <span class="n">bck_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_back_ground_tests</span><span class="p">(</span><span class="n">hosts</span><span class="p">)</span>
+        <span class="n">_hosts</span> <span class="o">=</span> <span class="n">hosts</span><span class="p">[:]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">_hosts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">_hosts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">clients</span> <span class="o">=</span> <span class="n">_hosts</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidir</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_execute_1server_nclient_bidir</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_h</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">(</span><span class="n">_h</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">print_bandwidt</span><span class="p">(</span><span class="n">hosts</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bw_test</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_bandwidths</span><span class="p">([</span><span class="n">server</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_bw</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Unidirectional traffic</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_iperf</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_bandwidt</span><span class="p">(</span><span class="n">clients</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bw_test</span><span class="p">:</span>
+            <span class="n">_bw</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">clients</span><span class="p">:</span>
+                <span class="n">_bw</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_combined_bandwidth</span><span class="p">(</span><span class="n">client</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000000</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_bandwidth</span><span class="p">(</span>
+                <span class="n">_bw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_bw</span><span class="p">,</span> <span class="s2">&quot;Combined bandwidth of other clients&quot;</span>
+            <span class="p">)</span>
+        <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">bck_test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capture_ethtool_output</span><span class="p">(</span><span class="n">hosts</span><span class="p">,</span> <span class="s2">&quot;-S&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">_start_eth</span> <span class="o">=</span> <span class="n">iperf_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;ethtool&quot;</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">_end_eth</span> <span class="o">=</span> <span class="n">iperf_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;ethtool&quot;</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_ethtool_data</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">_start_eth</span><span class="p">,</span> <span class="n">_end_eth</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="n">err</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: Error in ethtool comparison </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">host</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.capture_ethtool_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.capture_ethtool_output">[docs]</a>    <span class="k">def</span> <span class="nf">capture_ethtool_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">,</span> <span class="n">switch</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">host</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;ethtool&quot;</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;start&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">host</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;ethtool&quot;</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;end&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_ethtool_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">switch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.run_back_ground_tests"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.run_back_ground_tests">[docs]</a>    <span class="k">def</span> <span class="nf">run_back_ground_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
+        <span class="n">bck_test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_h</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+            <span class="n">bck_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">execute_background_tests</span><span class="p">,</span> <span class="n">_h</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">bck_test</span></div>
+
+<div class="viewcode-block" id="Iperf.run_iperf"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.run_iperf">[docs]</a>    <span class="k">def</span> <span class="nf">run_iperf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           @param: servers</span>
+<span class="sd">           @type list of host dictionary</span>
+<span class="sd">           @param: clients</span>
+<span class="sd">           @type: list of host dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_servers</span><span class="p">([</span><span class="n">server</span><span class="p">],</span> <span class="n">clients</span><span class="p">)</span>
+        <span class="c1"># The server needs to start up before the client can run.</span>
+        <span class="c1"># Give it 10 seconds</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_clients</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">)</span>
+            <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">_client</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Waiting for servers to finish&quot;</span><span class="p">)</span>
+                <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">_server</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop_server</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+            <span class="c1"># Reset the MTU value</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_mtu</span><span class="p">:</span>
+                <span class="n">mtu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_mtu</span>
+                <span class="n">clients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">clients</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_mtu</span><span class="p">(</span><span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">),</span> <span class="n">mtu</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_execute_1server_nclient_bidir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running Bi-Directional traffic&quot;</span><span class="p">)</span>
+        <span class="n">iperf_servers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">iperf_clients</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">iperf_servers</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_servers</span><span class="p">([</span><span class="n">server</span><span class="p">],</span> <span class="n">clients</span><span class="p">))</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">600</span>
+        <span class="c1"># Make sure ports are updated before continue test</span>
+        <span class="k">while</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed waiting for server </span><span class="si">%s</span><span class="s2"> to start,&quot;</span>
+                    <span class="s2">&quot;timeout after 600&quot;</span> <span class="o">%</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="n">ports</span> <span class="o">=</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]]</span>
+        <span class="c1"># For capturing iperf results from all clients. Trigger Server</span>
+        <span class="c1"># on others servers with diferent ports. Since server1 already</span>
+        <span class="c1"># runs iperf on ports required to initiate traffic on all client,</span>
+        <span class="c1"># make use of the ports count and tigger iperf on remaining servers</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clients</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)):</span>
+                <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">clients</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;hostname&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">iperf_servers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">start_iperf_server</span><span class="p">(</span><span class="n">clients</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ports</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">clients</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">clients</span><span class="p">:</span>
+                <span class="n">_ports</span> <span class="o">=</span> <span class="n">ports</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ports</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">clients</span><span class="p">))]</span>
+                <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">each</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_ports</span>
+                <span class="k">for</span> <span class="n">_p</span> <span class="ow">in</span> <span class="n">_ports</span><span class="p">:</span>
+                    <span class="n">iperf_servers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_iperf_server</span><span class="p">(</span><span class="n">each</span><span class="p">,</span> <span class="n">_p</span><span class="p">))</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Wait for all servers to start</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">iperf_clients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_clients</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">clients</span><span class="p">:</span>
+            <span class="n">iperf_clients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_clients</span><span class="p">(</span><span class="n">each</span><span class="p">,</span> <span class="p">[</span><span class="n">server</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">iperf_clients</span><span class="p">:</span>
+            <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+        <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">iperf_servers</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Iperf.start_servers"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.start_servers">[docs]</a>    <span class="k">def</span> <span class="nf">start_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">servers</span><span class="p">,</span> <span class="n">clients</span><span class="p">):</span>
+        <span class="n">_server</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">servers</span><span class="p">:</span>
+            <span class="n">hostname</span> <span class="o">=</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">hostname</span> <span class="ow">in</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Using ports:- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">))</span>
+                    <span class="n">port</span> <span class="o">=</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">hostname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]:</span>
+                    <span class="n">_thread</span><span class="p">,</span> <span class="n">_queue</span> <span class="o">=</span> <span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">get_ports</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">clients</span><span class="p">))</span>
+                    <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">([(</span><span class="n">_thread</span><span class="p">,</span> <span class="n">_queue</span><span class="p">)])</span>
+                    <span class="n">port</span> <span class="o">=</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Change it host specific port dictionary</span>
+                <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span> <span class="o">=</span> <span class="p">{</span><span class="n">hostname</span><span class="p">:</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">}</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">_port</span> <span class="ow">in</span> <span class="n">port</span><span class="p">:</span>
+                <span class="n">_server</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">start_iperf_server</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">_port</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_server</span></div>
+
+<div class="viewcode-block" id="Iperf.start_clients"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.start_clients">[docs]</a>    <span class="k">def</span> <span class="nf">start_clients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">clients</span><span class="p">):</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">hostname</span> <span class="ow">in</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Client can not initiate. Check server is running on ports&quot;</span><span class="p">)</span>
+        <span class="n">_client</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clients</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">client</span><span class="p">,</span> <span class="n">port</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">clients</span><span class="p">,</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">]):</span>
+                <span class="n">_client</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_iperf_client</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">port_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">clients</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">_range</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">clients</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_range</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">])</span>
+                    <span class="n">port_count</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">_p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_range</span><span class="p">):</span>
+                    <span class="n">_client</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_iperf_client</span><span class="p">(</span>
+                        <span class="n">server</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">hostname</span><span class="p">][</span><span class="n">port_count</span><span class="p">]))</span>
+                    <span class="n">port_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_client</span></div>
+
+<div class="viewcode-block" id="Iperf.start_iperf_server"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.start_iperf_server">[docs]</a>    <span class="k">def</span> <span class="nf">start_iperf_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;ip_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">iperf_out</span><span class="p">:</span>
+            <span class="n">_thread</span><span class="p">,</span> <span class="n">_queue</span> <span class="o">=</span> <span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_server_ip</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+            <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">([(</span><span class="n">_thread</span><span class="p">,</span> <span class="n">_queue</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_iperf</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.start_iperf_client"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.start_iperf_client">[docs]</a>    <span class="k">def</span> <span class="nf">start_iperf_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_iperf</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.start_iperf"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.start_iperf">[docs]</a>    <span class="k">def</span> <span class="nf">start_iperf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           starts iperf server/client.</span>
+<span class="sd">           Starts iperf server on default port 5201 if no port information is</span>
+<span class="sd">           provided for 1 to 1 connection.</span>
+<span class="sd">           For multihost, checks if no. of tcp ports is equal to no of client</span>
+<span class="sd">           to creat 1 to n connection and start server on each port. If no port</span>
+<span class="sd">           information found start iperf server incremental from 5201 port</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">host_queue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="n">host_thread</span> <span class="o">=</span> <span class="n">AutovalThread</span><span class="p">(</span>
+            <span class="n">host_queue</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">launch_iperf3</span><span class="p">,</span>
+            <span class="n">server</span><span class="p">,</span>
+            <span class="n">client</span><span class="p">,</span>
+            <span class="n">role</span><span class="p">,</span>
+            <span class="n">port</span>
+        <span class="p">)</span>
+        <span class="n">host_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">host_thread</span><span class="p">,</span> <span class="n">host_queue</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.stop_server"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.stop_server">[docs]</a>    <span class="k">def</span> <span class="nf">stop_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;pkill -9 iperf3&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.validate_ethtool_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.validate_ethtool_data">[docs]</a>    <span class="k">def</span> <span class="nf">validate_ethtool_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">):</span>
+        <span class="c1"># Check for error counter increases</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ethtool_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s2">&quot;-i&quot;</span><span class="p">)</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;driver:(.*)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">search</span> <span class="ow">and</span> <span class="s2">&quot;mlx&quot;</span> <span class="ow">in</span> <span class="n">search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_ethtool_output</span><span class="p">(</span>
+                <span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span>
+            <span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_ethtool_output</span><span class="p">(</span>
+                <span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">,</span> <span class="s2">&quot;drop&quot;</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span>
+            <span class="p">)</span>
+            <span class="c1"># Removed rx_discarts_phy validation T28601293</span>
+            <span class="c1"># check for existence of keys</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_keys</span><span class="p">(</span><span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">,</span> <span class="n">ETH_TOOL_FIELDS</span><span class="p">[</span><span class="s2">&quot;mlx&quot;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">search</span> <span class="ow">and</span> <span class="s2">&quot;bnxt&quot;</span> <span class="ow">in</span> <span class="n">search</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># Broadcom specific fields, don&#39;t fail if field not found</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Checking Broadcom fields&quot;</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_ethtool_output</span><span class="p">(</span>
+                <span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">,</span> <span class="s2">&quot;rx_fcs_err_frames&quot;</span><span class="p">,</span> <span class="n">optional_field</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_ethtool_output</span><span class="p">(</span>
+                <span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">,</span> <span class="s2">&quot;rx_align_err_frames&quot;</span><span class="p">,</span> <span class="n">optional_field</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_keys</span><span class="p">(</span><span class="n">eth_before</span><span class="p">,</span> <span class="n">eth_after</span><span class="p">,</span> <span class="n">ETH_TOOL_FIELDS</span><span class="p">[</span><span class="s2">&quot;bnxt&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s1">&#39;No supported nic found to compare ethtool output&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">,</span> <span class="n">key_list</span><span class="p">):</span>
+        <span class="n">_key_after</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">_key_before</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">before</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">after</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">before</span><span class="p">:</span>
+                <span class="n">_key_after</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_key_before</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_empty_list</span><span class="p">(</span>
+            <span class="n">_key_before</span><span class="p">,</span> <span class="s2">&quot;Check any missing key in ethtool output before test&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_empty_list</span><span class="p">(</span>
+            <span class="n">_key_after</span><span class="p">,</span> <span class="s2">&quot;Check any missing key in ethtool output after test.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Iperf.set_mtu"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.set_mtu">[docs]</a>    <span class="k">def</span> <span class="nf">set_mtu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">mtu</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+        <span class="c1"># Enable jumbo frames by setting the MTU val</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;change to MTU </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mtu</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ifconfig eth0 mtu </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mtu</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;ifconfig_eth0_mtu.log&quot;</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Check if requested value is displayed</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ifconfig eth0&quot;</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;ifconfig_eth0.log&quot;</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;mtu (\d+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="n">mtu_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+            <span class="n">mtu_value</span><span class="p">,</span> <span class="n">mtu</span><span class="p">,</span> <span class="s2">&quot;Verify that MTU value got set for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Iperf.launch_iperf3"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.launch_iperf3">[docs]</a>    <span class="k">def</span> <span class="nf">launch_iperf3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;iperf3 &quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span> <span class="o">+</span> <span class="mi">180</span>
+        <span class="n">msg_start</span> <span class="o">=</span> <span class="s2">&quot;Iperf3 [role:</span><span class="si">%s</span><span class="s2">] [</span><span class="si">%s</span><span class="s2">] [port:</span><span class="si">%d</span><span class="s2">]: Starting..&quot;</span>
+        <span class="n">msg_end</span> <span class="o">=</span> <span class="s2">&quot;Iperf3 [role:</span><span class="si">%s</span><span class="s2">] [</span><span class="si">%s</span><span class="s2">] [port:</span><span class="si">%d</span><span class="s2">]: completed..&quot;</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;server&quot;</span><span class="p">:</span>
+                <span class="n">server</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+                <span class="n">hostname</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">hostname</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtu</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_mtu</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtu</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">msg_start</span> <span class="o">%</span> <span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">role</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">hostname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+                <span class="n">_cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_server_options</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+                <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;iperf3_server.log&quot;</span><span class="p">)</span>
+                <span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="n">_cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span>
+                <span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">msg_end</span> <span class="o">%</span> <span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">client</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+                <span class="n">c_hostname</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">hostname</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.facebook.com&quot;</span><span class="p">)</span> <span class="c1"># noqa</span>
+                <span class="n">s_hostname</span> <span class="o">=</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.facebook.com&quot;</span><span class="p">)</span> <span class="c1"># noqa</span>
+                <span class="n">server_ip</span> <span class="o">=</span> <span class="n">iperf_out</span><span class="p">[</span><span class="s2">&quot;ip_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtu</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_mtu</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtu</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Iperf3 [role:Client][Server:</span><span class="si">%s</span><span class="s2">][Client:</span><span class="si">%s</span><span class="s2">][</span><span class="si">%s</span><span class="s2">] &quot;</span>
+                    <span class="s2">&quot;Starting..&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">s_hostname</span><span class="p">,</span> <span class="n">c_hostname</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">client</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
+                <span class="n">_cmd</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_client_options</span><span class="p">(</span><span class="n">server_ip</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+                <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;iperf3_client.log&quot;</span><span class="p">)</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                    <span class="n">client</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">_cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">speed</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">][</span><span class="s2">&quot;sum_sent&quot;</span><span class="p">][</span><span class="s1">&#39;bits_per_second&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_iperf_out</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">server</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">],</span> <span class="p">{</span><span class="n">port</span><span class="p">:</span> <span class="n">speed</span><span class="p">})</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Iperf3 [Server:</span><span class="si">%s</span><span class="s2">][Client:</span><span class="si">%s</span><span class="s2">][</span><span class="si">%s</span><span class="s2">] &quot;</span>
+                    <span class="s2">&quot;Completed BW - </span><span class="si">%s</span><span class="s2"> Gbits/sec&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">s_hostname</span><span class="p">,</span> <span class="n">c_hostname</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">),</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">speed</span> <span class="o">/</span> <span class="mi">1000000000</span><span class="p">))</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Iperf3 [role:</span><span class="si">%s</span><span class="s2">] [</span><span class="si">%s</span><span class="s2">][port:</span><span class="si">%s</span><span class="s2">]: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">role</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="Iperf.get_server_ip"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_server_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_server_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">_host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">iperf_out</span><span class="p">[</span><span class="s2">&quot;ip_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_host</span><span class="o">.</span><span class="n">hostname</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ip</span><span class="p">(</span><span class="n">_host</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.update_iperf_out"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.update_iperf_out">[docs]</a>    <span class="k">def</span> <span class="nf">update_iperf_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># Thread syncronization for avoiding multiple thread updation iperf_out</span>
+        <span class="c1"># and corrupting data.</span>
+        <span class="k">with</span> <span class="n">Iperf</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">iperf_out</span><span class="p">:</span>
+                <span class="n">iperf_out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="n">hostname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">iperf_out</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">iperf_out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">hostname</span><span class="p">:</span> <span class="p">{}})</span>
+            <span class="n">iperf_out</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">hostname</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_global_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">port</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-p </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="n">port</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_format</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-f </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_format</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-i </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;--logfile </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-d </span><span class="si">%s</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span>
+        <span class="k">return</span> <span class="n">args</span>
+
+<div class="viewcode-block" id="Iperf.get_server_options"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_server_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_server_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;-s -D &quot;</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_global_options</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">args</span></div>
+
+<div class="viewcode-block" id="Iperf.get_client_options"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_client_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_client_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_ip</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;-c </span><span class="si">%s</span><span class="s2"> -t </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server_ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_global_options</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">udp</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-u &#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-w </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipv6</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-6 &#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mss</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-M </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">mss</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_streams</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-P </span><span class="si">%d</span><span class="s1"> &#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_streams</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodelay</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s1">&#39;-N &#39;</span>
+        <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;-J &quot;</span>
+        <span class="k">return</span> <span class="n">args</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipv6</span><span class="p">:</span>
+            <span class="n">inet</span> <span class="o">=</span> <span class="s2">&quot;inet6&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inet</span> <span class="o">=</span> <span class="s2">&quot;inet&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">get_ip</span><span class="p">(</span><span class="n">inet</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Failed to get </span><span class="si">%s</span><span class="s2"> address for eth0, trying eth1&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">inet</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ip</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">get_ip</span><span class="p">(</span><span class="n">inet</span><span class="p">,</span> <span class="s2">&quot;eth1&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Failed to get </span><span class="si">%s</span><span class="s2"> IP. Check network config&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">inet</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ip</span>
+
+<div class="viewcode-block" id="Iperf.validate_bandwidths"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.validate_bandwidths">[docs]</a>    <span class="k">def</span> <span class="nf">validate_bandwidths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">,</span> <span class="n">expected_bw</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+            <span class="n">actual_bw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_combined_bandwidth</span><span class="p">(</span><span class="n">host</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000000</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_bandwidth</span><span class="p">(</span>
+                <span class="n">actual_bw</span><span class="p">,</span> <span class="n">expected_bw</span><span class="p">,</span>
+                <span class="s2">&quot;Comparing bandwidth of client </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">host</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.validate_bandwidth"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.validate_bandwidth">[docs]</a>    <span class="k">def</span> <span class="nf">validate_bandwidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_greater_equal</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.print_bandwidt"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.print_bandwidt">[docs]</a>    <span class="k">def</span> <span class="nf">print_bandwidt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">hosts</span><span class="p">:</span>
+            <span class="n">actual_bw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_combined_bandwidth</span><span class="p">(</span><span class="n">host</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000000</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Total bandwidth for </span><span class="si">%s</span><span class="s2"> is - </span><span class="si">%s</span><span class="s2"> Gbits/sec&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">host</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">actual_bw</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">(</span><span class="n">iperf_out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.get_combined_bandwidth"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_combined_bandwidth">[docs]</a>    <span class="k">def</span> <span class="nf">get_combined_bandwidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">_bw</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_h</span> <span class="ow">in</span> <span class="n">iperf_out</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">host</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">_h</span> <span class="ow">and</span> <span class="s2">&quot;client&quot;</span> <span class="ow">in</span> <span class="n">_h</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_server</span> <span class="ow">in</span> <span class="n">iperf_out</span><span class="p">[</span><span class="n">_h</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">_p</span> <span class="ow">in</span> <span class="n">iperf_out</span><span class="p">[</span><span class="n">_h</span><span class="p">][</span><span class="n">_server</span><span class="p">]:</span>
+                        <span class="n">_bw</span> <span class="o">+=</span> <span class="n">iperf_out</span><span class="p">[</span><span class="n">_h</span><span class="p">][</span><span class="n">_server</span><span class="p">][</span><span class="n">_p</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_bw</span></div>
+
+<div class="viewcode-block" id="Iperf.get_ports"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_ports">[docs]</a>    <span class="k">def</span> <span class="nf">get_ports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">client_count</span><span class="p">):</span>
+        <span class="n">_host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">cpus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpus</span><span class="p">(</span><span class="n">_host</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">client_count</span> <span class="o">&gt;=</span> <span class="n">cpus</span><span class="p">:</span>
+            <span class="n">_ports</span> <span class="o">=</span> <span class="p">[</span><span class="n">DEFAULT_PORT</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">client_count</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_ports</span> <span class="o">=</span> <span class="p">[</span><span class="n">DEFAULT_PORT</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
+                <span class="n">cpus</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">cpus</span> <span class="o">%</span> <span class="n">client_count</span><span class="p">))]</span>
+        <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span><span class="p">[</span><span class="n">_host</span><span class="o">.</span><span class="n">hostname</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ports</span></div>
+
+<div class="viewcode-block" id="Iperf.get_cpus"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_cpus">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lscpu&quot;</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;lscpu.log&quot;</span><span class="p">)</span>
+        <span class="n">cmd_out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="n">search_obj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+CPU\(s\):\s+(\d+)&quot;</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">search_obj</span><span class="p">:</span>
+            <span class="n">cpus</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">search_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Failed to get CPU count from </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cpus</span></div>
+
+<div class="viewcode-block" id="Iperf.get_ethtool_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.get_ethtool_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_ethtool_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s2">&quot;-S&quot;</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;ethtool.log&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ethtool </span><span class="si">%s</span><span class="s2"> eth0&quot;</span> <span class="o">%</span> <span class="n">switch</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ethtool </span><span class="si">%s</span><span class="s2"> eth1&quot;</span> <span class="o">%</span> <span class="n">switch</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">iperf_out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="Iperf.execute_background_tests"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.execute_background_tests">[docs]</a>    <span class="k">def</span> <span class="nf">execute_background_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">all_tests</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_tests</span>
+        <span class="n">_host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="n">_host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">create_parallel_control_file</span><span class="p">(</span><span class="n">all_tests</span><span class="p">)</span>
+        <span class="n">_host</span><span class="o">.</span><span class="n">autotest</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">runtime</span> <span class="o">+</span> <span class="mi">900</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Iperf.parse_args"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.iperf.Iperf.parse_args">[docs]</a>    <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runtime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;runtime&#39;</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bidir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bidir&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">udp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;udp&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;window_size&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_streams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;num_streams&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipv6</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ipv6&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mss&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodelay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nodelay&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mtu&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_mtu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reset_mtu&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">Iperf</span><span class="o">.</span><span class="n">ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;report_format&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logfile&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">demon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;demon&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background_tests</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;background_tests&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_1server_nclient</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;1server_nclient&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># bandwidth test related options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bw_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bandwidth_test&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exp_bw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected_bandwidth_gb&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.system Package &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="havoc.autoval.lib.host.system.bios Package" href="havoc.autoval.lib.host.system.bios.html" />
+    <link rel="prev" title="havoc.autoval.lib.host.models Package" href="havoc.autoval.lib.host.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">havoc</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="havoc.html">havoc package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="havoc.autoval.html">havoc.autoval Package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.cli.html">havoc.autoval.cli Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.e2e_tests.html">havoc.autoval.e2e_tests Package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="havoc.autoval.lib.html">havoc.autoval.lib Package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.models.html">havoc.autoval.lib.host.models Package</a></li>
+<li class="toctree-l6 current"><a class="current reference internal" href="#">havoc.autoval.lib.host.system Package</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.html">havoc.autoval.lib.host.system.bios Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html">havoc.autoval.lib.host.system.models Package</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.system"><code class="xref py py-mod docutils literal notranslate"><span class="pre">System</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.system_abstract"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemAbstract</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.system_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemConfig</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.system_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemFactory</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.system_legacy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemLegacy</span></code> Module</a></li>
+<li class="toctree-l7"><a class="reference internal" href="#module-havoc.autoval.lib.host.system.system_no_bmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemNoBMC</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.autotest"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Autotest</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_abstract"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionAbstract</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_dispatcher"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionDispatcher</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_factory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionFactory</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.connection_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ConnectionUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.credentials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Credentials</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#cyborg-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Cyborg</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.host"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Host</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#hwc-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">HWC</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.inband"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Inband</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.ipmi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPMI</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.local"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LocalConn</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.oob"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OOB</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.openbmc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OpenBMC</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.openbmc_rest_api"><code class="xref py py-mod docutils literal notranslate"><span class="pre">REST</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.ssh"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SSH</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.sshpass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SSHPassConn</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#module-havoc.autoval.lib.host.sys_utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SysUtils</span></code> Module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="havoc.autoval.lib.host.html#thriftconn-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ThriftConn</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.power.html">havoc.autoval.lib.power Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.test_utils.html">havoc.autoval.lib.test_utils Package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="havoc.autoval.lib.html#module-havoc.autoval.lib.test_base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TestBase</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="havoc.autoval.tests.html">havoc.autoval.tests Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">havoc</a> &raquo;</li>
+        
+          <li><a href="havoc.html">havoc package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.html">havoc.autoval Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.html">havoc.autoval.lib Package</a> &raquo;</li>
+        
+          <li><a href="havoc.autoval.lib.host.html">havoc.autoval.lib.host Package</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.system Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/havoc.autoval.lib.host.system.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="havoc-autoval-lib-host-system-package">
+<h1>havoc.autoval.lib.host.system Package<a class="headerlink" href="#havoc-autoval-lib-host-system-package" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.html">havoc.autoval.lib.host.system.bios Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html">havoc.autoval.lib.host.system.bios.models Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.bryce_canyon_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BryceCanyonBios</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.dl380gen10_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DL380Gen10Bios</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.tioga_pass_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TiogaPassBios</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.wedge_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WedgeBios</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.models.html#module-havoc.autoval.lib.host.system.bios.models.yosemite_v2_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">YosemiteV2Bios</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.bios.html#module-havoc.autoval.lib.host.system.bios.system_bios"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemBios</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html">havoc.autoval.lib.host.system.models Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.bigbasin"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BigBasin</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.bryce_canyon"><code class="xref py py-mod docutils literal notranslate"><span class="pre">BryceCanyon</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.coldstorage"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ColdStorage</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.dl380gen10"><code class="xref py py-mod docutils literal notranslate"><span class="pre">DL380Gen10</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.glacierpointv2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">GlacierPointV2</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.lightning"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Lightning</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.lightningv2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">LightningV2</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.northdome"><code class="xref py py-mod docutils literal notranslate"><span class="pre">NorthDome</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.tioga_pass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">TiogaPass</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.wedge"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Wedge</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.yosemite"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Yosemite</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="havoc.autoval.lib.host.system.models.html#module-havoc.autoval.lib.host.system.models.yosemitev2"><code class="xref py py-mod docutils literal notranslate"><span class="pre">YosemiteV2</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.system">
+<span id="system-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">System</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.system" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.system.System">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.system.</code><code class="sig-name descname">System</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract" title="havoc.autoval.lib.host.system.system_abstract.SystemAbstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.system.system_abstract.SystemAbstract</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system.System.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system.System.convert_string_matches_to_int">
+<code class="sig-name descname">convert_string_matches_to_int</code><span class="sig-paren">(</span><em class="sig-param">match</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System.convert_string_matches_to_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System.convert_string_matches_to_int" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system.System.create_lspci_info_dump">
+<code class="sig-name descname">create_lspci_info_dump</code><span class="sig-paren">(</span><em class="sig-param">lspci_dump_path</em>, <em class="sig-param">csr_ports=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System.create_lspci_info_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System.create_lspci_info_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will create a lspci hexadecimal dump for the given ports
+user can either pass it or by default based on the platform
+we take the ports that have nvme/ethernet/processor attached</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system.System.get_default_csr_port">
+<code class="sig-name descname">get_default_csr_port</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System.get_default_csr_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System.get_default_csr_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will return all root ports, nvme memory ports and
+ethernet controller ports</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system.System.get_oem_boot_sequence">
+<code class="sig-name descname">get_oem_boot_sequence</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System.get_oem_boot_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System.get_oem_boot_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system.System.get_system_boot_time">
+<code class="sig-name descname">get_system_boot_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system.html#System.get_system_boot_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system.System.get_system_boot_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.system_abstract">
+<span id="systemabstract-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemAbstract</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.system_abstract" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.system_abstract.</code><code class="sig-name descname">SystemAbstract</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.check_if_rpms_installed">
+<code class="sig-name descname">check_if_rpms_installed</code><span class="sig-paren">(</span><em class="sig-param">rpm</em>, <em class="sig-param">max_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.check_if_rpms_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.check_if_rpms_installed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.check_if_services_active">
+<code class="sig-name descname">check_if_services_active</code><span class="sig-paren">(</span><em class="sig-param">each_service</em>, <em class="sig-param">max_time</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.check_if_services_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.check_if_services_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method just checks if the service is active and running
+if not it will wait until the timeout and throws error</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.cycle_host">
+<code class="sig-name descname">cycle_host</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">cycle_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.cycle_host"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.cycle_host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.dut_health_check">
+<code class="sig-name descname">dut_health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.dut_health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.dut_health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will check the health of the system by checking if all the
+necessary services are active and the connection is properly established.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.is_service_active">
+<code class="sig-name descname">is_service_active</code><span class="sig-paren">(</span><em class="sig-param">service_to_check</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.is_service_active"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.is_service_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_abstract.SystemAbstract.system_health_check">
+<code class="sig-name descname">system_health_check</code><span class="sig-paren">(</span><em class="sig-param">dut_last_reboot=False</em>, <em class="sig-param">dut_connect_timeout=600</em>, <em class="sig-param">bmc_last_reboot=None</em>, <em class="sig-param">bmc_reconnect_timeout=180</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_abstract.html#SystemAbstract.system_health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.system_health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is to check the basic health of the system on both BMC/HOST is
+good and is running all the services required
+Host : It checks if the ‘havoc-client’, ‘sshd’, ‘ipmi.service’ are running</p>
+<blockquote>
+<div><p>Also checks if the thrift/ssh connectivity is working good</p>
+</div></blockquote>
+<p>BMC : checks if the services like healthd, sensord, are running
+Calling this method is recommended after the powercycles on server</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.system_config">
+<span id="systemconfig-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemConfig</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.system_config" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.system_config.SystemConfig">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.system_config.</code><code class="sig-name descname">SystemConfig</code><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_config.html#SystemConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_config.SystemConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_config.SystemConfig.compare_configs">
+<em class="property">classmethod </em><code class="sig-name descname">compare_configs</code><span class="sig-paren">(</span><em class="sig-param">cfg1</em>, <em class="sig-param">cfg2</em>, <em class="sig-param">user_filter=None</em>, <em class="sig-param">raise_on_fail=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_config.html#SystemConfig.compare_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_config.SystemConfig.compare_configs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_config.SystemConfig.config_check">
+<em class="property">classmethod </em><code class="sig-name descname">config_check</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">start=True</em>, <em class="sig-param">dump_location=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_config.html#SystemConfig.config_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_config.SystemConfig.config_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_config.SystemConfig.get_config_item">
+<em class="property">classmethod </em><code class="sig-name descname">get_config_item</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_config.html#SystemConfig.get_config_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_config.SystemConfig.get_config_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_config.SystemConfig.get_system_config">
+<em class="property">classmethod </em><code class="sig-name descname">get_system_config</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">start=True</em>, <em class="sig-param">dump_location=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_config.html#SystemConfig.get_system_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_config.SystemConfig.get_system_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.system_factory">
+<span id="systemfactory-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemFactory</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.system_factory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.system_factory.SystemFactory">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.system_factory.</code><code class="sig-name descname">SystemFactory</code><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_factory.html#SystemFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_factory.SystemFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Below dictionary contains list of supported project type. To add new
+type, create new child class of system class and import it here</p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_factory.SystemFactory.create">
+<em class="property">classmethod </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">skip_project_type=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_factory.html#SystemFactory.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_factory.SystemFactory.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the supported project type object</p>
+<p>&#64;param Host host
+&#64;param boolean skip_project_type: whether to skip looking for a specific project
+type. Project types here are subclasses of System with functions specific to
+different server models.
+&#64;return SystemAbstract</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_factory.SystemFactory.create_legacy_system">
+<em class="property">classmethod </em><code class="sig-name descname">create_legacy_system</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">skip_project_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_factory.html#SystemFactory.create_legacy_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_factory.SystemFactory.create_legacy_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return an instance of SystemLegacy (or its variation)</p>
+<p>&#64;param Host host
+&#64;param boolean skip_project_type: if false, simply return an instance of
+SystemLegacy and skip looking for the appropriate subclass</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_factory.SystemFactory.create_openbmc_system">
+<em class="property">classmethod </em><code class="sig-name descname">create_openbmc_system</code><span class="sig-paren">(</span><em class="sig-param">host</em>, <em class="sig-param">skip_project_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_factory.html#SystemFactory.create_openbmc_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_factory.SystemFactory.create_openbmc_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return an instance of System (or its subclass)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.system_legacy">
+<span id="systemlegacy-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemLegacy</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.system_legacy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.system_legacy.SystemLegacy">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.system_legacy.</code><code class="sig-name descname">SystemLegacy</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_legacy.html#SystemLegacy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_legacy.SystemLegacy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract" title="havoc.autoval.lib.host.system.system_abstract.SystemAbstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.system.system_abstract.SystemAbstract</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_legacy.SystemLegacy.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_legacy.html#SystemLegacy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_legacy.SystemLegacy.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-havoc.autoval.lib.host.system.system_no_bmc">
+<span id="systemnobmc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SystemNoBMC</span></code> Module<a class="headerlink" href="#module-havoc.autoval.lib.host.system.system_no_bmc" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="havoc.autoval.lib.host.system.system_no_bmc.SystemNoBMC">
+<em class="property">class </em><code class="sig-prename descclassname">havoc.autoval.lib.host.system.system_no_bmc.</code><code class="sig-name descname">SystemNoBMC</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_no_bmc.html#SystemNoBMC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_no_bmc.SystemNoBMC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#havoc.autoval.lib.host.system.system_abstract.SystemAbstract" title="havoc.autoval.lib.host.system.system_abstract.SystemAbstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">havoc.autoval.lib.host.system.system_abstract.SystemAbstract</span></code></a></p>
+<dl class="method">
+<dt id="havoc.autoval.lib.host.system.system_no_bmc.SystemNoBMC.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">host</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/havoc/autoval/lib/host/system/system_no_bmc.html#SystemNoBMC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#havoc.autoval.lib.host.system.system_no_bmc.SystemNoBMC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="havoc.autoval.lib.host.system.bios.html" class="btn btn-neutral float-right" title="havoc.autoval.lib.host.system.bios Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="havoc.autoval.lib.host.models.html" class="btn btn-neutral float-left" title="havoc.autoval.lib.host.models Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

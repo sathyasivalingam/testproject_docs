@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.tor_diagnostics_lib &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.tor_diagnostics_lib</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.tor_diagnostics_lib</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Library for ToR Diagnostics utilities.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="n">ACCTON_TOR_DIAGNOSTICS_PATH</span> <span class="o">=</span> <span class="s1">&#39;/mnt/vol/havoc/autotest/bin/tor_diagnostics/&#39;</span>
+<span class="n">FILE_NOT_FOUND_ERROR</span> <span class="o">=</span> <span class="s2">&quot;No such file or directory&quot;</span>
+<span class="n">ACCTON_DIAG_MAIN_PY</span> <span class="o">=</span> <span class="s2">&quot;usr/local/accton/bin/diag_main.py&quot;</span>
+
+
+<span class="c1"># Check whether connected to the correct host.</span>
+<div class="viewcode-block" id="pretest_check_correct_host_connected"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_check_correct_host_connected">[docs]</a><span class="k">def</span> <span class="nf">pretest_check_correct_host_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expected_hostname</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;hostname&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">output</span> <span class="o">==</span> <span class="n">expected_hostname</span><span class="p">,</span>
+                            <span class="s2">&quot;connected to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span></div>
+
+
+<span class="c1"># Check whether Python is installed.</span>
+<div class="viewcode-block" id="pretest_check_python_installed_on_host"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_check_python_installed_on_host">[docs]</a><span class="k">def</span> <span class="nf">pretest_check_python_installed_on_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;which python&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="s2">&quot;no&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span> <span class="s2">&quot;Python installation.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="should_reboot"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.should_reboot">[docs]</a><span class="k">def</span> <span class="nf">should_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="s2">&quot;ls /dev/ttyACM0* | grep -v &#39;/dev/ttyACM0&#39;&quot;</span><span class="p">,</span>
+        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># if ACMx interface is found but not ACM0, just try a reboot.</span>
+    <span class="k">if</span> <span class="n">ret</span><span class="o">.</span><span class="n">return_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_kernel_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.get_kernel_version">[docs]</a><span class="k">def</span> <span class="nf">get_kernel_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">current_kernel</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;uname -r&quot;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Current kernel version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">current_kernel</span><span class="p">)</span>
+    <span class="n">current_kernel</span> <span class="o">=</span> <span class="n">current_kernel</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">current_kernel</span></div>
+
+
+<div class="viewcode-block" id="should_upgrade_kernel"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.should_upgrade_kernel">[docs]</a><span class="k">def</span> <span class="nf">should_upgrade_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="s2">&quot;ls /dev/ttyACM0&quot;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ret</span><span class="o">.</span><span class="n">return_code</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># ACM interface found, no kernel upgrade.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># ACM interface found, kernel upgrade.</span></div>
+
+
+<div class="viewcode-block" id="kernel_bug_fix"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.kernel_bug_fix">[docs]</a><span class="k">def</span> <span class="nf">kernel_bug_fix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">fixed_kernel_version</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">should_reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;ACM* found, but not ACM0, rebooting...&quot;</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="n">should_upgrade_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;No ACM interfaces found, upgrading kernel&quot;</span><span class="p">)</span>
+        <span class="n">original_kernel</span> <span class="o">=</span> <span class="n">get_kernel_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">kernel_installer</span><span class="p">(</span><span class="n">fixed_kernel_version</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">original_kernel</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;ACM0 interface found&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="undo_kernel_bug_fix"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.undo_kernel_bug_fix">[docs]</a><span class="k">def</span> <span class="nf">undo_kernel_bug_fix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">did_upgrade</span><span class="p">,</span> <span class="n">original_kernel</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">did_upgrade</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Reverting back to original kernel </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">original_kernel</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">kernel_installer</span><span class="p">(</span><span class="n">original_kernel</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="c1"># Check whether ACM0 interface exists.</span>
+<div class="viewcode-block" id="pretest_check_whether_acm0_interface_exists"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_check_whether_acm0_interface_exists">[docs]</a><span class="k">def</span> <span class="nf">pretest_check_whether_acm0_interface_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ls /dev/ttyACM0&quot;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">FILE_NOT_FOUND_ERROR</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span>
+                            <span class="s2">&quot;ttyACM0 interface existence.&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># Return installation status.</span>
+<div class="viewcode-block" id="is_accton_diagnostics_installed"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.is_accton_diagnostics_installed">[docs]</a><span class="k">def</span> <span class="nf">is_accton_diagnostics_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ls </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ACCTON_DIAG_MAIN_PY</span><span class="p">,</span>
+                        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">FILE_NOT_FOUND_ERROR</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span></div>
+
+
+<span class="c1"># Check whether Accton Diagnostics are installed.</span>
+<div class="viewcode-block" id="pretest_check_accton_diagnostics_installed"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_check_accton_diagnostics_installed">[docs]</a><span class="k">def</span> <span class="nf">pretest_check_accton_diagnostics_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">installed</span> <span class="o">=</span> <span class="n">is_accton_diagnostics_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">installed</span><span class="p">,</span>
+                            <span class="s2">&quot;Accton Diagnostics installation.&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># Check if the device passed is recognised as Wedge.</span>
+<div class="viewcode-block" id="pretest_check_if_wedge"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_check_if_wedge">[docs]</a><span class="k">def</span> <span class="nf">pretest_check_if_wedge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">is_wedge</span><span class="p">(),</span> <span class="s2">&quot;Checking host is a Wedge.&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># Check if we are running a required Accton Diagnostics version.</span>
+<div class="viewcode-block" id="pretest_check_accton_required_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_check_accton_required_version">[docs]</a><span class="k">def</span> <span class="nf">pretest_check_accton_required_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;python </span><span class="si">%s</span><span class="s1"> -m 10000&#39;</span> <span class="o">%</span> <span class="n">ACCTON_DIAG_MAIN_PY</span><span class="p">,</span>
+                        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Get line containing version string and extract the version value.</span>
+    <span class="n">version_line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="n">l</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Diag Version&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span>
+                                        <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))))</span>
+    <span class="n">version_str</span> <span class="o">=</span> <span class="p">(</span><span class="n">version_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="c1"># And compare it to each of the values in JSON[tor_diags_version].</span>
+    <span class="n">req_version</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">version_str</span> <span class="o">==</span> <span class="n">v</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">tor_diags_version</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">req_version</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running Accton TOR Diagnostics tests version: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                      <span class="o">%</span> <span class="n">req_version</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">req_version</span><span class="p">),</span> <span class="s2">&quot;Verifying required Accton version&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># Wrapper to run all the pre-tests.</span>
+<div class="viewcode-block" id="pretest_tor_diagnostics_checks"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.pretest_tor_diagnostics_checks">[docs]</a><span class="k">def</span> <span class="nf">pretest_tor_diagnostics_checks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expected_hostname</span><span class="p">):</span>
+    <span class="n">pretest_check_correct_host_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expected_hostname</span><span class="p">)</span>
+    <span class="n">pretest_check_python_installed_on_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+    <span class="n">pretest_check_whether_acm0_interface_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+    <span class="n">pretest_check_accton_diagnostics_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+    <span class="n">pretest_check_accton_required_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+    <span class="n">pretest_check_if_wedge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span></div>
+
+
+<span class="c1"># Copy the Accton ToR diagnostics file into the host through Thrift.</span>
+<span class="c1"># The version can be of three types - Latest, Release or Stable.</span>
+<span class="c1">#   &#39;latest&#39; is the latest uncertified version.</span>
+<span class="c1">#   &#39;stable&#39; is the latest tested and stable version.</span>
+<span class="c1">#   &#39;release_&lt;number1&gt;_&lt;number2_RC&lt;number3&gt;_openbmc&lt;number4&gt;&#39;</span>
+<span class="c1">#       E.g.: &#39;release_0_35_RC5_openbmcv&lt;number4&gt;&#39;</span>
+<div class="viewcode-block" id="copy_accton_tor_diagnostics"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.copy_accton_tor_diagnostics">[docs]</a><span class="k">def</span> <span class="nf">copy_accton_tor_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">tor_diagnostics_file</span><span class="p">,</span>
+                                    <span class="n">destination_file_on_host</span><span class="p">):</span>
+    <span class="c1"># TODO(ashwinp): Enhance to use intelligent ToR diagnostics file selection.</span>
+    <span class="c1"># E.g.: P56902751</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">destination_file_on_host</span><span class="p">:</span>
+        <span class="n">destination_file_on_host</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">tor_diagnostics_file</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Copying </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2">...&quot;</span> <span class="o">%</span>
+                     <span class="p">(</span><span class="n">tor_diagnostics_file</span><span class="p">,</span> <span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+                          <span class="n">destination_file_on_host</span><span class="p">))</span>
+    <span class="n">host</span><span class="o">.</span><span class="n">put_file</span><span class="p">(</span><span class="n">tor_diagnostics_file</span><span class="p">,</span> <span class="n">destination_file_on_host</span><span class="p">)</span>
+
+    <span class="c1"># Test if the copy passed.</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ls &quot;</span> <span class="o">+</span> <span class="n">destination_file_on_host</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">FILE_NOT_FOUND_ERROR</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">output</span><span class="p">,</span>
+                                <span class="s2">&quot;Copy passed </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="clean_up_accton_diagnostics_files"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.clean_up_accton_diagnostics_files">[docs]</a><span class="k">def</span> <span class="nf">clean_up_accton_diagnostics_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;rm -rf /diag*&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Clean-up existing diagnostics files.</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;rm -rf /usr/local/accton/&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Cleaning the Accton directory.</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="install_fb_havoc_autotest"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.install_fb_havoc_autotest">[docs]</a><span class="k">def</span> <span class="nf">install_fb_havoc_autotest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+    <span class="c1"># TODO(ashwinp): t15374018</span>
+    <span class="c1"># Execute this only if the havoc client does not exist on the DUT.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Installing Havoc Autotest client...&quot;</span><span class="p">)</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;yes | yum install fb-havoc-autotest&#39;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+
+    <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;yes | yum install fb-havoc-autotest-testfiles&#39;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="install_accton_tor_diagnostics"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.tor_diagnostics_lib.install_accton_tor_diagnostics">[docs]</a><span class="k">def</span> <span class="nf">install_accton_tor_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span>
+                                       <span class="n">tor_diagnostics_file</span><span class="p">,</span>
+                                       <span class="n">destination_file_on_host</span><span class="p">):</span>
+
+    <span class="n">clean_up_accton_diagnostics_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+    <span class="n">install_fb_havoc_autotest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
+
+    <span class="c1"># Copy the zipped Accton ToR diagnostics file.</span>
+    <span class="n">copy_accton_tor_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">tor_diagnostics_file</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Unzip.</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;tar -xvzf /diag*&quot;</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Untarring the zipped diagnostics file.</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span>
+
+    <span class="c1"># Some more steps for set-up.</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;cp -f /usr/local/accton/env/rc.local.orig /etc/rc.local&#39;</span><span class="p">,</span>
+                          <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Copying rc.local file.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Sync and sleep 30s.&quot;</span><span class="p">)</span>
+    <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;sync&#39;</span><span class="p">)</span>
+    <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;sleep 30&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Rebooting the system...&quot;</span><span class="p">)</span>
+    <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;System rebooted!&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Installation of Accton ToR diagnostics is complete.&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

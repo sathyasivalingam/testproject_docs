@@ -1,0 +1,1439 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.autoval &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.autoval</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.autoval</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">queue</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">Queue</span> <span class="k">as</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Timer</span>
+
+<span class="kn">from</span> <span class="nn">..result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+<span class="kn">from</span> <span class="nn">.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">CmdError</span><span class="p">,</span> <span class="n">TestError</span><span class="p">,</span> <span class="n">TestStepError</span><span class="p">,</span> <span class="ne">TimeoutError</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="CmdResult"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.CmdResult">[docs]</a><span class="k">class</span> <span class="nc">CmdResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CmdResult.__init__"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.CmdResult.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">stderr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_code</span> <span class="o">=</span> <span class="n">return_code</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_this</span> <span class="o">=</span> <span class="s2">&quot;Command: </span><span class="si">%s</span><span class="s2"> rc [</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_code</span><span class="p">)</span>
+        <span class="n">_this</span> <span class="o">+=</span> <span class="s2">&quot;Output: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stdout</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_this</span></div>
+
+
+<div class="viewcode-block" id="AutovalUtils"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils">[docs]</a><span class="k">class</span> <span class="nc">AutovalUtils</span><span class="p">:</span>
+
+    <span class="n">_logs_initialized</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_custom_log_initialized</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_host</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_test_step</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">_failed_test_steps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_passed_test_steps</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">log_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+    <span class="n">result_handler</span> <span class="o">=</span> <span class="n">ResultHandler</span><span class="p">()</span>
+    <span class="n">continue_test_on_error</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_init_logs</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;cmdlog&quot;</span><span class="p">)</span>
+        <span class="n">hdlr</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">&quot;cmdlog.log&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+            <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y %H:%M:%S&quot;</span>
+        <span class="p">)</span>
+        <span class="n">hdlr</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">hdlr</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">log_level</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">_cond_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;conditions&quot;</span><span class="p">)</span>
+        <span class="n">hdlr</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">&quot;test_results.log&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+            <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y %H:%M:%S&quot;</span>
+        <span class="p">)</span>
+        <span class="n">hdlr</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">_cond_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">hdlr</span><span class="p">)</span>
+        <span class="n">_cond_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="n">_cond_logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_logs_initialized</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="AutovalUtils.set_host"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.set_host">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_host</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_host</span> <span class="o">=</span> <span class="n">host</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_host"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_host">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_host</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_host</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_host_dict"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_host_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_host_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">host_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hostname&quot;</span><span class="p">:</span> <span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">:</span>
+            <span class="n">host_dict</span><span class="p">[</span><span class="s2">&quot;oob_addr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">oob_addr</span>
+        <span class="k">return</span> <span class="n">host_dict</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.run_on_host"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_on_host">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_on_host</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_host</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.run_remotely"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_remotely">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_remotely</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.save_json"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.save_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">save_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.load_json"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.load_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">json_parsed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json_parsed</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.loads_json"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.loads_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">loads_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_str</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Wrapper for json.loads</span>
+<span class="sd">            @param:</span>
+<span class="sd">                _str: string  to convert</span>
+<span class="sd">                msg: message to raise on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_str</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Message: </span><span class="si">{}</span><span class="s2">. &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">if</span> <span class="n">msg</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;JSON load failed. </span><span class="si">{}</span><span class="s2">Error: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_log</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">custom_logout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_logs_initialized</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_init_logs</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">custom_logfile</span> <span class="ow">and</span> <span class="n">custom_logout</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Output redirected to </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">custom_logfile</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="n">message</span>
+        <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;cmdlog&quot;</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">custom_logfile</span> <span class="ow">and</span> <span class="n">custom_logout</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">custom_logfile</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">logfile</span><span class="p">:</span>
+                <span class="n">logfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">custom_logout</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutovalUtils.log_cmdlog"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.log_cmdlog">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_cmdlog</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">custom_logout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="p">,</span> <span class="n">custom_logout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.log_as_cmd"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.log_as_cmd">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_as_cmd</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an arbitrary message to the cmd_metrics and cmdlog logfiles</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_cmd_metric</span><span class="p">(</span><span class="s2">&quot;log message&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">log_cmdlog</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.raise_process_timeout"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.raise_process_timeout">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">raise_process_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">process</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;Command [</span><span class="si">%s</span><span class="s2">] timed out after [</span><span class="si">%d</span><span class="s2">] seconds&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">))</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">kill_proc_family</span><span class="p">(</span><span class="n">process</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.kill_proc_family"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.kill_proc_family">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">kill_proc_family</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">process</span><span class="p">):</span>
+        <span class="c1"># Kill process and all child processes</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span>
+        <span class="n">pids</span> <span class="o">=</span> <span class="p">[</span><span class="n">process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">pids</span><span class="p">:</span>
+            <span class="n">tmp_pid</span> <span class="o">=</span> <span class="n">pids</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pids</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_get_child_procs</span><span class="p">(</span><span class="n">tmp_pid</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">tmp_pid</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_child_procs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ps -o pid --ppid </span><span class="si">%d</span><span class="s2"> --noheaders&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">children</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_run_subprocess</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
+        <span class="p">)</span>
+        <span class="n">proc_stdout</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">proc_stderr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">background</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">CmdResult</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">proc_stdout</span><span class="p">,</span> <span class="n">proc_stderr</span><span class="p">,</span> <span class="n">ret_code</span><span class="p">)</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_communicate</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">thread_queue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+            <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span>
+                <span class="n">timeout</span><span class="p">,</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">raise_process_timeout</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">process</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">thread_queue</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="p">(</span><span class="n">proc_stdout</span><span class="p">,</span> <span class="n">proc_stderr</span><span class="p">,</span> <span class="n">ret_code</span><span class="p">)</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_communicate</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">timer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="n">thread_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">CmdResult</span><span class="p">(</span>
+            <span class="n">command</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">proc_stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">proc_stderr</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="n">ret_code</span>
+        <span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_communicate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">process</span><span class="p">):</span>
+        <span class="n">proc_stdout</span><span class="p">,</span> <span class="n">proc_stderr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+        <span class="n">proc_stdout</span> <span class="o">=</span> <span class="n">proc_stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+        <span class="n">proc_stderr</span> <span class="o">=</span> <span class="n">proc_stderr</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">proc_stdout</span><span class="p">,</span> <span class="n">proc_stderr</span><span class="p">,</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">get_return_code</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">working_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_remotely</span><span class="p">():</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            As ssh lib will accept timeout as integer</span>
+<span class="sd">            converting timeout from None</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="mi">600</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="p">,</span>
+                <span class="n">get_result_obj</span><span class="o">=</span><span class="n">get_return_code</span><span class="p">,</span>
+                <span class="n">ignore_status</span><span class="o">=</span><span class="n">ignore_status</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="n">working_directory</span><span class="o">=</span><span class="n">working_directory</span><span class="p">,</span>
+                <span class="n">custom_logfile</span><span class="o">=</span><span class="n">custom_logfile</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">get_return_code</span><span class="p">:</span>
+                <span class="n">return_code</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">return_code</span>
+                <span class="n">_out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">stdout</span> <span class="o">+</span> <span class="n">out</span><span class="o">.</span><span class="n">stderr</span>
+                <span class="n">stdout</span> <span class="o">=</span> <span class="n">_out</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">return_code</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">stdout</span> <span class="o">=</span> <span class="n">out</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">CmdResult</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="n">return_code</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_run_local</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="p">,</span>
+                <span class="n">get_return_code</span><span class="o">=</span><span class="n">get_return_code</span><span class="p">,</span>
+                <span class="n">ignore_status</span><span class="o">=</span><span class="n">ignore_status</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="n">working_directory</span><span class="o">=</span><span class="n">working_directory</span><span class="p">,</span>
+                <span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">,</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="AutovalUtils._run_local"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils._run_local">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_run_local</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">get_return_code</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">working_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Private method that runs cmd and logs output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">working_directory</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cd </span><span class="si">%s</span><span class="s2"> &amp;&amp; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_run_subprocess</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">)</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_cmd_metric</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">,</span> <span class="n">out</span>
+        <span class="p">)</span>
+        <span class="n">exit</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">log_cmdlog</span><span class="p">(</span><span class="s2">&quot;[</span><span class="si">%s</span><span class="s2">] Exit: </span><span class="si">%d</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">exit</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">get_return_code</span><span class="p">:</span>
+            <span class="c1"># This method already returns the result object, which include</span>
+            <span class="c1"># return code. We just have to make sure to not throw an Exception</span>
+            <span class="n">ignore_status</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">exit</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ignore_status</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Command returned non-zero exit status&quot;</span>
+            <span class="k">raise</span> <span class="n">CmdError</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.run_get_output"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_get_output">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_get_output</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">cmd</span><span class="p">,</span>
+        <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">working_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">get_return_code</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">custom_logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run given cmd with verbose set to False</span>
+<span class="sd">        Returns stdout of cmd on success, Exception on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Dont check the folder existence for autotest tests</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">custom_logfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_remotely</span><span class="p">()):</span>
+            <span class="n">custom_log_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;system_logs&quot;</span><span class="p">)</span>
+            <span class="n">custom_logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">custom_log_path</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">custom_log_path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> does not exists&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">custom_log_path</span><span class="p">))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span>
+            <span class="n">ignore_status</span><span class="o">=</span><span class="n">ignore_status</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">working_directory</span><span class="o">=</span><span class="n">working_directory</span><span class="p">,</span>
+            <span class="n">custom_logfile</span><span class="o">=</span><span class="n">custom_logfile</span><span class="p">,</span>
+            <span class="n">get_return_code</span><span class="o">=</span><span class="n">get_return_code</span><span class="p">,</span>
+            <span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># if get_return_code is True, result is a tuple</span>
+        <span class="k">if</span> <span class="n">get_return_code</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(),</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.run_non_verbose"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_non_verbose">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_non_verbose</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="n">ignore_status</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.try_run_get_output"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.try_run_get_output">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">try_run_get_output</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to run given cmd with verbose set to False</span>
+<span class="sd">        Returns stdout of cmd on success, None on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="n">ignore_status</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Failure try_run_get_output </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.run_search_pattern"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_search_pattern">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_search_pattern</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs cmd using try_run_get_output and searches for pattern in output</span>
+<span class="sd">        Returns first match group if found, None otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="n">ignore_status</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.run_remote_module"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_remote_module">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_remote_module</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">module</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">class_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+        <span class="n">host</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs a module in the validation_utils/modules directory.</span>
+<span class="sd">        For remote use runs through the host module, otherwise runs locally</span>
+<span class="sd">        @params</span>
+<span class="sd">        module - Module of the method to be called</span>
+<span class="sd">        method - Method to be called</span>
+<span class="sd">        class_name - Class of the  method to be called</span>
+<span class="sd">        params - List of Params</span>
+<span class="sd">        timeout - Time out in sec</span>
+<span class="sd">        host - Host obj of host to run the function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s2">&quot;/usr/facebook/havoc/autotest_testfiles&quot;</span>
+        <span class="n">module_runner</span> <span class="o">=</span> <span class="s2">&quot;validation_utils.modules.autoval_module_runner&quot;</span>
+        <span class="n">_host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="k">if</span> <span class="n">_host</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_host</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_host</span>
+
+        <span class="c1"># Create cli using --module, -f, -c and --params which refers to</span>
+        <span class="c1"># which function (-f) in a class (-c) within python file (--module)</span>
+        <span class="c1"># autoval_module_runner will run passing parameters --params.</span>
+        <span class="n">_cli</span> <span class="o">=</span> <span class="s2">&quot;python -m </span><span class="si">{}</span><span class="s2"> --module </span><span class="si">{}</span><span class="s2"> -f </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">module_runner</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">method</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">class_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_cli</span> <span class="o">+=</span> <span class="s2">&quot; -c </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">class_name</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">param_str</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+            <span class="n">_cli</span> <span class="o">+=</span> <span class="s2">&quot; --params </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_host</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No Host set/passed to run_remote_module()&quot;</span><span class="p">)</span>
+
+        <span class="n">json_data</span> <span class="o">=</span> <span class="n">_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">_cli</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># The method is expected to return json data, but can also</span>
+            <span class="c1"># return nothing, don&#39;t fail in this case</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.log_info"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.log_info">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder for logging functionality. Currently just uses logging</span>
+<span class="sd">        module to log.</span>
+<span class="sd">        @param msg: String to log</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.log_debug"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.log_debug">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_debug</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder for logging functionality. Currently just uses logging</span>
+<span class="sd">        module to log.</span>
+<span class="sd">        @param msg: String to log</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.compare_configs"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.compare_configs">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">compare_configs</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">difference_allowed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deviation_allowed</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares 2 configuration dicts.</span>
+<span class="sd">        Returns a dict of the difference in the 2 dicts</span>
+
+<span class="sd">        @param first: First dict</span>
+<span class="sd">        @param second: Second dict</span>
+<span class="sd">        @param deviation_allowed: Dict of fields where a deviation is allowed.</span>
+<span class="sd">                                  Key is fieldname, value is deviation allowed</span>
+<span class="sd">                                  in percent</span>
+<span class="sd">        @param difference_allowed: Dict of fields where a difference is allowed</span>
+<span class="sd">                                   Key is fieldname, value is difference allowed</span>
+<span class="sd">                                   in count</span>
+<span class="sd">        @return: dict of difference between first and second</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">diff</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Check for keys in first but not in second or where the values differ</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">second</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is missing in end config&quot;</span> <span class="o">%</span> <span class="n">key</span>
+                    <span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">error</span>
+                    <span class="n">diff</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">]]})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diff</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="kc">None</span><span class="p">]})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">difference_allowed</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">difference_allowed</span><span class="p">:</span>
+                    <span class="n">pct_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">pct_diff</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">difference_allowed</span><span class="p">[</span><span class="n">key</span><span class="p">]):</span>
+                        <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">elif</span> <span class="n">deviation_allowed</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">deviation_allowed</span><span class="p">:</span>
+                    <span class="n">pct_diff</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                        <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                        <span class="o">*</span> <span class="mi">100</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">pct_diff</span> <span class="o">&gt;</span> <span class="n">deviation_allowed</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                        <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">elif</span> <span class="n">pct_diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                            <span class="s2">&quot;Deviation of [</span><span class="si">%s</span><span class="s2">] within limit of [</span><span class="si">%f</span><span class="s2">]</span><span class="si">%%</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">deviation_allowed</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                        <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">found_diff</span><span class="p">:</span>
+                    <span class="n">diff</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]]})</span>
+        <span class="c1"># Now check for keys in second that are not in first</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">second</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is missing in start config&quot;</span> <span class="o">%</span> <span class="n">key</span>
+                    <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">error</span>
+                <span class="n">diff</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]]})</span>
+        <span class="k">return</span> <span class="n">diff</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.diff_configs"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.diff_configs">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">diff_configs</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">difference_allowed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deviation_allowed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">parents</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">diffs</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compares 2 configuration dicts.</span>
+<span class="sd">        Returns a list of the difference in the 2 dicts</span>
+<span class="sd">        This routine is recursive for nested dictionaries.</span>
+
+<span class="sd">        @param first: First dict</span>
+<span class="sd">        @param second: Second dict</span>
+
+<span class="sd">        @param deviation_allowed: Dict of fields where a deviation is allowed.</span>
+<span class="sd">                                  Key is fieldname, value is deviation allowed</span>
+<span class="sd">                                  in percent</span>
+<span class="sd">        @param difference_allowed: Dict of fields where a difference is allowed</span>
+<span class="sd">                                   Key is fieldname, value is difference allowed</span>
+<span class="sd">                                   in count</span>
+<span class="sd">        @param - (list) parents - the nested dictionary names above us.</span>
+<span class="sd">        @params - (list) diffs - the list of diffs we&#39;ve found already.</span>
+<span class="sd">        @return: dict of difference between first and second or a list of them</span>
+<span class="sd">                if we found more than 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># so we can append to them.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">diffs</span><span class="p">:</span>
+            <span class="n">diffs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parents</span><span class="p">:</span>
+            <span class="n">parents</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Check for keys in first but not in second or where the values differ</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">second</span><span class="p">:</span>
+                <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="kc">None</span><span class="p">]})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">difference_allowed</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">difference_allowed</span><span class="p">:</span>
+                    <span class="n">pct_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">pct_diff</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">difference_allowed</span><span class="p">[</span><span class="n">key</span><span class="p">]):</span>
+                        <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">elif</span> <span class="n">deviation_allowed</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">deviation_allowed</span><span class="p">:</span>
+                    <span class="n">pct_diff</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+                        <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                        <span class="o">*</span> <span class="mi">100</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">pct_diff</span> <span class="o">&gt;</span> <span class="n">deviation_allowed</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                        <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">elif</span> <span class="n">pct_diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                            <span class="s2">&quot;Deviation of [</span><span class="si">%s</span><span class="s2">] within limit of [</span><span class="si">%f</span><span class="s2">]</span><span class="si">%%</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">deviation_allowed</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                        <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+
+                        <span class="k">if</span> <span class="n">parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">new_diff</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">diff_configs</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                                <span class="n">difference_allowed</span><span class="o">=</span><span class="n">difference_allowed</span><span class="p">,</span>
+                                <span class="n">deviation_allowed</span><span class="o">=</span><span class="n">deviation_allowed</span><span class="p">,</span>
+                                <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                                <span class="n">diffs</span><span class="o">=</span><span class="n">diffs</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">new_diff</span> <span class="ow">and</span> <span class="n">new_diff</span> <span class="o">!=</span> <span class="n">diffs</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">diffs</span><span class="p">:</span>
+                                    <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_diff</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">diffs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_diff</span><span class="p">)</span>
+
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">parents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                            <span class="n">new_diff</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">diff_configs</span><span class="p">(</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                                <span class="n">difference_allowed</span><span class="o">=</span><span class="n">difference_allowed</span><span class="p">,</span>
+                                <span class="n">deviation_allowed</span><span class="o">=</span><span class="n">deviation_allowed</span><span class="p">,</span>
+                                <span class="n">parents</span><span class="o">=</span><span class="n">parents</span><span class="p">,</span>
+                                <span class="n">diffs</span><span class="o">=</span><span class="n">diffs</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">new_diff</span> <span class="ow">and</span> <span class="n">new_diff</span> <span class="o">!=</span> <span class="n">diffs</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">diffs</span><span class="p">:</span>
+                                    <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_diff</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">diffs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_diff</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">found_diff</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="k">if</span> <span class="n">found_diff</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">parents</span><span class="p">:</span>
+                            <span class="c1"># here we reconstruct the multi-nexted dictionary.</span>
+                            <span class="n">current_answer</span> <span class="o">=</span> <span class="p">[</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+                            <span class="n">parents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                                <span class="n">created_diff</span> <span class="o">=</span> <span class="p">{</span>
+                                    <span class="n">parent</span> <span class="p">:</span> <span class="n">current_answer</span>
+                                <span class="p">}</span>
+                                <span class="n">current_answer</span> <span class="o">=</span> <span class="n">created_diff</span>
+
+                            <span class="c1">#diffs.append(created_diff)</span>
+                            <span class="n">parents</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">created_diff</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">diffs</span><span class="p">:</span>
+                                    <span class="n">diffs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">created_diff</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">created_diff</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span> <span class="p">:</span> <span class="p">[</span><span class="n">first</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]]})</span>
+
+        <span class="c1"># Now check for keys in second that are not in first</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">second</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">first</span><span class="p">:</span>
+                <span class="n">diffs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">second</span><span class="p">[</span><span class="n">key</span><span class="p">]]})</span>
+
+
+        <span class="k">return</span> <span class="n">diffs</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.add_dict_key_prefix"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.add_dict_key_prefix">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">add_dict_key_prefix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">old_dict</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="n">new_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">old_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">new_dict</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">new_dict</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">did_pass</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">actual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">expected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">operation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">on_fail</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">continue_test_on_error</span><span class="p">:</span>
+            <span class="n">raise_on_fail</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_logs_initialized</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_init_logs</span><span class="p">()</span>
+        <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;conditions&quot;</span><span class="p">)</span>
+
+        <span class="n">step</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">add_test_step_result</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">operation</span>
+        <span class="p">)</span>
+        <span class="n">_msg</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_validation_msg</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">step</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">log_on_pass</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">did_pass</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">did_pass</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_failed_test_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">on_fail</span><span class="p">:</span>
+                <span class="n">on_fail_msg</span> <span class="o">=</span> <span class="s2">&quot;On failure processing for &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">msg</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_on_fail</span><span class="p">(</span>
+                    <span class="n">on_fail</span><span class="p">,</span> <span class="n">on_fail_msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">raise_on_fail</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestStepError</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_passed_test_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_on_fail</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">on_fail</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">on_fail</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Need on_fail param as a list&quot;</span><span class="p">)</span>
+        <span class="n">_funct</span> <span class="o">=</span> <span class="n">on_fail</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="n">_funct</span><span class="p">,</span> <span class="n">on_fail</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span>
+        <span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_validation_msg</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">did_pass</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">step</span>
+    <span class="p">):</span>
+
+        <span class="n">actual</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_formatted_msg</span><span class="p">(</span><span class="n">actual</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_formatted_msg</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">identifier</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="n">identifier</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; - Actual: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">actual</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">operation</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot; - Validation: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; - Expected: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">did_pass</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;PASSED - </span><span class="si">%s</span><span class="s2"> - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;FAILED - </span><span class="si">%s</span><span class="s2"> - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">msg</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_formatted_msg</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="c1"># If there&#39;s a newline in the output add another one to the start and</span>
+        <span class="c1"># end to make sure message is aligned</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">msg</span>
+
+<div class="viewcode-block" id="AutovalUtils.validate_condition"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_condition">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_condition</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">on_fail</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that a condition evaluates to True and logs the specified</span>
+<span class="sd">        message. Throws an exception if condition is False</span>
+<span class="sd">        @param condition: Condition to check for True</span>
+<span class="sd">        @param msg: Message to log</span>
+<span class="sd">        @return None. Throws exception if condition evaluates to False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">condition</span><span class="p">),</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">condition</span><span class="p">),</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isTrue&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+            <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+            <span class="n">on_fail</span><span class="o">=</span><span class="n">on_fail</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_empty_list"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_empty_list">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_empty_list</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">validate_list</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that a given list is empty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">validate_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="n">validate_list</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isEmptyList&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+            <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_non_empty_list"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_non_empty_list">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_non_empty_list</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">validate_list</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that a given list is with at least one element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">did_pass</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">validate_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">validate_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="n">did_pass</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="n">validate_list</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="s2">&quot;Non Empty List&quot;</span><span class="p">,</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isNonEmptyList&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+            <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_equal"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_equal">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_equal</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">actual</span><span class="p">,</span>
+        <span class="n">expected</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that actual equals expected (using &#39;==&#39; operator)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="n">actual</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="n">actual</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="n">expected</span><span class="p">,</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isEqual&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+            <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_less"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_less">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_less</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">actual</span><span class="p">,</span>
+        <span class="n">expected</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+            <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_less_equal"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_less_equal">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_less_equal</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">actual</span><span class="p">,</span>
+        <span class="n">expected</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+            <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;lte&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_greater"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_greater">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_greater</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">actual</span><span class="p">,</span>
+        <span class="n">expected</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+            <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;gt&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_greater_equal"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_greater_equal">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_greater_equal</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">actual</span><span class="p">,</span>
+        <span class="n">expected</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+            <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;gte&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_validate_lt_gt_eq</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">actual</span><span class="p">,</span>
+        <span class="n">expected</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">comparison</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">comparison</span> <span class="o">==</span> <span class="s2">&quot;lt&quot;</span><span class="p">:</span>
+            <span class="n">did_pass</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">&lt;</span> <span class="n">expected</span>
+            <span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;isLess&quot;</span>
+        <span class="k">elif</span> <span class="n">comparison</span> <span class="o">==</span> <span class="s2">&quot;lte&quot;</span><span class="p">:</span>
+            <span class="n">did_pass</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">&lt;=</span> <span class="n">expected</span>
+            <span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;isLessOrEqual&quot;</span>
+        <span class="k">elif</span> <span class="n">comparison</span> <span class="o">==</span> <span class="s2">&quot;gt&quot;</span><span class="p">:</span>
+            <span class="n">did_pass</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">&gt;</span> <span class="n">expected</span>
+            <span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;isGreater&quot;</span>
+        <span class="k">elif</span> <span class="n">comparison</span> <span class="o">==</span> <span class="s2">&quot;gte&quot;</span><span class="p">:</span>
+            <span class="n">did_pass</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">&gt;=</span> <span class="n">expected</span>
+            <span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;isGreaterOrEqual&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unsupported comparison </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">comparison</span><span class="p">))</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="n">did_pass</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="n">actual</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="n">expected</span><span class="p">,</span>
+            <span class="n">operation</span><span class="o">=</span><span class="n">operation</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+            <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="AutovalUtils.validate_in"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_in">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_in</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that &quot;item&quot; is &quot;in&quot; &quot;container&quot;. This works for items of lists</span>
+<span class="sd">        as well as substring of strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="n">item</span> <span class="ow">in</span> <span class="n">container</span><span class="p">,</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isIn&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+            <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_no_exception"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_no_exception">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_no_exception</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">code_ref</span><span class="p">,</span>
+        <span class="n">param_list</span><span class="p">,</span>
+        <span class="n">msg</span><span class="p">,</span>
+        <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that executing code_ref does not throw an exception. If an</span>
+<span class="sd">        exception is thrown the test step is marked as failed and the exception</span>
+<span class="sd">        is re-raised</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">exc_str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">code_ref</span><span class="p">(</span><span class="o">*</span><span class="n">param_list</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">exc</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">exc_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">raise_on_fail</span><span class="p">:</span>
+                <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+                <span class="n">did_pass</span><span class="o">=</span><span class="ow">not</span> <span class="n">exc</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+                <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+                <span class="n">actual</span><span class="o">=</span><span class="n">exc_str</span><span class="p">,</span>
+                <span class="n">expected</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isNotException&quot;</span><span class="p">,</span>
+                <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_exception"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_exception">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_exception</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">code_ref</span><span class="p">,</span> <span class="n">param_list</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">exception_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="n">exc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">actual_str</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">code_ref</span><span class="p">(</span><span class="o">*</span><span class="n">param_list</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">exc</span> <span class="o">=</span> <span class="n">e</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+            <span class="n">actual_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">actual</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">exception_type</span><span class="p">:</span>
+                <span class="n">exception_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">exception_type</span><span class="p">:</span>
+            <span class="n">exception_type</span> <span class="o">=</span> <span class="ne">Exception</span>
+
+        <span class="n">raise_on_fail</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">exc</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="o">!=</span> <span class="n">exception_type</span><span class="p">:</span>
+            <span class="n">raise_on_fail</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+            <span class="n">did_pass</span><span class="o">=</span><span class="n">exc</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span> <span class="n">exception_type</span><span class="p">),</span>
+            <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="n">identifier</span><span class="p">,</span>
+            <span class="n">actual</span><span class="o">=</span><span class="n">actual_str</span><span class="p">,</span>
+            <span class="n">expected</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">exception_type</span><span class="p">),</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isException&quot;</span><span class="p">,</span>
+            <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.validate_empty_diff"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.validate_empty_diff">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">validate_empty_diff</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates that the diff passed in is empty. Diff has to have the format</span>
+<span class="sd">        as created by the compare_configs method in this module. Example:</span>
+<span class="sd">            diff = AutovalUtils.compare_configs(before_dict, after_dict)</span>
+<span class="sd">            self.validate_empty_diff(diff, &quot;Check for no diff&quot;)</span>
+<span class="sd">        Creates a separate step for each difference (if any)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">diff</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+                    <span class="n">did_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+                    <span class="n">identifier</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                    <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isEmptyDiff&quot;</span><span class="p">,</span>
+                    <span class="n">actual</span><span class="o">=</span><span class="n">diff</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">expected</span><span class="o">=</span><span class="n">diff</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TestStepError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span>
+                <span class="n">did_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
+                <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;isEmptyDiff&quot;</span><span class="p">,</span>
+                <span class="n">actual</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">expected</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">raise_on_fail</span><span class="o">=</span><span class="n">raise_on_fail</span><span class="p">,</span>
+                <span class="n">log_on_pass</span><span class="o">=</span><span class="n">log_on_pass</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.to_string"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.to_string">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Convert an object to a string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="c1"># Convert unicode type (only in Python 2), but not str type</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">string</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.add_test_step_result"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.add_test_step_result">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">add_test_step_result</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">passed</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds the test step information to the result_handler module, which will</span>
+<span class="sd">        later be added to Hive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">():</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">frame</span>
+            <span class="c1"># Skip anything coming from standard libraries</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;autoval.py&quot;</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;test_base.py&quot;</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;validation_test.py&quot;</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">break</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fbcode_relative_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="n">step_number</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_test_step</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_test_step</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">step_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;did_pass&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">passed</span><span class="p">),</span>
+            <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
+            <span class="s2">&quot;step_number&quot;</span><span class="p">:</span> <span class="n">step_number</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp_ms&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">now</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
+            <span class="s2">&quot;identifier&quot;</span><span class="p">:</span> <span class="n">identifier</span><span class="p">,</span>
+            <span class="s2">&quot;actual&quot;</span><span class="p">:</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">actual</span><span class="p">),</span>
+            <span class="s2">&quot;expected&quot;</span><span class="p">:</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">expected</span><span class="p">),</span>
+            <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="n">operation</span><span class="p">,</span>
+            <span class="s2">&quot;test_file&quot;</span><span class="p">:</span> <span class="n">path</span><span class="p">,</span>
+            <span class="s2">&quot;test_line&quot;</span><span class="p">:</span> <span class="n">line</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_step</span><span class="p">(</span><span class="n">step_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">step_number</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_failed_test_steps"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_failed_test_steps">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_failed_test_steps</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_failed_test_steps</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_passed_test_steps"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_passed_test_steps">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_passed_test_steps</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_passed_test_steps</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.fbcode_relative_path"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.fbcode_relative_path">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">fbcode_relative_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Given the file path of a havoc test/library, return the path</span>
+<span class="sd">        relative to fbcode. This takes care of most autotest and autoval test</span>
+<span class="sd">        paths, but will fail if a test is called with a relative path such as</span>
+<span class="sd">        &quot;./iperf.py&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get absolute path even when path is relative and chdir has been used</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;havoc/&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">path</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># Find path relative to fbcode directory</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.*?havoc/&quot;</span><span class="p">,</span> <span class="s2">&quot;havoc/&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;havoc/autotest/client/&quot;</span><span class="p">,</span> <span class="s2">&quot;havoc/autotest_testfiles/&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;#link-tree/&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;/remote_exec_tests/(.*)/([^/]*)/([^/]*)$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;/autoval/tests/\1/\3&quot;</span><span class="p">,</span> <span class="n">path</span>
+        <span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;havoc/havoc/&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;havoc/&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div>
+
+    <span class="c1"># This function gives first match found with regex passed as argument for</span>
+    <span class="c1"># given command</span>
+<div class="viewcode-block" id="AutovalUtils.run_get_match"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.run_get_match">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">run_get_match</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">reg_ex</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">reg_ex</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No match found for cmd </span><span class="si">%s</span><span class="s2"> in output </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">output</span><span class="p">))</span></div>
+
+    <span class="c1"># Installs a list of rpms</span>
+<div class="viewcode-block" id="AutovalUtils.install_rpms"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.install_rpms">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">install_rpms</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rpm_list</span><span class="p">,</span> <span class="n">force_install</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">rpm_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">force_install</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_rpm_info</span><span class="p">(</span><span class="n">rpm</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;yum -y install </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rpm</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">CmdError</span><span class="p">:</span>
+                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rpm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Failed to install the following RPMs: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_rpm_info"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_rpm_info">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_rpm_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rpm</span><span class="p">):</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">ret</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+            <span class="s2">&quot;rpm -q </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rpm</span><span class="p">),</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_return_code</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_ethtool_output"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_ethtool_output">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_ethtool_output</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s2">&quot;-S&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Return ethtool output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ethtool</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ethtool</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;ethtool </span><span class="si">%s</span><span class="s2"> eth0&quot;</span> <span class="o">%</span> <span class="n">switch</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">ethtool</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;ethtool </span><span class="si">%s</span><span class="s2"> eth1&quot;</span> <span class="o">%</span> <span class="n">switch</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ethtool</span></div>
+
+<div class="viewcode-block" id="AutovalUtils.get_ethtool_output_dict"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.get_ethtool_output_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_ethtool_output_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ethtool_out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Return ethtool output in key value dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ethtool_out</span><span class="p">:</span>
+            <span class="n">ethtool_out</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_ethtool_output</span><span class="p">(</span><span class="n">switch</span><span class="p">)</span>
+        <span class="n">ethtool_out</span> <span class="o">=</span> <span class="n">ethtool_out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">eth_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ethtool_out</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">delimiter</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="n">delimiter</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">eth_dict</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">eth_dict</span></div>
+
+    <span class="c1"># Compare the value of the entries between two ethtool outputs.</span>
+    <span class="c1"># Takes the keytosearch argument and compares values among two ethtool</span>
+    <span class="c1"># outputs. For every mismatched entry, The test fails if report = fail</span>
+    <span class="c1"># or logs a message as warning if report = warn.</span>
+    <span class="c1"># The function assumes both ethtool outputs are generated from same</span>
+    <span class="c1"># version of ethtool utility and are generated on identical hardware platform.</span>
+<div class="viewcode-block" id="AutovalUtils.compare_ethtool_output"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.autoval.AutovalUtils.compare_ethtool_output">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">compare_ethtool_output</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">ethtool1</span><span class="p">,</span> <span class="n">ethtool2</span><span class="p">,</span> <span class="n">keytosearch</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">optional_field</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ethtool1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">ethtool2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;ethtool argument is empty&quot;</span><span class="p">)</span>
+        <span class="n">output_before</span> <span class="o">=</span> <span class="n">ethtool1</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">output_after</span> <span class="o">=</span> <span class="n">ethtool2</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">pattern_err</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">keytosearch</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">after</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">output_before</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern_err</span><span class="p">,</span> <span class="n">each</span><span class="p">):</span>
+                <span class="n">error_field</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">before</span><span class="p">[</span><span class="n">error_field</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">output_after</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern_err</span><span class="p">,</span> <span class="n">each</span><span class="p">):</span>
+                <span class="n">error_field</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">after</span><span class="p">[</span><span class="n">error_field</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">before</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">after</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">optional_field</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No field found for </span><span class="si">%s</span><span class="s2"> in ethtool output&quot;</span> <span class="o">%</span> <span class="n">keytosearch</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">namebefore</span> <span class="ow">in</span> <span class="n">before</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">namebefore</span> <span class="ow">in</span> <span class="n">after</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">before</span><span class="p">[</span><span class="n">namebefore</span><span class="p">]</span> <span class="o">!=</span> <span class="n">after</span><span class="p">[</span><span class="n">namebefore</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">report</span> <span class="o">==</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                            <span class="n">after</span><span class="p">[</span><span class="n">namebefore</span><span class="p">],</span>
+                            <span class="n">before</span><span class="p">[</span><span class="n">namebefore</span><span class="p">],</span>
+                            <span class="s2">&quot;Error count increase for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">namebefore</span><span class="p">),</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">report</span> <span class="o">==</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                            <span class="s2">&quot;Warning: The value for </span><span class="si">%s</span><span class="s2"> failed to match. &quot;</span>
+                            <span class="s2">&quot;Before: </span><span class="si">%s</span><span class="s2">. After: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">namebefore</span><span class="p">,</span> <span class="n">before</span><span class="p">[</span><span class="n">namebefore</span><span class="p">],</span> <span class="n">after</span><span class="p">[</span><span class="n">namebefore</span><span class="p">])</span>
+                        <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Key </span><span class="si">%s</span><span class="s2"> is missing from second ethtool argument </span><span class="se">\</span>
+<span class="s2">                    verify ethtool output for require field&quot;</span>
+                    <span class="o">%</span> <span class="n">namebefore</span>
+                <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.power.sample_power &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.power.sample_power</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.power.sample_power</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">havoc.autoval.lib.test_utils.convert_nums</span> <span class="k">as</span> <span class="nn">cn</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<div class="viewcode-block" id="HscPinAvg"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.HscPinAvg">[docs]</a><span class="k">class</span> <span class="nc">HscPinAvg</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    These constants are meant for the set_hsc_pin_avg_value() function.</span>
+<span class="sd">    These are the number of samples to be averaged during EIN collection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DISABLE_AVERAGING</span> <span class="o">=</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="n">SAMPLES_2</span> <span class="o">=</span> <span class="s2">&quot;0x01&quot;</span>
+    <span class="n">SAMPLES_4</span> <span class="o">=</span> <span class="s2">&quot;0x02&quot;</span>
+    <span class="n">SAMPLES_8</span> <span class="o">=</span> <span class="s2">&quot;0x03&quot;</span>
+    <span class="n">SAMPLES_16</span> <span class="o">=</span> <span class="s2">&quot;0x04&quot;</span>
+    <span class="n">SAMPLES_32</span> <span class="o">=</span> <span class="s2">&quot;0x05&quot;</span>
+    <span class="n">SAMPLES_64</span> <span class="o">=</span> <span class="s2">&quot;0x06&quot;</span>
+    <span class="n">SAMPLES_128</span> <span class="o">=</span> <span class="s2">&quot;0x07&quot;</span></div>
+
+
+<div class="viewcode-block" id="SamplePower"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower">[docs]</a><span class="k">class</span> <span class="nc">SamplePower</span><span class="p">():</span>
+<div class="viewcode-block" id="SamplePower.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">use_inband</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_inband</span> <span class="o">=</span> <span class="n">use_inband</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_ein_base_cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xdc &quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_ein_base_cmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x30 0xdd &quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_samples_to_collect</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimated_sample_time</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># units are seconds</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sys_chk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="s2">&quot;fru list&quot;</span><span class="p">)</span>
+        <span class="n">leopard</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Leopard&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sys_chk</span><span class="p">)</span>
+        <span class="n">wiwynn</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Wiwynn&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sys_chk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">leopard</span> <span class="ow">and</span> <span class="n">wiwynn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_hsc_pin_avg_value</span><span class="p">(</span><span class="n">HscPinAvg</span><span class="o">.</span><span class="n">DISABLE_AVERAGING</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SamplePower.begin_sampling_power"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.begin_sampling_power">[docs]</a>    <span class="k">def</span> <span class="nf">begin_sampling_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ival_time</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ival_time - Interval time between samples. Must be from [0, 255].</span>
+<span class="sd">                    Units are 0.25 seconds.</span>
+<span class="sd">        num_samples - Must be from [0, 65535].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_ein_base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x00 0x55 0x66 &quot;</span>
+
+        <span class="n">itbytes</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">int_to_bytes</span><span class="p">(</span><span class="n">ival_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itbytes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">nsbytes</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">int_to_bytes</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nsbytes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nsbytes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_samples_to_collect</span> <span class="o">=</span> <span class="n">num_samples</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_samples_to_collect</span> <span class="o">=</span> <span class="n">num_samples</span>
+            <span class="c1"># Update AFTER cmd succeeds</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimated_sample_time</span> <span class="o">=</span> <span class="n">num_samples</span> <span class="o">*</span> <span class="n">ival_time</span> <span class="o">*</span> <span class="mf">0.25</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+        <span class="c1"># passing abort collection sample for Leopard-Wiwynn</span>
+
+<div class="viewcode-block" id="SamplePower.abort_collecting_samples"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.abort_collecting_samples">[docs]</a>    <span class="k">def</span> <span class="nf">abort_collecting_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">leopard_wiwynn</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_ein_base_cmd</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x81&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="SamplePower.get_power_samples"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.get_power_samples">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_offset</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">,</span> <span class="n">buffer_time</span><span class="o">=</span><span class="mi">1800</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Blocks until the most recently started sample collection has finished</span>
+<span class="sd">        collecting all samples.</span>
+
+<span class="sd">        sample_offset - Offset from the first sample that you want to begin</span>
+<span class="sd">                        reading samples from. For example, an offset of 0</span>
+<span class="sd">                        means start reading from the first sample. Offset of</span>
+<span class="sd">                        3 means start from the fourth sample. Must be from</span>
+<span class="sd">                        [0, num_samples_read - 1].</span>
+<span class="sd">        num_samples - Number of samples to read starting at the sample_offset.</span>
+<span class="sd">                      Must be [0, 255]</span>
+
+<span class="sd">        returns - a list of the samples in decimal form. Samples are in order.</span>
+<span class="sd">                  Units are watts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimated_sample_time</span> <span class="o">+</span> <span class="n">buffer_time</span>
+
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_current_num_samples</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples_to_collect</span><span class="p">:</span>
+                <span class="c1"># There&#39;s a timing issue here. We must wait a little bit</span>
+                <span class="c1"># because even though the BMC reports that all samples have</span>
+                <span class="c1"># been collected, sometimes the sample collection isn&#39;t</span>
+                <span class="c1"># completely done. I think it needs some time to clean up.</span>
+                <span class="c1"># We can just sleep() for little bit to give it that time.</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Sample collection timed out.&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ein_base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x00 &quot;</span>
+
+        <span class="n">sobytes</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">int_to_bytes</span><span class="p">(</span><span class="n">sample_offset</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sobytes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sobytes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">nsbytes</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">int_to_bytes</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nsbytes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="n">samp_ints</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">bytes_to_ints</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">samples</span> <span class="o">+=</span> <span class="n">samp_ints</span>
+
+        <span class="c1"># Samples are in units of 0.1 watts. Convert to units of 1.0 Watts.</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">samples</span></div>
+
+<div class="viewcode-block" id="SamplePower.get_current_num_samples"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.get_current_num_samples">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_num_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the number of samples that have been collected since</span>
+<span class="sd">        the most recently started sample collection began.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ein_base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x05&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="n">cn</span><span class="o">.</span><span class="n">bytes_to_ints</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">num_samples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SamplePower.set_hsc_pin_avg_value"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.set_hsc_pin_avg_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_hsc_pin_avg_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set HSC PIN Averaging value during EIN Collection.</span>
+<span class="sd">        num_samples - Use one of the constants from the</span>
+<span class="sd">                      HscPinAvg class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_ein_base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x10 </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="SamplePower.free_memory"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.power.html#havoc.autoval.lib.power.sample_power.SamplePower.free_memory">[docs]</a>    <span class="k">def</span> <span class="nf">free_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_ein_base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x80&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_ipmitool_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_ipmitool_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_inband</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="c1"># TODO: The below commented out functions were briefly implemented, but</span>
+    <span class="c1">#       not made human/user friendly yet. They&#39;re not needed right now, but</span>
+    <span class="c1">#       if they&#39;re needed in the future, someone can uncomment them and</span>
+    <span class="c1">#       finish the implementation. Would be a shame to erase it.</span>
+
+    <span class="c1"># def get_hsc_pin_avg_val_during_ein_collect(self):</span>
+    <span class="c1">#     cmd = self.get_ein_base_cmd</span>
+    <span class="c1">#     cmd += &quot;0x10&quot;</span>
+
+    <span class="c1">#     out = self._run_ipmitool_cmd(cmd)</span>
+    <span class="c1">#     return out</span>
+
+    <span class="c1"># def get_avg_diff_of_samples(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Get average difference of sample counts</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     cmd = self.get_ein_base_cmd</span>
+    <span class="c1">#     cmd += &quot;0x01&quot;</span>
+
+    <span class="c1">#     out = self._run_ipmitool_cmd(cmd)</span>
+    <span class="c1">#     return out</span>
+
+    <span class="c1"># def get_max_diff_of_samples(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Get maximum difference between sample counts</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     cmd = self.get_ein_base_cmd</span>
+    <span class="c1">#     cmd += &quot;0x02&quot;</span>
+
+    <span class="c1">#     out = self._run_ipmitool_cmd(cmd)</span>
+    <span class="c1">#     return out</span>
+
+    <span class="c1"># def get_min_diff_of_samples(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Get minimum difference between sample counts</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     cmd = self.get_ein_base_cmd</span>
+    <span class="c1">#     cmd += &quot;0x03&quot;</span>
+
+    <span class="c1">#     out = self._run_ipmitool_cmd(cmd)</span>
+    <span class="c1">#     return out</span>
+
+    <span class="c1"># def get_raw_ein_data(self, offset_lsb, offset_msb, count):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     offset_lsb &amp; offset_msb - Offset of requested EIN raw data</span>
+    <span class="c1">#                               (0 to (&lt;Count of PIN to read&gt;))</span>
+    <span class="c1">#     count - Count to get. (0 to 20h)</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     cmd = self.get_ein_base_cmd</span>
+    <span class="c1">#     cmd += &quot;0x04 %s %s %s&quot; % (offset_lsb, offset_msb, count)</span>
+
+    <span class="c1">#     out = self._run_ipmitool_cmd(cmd)</span>
+    <span class="c1">#     return out</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

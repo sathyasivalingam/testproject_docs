@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models.openbmc_glacierpointv2 &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models.openbmc_glacierpointv2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.models.openbmc_glacierpointv2</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.models.openbmc_yosemitev2</span> <span class="k">import</span> <span class="n">OpenBMCYosemiteV2</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2">[docs]</a><span class="k">class</span> <span class="nc">OpenBMCGlacierPointV2</span><span class="p">(</span><span class="n">OpenBMCYosemiteV2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Sideband methods to execute on GPV2 server.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slot_for_gpv2</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_slot_for_gpv2"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_slot_for_gpv2">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_for_gpv2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Glacier PointV2 is attached to a twinlake yosemitev2 host.</span>
+<span class="sd">        The pairs are:</span>
+<span class="sd">        Slot2 host -&gt; Slot1 GPv2</span>
+<span class="sd">        Slot4 host -&gt; Slot3 GPv2</span>
+<span class="sd">        Replacing slot id is necessary to run commands on GPv2</span>
+<span class="sd">        through openbmc</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">slot_info</span> <span class="o">==</span> <span class="s2">&quot;slot2&quot;</span><span class="p">:</span>
+            <span class="n">slot_info</span> <span class="o">=</span> <span class="s2">&quot;slot1&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">slot_info</span> <span class="o">==</span> <span class="s2">&quot;slot4&quot;</span><span class="p">:</span>
+            <span class="n">slot_info</span> <span class="o">=</span> <span class="s2">&quot;slot3&quot;</span>
+        <span class="k">return</span> <span class="n">slot_info</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.device_fru_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.device_fru_list">[docs]</a>    <span class="k">def</span> <span class="nf">device_fru_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        execute fruid-util command on all the 12 pcie devices on gpv2</span>
+<span class="sd">        returns fruid from all devices</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/fruid-util </span><span class="si">%s</span><span class="s2"> device</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_full_fruid_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_full_fruid_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_fruid_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Extract and return</span>
+<span class="sd">            all the YV2 server related fruid</span>
+<span class="sd">            + GPV2 switch fruid</span>
+<span class="sd">            + 12 devices fruid</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_full_fruid_list</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fru_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_fru_list</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_fw_util_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_fw_util_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_fw_util_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return YV2 related fw-util + GPv2 slot fw-util</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fw_util_bmc_nic_slot</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fw_util</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.fw_update_glacierpoint_bic"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_bic">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_glacierpoint_bic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function performs bic fw-update of the gpv2 switch slot</span>
+<span class="sd">        Return value of this function is the console output of fw-update command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --update --bic </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.fw_update_glacierpoint_bicbl"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_bicbl">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_glacierpoint_bicbl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function performs bicbl fw-update of the gpv2 switch slot</span>
+<span class="sd">        Return value of this function is the console output of fw-update command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --update --bicbl </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_glacierpoint_bic_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_glacierpoint_bic_version">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">exponential</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_glacierpoint_bic_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Retrieves the GPv2 slot Bridge-IC Version</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --version&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># Get the BIC version from fw-util output</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Bridge-IC\sVersion:\s(\w+.\w+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to get BRIDGE IC version&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_glacierpoint_bicbl_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_glacierpoint_bicbl_version">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">exponential</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_glacierpoint_bicbl_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Retrieves the GPv2 slot Bridge-IC Bootloader Version</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --version&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># Get the BICbl version from fw-util output</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Bridge-IC\sBootloader\sVersion:\s(\w+.\w+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to get BIC bootloader version&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_cpld_glacierpoint_fw_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_cpld_glacierpoint_fw_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpld_glacierpoint_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Retrieves the GPv2 slot CPLD Version</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --version&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="c1"># Get the CPLD FW version from fw-util output</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;CPLD\sVersion:\s(\d+x\d+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to get CPLD FW version&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.fw_update_glacierpoint_cpld"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_glacierpoint_cpld">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_glacierpoint_cpld</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Executes the cpld fw update for GPv2 switch slot</span>
+<span class="sd">        Executes the ac_cycle(gpv2 slot)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --update --cpld </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">,</span>
+            <span class="n">bmc_binary_file_path</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">(</span><span class="n">slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.get_pciesw_fw_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.get_pciesw_fw_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_pciesw_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Retrieves the GPv2 slot pcie_sw Version</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --version&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="c1"># Get the pcie_sw FW version from fw-util output</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;PCIE\sswitch\sVersion:\s(\d+x\d+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to get PCIE switch Version:&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.fw_update_pcie_switch"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.fw_update_pcie_switch">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_pcie_switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Executes the pcie_sw fw update for GPv2 switch slot</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --update --pcie_sw </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">,</span>
+            <span class="n">bmc_binary_file_path</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.log_util_gpv2"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.log_util_gpv2">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_gpv2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Executes and returns the log-util output on GPv2 switch slot</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;log-util </span><span class="si">%s</span><span class="s2"> --print&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.log_util_all_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.log_util_all_options">[docs]</a>    <span class="k">def</span> <span class="nf">log_util_all_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns log-util output for host slot + GPv2 slot</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">logs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">log_util_all_options</span><span class="p">()</span>
+        <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_util_gpv2</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">logs</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.gpv2power"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.gpv2power">[docs]</a>    <span class="k">def</span> <span class="nf">gpv2power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">cycle_type</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        executes the cycle tests for GPv2 switch slot.</span>
+<span class="sd">        12V-cycle, 12V-on and 12V-off are valid for GPv2 slot.</span>
+<span class="sd">        other cycle types should be tested under negative testing with</span>
+<span class="sd">            not supported message.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cycle_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cycle&quot;</span><span class="p">,</span> <span class="s2">&quot;off&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;graceful-shutdown&quot;</span><span class="p">,</span> <span class="s2">&quot;reset&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;all_non_12V_cycle&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">cycle_options</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_negative_cycle</span><span class="p">(</span><span class="n">reboot_type</span><span class="o">=</span><span class="n">option</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;ac&#39;</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">(</span><span class="n">slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;ac_on_off_fullcycle&#39;</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCGlacierPointV2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">ac_on_off_fullcycle</span><span class="p">(</span>
+                <span class="n">slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unknown GPv2 power-util option </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cycle_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCGlacierPointV2.gpv2_negative_cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_glacierpointv2.OpenBMCGlacierPointV2.gpv2_negative_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">gpv2_negative_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">reboot_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Check negative test to make sure GPv2 returns error</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">reboot_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unknown reboot_type for cycling </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;power-util </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">,</span> <span class="n">reboot_type</span><span class="p">)</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing negative test : Cycling now : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="c1"># return code for reset command is 0; checking for fail in stdout instead:</span>
+        <span class="k">if</span> <span class="n">ret</span><span class="o">.</span><span class="n">return_code</span> <span class="o">==</span> <span class="mi">254</span> <span class="ow">or</span> <span class="s2">&quot;fail&quot;</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
+            <span class="c1">#Check if following STDOUT is found :</span>
+            <span class="c1">#&quot;Should not execute power on/off/graceful_shutdown/cycle/reset</span>
+            <span class="c1">#on device card&quot;:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ret</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^Should.*card$&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed message not found while executing </span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ret</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed power-cycle GPv2 slot </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpv2_slot</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage.storage_test_base &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage.storage_test_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.storage.storage_test_base</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.utils</span> <span class="k">import</span> <span class="n">find_in_nested_dict</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.storage_device_factory</span> <span class="k">import</span> \
+    <span class="n">StorageDeviceFactory</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.drive</span> <span class="k">import</span> <span class="n">DriveType</span><span class="p">,</span> <span class="n">DriveInterface</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">CmdError</span><span class="p">,</span>
+    <span class="n">TestError</span><span class="p">,</span>
+    <span class="n">TestStepError</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="DriveValidationException"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.DriveValidationException">[docs]</a><span class="k">class</span> <span class="nc">DriveValidationException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="StorageTestBase"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase">[docs]</a><span class="k">class</span> <span class="nc">StorageTestBase</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for testing drives.</span>
+<span class="sd">        - Create drive objects</span>
+<span class="sd">        - Compare and validate drive metrics at the end of the test</span>
+
+<span class="sd">        Test control params:</span>
+<span class="sd">            String[] drives: list of drive names to test: e.g. sdac, sdf,</span>
+<span class="sd">            String drive_type: hdd, ssd, etc.</span>
+<span class="sd">            String drive_interface: filter for drives with this interface</span>
+<span class="sd">                to test</span>
+<span class="sd">            String drive_model: test drives with this given model</span>
+<span class="sd">            String drive_count: if provided, will validate if the number</span>
+<span class="sd">                of test drives equal this value</span>
+<span class="sd">            String drive_config: json file that controls how drive data is</span>
+<span class="sd">                collected and validated</span>
+<span class="sd">            Boolean validate_bootdrive_smart: whether to validate boot drive</span>
+<span class="sd">            String validate_firmware: if provided, will check if test drives&#39;</span>
+<span class="sd">                firmware matches this value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># @override</span>
+<div class="viewcode-block" id="StorageTestBase.setup"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StorageTestBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage_test_setup</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StorageTestBase.storage_test_setup"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.storage_test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">storage_test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">boot_drive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span><span class="o">.</span><span class="n">get_boot_drive</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_config_file&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;drives&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drives&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span><span class="o">.</span><span class="n">get_block_devices</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;validate_bootdrive_smart&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">boot_drive</span><span class="p">)</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Collecting drive data.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drives</span> <span class="o">=</span> <span class="n">StorageDeviceFactory</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_list</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_config</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_test_drives_from_drives</span><span class="p">(</span>
+            <span class="n">drive_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">interface</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_interface&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_non_empty_list</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">drive</span><span class="o">.</span><span class="n">block_name</span> <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">],</span>
+            <span class="s2">&quot;Test drives list is not empty.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_test_drives_count</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_test_drives_firmware</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remove_partitions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive_data_before_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_drive_data</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_validate_test_drives_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;drive_count&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_count&quot;</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">),</span>
+                <span class="s2">&quot;Test drive count: </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_count&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_validate_test_drives_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;validate_firmware&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">:</span>
+            <span class="n">_fw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;validate_firmware&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                    <span class="n">drive</span><span class="o">.</span><span class="n">get_firmware_version</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                    <span class="n">_fw</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                    <span class="n">f</span><span class="s2">&quot;</span><span class="si">{drive.block_name}</span><span class="s2"> firmware is </span><span class="si">{_fw}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Test drives firmware is </span><span class="si">{_fw}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StorageTestBase._remove_partitions"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._remove_partitions">[docs]</a>    <span class="k">def</span> <span class="nf">_remove_partitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all partitions and unmount all drives, except for boot drive.</span>
+<span class="sd">            Running fio on a raw device would fail if attempted on an</span>
+<span class="sd">            already mounted device. Unmount the filesystem</span>
+<span class="sd">            before starting the tests.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">partitions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span><span class="o">.</span><span class="n">get_all_partitions</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">partitions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span><span class="o">.</span><span class="n">umount_partition</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span><span class="o">.</span><span class="n">remove_partition</span><span class="p">(</span><span class="n">part</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StorageTestBase._collect_drive_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._collect_drive_data">[docs]</a>    <span class="k">def</span> <span class="nf">_collect_drive_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Collect current drives&#39; data for before/after comparison and validation</span>
+
+<span class="sd">        @return {}: dictionary that map drive serial number -&gt; drive_snapshot object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drives</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="s2">&quot;serial_number&quot;</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">drive</span><span class="o">.</span><span class="n">serial_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">collect_data</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+    <span class="k">def</span> <span class="nf">_validate_drives_smart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drives</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_validate_drive_smart</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">DriveValidationException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_validate_drive_smart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="n">validate_config</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="s2">&quot;validate_config&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">serial_no</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="s2">&quot;serial_number&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">serial_no</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">before</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_data_before_test</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">serial_no</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">after</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_data_after_test</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">serial_no</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">smart_before</span> <span class="o">=</span> <span class="n">before</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SMART&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">smart_after</span> <span class="o">=</span> <span class="n">after</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SMART&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="k">if</span> <span class="n">smart_before</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">smart_after</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Validating /dev/</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_compare_drive_data</span><span class="p">(</span><span class="n">validate_config</span><span class="p">,</span> <span class="n">smart_before</span><span class="p">,</span> <span class="n">smart_after</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span><span class="s2">&quot;Missing SMART data.&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">DriveValidationException</span><span class="p">,</span> <span class="n">TestStepError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span><span class="s2">&quot;Drive /dev/</span><span class="si">%s</span><span class="s2"> - Serial No. </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span>
+                    <span class="n">serial_no</span><span class="p">,</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="p">))</span>
+
+<div class="viewcode-block" id="StorageTestBase._compare_drive_data"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._compare_drive_data">[docs]</a>    <span class="k">def</span> <span class="nf">_compare_drive_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validate_config</span><span class="p">,</span> <span class="n">before_dict</span><span class="p">,</span> <span class="n">after_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Usees instructions from validate_config dictionary and to compare drive</span>
+<span class="sd">            SMART data before and after the test</span>
+
+<span class="sd">        @param {} validate_config</span>
+<span class="sd">        @param {} before_dict</span>
+<span class="sd">        @param {} after_dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">actual</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">before</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">validate_config</span><span class="p">:</span>
+            <span class="n">compare_instr</span> <span class="o">=</span> <span class="n">validate_config</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">find_in_nested_dict</span><span class="p">(</span><span class="n">after_dict</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">actual</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span>
+                    <span class="s2">&quot;Unable to find &#39;</span><span class="si">%s</span><span class="s2">&#39; in drive log after test&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">))</span>
+
+            <span class="n">before</span> <span class="o">=</span> <span class="n">find_in_nested_dict</span><span class="p">(</span><span class="n">before_dict</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">before</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span>
+                    <span class="s2">&quot;Unable to find &#39;</span><span class="si">%s</span><span class="s2">&#39; in drive log before test&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">))</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_compare_drive_data_field</span><span class="p">(</span><span class="n">before</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">compare_instr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">DriveValidationException</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="n">errors</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StorageTestBase._compare_drive_data_field"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._compare_drive_data_field">[docs]</a>    <span class="k">def</span> <span class="nf">_compare_drive_data_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">instr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse a validate instruction and perform comparison on before vs. actual</span>
+<span class="sd">            values of a field. Supported operations:</span>
+<span class="sd">            &#39;&lt;&#39; -&gt; less than</span>
+<span class="sd">            &#39;&gt;&#39; -&gt; greater than</span>
+<span class="sd">            &#39;&gt;=&#39;-&gt; greater than equal to</span>
+<span class="sd">            &#39;&lt;=&#39;-&gt; less than equal to</span>
+<span class="sd">            &#39;=&#39; -&gt; check equality, similar to ==</span>
+<span class="sd">            &#39;-&#39; -&gt; in-between range (lower_val is required)</span>
+<span class="sd">            &#39;/&#39; -&gt; multiple options (existence of word in a string)</span>
+<span class="sd">            &#39;~&#39; -&gt; increment the &#39;expected&#39; by &quot;increment_by&quot; and compare</span>
+
+<span class="sd">        @param string/numeric before, actual:</span>
+<span class="sd">        @param string field</span>
+<span class="sd">        @param string instr: e.g. &quot;&gt;80&quot;, &quot;==&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">opr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Checking </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;==|&gt;|&lt;|/|-|~|&gt;=|&lt;=|=&quot;</span><span class="p">,</span> <span class="n">instr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="n">_msg</span> <span class="o">=</span> <span class="s2">&quot;Validate instruction must be a string.&quot;</span>
+            <span class="n">_msg</span> <span class="o">+=</span> <span class="s2">&quot; Field &#39;</span><span class="si">{}</span><span class="s2">&#39;. Instruction </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">instr</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">opr</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span> <span class="o">=</span> <span class="n">instr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_expression</span><span class="p">(</span>
+                    <span class="n">actual</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">higher</span><span class="p">),</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">lower_val</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+                <span class="n">increment</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">instr</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">opr</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_expression</span><span class="p">(</span>
+                    <span class="n">actual</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">increment_by</span><span class="o">=</span><span class="n">increment</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                <span class="n">expected</span> <span class="o">=</span> <span class="n">instr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_expression</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">opr</span> <span class="o">==</span> <span class="s2">&quot;==&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_expression</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">before</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">expected</span> <span class="o">=</span> <span class="n">instr</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">expected</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                    <span class="n">expected</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">actual</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="n">actual</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">actual</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_expression</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span>
+                <span class="s2">&quot;No matching operator found in </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">instr</span>
+            <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_evaluate_expression</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">opr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">lower_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">increment_by</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">):</span>
+        <span class="n">opr_match</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;gt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span> <span class="s2">&quot;lt&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;gteq&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;lteq&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;/&quot;</span><span class="p">:</span> <span class="s2">&quot;isIn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;~&quot;</span><span class="p">:</span> <span class="s2">&quot;incrementby&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;=&quot;</span><span class="p">:</span> <span class="s2">&quot;isEqual&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">lower_val</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="s2">&quot;&gt;&quot;</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="s2">&quot;&lt;&quot;</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;incrementby&quot;</span><span class="p">:</span>
+            <span class="n">expected</span> <span class="o">=</span> <span class="n">expected</span> <span class="o">+</span> <span class="n">increment_by</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="s2">&quot;&lt;&quot;</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;isIn&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">expected</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_in</span><span class="p">(</span><span class="n">each</span><span class="p">,</span> <span class="n">actual</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;isEqual&quot;</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opr</span> <span class="ow">in</span> <span class="n">opr_match</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">_validate_lt_gt_eq</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">opr_match</span><span class="p">[</span><span class="n">opr</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DriveValidationException</span><span class="p">(</span><span class="s2">&quot;No matching operator found to evaluate&quot;</span><span class="p">)</span>
+
+    <span class="c1"># @Override</span>
+<div class="viewcode-block" id="StorageTestBase.cleanup"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_data_after_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_drive_data</span><span class="p">()</span>
+            <span class="c1"># TODO: import save_smart_data</span>
+            <span class="c1"># and check_phy_err_changes from Autotest</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_validate_drives_smart</span><span class="p">()</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                self._save_smart_data(drive)</span>
+<span class="sd">            self._check_phy_err_changes()</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="k">except</span> <span class="n">DriveValidationException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">errors</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">super</span><span class="p">(</span><span class="n">StorageTestBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                        <span class="s2">&quot;Error during Storage Test cleanup: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="StorageTestBase.get_test_drives_from_drives"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase.get_test_drives_from_drives">[docs]</a>    <span class="k">def</span> <span class="nf">get_test_drives_from_drives</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">drive_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">interface</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filter drives that meet provided criteria for testing</span>
+
+<span class="sd">        @param</span>
+<span class="sd">            String drive_type - hdd, ssd, md</span>
+<span class="sd">            String interface - nvme, sas, sata</span>
+<span class="sd">            String model - drive model</span>
+<span class="sd">        @return - dict of logical name -&gt; Drive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drives</span>
+
+        <span class="k">if</span> <span class="n">drive_type</span><span class="p">:</span>
+            <span class="n">_enum_type</span> <span class="o">=</span> <span class="n">DriveType</span><span class="p">(</span><span class="n">drive_type</span><span class="p">)</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_drive_by_attr</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">_enum_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">interface</span><span class="p">:</span>
+            <span class="n">_enum_intf</span> <span class="o">=</span> <span class="n">DriveInterface</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_drive_by_attr</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="s2">&quot;interface&quot;</span><span class="p">,</span> <span class="n">_enum_intf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_drive_by_attr</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">filtered</span></div>
+
+<div class="viewcode-block" id="StorageTestBase._filter_drive_by_attr"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.storage_test_base.StorageTestBase._filter_drive_by_attr">[docs]</a>    <span class="k">def</span> <span class="nf">_filter_drive_by_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drives</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return drives in a list that has an attribute equal a provided value</span>
+
+<span class="sd">        @param String attr: attribute to compare</span>
+<span class="sd">        @param Enum/String value: drive is included if attribute has this value</span>
+<span class="sd">        @return Drive[]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="n">drives</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">filtered</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

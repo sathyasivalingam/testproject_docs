@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.pstate_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.pstate_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.pstate_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,))</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+
+<div class="viewcode-block" id="PstateUtils"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils">[docs]</a><span class="k">class</span> <span class="nc">PstateUtils</span><span class="p">:</span>
+
+    <span class="sd">&quot;&quot;&quot; Code to implemente pstates for tiogapass server &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PstateUtils.get_cpu_core"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.get_cpu_core">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_cpu_core</span><span class="p">():</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;dmidecode -t processor&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;Core Count: (\d+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="n">core_cnt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">core_cnt</span></div>
+
+<div class="viewcode-block" id="PstateUtils.make_mask"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.make_mask">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">make_mask</span><span class="p">(</span><span class="n">core_num</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Need to take more count and stage</span>
+<span class="sd">            and make a mask &quot;&quot;&quot;</span>
+        <span class="n">max_core_id</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">get_cpu_core</span><span class="p">()</span>
+        <span class="n">max_core_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">max_core_id</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Write stage </span><span class="si">%s</span><span class="s2"> to sequence file&quot;</span> <span class="o">%</span> <span class="n">stage</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/sequence.txt&quot;</span> <span class="o">%</span> <span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stage</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">write_core</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">stage</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">write_uncore</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">write_random</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PstateUtils.write_core"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.write_core">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_core</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">):</span>
+        <span class="c1"># write 0xffffffff,0x0,0</span>
+        <span class="n">val_10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">max_core_id</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">val_16</span> <span class="o">=</span> <span class="s1">&#39;0x</span><span class="si">%x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val_10</span><span class="p">)</span>
+        <span class="n">return_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, 0x0, 0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val_16</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">return_string</span></div>
+
+<div class="viewcode-block" id="PstateUtils.write_uncore"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.write_uncore">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_uncore</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">):</span>
+        <span class="c1"># write 0xffffffff,0x0,1</span>
+        <span class="n">val_10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">max_core_id</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">val_16</span> <span class="o">=</span> <span class="s1">&#39;0x</span><span class="si">%x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val_10</span><span class="p">)</span>
+        <span class="n">return_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, 0x0, 1&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val_16</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">return_string</span></div>
+
+<div class="viewcode-block" id="PstateUtils.write_random"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.write_random">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_random</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">):</span>
+        <span class="c1"># randomize 0xvalue_0,0xvalue_1,0</span>
+        <span class="n">val_2</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_core_id</span><span class="p">):</span>
+            <span class="n">rand_num</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_core_id</span><span class="p">)</span>
+            <span class="n">rand_num</span> <span class="o">=</span> <span class="p">((</span><span class="n">rand_num</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rand_num</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">val_2</span> <span class="o">+=</span> <span class="s1">&#39;0&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">val_2</span> <span class="o">+=</span> <span class="s1">&#39;1&#39;</span>
+        <span class="n">val_16</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">val_2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">return_string</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">val_2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">val_10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">max_core_id</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">allfs</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">val_10</span><span class="p">)</span>
+        <span class="n">flipped_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">allfs</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span> <span class="nb">int</span><span class="p">(</span><span class="n">val_16</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">val_16</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">flipped_val</span><span class="p">)</span>
+        <span class="n">return_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, 0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">return_string</span><span class="p">,</span> <span class="n">val_16</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">return_string</span></div>
+
+<div class="viewcode-block" id="PstateUtils.make_list"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.make_list">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">make_list</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="c1"># need to take 0xffffff and give a string of list</span>
+        <span class="c1"># like of cores such as 1,2,3,4,5</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">cores_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">mask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="mh">0x1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">cores_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">cores_list</span></div>
+
+<div class="viewcode-block" id="PstateUtils.set_core_msr"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.set_core_msr">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">):</span>
+        <span class="c1"># Set Core</span>
+        <span class="c1"># Take coreid, offset, core_num, msr_value - write its thread core</span>
+        <span class="n">coreid</span> <span class="o">=</span> <span class="n">core</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
+        <span class="n">thread_core</span> <span class="o">=</span> <span class="n">core_num</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">thread_core</span> <span class="o">=</span> <span class="n">coreid</span> <span class="o">+</span> <span class="n">thread_core</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="c1"># writing $value to $coreid and $thread_core, with $offset</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/wrmsr -p</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">msr_path</span><span class="p">,</span> <span class="n">coreid</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/wrmsr -p</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">msr_path</span><span class="p">,</span> <span class="n">thread_core</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PstateUtils.pstate_exec"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.pstate_utils.PstateUtils.pstate_exec">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">pstate_exec</span><span class="p">(</span><span class="n">endtime</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">core_num</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">get_cpu_core</span><span class="p">()</span>
+        <span class="c1"># total_core = core_num * 2</span>
+        <span class="c1"># total_core_max_id = total_core - 1</span>
+        <span class="n">test_duration</span> <span class="o">=</span> <span class="n">endtime</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">msr_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span>
+                                <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;tests&quot;</span><span class="p">,</span> <span class="s2">&quot;pstates&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">msr_path</span><span class="p">)</span>
+
+        <span class="sd">&quot;&quot;&quot; Create sequence file for each test stage</span>
+<span class="sd">        Stage 1. all core throttling (including uncore)</span>
+<span class="sd">        Stage 2. core vs. uncore throttling</span>
+<span class="sd">        Stage 3. random core throttling</span>
+<span class="sd">        Format of the Sequence file</span>
+<span class="sd">        stage_no,group1_mask,group2_mask,uncore_toggle,time_internval</span>
+<span class="sd">        This script will make sure group1_mask core and group2_mask</span>
+<span class="sd">        cores are both in opposite states</span>
+<span class="sd">        If uncore_toggle is 1, it would flip to different state</span>
+<span class="sd">        as group1 cores. &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/sequence.txt&quot;</span> <span class="o">%</span> <span class="n">file_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rm -rf sequence.txt&quot;</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="n">PstateUtils</span><span class="o">.</span><span class="n">make_mask</span><span class="p">(</span><span class="n">core_num</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+
+        <span class="c1"># Launch test program in the background</span>
+        <span class="c1"># Update app cmd to point to your binary</span>
+        <span class="c1"># Ptugen command for frequency to reach 3.0+ equivalent</span>
+        <span class="c1"># to or less than turbo frequency</span>
+        <span class="n">appcmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">nohup 2&gt;&amp;1 ./ptugen -y -b 1 -ct 2 -p 50 &amp;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">msr_path</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">appcmd</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Launching the ptugen in the background&quot;</span><span class="p">)</span>
+        <span class="c1"># Execute the sequence file in the loop until test time expires.</span>
+        <span class="c1"># toggle_interval is how fast to change pstate</span>
+        <span class="c1"># stage_duration is how long to stay in each stages</span>
+        <span class="n">toggle_interval</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">stage_duration</span> <span class="o">=</span> <span class="mi">60</span>
+        <span class="n">core_freq_t0</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/rdmsr -p0 0x199&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">msr_path</span>
+        <span class="n">core_freq_t0</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">core_freq_t0</span><span class="p">)</span>
+        <span class="n">uncore_freq_t0</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/rdmsr -p0 0x620&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">msr_path</span>
+        <span class="n">uncore_freq_t0</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">uncore_freq_t0</span><span class="p">)</span>
+        <span class="c1"># check 0x770[0]; if 1 HWPM is enabled; if 0 HWPM is disabled</span>
+        <span class="n">hwpm_on</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/rdmsr 0x770&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">msr_path</span>
+        <span class="n">hwpm_on</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">hwpm_on</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/sequence.txt&quot;</span> <span class="o">%</span> <span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">seq_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">seq_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                    <span class="n">starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;New Stage begins - parameters - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">line</span><span class="p">)</span>
+                    <span class="n">toggle_uncore</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">match</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+                        <span class="n">toggle_uncore</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Enabling Uncore Toggle: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">toggle_uncore</span><span class="p">)</span>
+                    <span class="n">mask</span> <span class="o">=</span> <span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">0</span><span class="p">)(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">corelist_1</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">make_list</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is group1 </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">corelist_1</span><span class="p">)</span>
+                    <span class="n">mask</span> <span class="o">=</span> <span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="n">corelist_2</span> <span class="o">=</span> <span class="n">PstateUtils</span><span class="o">.</span><span class="n">make_list</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;This is group2 </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">corelist_2</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Toggling uncore </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">match</span><span class="p">)</span>
+
+                    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="c1"># check if the stage is complete</span>
+                        <span class="n">currenttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                        <span class="n">timesincestart</span> <span class="o">=</span> <span class="p">(</span><span class="n">currenttime</span> <span class="o">-</span> <span class="n">starttime</span><span class="p">)</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running time at this stage: </span><span class="si">%s</span><span class="s2"> seconds&quot;</span>
+                                      <span class="o">%</span> <span class="n">timesincestart</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">timesincestart</span> <span class="o">&gt;</span> <span class="n">stage_duration</span><span class="p">):</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Stage has completed run for </span><span class="si">%s</span><span class="s2"> seconds&quot;</span>
+                                          <span class="o">%</span> <span class="n">timesincestart</span><span class="p">)</span>
+                            <span class="k">break</span>
+
+                        <span class="c1"># Detect whether HWPM feature is enabled, if so use</span>
+                        <span class="c1"># MSR register 0x774 to set the frequency limit, if not</span>
+                        <span class="c1"># use MSR register 0x199 to set the frequency limit</span>
+                        <span class="c1"># use set_core_msr to force all cores to</span>
+                        <span class="c1"># highest/lowest frequency</span>
+                        <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">hwpm_on</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x199&quot;</span><span class="p">,</span> <span class="s2">&quot;0xff00&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x774&quot;</span><span class="p">,</span> <span class="s2">&quot;0x2525&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_2</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">hwpm_on</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x199&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0200&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x774&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0707&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                        <span class="c1"># Do this only if we are to do uncore toggling</span>
+                        <span class="k">if</span> <span class="n">toggle_uncore</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_1</span><span class="p">:</span>
+                                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/wrmsr -p</span><span class="si">%d</span><span class="s2"> 0x620 0x0c0c&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">msr_path</span><span class="p">,</span> <span class="n">core</span><span class="p">)</span>
+                                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                                <span class="n">core_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">core</span> <span class="o">+</span> <span class="n">core_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/wrmsr -p</span><span class="si">%d</span><span class="s2"> 0x620 0x0c0c&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">msr_path</span><span class="p">,</span>
+                                                                        <span class="n">core_c</span><span class="p">)</span>
+                                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_2</span><span class="p">:</span>
+                                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/wrmsr -p</span><span class="si">%d</span><span class="s2"> 0x620 0x0c0c&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">msr_path</span><span class="p">,</span> <span class="n">core</span><span class="p">)</span>
+                                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                                <span class="n">core_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">core</span> <span class="o">+</span> <span class="n">core_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/wrmsr -p</span><span class="si">%d</span><span class="s2"> 0x620 0x0c0c&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">msr_path</span><span class="p">,</span>
+                                                                        <span class="n">core_c</span><span class="p">)</span>
+                                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">toggle_interval</span><span class="p">)</span>
+
+                        <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">hwpm_on</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x199&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0600&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x774&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0707&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_2</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">hwpm_on</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x199&quot;</span><span class="p">,</span> <span class="s2">&quot;0xff00&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x774&quot;</span><span class="p">,</span> <span class="s2">&quot;0x2525&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                        <span class="c1"># Do this only if we are to do uncore toggling</span>
+                        <span class="c1"># For setting the uncore frequency, we will set the MSR 0x620</span>
+                        <span class="k">if</span> <span class="n">toggle_uncore</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_1</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x620&quot;</span><span class="p">,</span> <span class="s2">&quot;0x1b1b&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_2</span><span class="p">:</span>
+                                <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x620&quot;</span><span class="p">,</span> <span class="s2">&quot;0x1b1b&quot;</span><span class="p">,</span>
+                                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">toggle_interval</span><span class="p">)</span>
+
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;stage complete - restore setting&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_1</span><span class="p">:</span>
+                        <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x620&quot;</span><span class="p">,</span> <span class="s2">&quot;0x</span><span class="si">%s</span><span class="s2">&quot;</span>
+                                                 <span class="o">%</span> <span class="n">uncore_freq_t0</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                        <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x199&quot;</span><span class="p">,</span> <span class="s2">&quot;0x</span><span class="si">%s</span><span class="s2">&quot;</span>
+                                                 <span class="o">%</span> <span class="n">core_freq_t0</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">core</span> <span class="ow">in</span> <span class="n">corelist_2</span><span class="p">:</span>
+                        <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x620&quot;</span><span class="p">,</span> <span class="s2">&quot;0x</span><span class="si">%s</span><span class="s2">&quot;</span>
+                                                 <span class="o">%</span> <span class="n">uncore_freq_t0</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+                        <span class="n">PstateUtils</span><span class="o">.</span><span class="n">set_core_msr</span><span class="p">(</span><span class="n">core</span><span class="p">,</span> <span class="s2">&quot;0x199&quot;</span><span class="p">,</span> <span class="s2">&quot;0x</span><span class="si">%s</span><span class="s2">&quot;</span>
+                                                 <span class="o">%</span> <span class="n">core_freq_t0</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">msr_path</span><span class="p">)</span>
+
+                <span class="n">test_currenttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">test_currenttime</span> <span class="o">&gt;</span> <span class="n">test_duration</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Test will terminate now runtime </span><span class="si">%s</span><span class="s2">&quot;</span>
+                                 <span class="o">%</span> <span class="n">test_currenttime</span><span class="p">)</span>
+                    <span class="k">break</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

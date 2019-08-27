@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">...autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">...autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+
+<span class="n">BER_CORRECTABLE</span> <span class="o">=</span> <span class="s2">&quot;crc_error_count&quot;</span>
+<span class="n">NAND_WRITE</span> <span class="o">=</span> <span class="s2">&quot;nand_bytes_written&quot;</span>
+<span class="n">NAND_WRITE_FORMULA</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">*32)/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;NAND_WRITE&quot;</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
+<span class="n">SAMSUNG_INDEX_DRIVE</span> <span class="o">=</span> <span class="s2">&quot;MZVLW256HEHP&quot;</span>
+<span class="n">VID</span> <span class="o">=</span> <span class="mi">32902</span>
+<span class="n">vendor_name</span> <span class="o">=</span> <span class="s1">&#39;Intel&#39;</span>
+
+
+<div class="viewcode-block" id="Intel"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel">[docs]</a><span class="k">class</span> <span class="nc">Intel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Intel NVME module. VID is 32902</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Intel.get_vendor_name"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel.get_vendor_name">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_vendor_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="c1"># Intel with index drives</span>
+        <span class="n">is_index</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_index_drive</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_index</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Intel_index&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Intel&quot;</span></div>
+
+<div class="viewcode-block" id="Intel.get_vendor_smart_log"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel.get_vendor_smart_log">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_vendor_smart_log</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="n">supported_cmds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;smart-log-add&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_smart_log_add</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">supported_cmds</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">supported_cmds</span><span class="p">[</span><span class="n">cmd</span><span class="p">](</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Intel.get_smart_log_add"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel.get_smart_log_add">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_smart_log_add</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">drive_path</span><span class="p">):</span>
+        <span class="n">result_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme intel smart-log-add </span><span class="si">%s</span><span class="s2"> --json&quot;</span> <span class="o">%</span> <span class="n">drive_path</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+            <span class="c1"># Need to trim extra new line character the end of output.</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;/n&quot;</span><span class="p">)</span>
+            <span class="n">json_out</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">json_out</span><span class="p">[</span><span class="s2">&quot;Device stats&quot;</span><span class="p">]:</span>
+                <span class="n">result_dic</span><span class="p">[</span><span class="n">each</span><span class="p">]</span> <span class="o">=</span> <span class="n">json_out</span><span class="p">[</span><span class="s2">&quot;Device stats&quot;</span><span class="p">][</span><span class="n">each</span><span class="p">][</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;No nvme intel &#39;smart-log-add&#39; command output received&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result_dic</span></div>
+
+<div class="viewcode-block" id="Intel.get_nand_write_param"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel.get_nand_write_param">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_nand_write_param</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">nand_write</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">nand_write</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">NAND_WRITE</span>
+        <span class="n">nand_write</span><span class="p">[</span><span class="s2">&quot;formula&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">NAND_WRITE_FORMULA</span>
+        <span class="k">return</span> <span class="n">nand_write</span></div>
+
+<div class="viewcode-block" id="Intel.is_index_drive"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel.is_index_drive">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">is_index_drive</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dev_name</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;SSDPEKKA256G7&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme list -o json&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="n">drive</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">dr</span> <span class="k">for</span> <span class="n">dr</span> <span class="ow">in</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;Devices&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dev_name</span> <span class="ow">in</span> <span class="n">dr</span><span class="p">[</span><span class="s2">&quot;DevicePath&quot;</span><span class="p">]</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">model_str</span> <span class="o">=</span> <span class="n">drive</span><span class="p">[</span><span class="s2">&quot;ModelNumber&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">model_str</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unsupported Intel Index drive found.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Intel.get_bit_error_ratio_param"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.nvme.html#havoc.autotest_testfiles.validation_utils.lib.storage.nvme.intel.Intel.get_bit_error_ratio_param">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_bit_error_ratio_param</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">ber</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ber</span><span class="p">[</span><span class="s1">&#39;correctable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BER_CORRECTABLE</span>
+        <span class="k">return</span> <span class="n">ber</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

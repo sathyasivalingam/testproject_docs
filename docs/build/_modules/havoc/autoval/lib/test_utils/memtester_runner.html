@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.memtester_runner &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.memtester_runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.memtester_runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.test_utils_base</span> <span class="k">import</span> <span class="n">TestUtilsBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="ne">TimeoutError</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+
+
+<div class="viewcode-block" id="MemtesterRunner"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner">[docs]</a><span class="k">class</span> <span class="nc">MemtesterRunner</span><span class="p">(</span><span class="n">TestUtilsBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MemtesterRunner.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MemtesterRunner</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;loops&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;runtime&quot;</span> <span class="p">:</span> <span class="mi">7200</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span> <span class="o">=</span> <span class="n">args</span></div>
+
+<div class="viewcode-block" id="MemtesterRunner.test_setup"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tmpdir</span><span class="p">()</span>
+        <span class="n">tool_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">()</span>
+
+        <span class="n">tarball</span> <span class="o">=</span> <span class="s1">&#39;memtester-4.3.0.tar.gz&#39;</span>
+        <span class="n">tarball</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tool_path</span><span class="p">,</span> <span class="n">tarball</span><span class="p">)</span>
+        <span class="n">GenericUtils</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">tarball</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">tarball</span><span class="p">,</span> <span class="s2">&quot;memtester tool path </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">tarball</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemtesterRunner.generate_args"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.generate_args">[docs]</a>    <span class="k">def</span> <span class="nf">generate_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merges default and user provided args</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">merged_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ARGS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">merged_args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">merged_args</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemtesterRunner.start_test"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.start_test">[docs]</a>    <span class="k">def</span> <span class="nf">start_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spawn_memtester</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+            <span class="c1">#Ignore the timeout error here which comes from passing in a</span>
+            <span class="c1">#timeout into self.host.run</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="MemtesterRunner.spawn_memtester"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.spawn_memtester">[docs]</a>    <span class="k">def</span> <span class="nf">spawn_memtester</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">host_freememory</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">sys_utils</span><span class="o">.</span><span class="n">get_free_memory</span><span class="p">())</span>
+
+        <span class="c1"># For high memory need timeout big enough so the test won&#39;t exit after</span>
+        <span class="c1"># the default havoc autoval timeout currently 600s</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span>
+
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_log_dirs</span><span class="p">()</span>
+        <span class="n">results_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">[</span><span class="s2">&quot;resultsdir&quot;</span><span class="p">],</span> <span class="s2">&quot;memtester.out&quot;</span><span class="p">)</span>
+        <span class="c1"># use 102400k (100MB)  to evaluate how much free memory it will take to run</span>
+        <span class="c1"># in a second</span>
+        <span class="n">mem_command</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">K </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;./memtester &quot;</span><span class="p">,</span>
+             <span class="mi">102400</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">[</span><span class="s2">&quot;loops&quot;</span><span class="p">])</span>
+
+        <span class="n">working_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span> <span class="o">+</span> <span class="s2">&quot;/memtester-4.3.0&quot;</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="c1"># run memtester to estimate how much free memory per second to test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mem_command</span><span class="p">,</span>
+            <span class="n">working_directory</span><span class="o">=</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">7200</span><span class="p">)</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span>
+        <span class="n">memory_size</span> <span class="o">=</span> <span class="mi">102400</span>  <span class="c1"># 100MB</span>
+        <span class="n">mem_per_sec</span> <span class="o">=</span> <span class="n">memory_size</span> <span class="o">/</span> <span class="n">delta</span><span class="o">.</span><span class="n">seconds</span>
+
+        <span class="c1"># we multiply by 0.8 for 80% of the free memory to be safe and</span>
+        <span class="c1"># make sure that we will not reach timeout while running the test</span>
+        <span class="n">freememory</span> <span class="o">=</span> <span class="n">timeout</span> <span class="o">*</span> <span class="n">mem_per_sec</span> <span class="o">*</span> <span class="mf">0.8</span>
+        <span class="k">if</span> <span class="n">freememory</span> <span class="o">&gt;</span> <span class="n">host_freememory</span> <span class="p">:</span>
+            <span class="n">freememory</span> <span class="o">=</span> <span class="n">host_freememory</span>
+
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">K </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;./memtester &quot;</span><span class="p">,</span>
+             <span class="n">freememory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_args</span><span class="p">[</span><span class="s2">&quot;loops&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Run memtester</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;running </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">command</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">custom_logfile</span><span class="o">=</span><span class="n">results_file</span><span class="p">,</span>
+                    <span class="n">working_directory</span><span class="o">=</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;memtester finishe with timeout </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">timeout</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="n">memtester_output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;cat </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">results_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memtester_info_output</span><span class="p">(</span><span class="n">memtester_output</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_results</span><span class="p">(</span><span class="n">memtester_output</span><span class="p">)</span>
+        <span class="n">memtester_gz</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">[</span><span class="s2">&quot;resultsdir&quot;</span><span class="p">],</span> <span class="s2">&quot;memtester.out.gz&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;gzip -cvf </span><span class="si">%s</span><span class="s2"> &gt; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">results_file</span><span class="p">,</span> <span class="n">memtester_gz</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;rm -f </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">results_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemtesterRunner.memtester_info_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.memtester_info_output">[docs]</a>    <span class="k">def</span> <span class="nf">memtester_info_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memtester_output</span><span class="p">):</span>
+        <span class="n">memtester_info</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">outlines</span> <span class="o">=</span> <span class="n">memtester_output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">outlines</span><span class="p">:</span>
+            <span class="n">each</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="s2">&quot;pagesize&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="p">)):</span>
+                    <span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">each</span>
+            <span class="k">elif</span> <span class="p">((</span><span class="s2">&quot;pagesizemask&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;want&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="p">)</span>
+                    <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;got&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;Loop&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="p">)):</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">each</span>
+            <span class="n">memtester_info</span> <span class="o">=</span> <span class="n">memtester_info</span> <span class="o">+</span> <span class="n">st</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">memtester_info</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemtesterRunner.parse_results"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.memtester_runner.MemtesterRunner.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memtester_output</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        validate memtester output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">memtester_output</span> <span class="ow">and</span> <span class="n">memtester_output</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Loop&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">outlines</span> <span class="o">=</span> <span class="n">memtester_output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">outlines</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;failure&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;fault&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                        <span class="ow">or</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;fail&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                        <span class="ow">or</span> <span class="s2">&quot;failed&quot;</span> <span class="ow">in</span> <span class="n">each</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Detected failure in line: </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">each</span><span class="p">,</span>
+                        <span class="s2">&quot;please check memtester output file for full details&quot;</span><span class="p">))</span>
+                <span class="n">each</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">each</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Loop&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Checking </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">each</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">regexout</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;(.*):&quot;</span><span class="p">,</span> <span class="n">each</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">regexout</span><span class="p">:</span>
+                    <span class="n">test_info</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">)):</span>
+                        <span class="c1"># Some tests before changing to ok status</span>
+                        <span class="c1"># during test show status as setting or testing or</span>
+                        <span class="c1"># \ and / alternatively. Before failing a test due to</span>
+                        <span class="c1"># not having status ok make sure test is done</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">each</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;testing&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">each</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;setting&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="n">last_testing_index</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;testing&quot;</span><span class="p">)</span>
+                            <span class="n">last_setting_index</span> <span class="o">=</span> <span class="n">each</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;setting&quot;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">last_testing_index</span> <span class="o">&gt;</span> <span class="n">last_setting_index</span><span class="p">:</span>
+                                <span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">test_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                        <span class="s1">&#39;</span><span class="si">{:14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                                         <span class="n">each</span><span class="p">[</span><span class="n">last_testing_index</span><span class="p">:])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">test_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                    <span class="s1">&#39;</span><span class="si">{:14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                                    <span class="n">each</span><span class="p">[</span><span class="n">last_setting_index</span><span class="p">:])</span>
+                            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                                <span class="s2">&quot;skipping validation for </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="s2">&quot;test did not complete&quot;</span><span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">each</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">each</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+                                <span class="ow">and</span> <span class="n">each</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+                            <span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">test_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+                                <span class="s1">&#39;</span><span class="si">{:14}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> | / -&quot;</span><span class="p">)</span>
+                            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                                <span class="s2">&quot;skipping validation for </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="s2">&quot;test did not complete&quot;</span><span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="k">continue</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                        <span class="n">each</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">),</span> <span class="s2">&quot;Checking status of &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span>
+                        <span class="n">regexout</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

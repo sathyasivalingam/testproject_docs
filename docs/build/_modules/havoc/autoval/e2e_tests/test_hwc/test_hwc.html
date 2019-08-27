@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.e2e_tests.test_hwc.test_hwc &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.e2e_tests.test_hwc.test_hwc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.e2e_tests.test_hwc.test_hwc</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">import</span> <span class="nn">havoc.autoval.lib.test_utils.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.openbmc</span> <span class="k">import</span> <span class="n">OpenBMC</span>
+
+
+<div class="viewcode-block" id="HwcTest"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest">[docs]</a><span class="k">class</span> <span class="nc">HwcTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test autoval/lib/host/HWC class functionalities</span>
+<span class="sd">    hwc mode is set through control file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: Library functions that have not been tested</span>
+    <span class="c1"># set_next_boot</span>
+    <span class="c1"># set_boot_order_ipv6</span>
+    <span class="c1"># remediate time</span>
+    <span class="c1"># watchdog: configure, start, stop</span>
+    <span class="c1"># users: get, validate, sanitize</span>
+
+<div class="viewcode-block" id="HwcTest.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_power_status</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_get_sel_log</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_get_sensor_log</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_clearing_sel_log</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_power_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_power_on</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_bmc_reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_power_cycle</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_getting_bios_codes</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_status"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_power_status">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Check if server is powered on.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">(),</span>
+            <span class="s2">&quot;Device should be powered on&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_get_sel_log"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_get_sel_log">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_sel_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Getting SEL log using hwc.&quot;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a random string to log, then verify if it&#39;s there</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">random_str</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">gen_random_string</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc</span><span class="p">,</span> <span class="n">OpenBMC</span><span class="p">):</span>
+            <span class="c1"># add_sel_message is only in OpenBMC</span>
+            <span class="c1"># so this test might will fail for legacy systems</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">add_sel_message</span><span class="p">(</span><span class="n">random_str</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">log_dump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">log_message</span><span class="p">()</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_random_string_in_log</span><span class="p">(</span><span class="n">log_dump</span><span class="p">,</span> <span class="n">random_str</span><span class="p">):</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">found</span><span class="p">,</span> <span class="s2">&quot;Successfully retrieved system event log&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># simpler test for legacy systems</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">log_message</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;Getting log message without error.&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_get_sensor_log"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_get_sensor_log">[docs]</a>    <span class="k">def</span> <span class="nf">test_get_sensor_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Test getting sensor log using hwc.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">sensor_data</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;Get log successfully&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_off"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_power_off">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering off the host.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">(),</span>
+            <span class="s2">&quot;Host should be powered off.&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_on"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_power_on">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering on the host.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">(),</span>
+            <span class="s2">&quot;Host should be powered on.&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_clearing_sel_log"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_clearing_sel_log">[docs]</a>    <span class="k">def</span> <span class="nf">test_clearing_sel_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a random string to log. Then verify that it&#39;s not there</span>
+<span class="sd">        after clearing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">random_str</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">gen_random_string</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc</span><span class="p">,</span> <span class="n">OpenBMC</span><span class="p">):</span>
+            <span class="c1"># add_sel_message is only in OpenBMC</span>
+            <span class="c1"># so this test might will fail for legacy systems</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">add_sel_message</span><span class="p">(</span><span class="n">random_str</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">log_dump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">log_message</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">is_random_string_in_log</span><span class="p">(</span><span class="n">log_dump</span><span class="p">,</span> <span class="n">random_str</span><span class="p">),</span>
+                <span class="s2">&quot;Check if the generated string is added to log.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">sel_clear</span><span class="p">()</span>
+            <span class="n">log_dump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">log_message</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="ow">not</span> <span class="n">utils</span><span class="o">.</span><span class="n">is_random_string_in_log</span><span class="p">(</span><span class="n">log_dump</span><span class="p">,</span> <span class="n">random_str</span><span class="p">),</span>
+                <span class="s2">&quot;Log is cleared&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># simpler test for legacy systems</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">sel_clear</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;Getting log message without error.&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_bmc_reset"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_bmc_reset">[docs]</a>    <span class="k">def</span> <span class="nf">test_bmc_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset BMC and test if it is pingable after a few minutes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Resetting BMC then verify.&quot;</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">reboot</span><span class="p">))</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_validate_bmc_offline</span><span class="p">))</span>
+        <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ping_bmc</span><span class="p">(),</span>
+            <span class="s2">&quot;BMC should be pingable.&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_power_cycle"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_power_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">test_power_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a cycle test of different types</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">cycle</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;DC cyle test passed&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;AC cyle test passed&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_reset</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;SLED cyle test passed&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_warm</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;Warm cyle test passed&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest.test_getting_bios_codes"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest.test_getting_bios_codes">[docs]</a>    <span class="k">def</span> <span class="nf">test_getting_bios_codes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: Elaborate test. Right now, it only runs to make sure</span>
+        <span class="c1"># the function does not throw any error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_bios_post_codes</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;Getting bios post codes without error&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_bios_post_codes_parsed</span><span class="p">,</span>
+            <span class="p">[],</span>
+            <span class="s2">&quot;Getting bios post codes without error&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="HwcTest._validate_bmc_offline"><a class="viewcode-back" href="../../../../../havoc.autoval.e2e_tests.test_hwc.html#havoc.autoval.e2e_tests.test_hwc.test_hwc.HwcTest._validate_bmc_offline">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_bmc_offline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if BMC is unreachable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ping_bmc</span><span class="p">(),</span>
+            <span class="s2">&quot;BMC should be offline&quot;</span>
+        <span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">HwcTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.fio.fio_runner &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.fio.fio_runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.fio.fio_runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.storage.storage_utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">StorageUtils</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.filesystem_actions</span> <span class="k">import</span> <span class="n">FilesystemActions</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">ignored</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.test_utils_base</span> <span class="k">import</span> <span class="n">TestUtilsBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.filesystem_utils</span> <span class="k">import</span> <span class="n">FilesystemUtils</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">LIB_PATH</span> <span class="o">=</span> <span class="s2">&quot;havoc/autoval/lib/test_utils/fio/jobfile_templates&quot;</span>
+
+
+<div class="viewcode-block" id="FioRunner"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner">[docs]</a><span class="k">class</span> <span class="nc">FioRunner</span><span class="p">(</span><span class="n">TestUtilsBase</span><span class="p">):</span>
+<div class="viewcode-block" id="FioRunner.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">logdirs</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_log_dirs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmp_logdir</span> <span class="o">=</span> <span class="n">logdirs</span><span class="p">[</span><span class="s2">&quot;control_server_logdir&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dut_logdir</span> <span class="o">=</span> <span class="n">logdirs</span><span class="p">[</span><span class="s2">&quot;dut_logdir&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_remote_fio_error</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;files&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive_interface</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_interface&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive_type</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drives</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drives&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_host</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_host</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FioRunner.test_setup"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">install_fio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fio_job</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_type</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive_interface</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drives</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;replace_values&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;template_file&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;filesystem&quot;</span><span class="p">],</span>
+            <span class="n">remote</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FioRunner.install_fio"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.install_fio">[docs]</a>    <span class="k">def</span> <span class="nf">install_fio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">install_rpms</span><span class="p">([</span><span class="s2">&quot;fio&quot;</span><span class="p">])</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_host</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FioRunner.get_drives"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.get_drives">[docs]</a>    <span class="k">def</span> <span class="nf">get_drives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">drive_type</span><span class="p">,</span> <span class="n">drive_interface</span><span class="p">,</span> <span class="n">drives</span><span class="p">):</span>
+        <span class="n">drives</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">test_drives</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span>
+            <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">,</span>
+            <span class="n">drive_type</span><span class="o">=</span><span class="n">drive_type</span><span class="p">,</span>
+            <span class="n">drive_interface</span><span class="o">=</span><span class="n">drive_interface</span><span class="p">,</span>
+            <span class="n">drives</span><span class="o">=</span><span class="n">drives</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">drives</span> <span class="o">=</span> <span class="n">test_drives</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Available drives: </span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drives</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">drives</span></div>
+
+<div class="viewcode-block" id="FioRunner.create_filesystem_mount"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.create_filesystem_mount">[docs]</a>    <span class="k">def</span> <span class="nf">create_filesystem_mount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">drives</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">drives</span><span class="p">:</span>
+            <span class="n">mnt</span> <span class="o">=</span> <span class="s2">&quot;/mnt/fio_test_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="n">FilesystemUtils</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">device</span><span class="p">,</span>
+                <span class="n">mnt</span><span class="p">,</span>
+                <span class="n">filesystem_type</span><span class="o">=</span><span class="s2">&quot;xfs&quot;</span><span class="p">,</span>
+                <span class="n">filesystem_options</span><span class="o">=</span><span class="s2">&quot; -K -i size=2048&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">FilesystemUtils</span><span class="o">.</span><span class="n">get_df_info</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span> <span class="s2">&quot;xfs&quot;</span><span class="p">,</span> <span class="s2">&quot;Mounted </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">mnt</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FioRunner.create_fio_job"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.create_fio_job">[docs]</a>    <span class="k">def</span> <span class="nf">create_fio_job</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">files</span><span class="p">,</span>
+        <span class="n">drive_type</span><span class="p">,</span>
+        <span class="n">drive_interface</span><span class="p">,</span>
+        <span class="n">drives</span><span class="p">,</span>
+        <span class="n">replace</span><span class="p">,</span>
+        <span class="n">templ_filename</span><span class="p">,</span>
+        <span class="n">filesystem</span><span class="p">,</span>
+        <span class="n">remote</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the list of test_drives on dut based on options passed i.e,</span>
+<span class="sd">        drive_type, drive_interface, all_block devices = True or False and</span>
+<span class="sd">        any special drives passed</span>
+<span class="sd">        Creates a new job file based on the &#39;template&#39; file and the test_</span>
+<span class="sd">        drives list got above</span>
+<span class="sd">        @param templ_filename: Path to file containing job definition</span>
+<span class="sd">        Takes default if nothing is passed</span>
+<span class="sd">        @replace: List of key / value pairs to replace in template file</span>
+<span class="sd">                additional imputs for fio can be given as key value pair</span>
+<span class="sd">                in the name &#39;additional_fio_options&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">drives</span><span class="p">:</span>
+            <span class="n">drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_drives</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">drive_type</span><span class="p">,</span> <span class="n">drive_interface</span><span class="p">,</span> <span class="n">drives</span><span class="p">)</span>
+        <span class="n">filesystemactions</span> <span class="o">=</span> <span class="n">FilesystemActions</span><span class="p">()</span>
+        <span class="n">templ_path</span> <span class="o">=</span> <span class="n">filesystemactions</span><span class="o">.</span><span class="n">get_file_path</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LIB_PATH</span><span class="p">,</span> <span class="n">templ_filename</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">templ_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">additional_fio_options</span> <span class="o">=</span> <span class="n">replace</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;additional_fio_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">additional_fio_options</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">replace</span><span class="p">[</span><span class="s2">&quot;additional_fio_options&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">replace</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">content</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">additional_fio_options</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">additional_fio_options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">content</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dev_str</span> <span class="o">=</span> <span class="n">content</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;[job</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">idx</span> <span class="o">+</span> <span class="s2">&quot;filename=</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">])</span>
+            <span class="n">drives</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filesystem</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_filesystem_mount</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">drives</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filesystem</span><span class="p">:</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;[job</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">idx</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;filename=/mnt/fio_test_</span><span class="si">%s</span><span class="s2">/file1</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;[job</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">idx</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;filename=/dev/</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">job_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmp_logdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">templ_filename</span>
+        <span class="n">dest_job_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut_logdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">templ_filename</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">job_file</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">prep_f</span><span class="p">:</span>
+            <span class="n">prep_f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dev_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">remote</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">ignored</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">exception_string</span><span class="o">=</span><span class="s2">&quot;already exists&quot;</span><span class="p">):</span>
+                <span class="n">host</span><span class="o">.</span><span class="n">put_file</span><span class="p">(</span><span class="n">job_file</span><span class="p">,</span> <span class="n">dest_job_file</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Job file used is at: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dest_job_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">dest_job_file</span></div>
+
+<div class="viewcode-block" id="FioRunner.run_fio_on_dut"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.run_fio_on_dut">[docs]</a>    <span class="k">def</span> <span class="nf">run_fio_on_dut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut_logdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;fio_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+        <span class="p">)</span>
+        <span class="n">tmp_output_file</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tmp_logdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;fio_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+        <span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fio </span><span class="si">%s</span><span class="s2"> --output-format=json --output </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running FIO using command: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">28800</span><span class="p">)</span>
+        <span class="n">cmd_out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">return_code</span>
+        <span class="c1"># setting timeout to 8 hrs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">remote</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">get_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">tmp_output_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exit_code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_fio_error</span><span class="p">(</span><span class="n">exit_code</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">,</span> <span class="n">tmp_output_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;FIO output file is copied at: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tmp_output_file</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">tmp_output_file</span></div>
+
+<div class="viewcode-block" id="FioRunner.start_test"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.start_test">[docs]</a>    <span class="k">def</span> <span class="nf">start_test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ret</span><span class="p">,</span> <span class="n">tmp_output_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_fio_on_dut</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">remote</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fio_file</span> <span class="o">=</span> <span class="n">tmp_output_file</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">tmp_output_file</span></div>
+
+<div class="viewcode-block" id="FioRunner.parse_fio_error"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.parse_fio_error">[docs]</a>    <span class="k">def</span> <span class="nf">parse_fio_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method parses and checks through each job</span>
+<span class="sd">        of the fio output file you provide as input and check</span>
+<span class="sd">        if there are any errors in each job executed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fio_out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">fio_out</span> <span class="o">=</span> <span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="c1"># Ignoring if &quot;timeout on cmd SEND_ETA&quot; while FIO</span>
+                <span class="c1"># Parse Error from fio Output to ignore such error</span>
+                <span class="c1"># if ignore_remote_fio_error set to true in control file</span>
+                <span class="c1"># Until we find issue why SEND_ETA happens in FIO client/server;</span>
+                <span class="c1"># we were ignoring it raising error during test</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_remote_fio_error</span><span class="p">:</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;timeout on cmd SEND_ETA&quot;</span><span class="p">,</span> <span class="n">fio_out</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+                        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                            <span class="s2">&quot;SEND_ETA timed out with exit code: </span><span class="si">%s</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> cmd_out:- </span><span class="si">%s</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">exit_code</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+                <span class="c1"># Parse error code in fio command output</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;error : (\d*)&quot;</span><span class="p">,</span> <span class="n">fio_out</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                        <span class="s2">&quot;FIO Failed, </span><span class="se">\n</span><span class="s2"> cmd_out:- </span><span class="si">%s</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> log file:- </span><span class="si">%s</span><span class="s2">&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="n">cmd_out</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">))</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;FIO Output File Not Found&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FioRunner.parse_results"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.fio.html#havoc.autoval.lib.test_utils.fio.fio_runner.FioRunner.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">print_result</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses fio JSON result file</span>
+<span class="sd">        @param path: Path to JSON file with results</span>
+<span class="sd">        @return: Dictionary with key / value result pairs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fio_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">results_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Parsing results from json (</span><span class="si">%s</span><span class="s2">):&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fio_file</span><span class="p">))</span>
+        <span class="n">fio</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">perf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fio</span><span class="p">[</span><span class="s2">&quot;fio_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results_data</span><span class="p">[</span><span class="s2">&quot;fio version&quot;</span><span class="p">]</span>
+        <span class="c1"># Saving the Input</span>
+        <span class="n">fio</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">add_dict_key_prefix</span><span class="p">(</span><span class="n">results_data</span><span class="p">[</span><span class="s2">&quot;global options&quot;</span><span class="p">],</span> <span class="s2">&quot;opt_&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">fio</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="n">results_data</span><span class="p">[</span><span class="s2">&quot;jobs&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+            <span class="n">_job_data</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">_job_data</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
+            <span class="n">_job_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">add_dict_key_prefix</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s2">&quot;job options&quot;</span><span class="p">],</span> <span class="s2">&quot;opt_&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">rw</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;trim&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="s2">&quot;runtime&quot;</span> <span class="ow">in</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">]</span> <span class="ow">and</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">jobname</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;jobname&quot;</span><span class="p">]</span>
+                <span class="n">perf</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bw&quot;</span><span class="p">,</span> <span class="s2">&quot;bw_agg&quot;</span><span class="p">,</span> <span class="s2">&quot;bw_max&quot;</span><span class="p">,</span> <span class="s2">&quot;bw_min&quot;</span><span class="p">,</span> <span class="s2">&quot;bw_mean&quot;</span><span class="p">]:</span>
+                    <span class="n">perf</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (Kb/s)&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="n">field</span><span class="p">]</span>
+                    <span class="n">_job_data</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="n">field</span><span class="p">)]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="n">field</span><span class="p">]</span>
+
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;iops&quot;</span><span class="p">,</span> <span class="s2">&quot;total_ios&quot;</span><span class="p">]:</span>
+                    <span class="n">perf</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="n">field</span><span class="p">]</span>
+                    <span class="n">_job_data</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="n">field</span><span class="p">)]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="n">field</span><span class="p">]</span>
+
+                <span class="k">for</span> <span class="n">lat</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="s2">&quot;lat_ns&quot;</span> <span class="ow">in</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">]:</span>
+                        <span class="n">_job_data</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rw</span><span class="p">,</span> <span class="n">field</span><span class="p">)]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="s2">&quot;lat_ns&quot;</span><span class="p">][</span><span class="n">lat</span><span class="p">]</span>
+                        <span class="n">perf</span><span class="p">[</span><span class="s2">&quot;lat_</span><span class="si">%s</span><span class="s2"> (nsec)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lat</span><span class="p">)]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="n">rw</span><span class="p">][</span><span class="s2">&quot;lat_ns&quot;</span><span class="p">][</span><span class="n">lat</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">print_result</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">%s</span><span class="s2"> -- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">jobname</span><span class="p">,</span> <span class="n">rw</span><span class="p">))</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">perf</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="n">fio</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_job_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fio</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

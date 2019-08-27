@@ -1,0 +1,414 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage.sas.sas_drive &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage.sas.sas_drive</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.storage.sas.sas_drive</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.sdparm_utils</span> <span class="k">import</span> <span class="n">SdparmUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.drive</span> <span class="k">import</span> <span class="n">Drive</span><span class="p">,</span> <span class="n">DriveInterface</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot</span> <span class="k">import</span> <span class="n">SASDriveSnapshot</span>
+
+
+<div class="viewcode-block" id="SASDriveException"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDriveException">[docs]</a><span class="k">class</span> <span class="nc">SASDriveException</span><span class="p">(</span><span class="n">TestError</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="SASDrive"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive">[docs]</a><span class="k">class</span> <span class="nc">SASDrive</span><span class="p">(</span><span class="n">Drive</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SASDrive.__init__"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">block_name</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interface for interacting with SAS drives</span>
+
+<span class="sd">        @param Host host: host object</span>
+<span class="sd">        @param String block_name: drive name in /dev/ path</span>
+<span class="sd">        @param String config: json file that controls how drive data is</span>
+<span class="sd">            collected and validated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SASDrive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">block_name</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">=</span> <span class="n">DriveInterface</span><span class="o">.</span><span class="n">SAS</span>
+        <span class="n">smart_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smartctl_output</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_serial_number</span><span class="p">(</span><span class="n">smart_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_user_capacity</span><span class="p">(</span><span class="n">smart_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_number</span><span class="p">(</span><span class="n">smart_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sector_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sector_size</span><span class="p">(</span><span class="n">smart_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_manufacturer</span><span class="p">(</span><span class="n">smart_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.create_snapshot"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.create_snapshot">[docs]</a>    <span class="k">def</span> <span class="nf">create_snapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SASDriveSnapshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.get_firmware_version"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.get_firmware_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_firmware_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">smart_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smartctl_output</span><span class="p">()</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Revision:\s+(\w+)&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span><span class="s1">&#39;firmware version&#39;</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.update_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.update_firmware">[docs]</a>    <span class="k">def</span> <span class="nf">update_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_name</span><span class="p">,</span> <span class="n">fw_bin_loc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param String fw_version</span>
+<span class="sd">        @param String fw_bin_loc: binary path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sas_slot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sas_slot</span><span class="p">()</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -p1 -a 19,</span><span class="si">%d</span><span class="s2">,,,Yes,0,0,0,0 -f </span><span class="si">%s</span><span class="s2"> 20&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sas_slot</span><span class="p">,</span> <span class="n">fw_bin_loc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># noqa</span></div>
+
+<div class="viewcode-block" id="SASDrive.get_read_lookahead"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.get_read_lookahead">[docs]</a>    <span class="k">def</span> <span class="nf">get_read_lookahead</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return int: 1 for enabled, 0 or disabled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">get_read_lookahead</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.enable_read_lookahead"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.enable_read_lookahead">[docs]</a>    <span class="k">def</span> <span class="nf">enable_read_lookahead</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param boolean save: if True will set current mode and the saved mode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">enable_read_lookahead</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.disable_read_lookahead"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.disable_read_lookahead">[docs]</a>    <span class="k">def</span> <span class="nf">disable_read_lookahead</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">disable_read_lookahead</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.get_write_cache"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.get_write_cache">[docs]</a>    <span class="k">def</span> <span class="nf">get_write_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return int: 1 for enabled, 0 or disabled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">get_write_cache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.enable_write_cache"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.enable_write_cache">[docs]</a>    <span class="k">def</span> <span class="nf">enable_write_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">enable_write_cache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive.disable_write_cache"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.disable_write_cache">[docs]</a>    <span class="k">def</span> <span class="nf">disable_write_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">disable_write_cache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive._get_sas_slot"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._get_sas_slot">[docs]</a>    <span class="k">def</span> <span class="nf">_get_sas_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get SAS slot from lsiutil command</span>
+
+<span class="sd">        @return int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_sas_slots</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="c1"># e.g. match number 2 and 74</span>
+            <span class="c1">#     B___T  Type       Vendor   Product          Rev</span>
+            <span class="c1"># 2.  0  74  Disk       SEAGATE  ST14000NM0108    Q0B2</span>
+            <span class="sa">r</span><span class="s2">&quot;(\d+).\s+\d+\s+(\d+)\s+Disk&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;lsiutil -p1 -a 19,,0,0 20&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">phy_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fbjbod_utils</span><span class="o">.</span><span class="n">get_drive_phy_num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sas_target_from_phy_num</span><span class="p">(</span><span class="n">phy_num</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">all_sas_slots</span> <span class="ow">and</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">slot</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">all_sas_slots</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">SASDriveException</span><span class="p">(</span><span class="s2">&quot;Unable to find SAS slot for /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDrive._get_sas_target_from_phy_num"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._get_sas_target_from_phy_num">[docs]</a>    <span class="k">def</span> <span class="nf">_get_sas_target_from_phy_num</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phy_num</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param int phy_num</span>
+<span class="sd">        @return string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="c1"># e.g. match number 74</span>
+                <span class="c1">#  B___T___L  Type ... PhyNum</span>
+                <span class="c1">#  0  74   0  Disk ...   18</span>
+                <span class="sa">r</span><span class="s2">&quot;\d+\s+(\d+)\s+\d+\s+Disk.+\s+</span><span class="si">%d</span><span class="s2">$&quot;</span> <span class="o">%</span> <span class="n">phy_num</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;lsiutil -p1 -s&quot;</span><span class="p">),</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">M</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SASDriveException</span><span class="p">(</span><span class="s2">&quot;Failed to get target address for /dev/</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">e</span>
+            <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Vendor:\s+(\w+)&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span>
+            <span class="n">smart_data</span><span class="p">,</span>
+            <span class="n">pattern</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_serial_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Serial number:\s+(\w+)&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;serial number&#39;</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_user_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;User Capacity:\s+(\w+)&#39;</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;user capacity&#39;</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_model_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Product:\s+(\w+)&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;device model&#39;</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_sector_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Logical block size:\s+(\w+)\sbytes&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;sector size&#39;</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SASDrive.get_interface_speed"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive.get_interface_speed">[docs]</a>    <span class="k">def</span> <span class="nf">get_interface_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sas_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sas_address</span><span class="p">()</span>
+        <span class="n">sym_link</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_end_device_with_sas_address</span><span class="p">(</span><span class="n">sas_address</span><span class="p">)</span>
+        <span class="n">cbt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_channel_bus_target_from_sym_link</span><span class="p">(</span><span class="n">sym_link</span><span class="p">)</span>
+        <span class="n">phy_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_phy_id_from_cbt_address</span><span class="p">(</span><span class="n">cbt</span><span class="p">)</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_link_speed_from_os</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">cbt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">phy_id</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">speed</span></div>
+
+<div class="viewcode-block" id="SASDrive._get_channel_bus_target_from_sym_link"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._get_channel_bus_target_from_sym_link">[docs]</a>    <span class="k">def</span> <span class="nf">_get_channel_bus_target_from_sym_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get drive&#39;s C:B:T from sym link</span>
+
+<span class="sd">        @param string link: symbolic link of drive</span>
+<span class="sd">            e.g. ...host6/port-6:1/expander-6:1/port-6:1:9/end_device-6:1:9/...</span>
+<span class="sd">        @return tuple(str, str, str): tuple of C:B:T</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;end_device-([0-9]+)\:([0-9]+)\:([0-9]+)&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Fail to find /dev/</span><span class="si">%s</span><span class="s2"> C:B:T address from sym link: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">link</span>
+            <span class="p">))</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SASDrive._get_phy_id_from_cbt_address"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._get_phy_id_from_cbt_address">[docs]</a>    <span class="k">def</span> <span class="nf">_get_phy_id_from_cbt_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cbt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        With SAS expander topology, there may be a target/phy missmatch.</span>
+<span class="sd">            From C:B:T we can get phy identifier</span>
+
+<span class="sd">        @param cbt tuple(str, str, str): tuple of C:B:T</span>
+<span class="sd">        @return string: phy id of drive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/sas_device/end_device-&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/phy_identifier&quot;</span> <span class="o">%</span> <span class="n">cbt</span>
+        <span class="n">phy_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">phy_id</span></div>
+
+<div class="viewcode-block" id="SASDrive._get_link_speed_from_os"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._get_link_speed_from_os">[docs]</a>    <span class="k">def</span> <span class="nf">_get_link_speed_from_os</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb_phy_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get link speed from OS, addressed as phy-C:B:Phy</span>
+
+<span class="sd">        @param cbt tuple(str, str, str): tuple of C:B:Phy_ID</span>
+<span class="sd">        @return string: represents link speed of drive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/class/sas_phy/phy-</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="n">cb_phy_id</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;negotiated_linkrate&quot;</span>
+        <span class="n">link_spd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># noqa</span>
+
+        <span class="k">return</span> <span class="n">link_spd</span></div>
+
+<div class="viewcode-block" id="SASDrive._get_sas_address"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._get_sas_address">[docs]</a>    <span class="k">def</span> <span class="nf">_get_sas_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /sys/block/</span><span class="si">%s</span><span class="s2">/device/sas_address&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">address</span></div>
+
+<div class="viewcode-block" id="SASDrive._find_end_device_with_sas_address"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive.SASDrive._find_end_device_with_sas_address">[docs]</a>    <span class="k">def</span> <span class="nf">_find_end_device_with_sas_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sas_add</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param string sas_add</span>
+<span class="sd">        @return string: sym link of end device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 2 search /sys for the an end_device with matching sas_address</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;find /sys -type f -name &#39;sas_address&#39; -print0 | &quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;xargs -0 grep </span><span class="si">%s</span><span class="s2"> | grep -m 1 end_device&quot;</span> <span class="o">%</span> <span class="n">sas_add</span>
+        <span class="n">sym_link</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sym_link</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

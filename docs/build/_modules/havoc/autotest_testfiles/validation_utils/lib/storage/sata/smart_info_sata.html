@@ -1,0 +1,954 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">...autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">...autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">...disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">...generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">...fbjbod_utils</span> <span class="k">import</span> <span class="n">FbjbodUtils</span>
+<span class="kn">from</span> <span class="nn">...storage.smart_validation_abstract</span> <span class="k">import</span> <span class="n">SmartValidationAbstract</span>
+<span class="kn">from</span> <span class="nn">...hdparm_utils</span> <span class="k">import</span> <span class="n">HdparmUtils</span>
+
+
+<div class="viewcode-block" id="SMARTInfoSata"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata">[docs]</a><span class="k">class</span> <span class="nc">SMARTInfoSata</span><span class="p">(</span><span class="n">SmartValidationAbstract</span><span class="p">):</span>
+<div class="viewcode-block" id="SMARTInfoSata.__init__"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">external_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockname</span> <span class="o">=</span> <span class="n">drive</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">external_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;sata&#39;</span> <span class="ow">in</span> <span class="n">external_file</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_file</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span>
+                <span class="n">external_file</span><span class="p">[</span><span class="s1">&#39;sata&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_file</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span>
+                <span class="s2">&quot;smart_hdd_check_sata.txt&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockname</span> <span class="o">=</span> <span class="n">drive</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines dict datastructure for SMART attributes with the following</span>
+<span class="sd">        layout: ATTRIBUTE_ID: { MANUFACTURER: { &#39;Desc&#39;: DESCRIPTION, &#39;Min&#39;:</span>
+<span class="sd">                MIN_VALUE, &#39;Max&#39;: MAX_VALUE}}</span>
+<span class="sd">        With:</span>
+<span class="sd">                Required fields:</span>
+<span class="sd">                ATTRIBUTE_ID = SMART Attribute ID (1 - 249)</span>
+<span class="sd">                MANUFACTURER: INTEL, TOSHIBA, SAMSUNG or Common</span>
+<span class="sd">                DESCRIPTION: Field name of SMART attribute</span>
+
+<span class="sd">                Optional fields:</span>
+<span class="sd">                MIN_VALUE: Minimum value to check during verification. Test will</span>
+<span class="sd">                           throw error if actual value is below this value.</span>
+<span class="sd">                MAX_VALUE: Maximum value to check during verification. Test will</span>
+<span class="sd">                           throw error if actual value is above this value.</span>
+
+<span class="sd">                Min and Max values are coming from this task: #6143034</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="p">()</span>
+
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        smart_data_patterns is the list of regex pattern to look</span>
+<span class="sd">        in the smart data to get the stats.</span>
+<span class="sd">        The key is the string that will be the smart key in smartdata dictionary</span>
+<span class="sd">        and the value is the value collected from smart output</span>
+<span class="sd">        Note: Group the exact value you want to pull from smart log</span>
+<span class="sd">        Example:</span>
+<span class="sd">        gplogPage6Id24Counter :  0x06\s+0x018(\w+)\s+xxx</span>
+<span class="sd">        for the above item the smart log is searched for</span>
+<span class="sd">        0x06\s+0x018(\w+)\s+xxx pattern and the value that is captured in the</span>
+<span class="sd">        place of \w+ and will be saved with key as gplogPage6Id24Counter if a</span>
+<span class="sd">        match found else ignore and continue to next item in the dict</span>
+<span class="sd">        Note : dont forget to group the value you want to capture in the regex</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">oui_json_data</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span><span class="s2">&quot;Oui_WWN_Mapping.json&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">smart_data_patterns</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;commandFailedDueToICRCError&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+Command\s+failed\s+due\s+to\s+ICRC\s+&#39;</span>
+            <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForDataFIS&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+data\s+FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForDeviceToHostDataFIS&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+device-to-host\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;data\s+FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceDataFis&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+host-to-device\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;data\s+FIS&#39;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s1">&#39;rERRResponseForNonDataFis&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+non-data\s+FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForDeviceToHostNonDataFis&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+device-to-host\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;non-data\s+FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceNonDataFis&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+host-to-device\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;non-data\s+FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;deviceToHostNonDataFisRetries&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+Device-to-host\s+non-data\s+FIS\s+retries&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;CRCErrorsWithinHostToDeviceFIS&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+CRC\s+errors\s+within\s+host-to-device\s+&#39;</span>
+            <span class="s1">&#39;FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;nonCRCErrorsWithinHostToDeviceFIS&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+Non-CRC\s+errors\s+within\s+host-to-device&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;\s+FIS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceDataFISAndCRC&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+host-to-device\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;data\s+FIS\,\s+CRC&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceDataFISAndNonCRC&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+host-to-device\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;data\s+FIS\,\s+non-CRC&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceNonDataFISAndCRC&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+host-to-device&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;\s+non-data\s+FIS\,\s+CRC&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceNonDataFISAndNonCRC&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+R_ERR\s+response\s+for\s+host-to-device&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;\s+non-data\s+FIS\,\s+non-CRC&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;transitionFromDrivePhyRdyToDrivePhyNRdy&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+Transition\s+from\s+drive\s+PhyRdy\s+to\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;drive\s+PhyNRdy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;deviceToHostRegisterFISesSentDueToACOMRESET&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;\w+\s+\d+\s+(\d+)\s+Device-to-host\s+register\s+FISes\s+sent&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;\s+due\s+to\s+a\s+COMRESET&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;gplogPage6Id24Counter&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;(6|0x06)\s+0x018\s+\d+\s+(\d+)\s+.*\s+Number\s+of\s+Interface\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;CRC\s+Errors&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;gplogPage4Id8Counter&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;(4|0x04)\s+0x008\s+\d+\s+(\d+)\s+.*\s+Number\s+of\s+Reported\s+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;Uncorrectable\s+Errors&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;device_health&#39;</span><span class="p">:</span>
+            <span class="sa">r</span><span class="s1">&#39;SMART overall-health self-assessment test result: (\w+)&#39;</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;RawReadErrorRate&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;5&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;ReallocatedSectorCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;9&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PowerOnHours&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;12&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PowerCycleCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;167&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;SSDProtectMode&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;168&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;SATAPhyErrorCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;169&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;BadBlockCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;170&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;RSVD232&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;Min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s1">&#39;Max&#39;</span><span class="p">:</span> <span class="mi">10</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;171&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PRGMFailCount&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;Min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s1">&#39;Max&#39;</span><span class="p">:</span> <span class="mi">50</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;172&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;EraseFailCount&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;Min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s1">&#39;Max&#39;</span><span class="p">:</span> <span class="mi">50</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;173&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;EraseCountusr&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;174&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;EraseCountsys&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;UnexpPwrLoss&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;175&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PgmFailCntChip&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PLPFailures&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;177&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;WearLevelCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;179&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;UsedRsvdBlkCntTot&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;180&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;UnusedRsvdBlkCntTot&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;181&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;ProgramFailCntTotal&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;182&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;EraseFailCntTotal&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;183&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;SATADwnShft&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;RuntimeBadBlock&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;184&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;E2EDetCnt&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;End-to-EndError&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;187&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;ReportedUncorrect&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;190&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;CaseTemperature&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;AirflowTemperatureCel&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;192&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;Power-OffRetractCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;194&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;InternalTemperature&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;195&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;UncorrectableErrorCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;197&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;CurrentPendingSector&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;199&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;CRCErrCount&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;UDMACRCErrorCount&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;202&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;SSDModeStatus&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;225&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;HostWrites&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;226&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TimedMediaWear&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;227&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TimedRWRatio&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;232&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PLPCapHealth&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;RSVDSpaceRem&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;Min&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;Max&#39;</span><span class="p">:</span> <span class="s1">&#39;10&#39;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;233&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;MediaWearCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;234&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;ThermalThrottle&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;235&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;PowerRecoveryCount&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;241&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TotalLBAsWritten&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;242&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TotalLBAsRead&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;243&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;RefreshCount&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;NANDWrites&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;SATADownShift&#39;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;244&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;ThermalThrottleStatus&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;245&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TimedWorkloadMediaWear&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;246&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TimedWorkloadHostRW&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;247&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;TimedWorkloadTimer&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;249&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;NANDWrites&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;251&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;NANDWrites&#39;</span><span class="p">}},</span>
+            <span class="s1">&#39;commandFailedDueToICRCError&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;Command failed due to ICRC error&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForDataFIS&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForDeviceToHostDataFIS&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for device-to-host data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceDataFis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for host-to-device data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForNonDataFis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for non-data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForDeviceToHostNonDataFis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for device-to-host non-data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceNonDataFis&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for host-to-device non-data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;deviceToHostNonDataFisRetries&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for device-to-host non-data FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;CRCErrorsWithinHostToDeviceFIS&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;CRC errors within host-to-device FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;nonCRCErrorsWithinHostToDeviceFIS&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;Non-CRC errors within host-to-device FIS&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceDataFISAndCRC&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;R_ERR response for host-to-device data FIS, CRC&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceDataFISAndNonCRC&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span>
+                    <span class="s1">&#39;R_ERR response for host-to-device data FIS, non-CRC&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceNonDataFISAndCRC&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span>
+                    <span class="s1">&#39;R_ERR response for host-to-device non-data FIS, CRC&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rERRResponseForHostToDeviceNonDataFISAndNonCRC&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span>
+                    <span class="s1">&#39;R_ERR response for host-to-device non-data FIS,non-CRC&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;transitionFromDrivePhyRdyToDrivePhyNRdy&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;Transition from drive PhyRdy to drive PhyNRdy&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;deviceToHostRegisterFISesSentDueToACOMRESET&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span>
+                    <span class="s1">&#39;Device-to-host register FISes sent due to a COMRESET&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;gplogPage6Id24Counter&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span> <span class="s1">&#39;GPlog Reported Number of Interface CRC Errors&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;gplogPage4Id8Counter&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;Common&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;Desc&#39;</span><span class="p">:</span>
+                    <span class="s1">&#39;Gplog Reported Number of Reported Uncorrectable Errors&#39;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SMARTInfoSata.get_smart_output"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.get_smart_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_smart_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="c1"># smartctl exit status varies (see manpage). Ignore it here:</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;smartctl -x /dev/</span><span class="si">%s</span><span class="s2">; echo &#39;done&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># If the command above didn&#39;t work then this is not a SATA device.</span>
+            <span class="c1"># Try isdct dump instead which works for Intel NVME devices.</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;isdct dump -destination /dev/stdout -intelssd 0 &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;DataType=&#39;nvmelog&#39; LogID=&quot;</span>
+            <span class="k">for</span> <span class="n">logid</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">202</span><span class="p">]:</span>
+                <span class="n">out</span> <span class="o">+=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span> <span class="o">+</span> <span class="n">logid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="k">def</span> <span class="nf">_extract_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Didn&#39;t find </span><span class="si">%s</span><span class="s2"> in SMART output&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_device_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;LU WWN Device Id:\s+\w+\s+(\w+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="n">manufacturer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oui_json_data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="n">manufacturer</span>
+
+    <span class="k">def</span> <span class="nf">_get_serial_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Serial Number:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;serial number&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Firmware Version:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;firmware version&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_user_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;User Capacity:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;user capacity&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">capacity</span>
+
+    <span class="k">def</span> <span class="nf">_get_model_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Device Model:\s+(\w*.*)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;device model&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_sector_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Sector Size(?:s)?:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;sector size&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_write_amplification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="n">waf</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">manufacturer</span> <span class="o">==</span> <span class="s1">&#39;TOSHIBA&#39;</span><span class="p">:</span>
+            <span class="c1"># Toshiba Write Amplification:</span>
+            <span class="n">waf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">249</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">241</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">manufacturer</span> <span class="o">==</span> <span class="s1">&#39;INTEL&#39;</span><span class="p">:</span>
+            <span class="c1"># Intel Write Amplification:</span>
+            <span class="k">if</span> <span class="mi">243</span> <span class="ow">in</span> <span class="n">attr</span> <span class="ow">and</span> <span class="mi">241</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+                <span class="c1"># Older INTEL FW doesn&#39;t have these fields</span>
+                <span class="n">waf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">243</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">241</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">manufacturer</span> <span class="o">==</span> <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">177</span> <span class="ow">in</span> <span class="n">attr</span> <span class="ow">and</span> <span class="mi">241</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+                <span class="n">waf</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">177</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1024</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span> <span class="o">/</span>
+                    <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">241</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">512</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">manufacturer</span> <span class="o">==</span> <span class="s1">&#39;HYNIX&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="mi">234</span> <span class="ow">in</span> <span class="n">attr</span> <span class="ow">and</span> <span class="mi">241</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+                <span class="n">waf</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">234</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">241</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown manufacturer </span><span class="si">%s</span><span class="s2"> for write amplification&quot;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">manufacturer</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">waf</span>
+
+    <span class="k">def</span> <span class="nf">_get_extra_manufacturer_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="n">extra_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">manufacturer</span> <span class="o">==</span> <span class="s1">&#39;SAMSUNG&#39;</span><span class="p">:</span>
+            <span class="n">waf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_write_amplification</span><span class="p">(</span><span class="n">manufacturer</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">waf</span><span class="p">:</span>
+                <span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;tbw&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">7372</span> <span class="o">/</span> <span class="n">waf</span>
+            <span class="k">if</span> <span class="mi">245</span> <span class="ow">in</span> <span class="n">attr</span> <span class="ow">and</span> <span class="mi">247</span> <span class="ow">in</span> <span class="n">attr</span><span class="p">:</span>
+                <span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;media_wear_1sec&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">245</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">247</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span>
+                <span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;estimated_eol&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="mi">100</span> <span class="o">/</span> <span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;media_wear_1sec&#39;</span><span class="p">]</span>
+                <span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;eol_years&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="n">extra_data</span><span class="p">[</span><span class="s1">&#39;estimated_eol&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">365</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">extra_data</span>
+
+    <span class="k">def</span> <span class="nf">_extract_other_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">all_statistics</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_data_patterns</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">all_statistics</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)})</span>
+        <span class="k">return</span> <span class="n">all_statistics</span>
+
+<div class="viewcode-block" id="SMARTInfoSata.get_common_fields"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.get_common_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_common_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_device_manufacturer</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;logical_drive&#39;</span><span class="p">:</span> <span class="n">device</span><span class="p">})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;serial_number&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_serial_number</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;firmware_version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fw_version</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;user_capacity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_user_capacity</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;sector_size&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sector_size</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_number</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="k">return</span> <span class="n">fields</span></div>
+
+    <span class="k">def</span> <span class="nf">_parse_smart_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">):</span>
+
+        <span class="c1"># Example output:</span>
+        <span class="c1"># ID# ATTRIBUTE_NAME          FLAGS    VALUE WORST THRESH FAIL RAW_VALUE</span>
+        <span class="c1">#   5 Reallocated_Sector_Ct   -O--CK   100   100   000    -    0</span>
+        <span class="c1">#   9 Power_On_Hours          -O--CK   100   100   000    -    954</span>
+
+        <span class="c1"># Get ID, then skip next 6 blocks to get to RAW_VALUE</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;(\d+)+(?:\s+\S+)</span><span class="si">{2}</span><span class="s1">\s+(\d+)\s+(\d+)\s+(\d+)&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;(?:\s+\S+)\s+(-?\d+)&#39;</span>
+        <span class="p">)</span>
+
+        <span class="n">parsed</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">in_attributes</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">in_attributes</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;ATTRIBUTE_NAME&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">in_attributes</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">continue</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">attr_id</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">worst</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">thresh</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                <span class="c1"># First group is always integer, second group might be string</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+                    <span class="s1">&#39;worst&#39;</span><span class="p">:</span> <span class="n">worst</span><span class="p">,</span>
+                    <span class="s1">&#39;thresh&#39;</span><span class="p">:</span> <span class="n">thresh</span><span class="p">,</span>
+                    <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">parsed</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="nb">int</span><span class="p">(</span><span class="n">attr_id</span><span class="p">):</span> <span class="n">data</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Reached the end of the attributes</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">parsed</span>
+
+<div class="viewcode-block" id="SMARTInfoSata.get_smart_attributes"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.get_smart_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_smart_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">device</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Please provide either device or output&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_output</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">manufacturer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_device_manufacturer</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_smart_attributes</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">attributes</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.to_config_dict"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.to_config_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_config_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transforms smart_data dict as generated by self.get_data into</span>
+<span class="sd">        human readable key value pairs that can be stored in test config data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">smart_values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">man</span> <span class="o">=</span> <span class="n">smart_data</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">]</span>
+        <span class="n">drive</span> <span class="o">=</span> <span class="n">smart_data</span><span class="p">[</span><span class="s1">&#39;logical_drive&#39;</span><span class="p">]</span>
+        <span class="n">smart_values</span><span class="p">[</span><span class="s1">&#39;storage_manufacturer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">man</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">smart_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">man</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">man</span><span class="p">][</span><span class="s1">&#39;Desc&#39;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="s1">&#39;Common&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;Common&#39;</span><span class="p">][</span><span class="s1">&#39;Desc&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;smart</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+            <span class="n">smart_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="c1"># Special case for Temperate, which shows up with Min / Max</span>
+            <span class="c1"># values, example:</span>
+            <span class="c1"># 29 (Min/Max 27/37)</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+).*Min/Max.*(\d+)/(\d+)&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">desc_cur</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">Current&quot;</span> <span class="o">%</span> <span class="n">desc</span>
+                <span class="n">desc_min</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">Min&quot;</span> <span class="o">%</span> <span class="n">desc</span>
+                <span class="n">desc_max</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">Max&quot;</span> <span class="o">%</span> <span class="n">desc</span>
+                <span class="n">smart_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">desc_cur</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="n">desc_min</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                    <span class="n">desc_max</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+                <span class="p">}</span>
+                <span class="n">smart_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">smart_dict</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">desc_key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span>
+                    <span class="n">smart_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">desc_key</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+                <span class="n">smart_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+            <span class="n">smart_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">smart_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">smart_values</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.get_data"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">interface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_interface_is_sata</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">interface</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Not a Sata Smart drive&quot;</span><span class="p">)</span>
+        <span class="n">smart_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_device_type</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sata&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_output</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_attributes</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">smart_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+
+        <span class="n">manufacturer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_device_manufacturer</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hdd&quot;</span><span class="p">:</span>
+            <span class="n">waf</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">waf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_write_amplification</span><span class="p">(</span><span class="n">manufacturer</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+
+        <span class="n">smart_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;write_amplification&#39;</span><span class="p">:</span> <span class="n">waf</span><span class="p">})</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_extra_manufacturer_fields</span><span class="p">(</span><span class="n">manufacturer</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="n">smart_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span>
+        <span class="n">smart_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_common_fields</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span>
+        <span class="n">smart_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_extract_other_statistics</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">smart_data</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.check_interface_is_sata"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.check_interface_is_sata">[docs]</a>    <span class="k">def</span> <span class="nf">check_interface_is_sata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_inq /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">inquiry_output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.*Vendor\s+identification:\s+(\w+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">inquiry_output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">interface_type</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">interface_type</span> <span class="o">==</span> <span class="s1">&#39;ATA&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s1">&#39;Could not get interface type of device </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.validate_rules"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.validate_rules">[docs]</a>    <span class="k">def</span> <span class="nf">validate_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">smart_attr_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates SMART min / max attribute rules as defined in</span>
+<span class="sd">        self.attribute_desc. Raises an exception if any errors found</span>
+<span class="sd">        @param smart_data: Parsed SMART data as generated by self.get_data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Validating SMART rules&quot;</span><span class="p">)</span>
+        <span class="n">man</span> <span class="o">=</span> <span class="n">smart_data</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">smart_attr_dict</span><span class="p">:</span>
+            <span class="n">rules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_desc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rules</span> <span class="o">=</span> <span class="n">smart_attr_dict</span>
+
+        <span class="n">all_errors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">this_rule</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">counters_to_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;worst&#39;</span><span class="p">,</span> <span class="s1">&#39;thresh&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">rules</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">this_rule</span><span class="p">[</span><span class="s1">&#39;Min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">this_rule</span><span class="p">[</span><span class="s1">&#39;Max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smart_data</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">man_name</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">man</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                        <span class="n">man_name</span> <span class="o">=</span> <span class="n">man</span>
+                    <span class="k">elif</span> <span class="s1">&#39;Common&#39;</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                        <span class="n">man_name</span> <span class="o">=</span> <span class="s1">&#39;Common&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">man_value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">man_name</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">counter</span> <span class="ow">in</span> <span class="n">man_value</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">counter</span> <span class="ow">in</span> <span class="n">counters_to_check</span><span class="p">:</span>
+                            <span class="n">this_rule</span><span class="p">[</span><span class="s1">&#39;Min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">man_value</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="s1">&#39;Min&#39;</span><span class="p">]</span>
+                            <span class="n">this_rule</span><span class="p">[</span><span class="s1">&#39;Max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">man_value</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="s1">&#39;Max&#39;</span><span class="p">]</span>
+                            <span class="n">all_errors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">check_current_in_range</span><span class="p">(</span>
+                                    <span class="n">this_rule</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)][</span><span class="n">counter</span><span class="p">],</span>
+                                    <span class="n">key</span><span class="p">,</span> <span class="n">counter</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smart_data</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">run_check</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">man</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                        <span class="k">for</span> <span class="n">minmax</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Min&#39;</span><span class="p">,</span> <span class="s1">&#39;Max&#39;</span><span class="p">]:</span>
+                            <span class="k">if</span> <span class="n">minmax</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">man</span><span class="p">]:</span>
+                                <span class="n">this_rule</span><span class="p">[</span><span class="n">minmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">man</span><span class="p">][</span><span class="n">minmax</span><span class="p">]</span>
+                                <span class="n">run_check</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">elif</span> <span class="s1">&#39;Common&#39;</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                        <span class="k">for</span> <span class="n">minmax</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Min&#39;</span><span class="p">,</span> <span class="s1">&#39;Max&#39;</span><span class="p">]:</span>
+                            <span class="k">if</span> <span class="n">minmax</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;Common&#39;</span><span class="p">]:</span>
+                                <span class="n">this_rule</span><span class="p">[</span><span class="n">minmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">rules</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;Common&#39;</span><span class="p">][</span><span class="n">minmax</span><span class="p">]</span>
+                                <span class="n">run_check</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="n">run_check</span><span class="p">:</span>
+                        <span class="n">all_errors</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">check_current_in_range</span><span class="p">(</span>
+                                <span class="n">this_rule</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">key</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">all_errors</span><span class="p">:</span>
+            <span class="n">smart_error</span> <span class="o">=</span> <span class="s2">&quot;Found SMART attribute errors:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_errors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">smart_error</span> <span class="o">+=</span> <span class="s2">&quot;Key: </span><span class="si">%s</span><span class="s2">. </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">smart_error</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.compare_attributes"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.compare_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">compare_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config1</span><span class="p">,</span> <span class="n">config2</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">json_data</span><span class="p">:</span>
+            <span class="n">input_list</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Escaping smart attributes compare for SSD.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">dev_start_config</span> <span class="o">=</span> <span class="n">config1</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+            <span class="n">dev_end_config</span> <span class="o">=</span> <span class="n">config2</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+            <span class="n">attribute_list</span> <span class="o">=</span> <span class="n">input_list</span><span class="p">[</span><span class="n">dev_start_config</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compare_dict</span><span class="p">(</span>
+                <span class="n">dev_start_config</span><span class="p">,</span> <span class="n">dev_end_config</span><span class="p">,</span> <span class="n">attribute_list</span>
+            <span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.compare_dict"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.compare_dict">[docs]</a>    <span class="k">def</span> <span class="nf">compare_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">check_list</span><span class="p">):</span>
+        <span class="n">dict1</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict2</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">check_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">dict1</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">d1</span><span class="p">[</span><span class="n">k</span><span class="p">]})</span>
+            <span class="n">dict2</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">d2</span><span class="p">[</span><span class="n">k</span><span class="p">]})</span>
+        <span class="n">diff_in_smart</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span><span class="n">dict1</span><span class="p">,</span> <span class="n">dict2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">diff_in_smart</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;the difference in smart data is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">diff_in_smart</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.update_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.update_firmware">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_firmware</span><span class="p">(</span><span class="n">versions</span><span class="p">,</span> <span class="n">upgrade</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fw_slot</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">download_type</span> <span class="o">=</span> <span class="s2">&quot;--fwdownload&quot;</span>
+        <span class="c1"># Mode 7 downloads firmware as single segment</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mode</span><span class="p">):</span>
+            <span class="n">download_type</span> <span class="o">=</span> <span class="s2">&quot;--fwdownload-mode7&quot;</span>
+        <span class="n">my_list</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">versions</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">upgrade</span><span class="p">:</span>
+            <span class="n">my_list</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">my_list</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">my_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">upgrade</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">firmware_file</span> <span class="o">=</span> <span class="n">versions</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+                <span class="n">SMARTInfoSata</span><span class="o">.</span><span class="n">update_device_firmware</span><span class="p">(</span><span class="n">download_type</span><span class="p">,</span> <span class="n">firmware_file</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering off all slots&quot;</span><span class="p">)</span>
+            <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweroff_allhddslot</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering on all slots&quot;</span><span class="p">)</span>
+            <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweron_allhddslot</span><span class="p">()</span>
+            <span class="n">SMARTInfoSata</span><span class="o">.</span><span class="n">check_version</span><span class="p">(</span><span class="n">versions</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">],</span> <span class="n">devices</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.check_version"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.check_version">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="n">firmware_output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;sg_map -i&quot;</span><span class="p">)</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">firmware_output</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s1">&#39;One or more drive are not with version </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.update_device_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.update_device_firmware">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_device_firmware</span><span class="p">(</span><span class="n">download_type</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;hdparm </span><span class="si">%s</span><span class="s1">  </span><span class="si">%s</span><span class="s1"> --please-destroy-my-drive&#39;</span>\
+                <span class="s1">&#39; --yes-i-know-what-i-am-doing&#39;</span>\
+                <span class="s1">&#39; /dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">download_type</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;hdparm command failed for device </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.writecache_get"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.writecache_get">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_get</span><span class="p">(</span><span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        @param str device: path of drive under /dev/ (e.g. sdb)</span>
+<span class="sd">        @return int: 1 for enabled, 0 or disabled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">get_writecache_state</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.writecache_enable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.writecache_enable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        @param str device: path of drive under /dev/ (e.g. sdb)</span>
+<span class="sd">        @param boolean save: Only used to keep uniform function signature with</span>
+<span class="sd">            SmartValidationAbstract.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">writecache_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.writecache_disable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.writecache_disable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">writecache_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.read_lookahead_get"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.read_lookahead_get">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_get</span><span class="p">(</span><span class="n">drive</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">get_readlookahead_state</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.read_lookahead_disable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.read_lookahead_disable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">readlookahead_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSata.read_lookahead_enable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sata.html#havoc.autotest_testfiles.validation_utils.lib.storage.sata.smart_info_sata.SMARTInfoSata.read_lookahead_enable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">readlookahead_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

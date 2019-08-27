@@ -1,0 +1,1528 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.fw_update_util &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.fw_update_util</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.fw_update_util</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.system.system_config</span> <span class="k">import</span> <span class="n">SystemConfig</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.config_check</span> <span class="k">import</span> <span class="n">ConfigCheck</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.connection_utils</span> <span class="k">import</span> <span class="n">ConnectionUtils</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># no support of cyborg on Hi5</span>
+    <span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.soliton_beam_utils</span> <span class="k">import</span> <span class="n">SolitonBeamUtils</span>
+    <span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.cyborg</span> <span class="k">import</span> <span class="n">Cyborg</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="n">MINIMUM_SPACE_PERCENTAGE</span> <span class="o">=</span> <span class="mf">0.20</span>
+<span class="n">BYTES_TO_MB_CONVERSION_VALUE</span> <span class="o">=</span> <span class="mi">20</span>
+
+
+<div class="viewcode-block" id="FwUpdateUtil"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil">[docs]</a><span class="k">class</span> <span class="nc">FwUpdateUtil</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">test_matrix</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="viewcode-block" id="FwUpdateUtil.bios_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.bios_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bios_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">test_control</span><span class="p">,</span> <span class="n">fw_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">):</span>
+        <span class="c1"># Read model specific registers and compare between BIOS versions</span>
+        <span class="k">if</span> <span class="n">_iter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_get_bios_checks</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">system_bios_log_check</span><span class="p">:</span>
+            <span class="c1"># Create acpi and lspci dump</span>
+            <span class="n">acpi_dump_before</span><span class="p">,</span> <span class="n">lspci_dump_before</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_system_log</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="s2">&quot;before_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_iter</span>
+            <span class="p">)</span>
+        <span class="c1"># Get bios_info using dmidecode</span>
+        <span class="n">bios_log_before</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_bios_full_info</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rdmsr_check</span><span class="p">:</span>
+            <span class="n">msr_before</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">rdmsr</span><span class="p">()</span>
+        <span class="c1"># check the boot time for the system to compare after the bios fwupgrade</span>
+        <span class="n">boot_time_before_upgrade</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">get_system_boot_time</span><span class="p">()</span>
+        <span class="n">bios_ver_old</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_bios_ver</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;inband&quot;</span><span class="p">:</span>
+            <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;inband&quot;</span><span class="p">,</span> <span class="s2">&quot;bios&quot;</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="n">dut</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_dut_dir</span><span class="p">(),</span> <span class="n">bin_ver</span><span class="p">)</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">bios_inband_update</span><span class="p">(</span><span class="n">dut</span><span class="p">,</span> <span class="n">bin_src</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">:</span>
+            <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;oob&quot;</span><span class="p">,</span> <span class="s2">&quot;bios&quot;</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="s2">&quot;bios&quot;</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bios</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_str</span><span class="p">:</span>
+                <span class="c1"># Log the error details along with the md5sum of the binary file.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;cyborg&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fw_version</span> <span class="o">==</span> <span class="s2">&quot;previous&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No ekpp bundle provided.&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fw_version</span> <span class="o">==</span> <span class="s2">&quot;latest&quot;</span><span class="p">:</span>
+                <span class="c1"># latest means we use Cyborg default options</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;npi_bundle&quot;</span><span class="p">:</span> <span class="n">fw_version</span><span class="p">}</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">cyborg_update</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+            <span class="c1"># performing no post bios update check for now for bios update using cyborg.</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Invalid input method: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">update_method</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_bios_post_checks</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span>
+            <span class="n">_iter</span><span class="p">,</span>
+            <span class="n">bin_ver</span><span class="p">,</span>
+            <span class="n">bios_ver_old</span><span class="p">,</span>
+            <span class="n">bios_log_before</span><span class="p">,</span>
+            <span class="n">msr_before</span><span class="p">,</span>
+            <span class="n">acpi_dump_before</span><span class="p">,</span>
+            <span class="n">lspci_dump_before</span><span class="p">,</span>
+            <span class="n">boot_time_before_upgrade</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%d</span><span class="s2"> - complete&quot;</span> <span class="o">%</span> <span class="n">_iter</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.openbmc_fw_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.openbmc_fw_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">openbmc_fw_update</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">test_control</span><span class="p">,</span> <span class="n">fw_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calling the openbmc fw-util class to performance upgrade or downgrade</span>
+<span class="sd">        on the BMC.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host                = contains the host object.</span>
+<span class="sd">            update_method       = out of band or soliton bean</span>
+<span class="sd">            _iter               = current number of the iteration.</span>
+<span class="sd">            test_control        = contains test control file&#39;s json data as dict.</span>
+<span class="sd">            fw_version          = what version of binary, refers to fw_version_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">:</span>
+            <span class="n">FwOpenbmcUtil</span><span class="o">.</span><span class="n">openbmc_fwutil_update</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="s2">&quot;oob&quot;</span><span class="p">,</span> <span class="s2">&quot;openbmc&quot;</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">test_control</span><span class="p">,</span> <span class="n">fw_version</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;soliton_beam&quot;</span><span class="p">:</span>
+            <span class="n">FwOpenbmcUtil</span><span class="o">.</span><span class="n">openbmc_soliton_beam_update</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;openbmc&quot;</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unsupported </span><span class="si">%s</span><span class="s2"> update method found &quot;</span> <span class="o">%</span> <span class="n">update_method</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_cfg_check_filter_list"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_cfg_check_filter_list">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_cfg_check_filter_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To get the config check filter list for the respective firmware test.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;bios&quot;</span> <span class="ow">in</span> <span class="n">fw_type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;bios_settings&quot;</span><span class="p">,</span> <span class="s2">&quot;bios_version&quot;</span><span class="p">,</span> <span class="s2">&quot;me_version&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">&quot;openbmc&quot;</span> <span class="ow">in</span> <span class="n">fw_type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="s2">&quot;bmc_version&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;openbmc_version&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;rom_version&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;product_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fan_speed_controller_version&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="n">fw_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bic&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-bic&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;bridge-ic_bootloader_version&quot;</span><span class="p">,</span> <span class="s2">&quot;bridge-ic_version&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">fw_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bicbl&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-bicbl&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;bridge-ic_bootloader_version&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">fw_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;cpld&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-cpld&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;cpld_version&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;pcie_sw&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;pciesw_version&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Unsupported </span><span class="si">%s</span><span class="s2"> firmware upgrade found &quot;</span> <span class="o">%</span> <span class="n">fw_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_fw_test_file_name"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_fw_test_file_name">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_fw_test_file_name</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">binary_source</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">enforce_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used to check if the folder exists in the local directory,</span>
+<span class="sd">        else returns False. If exists then check for the binary or flash file of the</span>
+<span class="sd">        firmware version and return the file name, else raise Exception.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">str_of_files_list</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">binary_source</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">str_of_files_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;bios&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">str_of_files_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">fw_version</span> <span class="ow">in</span> <span class="n">filename</span> <span class="ow">and</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No Binary file named with the firmware version&quot;</span>
+                                <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> exists in the folder&quot;</span> <span class="o">%</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fw_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bic&quot;</span><span class="p">,</span> <span class="s2">&quot;bicbl&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-bic&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-bicbl&quot;</span><span class="p">):</span>
+                <span class="c1"># The fw_version contains &quot;v1.31&quot; or &quot;v1.08&quot;</span>
+                <span class="c1"># The regular expression&#39;s output is &quot;131&quot; or &quot;108&quot;</span>
+                <span class="c1"># The binary filename is &quot;f20_bootloader_110.bin&quot; or</span>
+                <span class="c1"># &quot;f20_snowflake_131.bin&quot;</span>
+                <span class="c1"># Checking if the regular expression output is present in the</span>
+                <span class="c1"># filename. If present, then the fi  le extension is &quot;.bin&quot;.</span>
+                <span class="n">fw_ver_num</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;([0-9].+)&quot;</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">str_of_files_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">fw_ver_num</span> <span class="ow">in</span> <span class="n">filename</span> <span class="ow">and</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No Binary file named with the firmware version&quot;</span>
+                                <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> exists in the folder&quot;</span> <span class="o">%</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fw_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;cpld&quot;</span><span class="p">,</span> <span class="s2">&quot;gpv2-cpld&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">str_of_files_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;jbc&quot;</span><span class="p">,</span> <span class="s2">&quot;bin&quot;</span><span class="p">)):</span>
+                        <span class="k">return</span> <span class="n">filename</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No Binary file named with the firmware version&quot;</span>
+                                <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> exists in the folder&quot;</span> <span class="o">%</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;openbmc&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">FwOpenbmcUtil</span><span class="o">.</span><span class="n">get_flash_file_from_tmp_dir</span><span class="p">(</span>
+                    <span class="n">str_of_files_list</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_version</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-pciesw&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">str_of_files_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">fw_version</span> <span class="ow">in</span> <span class="n">filename</span> <span class="ow">and</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;bin&quot;</span><span class="p">,</span> <span class="s2">&quot;pmc&quot;</span><span class="p">)):</span>
+                        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No bin or pmc file with the firmware version&quot;</span>
+                                <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> exists in the folder&quot;</span> <span class="o">%</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unsupported </span><span class="si">%s</span><span class="s2"> firmware&quot;</span> <span class="o">%</span> <span class="n">fw_type</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">raise_error</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;No Binary file named with the firmware version &quot;</span>
+                    <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> exists in the folder&quot;</span> <span class="o">%</span> <span class="n">fw_version</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_absolute_filepath_from_bmc"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_absolute_filepath_from_bmc">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src</span><span class="p">,</span> <span class="n">enforce_status</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To get the file&#39;s absolute path from the bmc, where the binary file is</span>
+<span class="sd">        copied.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host            = host object</span>
+<span class="sd">            fw_type         = Bios, Bic, Bicbl, OpenBMC, cpld</span>
+<span class="sd">            bin_ver         = what version of binary, refers to fw_version_map.</span>
+<span class="sd">            bin_src         = binary file location.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">control_server_tmpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_control_server_tmpdir</span><span class="p">(),</span> <span class="n">bin_ver</span>
+        <span class="p">)</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_test_file_name</span><span class="p">(</span><span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Extracting the file in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">control_server_tmpdir</span><span class="p">)</span>
+            <span class="n">GenericUtils</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">bin_src</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">)</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_test_file_name</span><span class="p">(</span>
+                <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Compare md5sum of the file from the control server temp directory with</span>
+        <span class="c1"># bmc file and if matches proceed with test execution, else copy the file.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Get the md5sum for the binary file on the control server&#39;s temporary</span>
+            <span class="c1"># directory where the tar files are extracted.</span>
+            <span class="n">md5sum_cs_tmpdir</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+                <span class="s2">&quot;md5sum </span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">bmc_fw_test_folder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_bmc_test_folder_path</span><span class="p">(</span><span class="n">fw_type</span><span class="p">)</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bmc_fw_test_folder</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+            <span class="c1"># Get md5sum for binary file on the BMC.</span>
+            <span class="n">md5sum_bmc_file</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;md5sum </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># Compare both the values, if matching proceed with execution, else</span>
+            <span class="c1"># consider that the file is not same and copy again.</span>
+            <span class="k">if</span> <span class="n">md5sum_cs_tmpdir</span> <span class="o">==</span> <span class="n">md5sum_bmc_file</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;md5sum of the binary files are matching - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">md5sum_bmc_file</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bmc_fw_test_folder</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;The firmware test file is not there on the BMC to check for md5sum&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># File is copied to BMC only when it is not found in the directory path</span>
+        <span class="c1"># or if it&#39;s md5sum is not matching.</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">copy_files_to_bmc</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.log_fw_error_details"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.log_fw_error_details">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">log_fw_error_details</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To log the error details along with the md5sum of the file, if it is present.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">md5sum_bmc_file</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;md5sum </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">bmc_binary_file_path</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;The file has been deleted during the process.&quot;</span>
+                <span class="s2">&quot; There is no </span><span class="si">{0}</span><span class="s2"> to get the md5sum and the Firmware update failed &quot;</span>
+                <span class="s2">&quot;due to </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+            <span class="s2">&quot;Firmware update failed due to </span><span class="si">{0}</span><span class="s2"> and md5sum of the &quot;</span>
+            <span class="s2">&quot; file is </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_str</span><span class="p">,</span> <span class="n">md5sum_bmc_file</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.copy_files_to_bmc"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.copy_files_to_bmc">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">copy_files_to_bmc</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">file_name</span><span class="p">,</span>
+        <span class="n">control_server_tmpdir</span><span class="p">,</span>
+        <span class="n">fw_type</span><span class="p">,</span>
+        <span class="n">cleanup_bmc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">available_memoryspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">file_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To copy the files into BMC. If there is issue while copying then available</span>
+<span class="sd">        memory on the BMC is checked. If there is no space then the havoc</span>
+<span class="sd">        related folders on the BMC are deleted only if they are not used by other</span>
+<span class="sd">        tests.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Gets the BMC temp folder path.</span>
+        <span class="n">bmc_fw_test_folder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_bmc_test_folder</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">fw_type</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">openbmc_copyfiles</span><span class="p">(</span>
+                <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">bmc_fw_test_folder</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">check_file_in_bmc_folder</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">bmc_fw_test_folder</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cleanup_bmc</span><span class="p">:</span>
+                <span class="c1"># Exception is caught, when the copy fails and it cleans up the bmc</span>
+                <span class="c1"># by deleting the havoc related folders that are not being used and</span>
+                <span class="c1"># retries copying the file to BMC.</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">cleanup_bmc_and_retry_copying</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">fw_type</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;Even after cleaning the unused folders on BMC, there is still &quot;</span>
+                    <span class="s2">&quot;issue while copying. Available BMC space found as </span><span class="si">{0}</span><span class="s2"> MB.&quot;</span>
+                    <span class="s2">&quot; File size is </span><span class="si">{1}</span><span class="s2"> MB&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">available_memoryspace</span><span class="p">,</span> <span class="n">file_size</span><span class="p">)</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.cleanup_bmc_and_retry_copying"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.cleanup_bmc_and_retry_copying">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">cleanup_bmc_and_retry_copying</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">fw_type</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean up the BMC by deleting the havoc firmware test related folders</span>
+<span class="sd">        that are not being used by any other test and retry copying.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the file&#39;s size from the control server temp directory in MBs.</span>
+        <span class="n">file_size</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">))</span>
+            <span class="o">&gt;&gt;</span> <span class="n">BYTES_TO_MB_CONVERSION_VALUE</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Get Available memory space on the BMC.</span>
+        <span class="n">available_memoryspace</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_available_space</span><span class="p">()</span>
+        <span class="c1"># Calculate the minimum space requried by getting the total space on the BMC.</span>
+        <span class="n">minimum_space</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_total_space</span><span class="p">()</span> <span class="o">*</span> <span class="n">MINIMUM_SPACE_PERCENTAGE</span>
+        <span class="c1"># Check and delete only if the space is less than the minimum required space.</span>
+        <span class="k">if</span> <span class="n">available_memoryspace</span> <span class="o">&lt;=</span> <span class="n">minimum_space</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cleanup_and_retry_copying</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">minimum_space</span><span class="p">,</span>
+                <span class="n">file_name</span><span class="p">,</span>
+                <span class="n">control_server_tmpdir</span><span class="p">,</span>
+                <span class="n">fw_type</span><span class="p">,</span>
+                <span class="n">file_size</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+            <span class="s2">&quot;Issue while trying to copy the file to BMC. Available BMC space &quot;</span>
+            <span class="s2">&quot;found as </span><span class="si">{0}</span><span class="s2"> MB. File size is </span><span class="si">{1}</span><span class="s2"> MB&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">available_memoryspace</span><span class="p">,</span> <span class="n">file_size</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil._cleanup_and_retry_copying"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil._cleanup_and_retry_copying">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_cleanup_and_retry_copying</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">minimum_space</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">file_size</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In this method, we get the list of the paths with their memory occupancy.</span>
+<span class="sd">        If the havoc system firmware test folder is being not used then they are</span>
+<span class="sd">        deleted else not.</span>
+
+<span class="sd">        To get the list of the folder and their memory occupancy.</span>
+
+<span class="sd">        Get how much each path and how much memory they are occupying on the BMC.</span>
+<span class="sd">        output : :~# du -h /tmp/</span>
+<span class="sd">            199.4M  /tmp/havoc_system_fw/havoc_bios</span>
+<span class="sd">            199.4M  /tmp/havoc_system_fw</span>
+<span class="sd">            28.0K   /tmp/thresh-cache</span>
+<span class="sd">            236.0K  /tmp/cache_store</span>
+<span class="sd">            200.0M  /tmp/</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">directory_paths_with_size_list</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;du -h /tmp/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># Check and delete only the folders that are related to havoc, when unused.</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">directory_paths_with_size_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;havoc_system_fw&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_check_directory_availability_and_delete</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># Get Available memory space on the BMC.</span>
+        <span class="n">available_memoryspace</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_available_space</span><span class="p">()</span>
+        <span class="c1"># Check and copy only if the space is more than the minimum required space.</span>
+        <span class="k">if</span> <span class="n">available_memoryspace</span> <span class="o">&gt;=</span> <span class="n">minimum_space</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">copy_files_to_bmc</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">file_name</span><span class="p">,</span>
+                <span class="n">control_server_tmpdir</span><span class="p">,</span>
+                <span class="n">fw_type</span><span class="p">,</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">available_memoryspace</span><span class="p">,</span>
+                <span class="n">file_size</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+            <span class="s2">&quot;Available BMC space found as </span><span class="si">{0}</span><span class="s2"> MB which is less than </span><span class="si">{1}</span><span class="s2"> MB &quot;</span>
+            <span class="s2">&quot;required. Folders could not be deleted, since they are being&quot;</span>
+            <span class="s2">&quot; used&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">available_memoryspace</span><span class="p">,</span> <span class="n">minimum_space</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.check_and_delete_directory_contents"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.check_and_delete_directory_contents">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">check_and_delete_directory_contents</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">sub_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To check and delete the directory contents.</span>
+<span class="sd">        If the folder exists, check if it is being used by other tests, else delete</span>
+<span class="sd">        the folder.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">destination_folder</span> <span class="o">=</span> <span class="s2">&quot;/tmp/havoc_system_fw&quot;</span>
+            <span class="k">if</span> <span class="n">sub_dir</span><span class="p">:</span>
+                <span class="n">destination_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">destination_folder</span><span class="p">,</span> <span class="s2">&quot;havoc_&quot;</span> <span class="o">+</span> <span class="n">sub_dir</span>
+                <span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="s2">&quot;ls </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">destination_folder</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;No such file or directory&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+                <span class="c1"># Check if the folder is being used by any other test, else delete.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_check_directory_availability_and_delete</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">destination_folder</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Return without deleting since the folder is not created.</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;No directory created on BMC to delete&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Host object is not created.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil._check_directory_availability_and_delete"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil._check_directory_availability_and_delete">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_check_directory_availability_and_delete</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">destination_folder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checking if the directory is being used by another test. If its being</span>
+<span class="sd">        used, then the directory is ignored, else the directory is deleted.</span>
+<span class="sd">        Eg: ps | grep &lt;directory&gt; gives default of two results when test</span>
+<span class="sd">        diretory is not being used by any other test.</span>
+
+<span class="sd">            27579 root      2800 S    bash -c ps | grep /tmp/havoc</span>
+<span class="sd">            27581 root      2956 S    grep /tmp/havoc</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ps | grep </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">destination_folder</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">delete_bmc_destination_path</span><span class="p">(</span><span class="n">destination_folder</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> folder is being used, so proceeding &quot;</span>
+                <span class="s2">&quot;without deleting. &quot;</span> <span class="o">%</span> <span class="n">destination_folder</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_bmc_test_folder"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_bmc_test_folder">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_bmc_test_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">control_server_tmpdir</span><span class="p">,</span> <span class="n">fw_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the BMC destination folder name and check if it exists on BMC.</span>
+<span class="sd">        If not create the path string and return it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bmc_fw_test_folder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_bmc_test_folder_path</span><span class="p">(</span><span class="n">fw_type</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_directory_contents</span><span class="p">(</span><span class="n">bmc_fw_test_folder</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;mkdir -p </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">bmc_fw_test_folder</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bmc_fw_test_folder</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.check_file_in_bmc_folder"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.check_file_in_bmc_folder">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">check_file_in_bmc_folder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">bmc_fw_test_folder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checking if the binary file that is required for the firmware test is present</span>
+<span class="sd">        in the folder or not. If not, raise exception.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">file_name</span>
+            <span class="ow">in</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_directory_contents</span><span class="p">(</span><span class="n">bmc_fw_test_folder</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bmc_fw_test_folder</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;No Binary file named with the firmware version &quot;</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> exists in the folder&quot;</span> <span class="o">%</span> <span class="n">file_name</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil._get_bmc_test_folder_path"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil._get_bmc_test_folder_path">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_bmc_test_folder_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fw_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method returns the name of the folder, to hold the binary files</span>
+<span class="sd">        during the test, on the destination of the BMC</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bmc_fw_test_folder</span> <span class="o">=</span> <span class="s2">&quot;/tmp/havoc_system_fw&quot;</span>
+        <span class="k">if</span> <span class="n">fw_type</span><span class="p">:</span>
+            <span class="n">bmc_fw_test_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bmc_fw_test_folder</span><span class="p">,</span> <span class="s2">&quot;havoc_&quot;</span> <span class="o">+</span> <span class="n">fw_type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bmc_fw_test_folder</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.cyborg_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.cyborg_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">cyborg_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cyborg</span> <span class="o">=</span> <span class="n">Cyborg</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
+            <span class="n">job_id</span> <span class="o">=</span> <span class="n">cyborg</span><span class="o">.</span><span class="n">upgrade_server</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Started Cyborg job - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">job_id</span><span class="p">))</span>
+            <span class="n">cyborg</span><span class="o">.</span><span class="n">wait_until_job_completes</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Cyborg update completed flashing </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_bios_post_checks</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">_iter</span><span class="p">,</span>
+        <span class="n">bin_ver</span><span class="p">,</span>
+        <span class="n">bios_ver_old</span><span class="p">,</span>
+        <span class="n">bios_log_before</span><span class="p">,</span>
+        <span class="n">msr_before</span><span class="p">,</span>
+        <span class="n">acpi_dump_before</span><span class="p">,</span>
+        <span class="n">lspci_dump_before</span><span class="p">,</span>
+        <span class="n">boot_time_before_upgrade</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">bios_ver_new</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_bios_ver</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+            <span class="n">bios_ver_new</span><span class="p">,</span>
+            <span class="n">bin_ver</span><span class="p">,</span>
+            <span class="s2">&quot;Fw version Expected: </span><span class="si">%s</span><span class="s2">, Fw version Found: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bin_ver</span><span class="p">,</span> <span class="n">bios_ver_new</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rdmsr_check</span><span class="p">:</span>
+            <span class="n">msr_after</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">rdmsr</span><span class="p">()</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_diff_in_msr_groups</span><span class="p">(</span><span class="n">msr_before</span><span class="p">,</span> <span class="n">msr_after</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_empty_diff</span><span class="p">(</span>
+                <span class="n">diff</span><span class="p">,</span> <span class="s2">&quot;Compare MSR values&quot;</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="c1"># check the boot time after the bios fw upgrade</span>
+        <span class="n">boot_time_after_upgrade</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">get_system_boot_time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">system_bios_log_check</span><span class="p">:</span>
+            <span class="c1"># Create acpi and lspci dump</span>
+            <span class="n">acpi_dump_after</span><span class="p">,</span> <span class="n">lspci_dump_after</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_system_log</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="s2">&quot;after_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_iter</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">_iter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">acpi_diff</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">compare_acpi_dump</span><span class="p">(</span>
+                    <span class="n">acpi_dump_before</span><span class="p">,</span> <span class="n">acpi_dump_after</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">acpi_diff</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;Difference in acpi table dump is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">acpi_diff</span>
+                    <span class="p">)</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;look at acpi dumps for comparision </span><span class="se">\n</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                                 before_update: </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> after_update: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">acpi_dump_before</span><span class="p">,</span> <span class="n">acpi_dump_after</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="n">lspci_diff</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">compare_lspci_dump</span><span class="p">(</span>
+                <span class="n">lspci_dump_before</span><span class="p">,</span> <span class="n">lspci_dump_after</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">lspci_diff</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Difference in lspci dump is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">lspci_diff</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_iter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">boot_time_after_upgrade</span> <span class="o">-</span> <span class="n">boot_time_before_upgrade</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">test_matrix</span><span class="p">[</span><span class="s2">&quot;iteration:&quot;</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_iter</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">test_matrix</span><span class="p">[</span><span class="s2">&quot;iteration:&quot;</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_iter</span><span class="p">)][</span>
+                <span class="s2">&quot;boot_time_before_upgrade&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">boot_time_before_upgrade</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">test_matrix</span><span class="p">[</span><span class="s2">&quot;iteration:&quot;</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_iter</span><span class="p">)][</span>
+                <span class="s2">&quot;boot_time_after_upgrade&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">boot_time_after_upgrade</span>
+            <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="bp">cls</span><span class="o">.</span><span class="n">boot_time_variance</span><span class="p">:</span>
+                <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;iteration - </span><span class="si">{}</span><span class="s2"> bios updated from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> Boot variance-</span><span class="se">\</span>
+<span class="s2">                         </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">_iter</span><span class="p">,</span> <span class="n">bios_ver_old</span><span class="p">,</span> <span class="n">bios_ver_new</span><span class="p">,</span> <span class="n">diff</span>
+                <span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">boot_time_failures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="c1"># Get the PCR value from the server for current and</span>
+        <span class="c1"># previous bios version at first and second  iteration</span>
+        <span class="c1"># and compare it against for rest of the iteration</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">no_pcr_check</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Get the PCR value of current BIOS version&quot;</span><span class="p">)</span>
+            <span class="n">pcr_current_bios_val</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">get_pcr0</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_iter</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">pcr_val</span><span class="p">[</span><span class="n">bios_ver_new</span><span class="p">]</span> <span class="o">=</span> <span class="n">pcr_current_bios_val</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Iter: </span><span class="si">%d</span><span class="s2"> version Current: </span><span class="si">%s</span><span class="s2"> PCR00: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">_iter</span><span class="p">,</span> <span class="n">bios_ver_new</span><span class="p">,</span> <span class="n">pcr_current_bios_val</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                    <span class="n">pcr_current_bios_val</span><span class="p">,</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">pcr_val</span><span class="p">[</span><span class="n">bios_ver_new</span><span class="p">],</span>
+                    <span class="s2">&quot;Verify BIOS flash is successful with correct PCR value&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">me_util_check</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Performing ME version check for current BIOS&quot;</span><span class="p">)</span>
+            <span class="n">cur_me_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_me_fw_version</span><span class="p">()</span>
+            <span class="n">_json</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_version_map_file</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;bios&quot;</span><span class="p">)</span>
+            <span class="n">expected_me_version</span> <span class="o">=</span> <span class="n">_json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">bios_ver_new</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">expected_me_version</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No matching me version found in fw_version_map.json&quot;</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">cur_me_ver</span><span class="p">,</span>
+                <span class="n">expected_me_version</span><span class="p">,</span>
+                <span class="s2">&quot;Verify BIOS ME flash is successful with correct ME version&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="c1"># Get Bios full infomation and compare with older firmware data</span>
+        <span class="n">bios_log_after</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_bios_full_info</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">diff_bios_dmidecode</span><span class="p">(</span><span class="n">bios_log_before</span><span class="p">,</span> <span class="n">bios_log_after</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_empty_list</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">boot_time_failures</span><span class="p">,</span>
+            <span class="s2">&quot;Check for boot time variance less than </span><span class="si">%s</span><span class="s2"> seconds&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">boot_time_variance</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">cfg_init</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">cfg_init</span><span class="p">,</span> <span class="s2">&quot;Config check&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_test_matrix"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_test_matrix">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_test_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">test_matrix</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.diff_bios_dmidecode"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.diff_bios_dmidecode">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">diff_bios_dmidecode</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">start_info</span><span class="p">,</span> <span class="n">end_info</span><span class="p">):</span>
+        <span class="n">config_check</span> <span class="o">=</span> <span class="n">ConfigCheck</span><span class="p">()</span>
+        <span class="n">start_filtered</span> <span class="o">=</span> <span class="n">config_check</span><span class="o">.</span><span class="n">filter_dmidecode</span><span class="p">(</span><span class="n">start_info</span><span class="p">)</span>
+        <span class="n">end_filtered</span> <span class="o">=</span> <span class="n">config_check</span><span class="o">.</span><span class="n">filter_dmidecode</span><span class="p">(</span><span class="n">end_info</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+            <span class="n">start_filtered</span><span class="p">,</span>
+            <span class="n">end_filtered</span><span class="p">,</span>
+            <span class="s2">&quot;bios dmidecode output comparison between two versions&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_dut_dir"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_dut_dir">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_dut_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_dut_tmpdir</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_fw_binary"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_fw_binary">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_fw_binary</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">binary_type</span><span class="p">,</span> <span class="n">binary_ver</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the complete path of the Bios binary location.</span>
+<span class="sd">        @param</span>
+<span class="sd">            host - host object</span>
+<span class="sd">            method - Inband or out of bandsel.</span>
+<span class="sd">            binary_type - Bios, Nic, OpenBmc etc</span>
+<span class="sd">            binary_ver -  what version of binary, refers to fw_version_map.</span>
+
+<span class="sd">        Eg For BIOS the fw_version_map.json looks like below. The code looks for</span>
+<span class="sd">        matching Bios binary matching respective version.</span>
+<span class="sd">        {</span>
+<span class="sd">          inband:{</span>
+<span class="sd">              &quot;rcd04&quot;:&quot;RCD04.tgz&quot;,</span>
+<span class="sd">              &quot;rcd05&quot;:&quot;RCD05.tgz&quot;,</span>
+<span class="sd">              &quot;latest&quot;: &quot;rcd05&quot;,</span>
+<span class="sd">              &quot;previous&quot;: &quot;rcd04&quot;,</span>
+<span class="sd">              &quot;stable&quot;: &quot;rcd04&quot;</span>
+<span class="sd">          },</span>
+<span class="sd">          oob:{</span>
+<span class="sd">              &quot;rcd04&quot;:&quot;RCD04.tgz&quot;,</span>
+<span class="sd">              &quot;rcd05&quot;:&quot;RCD05.tgz&quot;,</span>
+<span class="sd">              &quot;latest&quot;: &quot;rcd05&quot;,</span>
+<span class="sd">              &quot;previous&quot;: &quot;rcd04&quot;,</span>
+<span class="sd">              &quot;stable&quot;: &quot;rcd04&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">         }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">binary_dir</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_bin_dir</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">binary_type</span><span class="p">)</span>
+        <span class="n">fw_version_json</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_version_map_file</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">binary_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fw_version_json</span><span class="p">:</span>
+            <span class="n">binary</span> <span class="o">=</span> <span class="n">fw_version_json</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="n">binary_ver</span><span class="p">]</span>
+            <span class="c1"># For default latest/previous refers to Bios version not the binary</span>
+            <span class="k">if</span> <span class="n">binary</span> <span class="ow">in</span> <span class="n">fw_version_json</span><span class="p">[</span><span class="n">method</span><span class="p">]:</span>
+                <span class="n">binary_ver</span> <span class="o">=</span> <span class="n">binary</span>
+                <span class="n">binary</span> <span class="o">=</span> <span class="n">fw_version_json</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="n">binary_ver</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">binary_ver</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">binary_dir</span><span class="p">,</span> <span class="s2">&quot;fw_binary&quot;</span><span class="p">,</span> <span class="n">binary</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No fw_version_map.json found at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">binary_dir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_fw_bin_dir"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_fw_bin_dir">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_fw_bin_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">bin_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path of the folder where all bios binaries are saved</span>
+<span class="sd">        for respective project type and firmware type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">product_name</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">product_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">bin_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_firmware_path</span><span class="p">(),</span> <span class="n">product_name</span><span class="p">,</span> <span class="n">bin_type</span><span class="p">)</span>
+        <span class="n">with_make</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bin_dir</span><span class="p">,</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_manufacturer</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">with_make</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">with_make</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bin_dir</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">bin_dir</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No firmware directories found at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">bin_dir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.get_fw_version_map_file"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.get_fw_version_map_file">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_fw_version_map_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">bin_type</span><span class="p">):</span>
+        <span class="n">binary_dir</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_bin_dir</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bin_type</span><span class="p">)</span>
+        <span class="n">fw_version_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">binary_dir</span><span class="p">,</span> <span class="s2">&quot;fw_version_map.json&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fw_version_file</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">load_json</span><span class="p">(</span><span class="n">fw_version_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No fw_version_map.json found at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">binary_dir</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_bios_checks</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">_json</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_version_map_file</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;bios&quot;</span><span class="p">)</span>
+        <span class="n">all_bios_checks</span> <span class="o">=</span> <span class="n">_json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bios_checks&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">system_bios_log_check</span> <span class="o">=</span> <span class="n">all_bios_checks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;system_bios_log&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">boot_time_variance</span> <span class="o">=</span> <span class="n">all_bios_checks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;boot_time_variance&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">no_pcr_check</span> <span class="o">=</span> <span class="n">all_bios_checks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;no_pcr_check&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">me_util_check</span> <span class="o">=</span> <span class="n">all_bios_checks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;me_util_check&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rdmsr_check</span> <span class="o">=</span> <span class="n">all_bios_checks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rdmsr&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">boot_time_failures</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">pcr_val</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_system_log</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">log_name</span><span class="p">):</span>
+        <span class="n">system_log_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_system_logdir</span><span class="p">()</span>
+        <span class="c1"># Create acpi dump</span>
+        <span class="n">_acpi_dump</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;acpi_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">log_name</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">create_acpi_dump</span><span class="p">(</span><span class="n">_acpi_dump</span><span class="p">)</span>
+        <span class="c1"># Create lspci dump</span>
+        <span class="n">_lspci_dump</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">system_log_dir</span><span class="p">,</span> <span class="s2">&quot;lspci_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">log_name</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Creating LSPCI dump at </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_lspci_dump</span><span class="p">)</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">create_lspci_info_dump</span><span class="p">(</span><span class="n">_lspci_dump</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_acpi_dump</span><span class="p">,</span> <span class="n">_lspci_dump</span>
+
+<div class="viewcode-block" id="FwUpdateUtil.cpld_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.cpld_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">cpld_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calling the CPLD fw-util class to perform upgrade or downgrade</span>
+<span class="sd">        on the CPLD</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host                = contains the host object</span>
+<span class="sd">            update_method       = out of band</span>
+<span class="sd">            _iter               = current number of the iteration</span>
+<span class="sd">            fw_type             = CPLD</span>
+<span class="sd">            fw_version          = what version of binary, refers to fw_version_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">:</span>
+            <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-cpld&quot;</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_glacierpoint_cpld</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_cpld</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; Output of CPLD update: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_str</span><span class="p">:</span>
+                <span class="c1"># Log the error details along with the md5sum of the binary file.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-cpld&quot;</span><span class="p">:</span>
+                <span class="n">current_cpld_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_cpld_glacierpoint_fw_version</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_cpld_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_cpld_fw_version</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">current_cpld_ver</span><span class="p">,</span>
+                <span class="n">bin_ver</span><span class="p">,</span>
+                <span class="s2">&quot;Fw version Expected: </span><span class="si">%s</span><span class="s2">, Fw version Found: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">bin_ver</span><span class="p">,</span> <span class="n">current_cpld_ver</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;CPLD </span><span class="si">%s</span><span class="s2"> provided is not supported&quot;</span> <span class="o">%</span> <span class="n">update_method</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.check_bic_prerequisite"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.check_bic_prerequisite">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">check_bic_prerequisite</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To check if the BIC has the bootload version that supports the BIC testing.</span>
+<span class="sd">        If not, the BIC bootloader is updated to the latest version and then the</span>
+<span class="sd">        test proceeds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Checking for Bicbl updates&quot;</span><span class="p">)</span>
+        <span class="n">fw_version</span><span class="p">,</span> <span class="n">fw_src_tar_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;oob&quot;</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="s2">&quot;latest&quot;</span><span class="p">)</span>
+
+        <span class="n">current_bicbl_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_bridgeic_bootloader_version</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">current_bicbl_ver</span> <span class="o">&lt;</span> <span class="n">fw_version</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Upgrading Bicbl version to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fw_version</span><span class="p">)</span>
+            <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">,</span> <span class="n">fw_src_tar_path</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bicbl</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; Output of Bicbl update: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_str</span><span class="p">:</span>
+                <span class="c1"># Log the error details along with the md5sum of the binary file.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+            <span class="n">current_bicbl_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_bridgeic_bootloader_version</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">current_bicbl_ver</span><span class="p">,</span>
+                <span class="n">fw_version</span><span class="p">,</span>
+                <span class="s2">&quot;Fw version Expected: </span><span class="si">%s</span><span class="s2">, Fw version Found: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">fw_version</span><span class="p">,</span> <span class="n">current_bicbl_ver</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Bicbl version is set to </span><span class="si">%s</span><span class="s2"> for bic testing&quot;</span> <span class="o">%</span> <span class="n">fw_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.bic_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.bic_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bic_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calling the BIC fw-util class to performance upgrade or downgrade</span>
+<span class="sd">        on the BIC.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host                = contains the host object.</span>
+<span class="sd">            update_method       = out of band.</span>
+<span class="sd">            _iter               = current number of the iteration.</span>
+<span class="sd">            fw_type             = BIC.</span>
+<span class="sd">            fw_version          = what version of binary, refers to fw_version_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">host</span><span class="o">.</span><span class="n">product_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;tiogapass&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;There is no Bic update for Tiogapass platform&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">bic_fw_update</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.bic_fw_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.bic_fw_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bic_fw_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">):</span>
+        <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">_iter</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">host</span><span class="o">.</span><span class="n">product_type_glacierpoint</span> <span class="o">!=</span> <span class="s2">&quot;Glacier Point V2&quot;</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">check_bic_prerequisite</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="s2">&quot;bicbl&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">:</span>
+            <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-bic&quot;</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_glacierpoint_bic</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bic</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; Output of Bic update: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_str</span><span class="p">:</span>
+                <span class="c1"># Log the error details along with the md5sum of the binary file.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-bic&quot;</span><span class="p">:</span>
+                <span class="n">current_bic_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_glacierpoint_bic_version</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_bic_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_bridge_ic_version</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">current_bic_ver</span><span class="p">,</span>
+                <span class="n">bin_ver</span><span class="p">,</span>
+                <span class="s2">&quot;Fw version Expected: </span><span class="si">%s</span><span class="s2">, Fw version Found: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">bin_ver</span><span class="p">,</span> <span class="n">current_bic_ver</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Bridge type </span><span class="si">%s</span><span class="s2"> provided is not supported&quot;</span> <span class="o">%</span> <span class="n">update_method</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.bicbl_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.bicbl_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bicbl_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calling the BIC bootloader fw-util class to performance upgrade or downgrade</span>
+<span class="sd">        on the BIC bootloader.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host                = contains the host object.</span>
+<span class="sd">            update_method       = out of band.</span>
+<span class="sd">            _iter               = current number of the iteration.</span>
+<span class="sd">            fw_type             = Bicbl.</span>
+<span class="sd">            fw_version          = what version of binary, refers to fw_version_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">host</span><span class="o">.</span><span class="n">product_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;tiogapass&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;There is no Bicbl update for Tiogapass platform&quot;</span><span class="p">)</span>
+        <span class="c1"># Glacier point is attached to twinlake host, so in one cycle perform</span>
+        <span class="c1"># bicbl update of the host and glacier point and validate the versions</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">bicbl_fw_update</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.bicbl_fw_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.bicbl_fw_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">bicbl_fw_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">):</span>
+        <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">:</span>
+            <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-bicbl&quot;</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_glacierpoint_bicbl</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bicbl</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; Output of Bicbl update: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_str</span><span class="p">:</span>
+                <span class="c1"># Log the error details along with the md5sum of the binary file.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+            <span class="c1"># Bicbl takes 5s time to reflect the fw version, after upgrading</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">fw_type</span> <span class="o">==</span> <span class="s2">&quot;gpv2-bicbl&quot;</span><span class="p">:</span>
+                <span class="n">current_bicbl_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_glacierpoint_bicbl_version</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">current_bicbl_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_bridgeic_bootloader_version</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">current_bicbl_ver</span><span class="p">,</span>
+                <span class="n">bin_ver</span><span class="p">,</span>
+                <span class="s2">&quot;Fw version Expected: </span><span class="si">%s</span><span class="s2">, Fw version Found: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">bin_ver</span><span class="p">,</span> <span class="n">current_bicbl_ver</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Bridge type </span><span class="si">%s</span><span class="s2"> provided is not supported&quot;</span> <span class="o">%</span> <span class="n">update_method</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.pciesw_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.pciesw_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">pciesw_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         fw-util pcie_sw update is only available on GPv2 switch</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">host</span><span class="o">.</span><span class="n">product_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;glacierpointv2&quot;</span><span class="p">:</span>
+            <span class="c1">#This update is only supported for gpv2 in  Glavierpointv2 project</span>
+            <span class="c1">#Find the binary ver and file path</span>
+            <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="s2">&quot;gpv2-pciesw&quot;</span><span class="p">,</span> <span class="n">fw_version</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">update_method</span> <span class="o">==</span> <span class="s2">&quot;oob&quot;</span><span class="p">:</span>
+                <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="s2">&quot;gpv2-pciesw&quot;</span><span class="p">,</span> <span class="n">bin_ver</span><span class="p">,</span> <span class="n">bin_src_tar_path</span>
+                <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_pcie_switch</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">)</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; Output of pcie_sw update: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_str</span><span class="p">:</span>
+                    <span class="c1"># Log the error details along with the md5sum of the binary file.</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">_str</span><span class="p">)</span>
+                <span class="c1"># pcie_sw takes 5s time to reflect the fw version, after upgrading</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                <span class="n">current_pciesw_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_pciesw_fw_version</span><span class="p">()</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="n">bin_ver</span> <span class="ow">in</span> <span class="n">current_pciesw_ver</span><span class="p">,</span>
+                    <span class="s2">&quot;Fw version Expected: </span><span class="si">%s</span><span class="s2">, Fw version Found: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">bin_ver</span><span class="p">,</span> <span class="n">current_pciesw_ver</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;pcie_sw udpate not supported with </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">update_method</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;pcie_sw update NOT available on host other than GPv2&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwUpdateUtil.nic_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwUpdateUtil.nic_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">nic_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;nic not implemented&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FwOpenbmcUtil"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil">[docs]</a><span class="k">class</span> <span class="nc">FwOpenbmcUtil</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="FwOpenbmcUtil.openbmc_fwutil_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.openbmc_fwutil_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">openbmc_fwutil_update</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">_iter</span><span class="p">,</span> <span class="n">test_control</span><span class="p">,</span> <span class="n">fw_version</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is used to do an OpenBMC upgrade and downgrade using firmware</span>
+<span class="sd">        util command. For this test, let us assume the base or required version is</span>
+<span class="sd">        4.4 and the user wants to toggle between 5.0(previous) and 6.0(latest) version</span>
+<span class="sd">        and the firmware version map json file contains [4.2, 4.4, 5.0, 5.1, 6.0].</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">        1. BMC has no issue while upgrading from its current version, but while</span>
+<span class="sd">        downgrading it has to downgrade only to the (n-1) version from the output</span>
+<span class="sd">        of &quot;cat /mnt/data/kv_store/image_versions.&quot;</span>
+
+<span class="sd">        2. We compare the current version of the BMC and if its below the base or</span>
+<span class="sd">        required version of that platform, then upgrade. We do it because vboot-util</span>
+<span class="sd">        is not supported for versions older than the base or required version.</span>
+
+
+<span class="sd">        The following are the flows or cases that this OpenBMC test handles:</span>
+
+<span class="sd">        A. Current Version of BMC is 4.2</span>
+<span class="sd">        kv-store image version&#39;s output after zeroth iteration - [4.2, 4.4, 6.0]</span>
+<span class="sd">        4.2 --&gt; 4.4 --&gt; 6.0 --&gt; 4.4 --&gt; 5.0 --&gt; 6.0 --&gt; 5.0</span>
+<span class="sd">             |__________|     |__________|       |       |</span>
+<span class="sd">                Iter=0            Iter=1       Iter=2   Iter=3</span>
+
+<span class="sd">        B. Current Version of BMC is 4.4</span>
+<span class="sd">        kv-store image version&#39;s output after zeroth iteration - [4.4, 6.0]</span>
+<span class="sd">        4.4 --&gt; 6.0 --&gt; 4.4 --&gt; 5.0 --&gt; 6.0 --&gt; 5.0</span>
+<span class="sd">                 |    |__________|       |       |</span>
+<span class="sd">               Iter=0     Iter=1       Iter=2   Iter=3</span>
+
+<span class="sd">        C. Current Version of BMC is 5.0</span>
+<span class="sd">        kv-store image version&#39;s output after zeroth iteration - [5.0, 6.0]</span>
+<span class="sd">        5.0--&gt; 6.0 --&gt; 5.0 --&gt; 6.0 --&gt; 5.0</span>
+<span class="sd">                |       |       |       |</span>
+<span class="sd">              Iter=0  Iter=1  Iter=2   Iter=3</span>
+
+<span class="sd">        D. Current Version of BMC is 4.6</span>
+<span class="sd">        kv-store image version&#39;s output after zeroth iteration - [4.6, 6.0]</span>
+<span class="sd">        4.6 --&gt; 6.0 --&gt; RTE (during 2nd iteration)</span>
+<span class="sd">                 |</span>
+<span class="sd">               Iter=0</span>
+<span class="sd">        Raise Test Error (RTE), since 4.6 version is not found in the fw_version_map</span>
+<span class="sd">        json file.</span>
+
+<span class="sd">        E. Current Version of BMC is 6.0 and previous version installed on BMC is 5.1</span>
+<span class="sd">        kv_store image version is [5.1, 6.0]</span>
+<span class="sd">        6.0 --&gt; 6.0 (reflashing same BMC version) --&gt; RTE (during 2nd iteration)</span>
+<span class="sd">                |</span>
+<span class="sd">              Iter=0</span>
+<span class="sd">        RTE, since (n-1) version is greater than the user requested previous_version.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host                = contains the host object.</span>
+<span class="sd">            update_method       = out of bandsel.</span>
+<span class="sd">            fw_type_name        = Bios, Nic, OpenBmc etc</span>
+<span class="sd">            _iter               = current number of the iteration.</span>
+<span class="sd">            test_control        = contains test control file&#39;s json data as dict.</span>
+<span class="sd">            fw_version          = what version of binary, refers to fw_version_map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">enforce_status</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">is_hardware_enforce</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">vboot_util</span><span class="p">())</span>
+
+        <span class="c1"># Getting the user requested firmware&#39;s location details, the firmware</span>
+        <span class="c1"># can be either the upgrade or the downgrade depending on the iteration.</span>
+        <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">fw_version</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">_iter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Check if the base version of the platform is mentioned in the firnware</span>
+            <span class="c1"># version map json file, if so get the location and version details.</span>
+            <span class="n">base_fw_ver</span><span class="p">,</span> <span class="n">base_fw_ver_src</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_base_version</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">base_fw_ver</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_check_setup_requirement_for_upgrade</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span>
+                    <span class="n">base_fw_ver</span><span class="p">,</span> <span class="n">base_fw_ver_src</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># We are getting the minimum version that is mentioned in the firnware</span>
+                <span class="c1"># version map json file since base version is not mentioned.</span>
+                <span class="n">min_fw_ver</span><span class="p">,</span> <span class="n">min_fw_ver_src</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_minimum_fw_version</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span>
+                <span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_check_setup_requirement_for_upgrade</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span>
+                    <span class="n">min_fw_ver</span><span class="p">,</span> <span class="n">min_fw_ver_src</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_iter</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">enforce_status</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_check_setup_requirement_for_downgrade</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span>
+                <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">enforce_status</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil._get_minimum_fw_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil._get_minimum_fw_version">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_minimum_fw_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the minimum fw version from the fw version json map file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fw_version_json</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_fw_version_map_file</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fw_version_json</span><span class="p">:</span>
+            <span class="n">json_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fw_version_json</span><span class="p">[</span><span class="n">update_method</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">encoded_json_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_item</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">:</span>
+                <span class="n">encoded_json_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ConnectionUtils</span><span class="o">.</span><span class="n">str_encode</span><span class="p">(</span><span class="n">_item</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">encoded_json_data</span><span class="p">:</span>
+                <span class="n">encoded_json_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="n">encoded_json_data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">sorting_json_data</span>
+                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">encoded_json_data</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil._check_setup_requirement_for_upgrade"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil._check_setup_requirement_for_upgrade">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_check_setup_requirement_for_upgrade</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">update_method</span><span class="p">,</span>
+        <span class="n">fw_type_name</span><span class="p">,</span>
+        <span class="n">enforce_status</span><span class="p">,</span>
+        <span class="n">base_fw_ver</span><span class="p">,</span>
+        <span class="n">base_fw_ver_src</span><span class="p">,</span>
+        <span class="n">fw_ver</span><span class="p">,</span>
+        <span class="n">fw_ver_src</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We compare the Current version of the BMC and if its below the base or</span>
+<span class="sd">        required version of that platform, then upgrade. We do it because vboot-util</span>
+<span class="sd">        is not supported for versions older than the base or required version.</span>
+<span class="sd">        If its greater than or equal to the base or required version then proceeds</span>
+<span class="sd">        with the upgrading to the user requested version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bmc_prev_image_ver_list</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_openbmc_previous_ver_list</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;There is no bmc image version list&quot;</span>
+                <span class="s2">&quot;for the </span><span class="si">%s</span><span class="s2"> BMC &quot;</span> <span class="o">%</span> <span class="n">host</span><span class="o">.</span><span class="n">product_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="n">current_ver</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_openbmc_version</span><span class="p">()</span>
+
+        <span class="c1"># This is to handle those servers that have (9,91) vboot validation failure.</span>
+        <span class="c1"># Due to this error, the current version on the BMC and the nth value that</span>
+        <span class="c1"># the image version list of kv-store are not same. So, in this case, we are</span>
+        <span class="c1"># going with the value from the kv-store&#39;s image version list as current</span>
+        <span class="c1"># version.</span>
+
+        <span class="c1"># Sample output of a server that has (9,91) vboot validation error.</span>
+        <span class="c1"># root@sled1202an-oob:~# fw-util all --version | grep BMC</span>
+        <span class="c1"># BMC Version: fby2-v4.3</span>
+        <span class="c1"># root@sled1202an-oob:~# cat /mnt/data/kv_store/image_versions</span>
+        <span class="c1"># fby2-v3.9,fby2-v4.1,fby2-v4.4,fby2-v4.6</span>
+        <span class="c1"># root@sled1202an-oob:~#</span>
+        <span class="k">if</span> <span class="n">bmc_prev_image_ver_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">current_ver</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Handling the case where (9,91) vboot validation error already&quot;</span>
+                <span class="s2">&quot;exists on the server. So, updating to the known successful BMC &quot;</span>
+                <span class="s2">&quot;boot version will slove this.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">current_ver</span> <span class="o">=</span> <span class="n">bmc_prev_image_ver_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># This covers Case A</span>
+        <span class="k">if</span> <span class="n">current_ver</span> <span class="o">&lt;</span> <span class="n">base_fw_ver</span><span class="p">:</span>
+            <span class="c1"># Updates the BMC that is with old version to the base or minimum</span>
+            <span class="c1"># required version of the platform as part of pre-check.</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">base_fw_ver</span><span class="p">,</span> <span class="n">base_fw_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span>
+            <span class="c1"># Updates to the &quot;latest&quot; version that the user is requesting.</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This covers Case B</span>
+            <span class="k">if</span> <span class="n">current_ver</span> <span class="o">&lt;=</span> <span class="n">fw_ver</span><span class="p">:</span>
+                <span class="c1"># Updates to the &quot;latest&quot; version that the user is requesting.</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># This covers Cases such as A, D, E</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_check_setup_requirement_for_downgrade</span><span class="p">(</span>
+                    <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span>
+                    <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil._check_setup_requirement_for_downgrade"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil._check_setup_requirement_for_downgrade">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_check_setup_requirement_for_downgrade</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">,</span>
+        <span class="n">update_method</span><span class="p">,</span>
+        <span class="n">fw_type_name</span><span class="p">,</span>
+        <span class="n">enforce_status</span><span class="p">,</span>
+        <span class="n">fw_ver</span><span class="p">,</span>
+        <span class="n">fw_ver_src</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the user requested previous version is same as the (n-1) version</span>
+<span class="sd">        from the kv-store&#39;s image version list. If so downgrade to &quot;previous&quot; version</span>
+<span class="sd">        directly, else downgrade to (n-1) version and then to the &quot;previous&quot; version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bmc_prev_image_ver_list</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_openbmc_previous_ver_list</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;There is no bmc image version list&quot;</span>
+                <span class="s2">&quot;for the </span><span class="si">%s</span><span class="s2"> BMC &quot;</span> <span class="o">%</span> <span class="n">host</span><span class="o">.</span><span class="n">product_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="c1"># (n-1) version from the output of the kv-store&#39;s image version file.</span>
+        <span class="n">previous_ver_on_bmc</span> <span class="o">=</span> <span class="n">bmc_prev_image_ver_list</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># This covers Case D</span>
+            <span class="n">previous_ver</span><span class="p">,</span> <span class="n">previous_ver_src</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">previous_ver_on_bmc</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;The (n-1) version i.e., </span><span class="si">{0}</span><span class="s2"> from the image version list </span><span class="si">{1}</span><span class="s2"> of &quot;</span>
+                <span class="s2">&quot;the BMC is not found in the firmware_version_map json file to&quot;</span>
+                <span class="s2">&quot; downgrade.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">previous_ver_on_bmc</span><span class="p">,</span> <span class="n">bmc_prev_image_ver_list</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">previous_ver_on_bmc</span> <span class="o">==</span> <span class="n">fw_ver</span><span class="p">:</span>
+            <span class="c1"># This covers Case C</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">previous_ver_on_bmc</span> <span class="o">&lt;</span> <span class="n">fw_ver</span><span class="p">:</span>
+            <span class="c1"># This covers Case A</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">previous_ver</span><span class="p">,</span> <span class="n">previous_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Updates to the version that the user is requesting.</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">update_fw_bmc_rom</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">fw_type_name</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This covers Case E</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;The (n-1) version, i.e., </span><span class="si">{0}</span><span class="s2"> from the image version list of the BMC &quot;</span>
+                <span class="s2">&quot;is greater than the </span><span class="si">{1}</span><span class="s2"> version that the user is requesting to flash, &quot;</span>
+                <span class="s2">&quot;which is not possible&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">previous_ver_on_bmc</span><span class="p">,</span> <span class="n">fw_ver</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil.sorting_json_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.sorting_json_data">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">sorting_json_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the filtered json file list and sorts through them to provided</span>
+<span class="sd">        the minimum version and its file name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;([0-9]+)&quot;</span><span class="p">,</span> <span class="n">json_data</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil.get_base_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.get_base_version">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_base_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checking if the BMC we are performing test on meets the requirement</span>
+<span class="sd">        such as if the version on the BMC is equal or greater than the base</span>
+<span class="sd">        required version of that platform. If not, the device is first upgrade</span>
+<span class="sd">        to the base-required version of that platform.</span>
+
+<span class="sd">        As of Nov 2018,</span>
+<span class="sd">            TiogaPass       = 4.2</span>
+<span class="sd">            Bryce Canyon    = 1.9.2</span>
+<span class="sd">            Yosemitev2      = 3.6</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host            = contains the host object.</span>
+<span class="sd">            update_method   = out of bandsel.</span>
+<span class="sd">            fw_type_name    = openbmc/bmc</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">base_fw_ver_name</span> <span class="o">=</span> <span class="n">base_fw_ver_src</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">base_fw_ver_name</span><span class="p">,</span> <span class="n">base_fw_ver_sc_tar</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_fw_binary</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">update_method</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="s2">&quot;base&quot;</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Base version is not provided in the json file of the version map.&quot;</span>
+                <span class="s2">&quot; So proceeding with the minimum version listed in the version map file&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">base_fw_ver_name</span><span class="p">,</span> <span class="n">base_fw_ver_src</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil.update_fw_bmc_rom"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.update_fw_bmc_rom">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">update_fw_bmc_rom</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_ver_name</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method does bmc update for the provided fw version name and does rom</span>
+<span class="sd">        update only when the enforce status is true, for that fw version of the</span>
+<span class="sd">        BMC.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            host            = contains the host object.</span>
+<span class="sd">            enforce_status  = If hardware enfource status flag is 0x01 then True</span>
+<span class="sd">                                else if 0x00, then False</span>
+<span class="sd">            fw_ver_name     = fw version name of the platform. Eg: fby2-v6.0</span>
+<span class="sd">            fw_ver_src      = fw version source location path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_ver_name</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">enforce_status</span>
+        <span class="p">)</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;BMC execution started on the platform with </span><span class="si">%s</span><span class="s2"> version. &quot;</span> <span class="o">%</span> <span class="n">fw_ver_name</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bmc</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Completed Executing fw-util with bmc option </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">enforce_status</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;ROM execution started on the platform with </span><span class="si">%s</span><span class="s2"> version. &quot;</span> <span class="o">%</span> <span class="n">fw_ver_name</span>
+            <span class="p">)</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">bmc_binary_file_path</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_absolute_filepath_from_bmc</span><span class="p">(</span>
+                        <span class="n">host</span><span class="p">,</span> <span class="n">fw_type</span><span class="p">,</span> <span class="n">fw_ver_name</span><span class="p">,</span> <span class="n">fw_ver_src</span><span class="p">,</span> <span class="n">enforce_status</span>
+                    <span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;Issue while trying to copy the files. Trying again&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_rom</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bmc_binary_file_path</span><span class="p">))</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Completed Executing fw-util with rom option </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">out</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">log_fw_error_details</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">bmc_binary_file_path</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil.get_flash_file_from_tmp_dir"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.get_flash_file_from_tmp_dir">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_flash_file_from_tmp_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path_contents</span><span class="p">,</span> <span class="n">enforce_status</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks the local directory if it exists or not. If exists then returns</span>
+<span class="sd">        the filename of the flash file depending on the hardware enforce status.</span>
+<span class="sd">        If folder doesn&#39;t exists then returns False.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            fw_version      = firmware update version name.</span>
+<span class="sd">            enforce_status  = Contains True or False depending on the value of</span>
+<span class="sd">                            the hardware enforce (HWE) value from the vboot-util. Status</span>
+<span class="sd">                            is True, if the HWE value is 0x01; else, False</span>
+<span class="sd">            path_contents   = Contents of the destination directory path.</span>
+<span class="sd">        Example:</span>
+<span class="sd">            fw_version      = &quot;fby2-v4.6&quot; | &quot;fbtp-v6.0&quot;</span>
+<span class="sd">            enforce_status  = True | False</span>
+<span class="sd">            path_contents   = &quot;[&#39;flash-fby2&#39;,&#39;flash-fby2.locked.signed&#39;,...]&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flash_type</span> <span class="o">=</span> <span class="s2">&quot;flash-&quot;</span> <span class="o">+</span> <span class="n">fw_version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">enforce_status</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked.signed&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">path_contents</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked.signed&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">path_contents</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked.signed&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">path_contents</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked.signed&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">path_contents</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.locked&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.signed&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">path_contents</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">flash_type</span> <span class="o">+</span> <span class="s2">&quot;.signed&quot;</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">flash_type</span><span class="p">)</span> <span class="ow">in</span> <span class="n">path_contents</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">flash_type</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+            <span class="s2">&quot;There is no signed or locked.signed flashed file to run the test&quot;</span>
+            <span class="s2">&quot;in the folder </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">path_contents</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil.openbmc_soliton_beam_update"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.openbmc_soliton_beam_update">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">openbmc_soliton_beam_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">):</span>
+        <span class="n">fw_version_json</span> <span class="o">=</span> <span class="n">FwUpdateUtil</span><span class="o">.</span><span class="n">get_fw_version_map_file</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">fw_type_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fw_version_json</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fw_version</span> <span class="o">==</span> <span class="s2">&quot;previous&quot;</span> <span class="ow">or</span> <span class="n">fw_version</span> <span class="o">==</span> <span class="s2">&quot;latest&quot;</span><span class="p">:</span>
+                <span class="n">fw_version</span> <span class="o">=</span> <span class="n">fw_version_json</span><span class="p">[</span><span class="s2">&quot;soliton_beam&quot;</span><span class="p">][</span><span class="n">fw_version</span><span class="p">]</span>
+            <span class="n">platform_id</span> <span class="o">=</span> <span class="n">fw_version_json</span><span class="p">[</span><span class="s2">&quot;soliton_beam&quot;</span><span class="p">][</span><span class="s2">&quot;platform_id&quot;</span><span class="p">]</span>
+        <span class="n">_parameters</span> <span class="o">=</span> <span class="n">SolitonBeamUtils</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">platform_id</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span>
+        <span class="n">_parameters</span><span class="o">.</span><span class="n">soliton_beam_fw_update</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">platform_id</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">verify_fw_on_oob</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FwOpenbmcUtil.verify_fw_on_oob"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.fw_update_util.FwOpenbmcUtil.verify_fw_on_oob">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">verify_fw_on_oob</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        After soliton_beam is completed,</span>
+<span class="sd">        Check whether the firmware is updated on the openbmc</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_openbmc_version</span><span class="p">()</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(v\d*.\d*)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">bmc_version</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+            <span class="n">version</span><span class="p">,</span>
+            <span class="n">bmc_version</span><span class="p">,</span>
+            <span class="s2">&quot;Verify BMC update is successful with correct BMC version&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

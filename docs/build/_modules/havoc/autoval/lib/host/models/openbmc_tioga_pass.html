@@ -1,0 +1,447 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.models.openbmc_tioga_pass &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.models.openbmc_tioga_pass</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.models.openbmc_tioga_pass</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.openbmc</span> <span class="k">import</span> <span class="n">OpenBMC</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">import</span> <span class="nn">havoc.autoval.lib.test_utils.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass">[docs]</a><span class="k">class</span> <span class="nc">OpenBMCTiogaPass</span><span class="p">(</span><span class="n">OpenBMC</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenBMCTiogaPass.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.health_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.health_check">[docs]</a>    <span class="k">def</span> <span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Determine if it&#39;s a OpenBMC TiogaPass</span>
+        <span class="n">is_openbmctiogapass</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_openbmc_model</span><span class="p">(</span><span class="s2">&quot;Tioga Pass&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_openbmctiogapass</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No OpenBMC Server Tioga Pass device detected&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Detected server Tioga Pass&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_critical_services"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_critical_services">[docs]</a>    <span class="k">def</span> <span class="nf">get_critical_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method returns a list of services that are always expected to</span>
+<span class="sd">        run on the openBMC Tiogapass System</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;sensord&#39;</span><span class="p">,</span> <span class="s1">&#39;healthd&#39;</span><span class="p">,</span> <span class="s1">&#39;fscd&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_slot_info"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_slot_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_slot_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;mb&quot;</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_fru_no"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_fru_no">[docs]</a>    <span class="k">def</span> <span class="nf">get_fru_no</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TP server FRU is always 1</span>
+        <span class="k">return</span> <span class="s2">&quot;1&quot;</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.openbmc_flashcp_upgrade_cmd"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.openbmc_flashcp_upgrade_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">openbmc_flashcp_upgrade_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subfile</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/sbin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;flashcp -v /tmp/</span><span class="si">%s</span><span class="s2"> /dev/mtd5&quot;</span> <span class="o">%</span> <span class="n">subfile</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.fw_update_bmc"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.fw_update_bmc">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_bmc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">reboot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --update --bmc </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_slot_info</span><span class="p">(),</span> <span class="n">file_path</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reboot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="c1"># Function can be used if need be in future</span>
+    <span class="c1"># We do not stress test with rom option currently will be read only</span>
+<div class="viewcode-block" id="OpenBMCTiogaPass.fw_update_rom"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.fw_update_rom">[docs]</a>    <span class="k">def</span> <span class="nf">fw_update_rom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">reboot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/&quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fw-util </span><span class="si">%s</span><span class="s2"> --update --rom </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_slot_info</span><span class="p">(),</span> <span class="n">file_path</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing OpenBMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reboot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.validate_version"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.validate_version">[docs]</a>    <span class="k">def</span> <span class="nf">validate_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fw_ver_num</span><span class="p">):</span>
+        <span class="c1"># validate the version to be updated is 1.5 or higher</span>
+        <span class="c1"># Use fw-util command accordingly</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d+\.\d+&quot;</span><span class="p">,</span> <span class="n">fw_ver_num</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">match_string</span> <span class="ow">in</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">match_string</span> <span class="o">&gt;=</span> <span class="mf">1.5</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;Failed to validate OpenBMC FW version.&quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;Expected 1.5 or higher, got </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fw_ver_num</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.openbmc_flashcp_prerequisite"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.openbmc_flashcp_prerequisite">[docs]</a>    <span class="k">def</span> <span class="nf">openbmc_flashcp_prerequisite</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+    <span class="c1"># OEM Related</span>
+<div class="viewcode-block" id="OpenBMCTiogaPass.clear_boot_order_cmos"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.clear_boot_order_cmos">[docs]</a>    <span class="k">def</span> <span class="nf">clear_boot_order_cmos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#cmd = &quot;/usr/local/bin/bios-util mb --boot_order enable --clear_CMOS&quot;</span>
+        <span class="c1">#self.bmc_host.run(cmd)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clear_boot_order_cmos</span><span class="p">(</span><span class="s2">&quot;mb&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span></div>
+
+    <span class="c1"># NIC FRUs</span>
+<div class="viewcode-block" id="OpenBMCTiogaPass.nic_fru_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.nic_fru_list">[docs]</a>    <span class="k">def</span> <span class="nf">nic_fru_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;fruid-util nic&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/fruid-util nic&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_full_fruid_list"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_full_fruid_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_fruid_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_full_fruid_list</span><span class="p">()</span>
+        <span class="n">base</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nic_fru_list</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_fw_util_options"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_fw_util_options">[docs]</a>    <span class="k">def</span> <span class="nf">get_fw_util_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fw_util_all</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">base</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.ac_cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.ac_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">ac_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">post_health_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This raw command is sled cycle which tends to lose</span>
+<span class="sd">        connection to oob, Not appropriate for test cases where bmc</span>
+<span class="sd">        needs to be intact</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="s2">&quot;0x06 0x05 0x73 0x6c 0x65 0x64 0x2d 0x63 0x79 0x63 0x6c 0x65&quot;</span>
+        <span class="n">cycle_cmd_12v</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw &quot;</span> <span class="o">+</span> <span class="n">raw</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cycle_cmd_12v</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;timed out&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Ac-cycle Failed- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="c1"># First make sure the system is up and runing using dut_health_check</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_cycle_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.ac_on_off_fullcycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.ac_on_off_fullcycle">[docs]</a>    <span class="k">def</span> <span class="nf">ac_on_off_fullcycle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        12V cycles(12V-on/off/cycle) is not</span>
+<span class="sd">        supported in tiogapass</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.bios_post_flash"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.bios_post_flash">[docs]</a>    <span class="k">def</span> <span class="nf">bios_post_flash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_reboot</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.sled_cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.sled_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">sled_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">post_health_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">sled_cycle</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">post_health_check</span><span class="o">=</span><span class="n">post_health_check</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_cycle_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.cycle"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.cycle">[docs]</a>    <span class="k">def</span> <span class="nf">cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">reboot_check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">post_health_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenBMCTiogaPass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">reboot_check</span><span class="o">=</span><span class="n">reboot_check</span><span class="p">,</span>
+            <span class="n">post_health_check</span><span class="o">=</span><span class="n">post_health_check</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_cycle_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.post_cycle_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.post_cycle_check">[docs]</a>    <span class="k">def</span> <span class="nf">post_cycle_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_vboot_util</span><span class="p">(</span><span class="n">filter_errors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.verify_flash_sensors"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.verify_flash_sensors">[docs]</a>    <span class="k">def</span> <span class="nf">verify_flash_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        The ava sensors which shows ok status implies</span>
+<span class="sd">        the ava is available on the server and in turn</span>
+<span class="sd">        shows the nvme temp status as ok</span>
+<span class="sd">        which ever shows NA would mean ava card is not</span>
+<span class="sd">        available</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;MB_C(\d+)&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\(ok\)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_gpio_lbg_tool_path"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_gpio_lbg_tool_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_gpio_lbg_tool_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tool_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">()</span>
+        <span class="n">gpio_lbg_x64</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tool_path</span><span class="p">,</span> <span class="s2">&quot;gpio_LBG_x64&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gpio_lbg_x64</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_bmcreset_cmd"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_bmcreset_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">get_bmcreset_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;stat /usr/local/bin/gpio_LBG_x64&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">gpio_lbg_x64</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gpio_lbg_tool_path</span><span class="p">()</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">copy_file</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">gpio_lbg_x64</span><span class="p">,</span>
+                <span class="s2">&quot;/usr/local/bin/gpio_LBG_x64&quot;</span>
+            <span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/chmod +x /usr/local/bin/gpio_LBG_x64&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;gpio_LBG_x64 set 1 36 output low &amp;&amp; gpio_LBG_x64 set 1 36 output high&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.verify_flash_availability"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.verify_flash_availability">[docs]</a>    <span class="k">def</span> <span class="nf">verify_flash_availability</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        AVA card is a riser card which holds the nvme.</span>
+<span class="sd">        To check if the AVA card is present it should provide</span>
+<span class="sd">        sensor util with ok status or with its temperature.</span>
+<span class="sd">        This method will check for AVA card and then fetch</span>
+<span class="sd">        its slot number in order to map the nvme it is holding</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/sensor-util all &quot;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| grep -i AVA&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">ava_slots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">check_ava_present</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+            <span class="n">check_ava_present</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">check_ava_present</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">check_ava_present</span><span class="p">:</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;MB_C(\d+)_AVA_FTEMP&#39;</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="n">flash_slot_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">ava_slots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flash_slot_number</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ava_slots</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;AVA Card is not Available&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenBMCTiogaPass.get_flash_temperature"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.models.html#havoc.autoval.lib.host.models.openbmc_tioga_pass.OpenBMCTiogaPass.get_flash_temperature">[docs]</a>    <span class="k">def</span> <span class="nf">get_flash_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">temp_val</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method will take the slot number reported by the</span>
+<span class="sd">        AVA card, map it to its equivalent nvme and provide</span>
+<span class="sd">        the temperature of the nvme. Each AVA card will have</span>
+<span class="sd">        4 slots, max of 4 nvme can be attached.</span>
+<span class="sd">        At any time if the temperature of the nvme is greater</span>
+<span class="sd">        then 75 deg celsius it is high threshold value</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">check_temp</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="n">temp_val</span> <span class="o">=</span> <span class="mi">75</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/sensor-util all &quot;</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| grep -i MB_C</span><span class="si">%d</span><span class="s2">_</span><span class="si">%d</span><span class="s2">_NVME&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">index_no</span><span class="p">)</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;ok&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+                    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;.*\s(\d+\.\d+)\sC&#39;</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">nvme_temp</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Temperature of NVME slot</span><span class="si">%d</span><span class="s2"> index</span><span class="si">%d</span><span class="s2"> is </span><span class="si">%s</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">index_no</span><span class="p">,</span> <span class="n">nvme_temp</span><span class="p">))</span>
+                        <span class="n">check_temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nvme_temp</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;AVA slot</span><span class="si">%d</span><span class="s2"> with index </span><span class="si">%d</span><span class="s2"> does not have nvme&quot;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">index_no</span><span class="p">))</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">check_temp</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">temp_val</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">threshold</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Temperature </span><span class="si">%s</span><span class="s2"> is higher threshold for NVME&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">threshold</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">check_temp</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

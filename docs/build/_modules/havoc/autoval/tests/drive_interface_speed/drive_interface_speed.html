@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.drive_interface_speed.drive_interface_speed &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.drive_interface_speed.drive_interface_speed</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.drive_interface_speed.drive_interface_speed</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2016-present, Facebook, Inc.</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Description     : This test compares the drive&#39;s interface speed with</span>
+<span class="c1">#                   the expected input speed value.</span>
+<span class="c1"># TestCase IDs    : UHDDT_002</span>
+<span class="c1"># ==============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.storage_test_base</span> <span class="k">import</span> <span class="n">StorageTestBase</span>
+
+
+<div class="viewcode-block" id="DriveInterfaceSpeed"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_interface_speed.html#havoc.autoval.tests.drive_interface_speed.drive_interface_speed.DriveInterfaceSpeed">[docs]</a><span class="k">class</span> <span class="nc">DriveInterfaceSpeed</span><span class="p">(</span><span class="n">StorageTestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Drive Interface Speed Test.</span>
+
+<span class="sd">    This test gets all the drives available in the host based on drive type,</span>
+<span class="sd">    gets the interface speed for each drive and verifies the test parameter</span>
+<span class="sd">    speed value present in available drives interface speed list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    test_drives : :obj:`list` of :obj:`str`</span>
+<span class="sd">        All drives present in the host.</span>
+<span class="sd">    spec_link_speed : String</span>
+<span class="sd">        Expected link speed of drives being tested</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DriveInterfaceSpeed.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_interface_speed.html#havoc.autoval.tests.drive_interface_speed.drive_interface_speed.DriveInterfaceSpeed.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validates Drive&#39;s Interface Speed.</span>
+
+<span class="sd">        This method gets all the drives on the host based on the drive type</span>
+<span class="sd">        &amp; drive interface and calculates the link speed if test parameter</span>
+<span class="sd">        isn&#39;t provided.</span>
+
+<span class="sd">        Gets the Interface speed for each drive and validates whether the</span>
+<span class="sd">        expected test parameter Interface speed is present in the Drive&#39;s</span>
+<span class="sd">        Interface speed list.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When comparison fails between expected and actual values of</span>
+<span class="sd">            Drive&#39;s Interface Speed.</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When fails to find the</span>
+<span class="sd">                - Interface Speed field from SMARTCTL command for SATA Interface.</span>
+<span class="sd">                - C:B:T Address from symlink for SAS Interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Begin checking drive interface speed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get link speed of the first drive if test parameter isn&#39;t provided</span>
+        <span class="n">spec_link_speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;spec_link_speed&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_interface_speed</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">:</span>
+            <span class="n">speed</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">get_interface_speed</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_in</span><span class="p">(</span>
+                <span class="n">spec_link_speed</span><span class="p">,</span>
+                <span class="n">speed</span><span class="p">,</span>
+                <span class="s2">&quot;Verify /dev/</span><span class="si">%s</span><span class="s2"> link speed.&quot;</span> <span class="o">%</span> <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Finished checking drive interface speed.&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_interface_speed.html#havoc.autoval.tests.drive_interface_speed.drive_interface_speed.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">DriveInterfaceSpeed</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

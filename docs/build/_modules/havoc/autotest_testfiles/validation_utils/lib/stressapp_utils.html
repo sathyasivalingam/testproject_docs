@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.stressapp_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.stressapp_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.stressapp_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,))</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">..result_handler</span> <span class="k">import</span> <span class="n">ResultHandler</span>
+<span class="kn">from</span> <span class="nn">.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># stressapptest --help</span>
+<span class="sd">Stats: SAT revision 1.0.3_autoconf, 64 bit binary</span>
+<span class="sd">Log: root @ dev224.snc1.facebook.com on Mon Oct 18 14:53:30 PDT 2010 from open source release</span>
+<span class="sd">Usage: ./sat(32|64) [options]</span>
+<span class="sd"> -M mbytes        megabytes of ram to test</span>
+<span class="sd"> -H mbytes        minimum megabytes of hugepages to require</span>
+<span class="sd"> -s seconds       number of seconds to run</span>
+<span class="sd"> -m threads       number of memory copy threads to run</span>
+<span class="sd"> -i threads       number of memory invert threads to run</span>
+<span class="sd"> -C threads       number of memory CPU stress threads to run</span>
+<span class="sd"> --findfiles      find locations to do disk IO automatically</span>
+<span class="sd"> -d device        add a direct write disk thread with block device (or file) &#39;device&#39;</span>
+<span class="sd"> -f filename      add a disk thread with tempfile &#39;filename&#39;</span>
+<span class="sd"> -l logfile       log output to file &#39;logfile&#39;</span>
+<span class="sd"> --max_errors n   exit early after finding &#39;n&#39; errors</span>
+<span class="sd"> -v level         verbosity (0-20), default is 8</span>
+<span class="sd"> -W               Use more CPU-stressful memory copy</span>
+<span class="sd"> -A               run in degraded mode on incompatible systems</span>
+<span class="sd"> -p pagesize      size in bytes of memory chunks</span>
+<span class="sd"> --filesize size  size of disk IO tempfiles</span>
+<span class="sd"> -n ipaddr        add a network thread connecting to system at &#39;ipaddr&#39;</span>
+<span class="sd"> --listen         run a thread to listen for and respond to network threads.</span>
+<span class="sd"> --no_errors      run without checking for ECC or other errors</span>
+<span class="sd"> --force_errors   inject false errors to test error handling</span>
+<span class="sd"> --force_errors_like_crazy   inject a lot of false errors to test error handling</span>
+<span class="sd"> -F               don&#39;t result check each transaction</span>
+<span class="sd"> --stop_on_errors  Stop after finding the first error.</span>
+<span class="sd"> --read-block-size     size of block for reading (-d)</span>
+<span class="sd"> --write-block-size    size of block for writing (-d). If not defined, the size of block for writing will be defined as the size of block for reading</span>
+<span class="sd"> --segment-size   size of segments to split disk into (-d)</span>
+<span class="sd"> --cache-size     size of disk cache (-d)</span>
+<span class="sd"> --blocks-per-segment  number of blocks to read/write per segment per iteration (-d)</span>
+<span class="sd"> --read-threshold      maximum time (in us) a block read should take (-d)</span>
+<span class="sd"> --write-threshold     maximum time (in us) a block write should take (-d)</span>
+<span class="sd"> --random-threads      number of random threads for each disk write thread (-d)</span>
+<span class="sd"> --destructive    write/wipe disk partition (-d)</span>
+<span class="sd"> --monitor_mode   only do ECC error polling, no stress load.</span>
+<span class="sd"> --cc_test        do the cache coherency testing</span>
+<span class="sd"> --cc_inc_count   number of times to increment the cacheline&#39;s member</span>
+<span class="sd"> --cc_line_count  number of cache line sized datastructures to allocate for the cache coherency threads to operate</span>
+<span class="sd"> --paddr_base     allocate memory starting from this address</span>
+<span class="sd"> --pause_delay    delay (in seconds) between power spikes</span>
+<span class="sd"> --pause_duration duration (in seconds) of each pause</span>
+<span class="sd"> --local_numa : choose memory regions associated with each CPU to be tested by that CPU</span>
+<span class="sd"> --remote_numa : choose memory regions not associated with each CPU to be tested by that CPU</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="StressappUtils"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils">[docs]</a><span class="k">class</span> <span class="nc">StressappUtils</span><span class="p">:</span>
+
+<div class="viewcode-block" id="StressappUtils.install_stressapp"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils.install_stressapp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">install_stressapp</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>
+        <span class="n">old_host</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_host</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">install_rpms</span><span class="p">([</span><span class="s2">&quot;fb-stressapptest&quot;</span><span class="p">])</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">old_host</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StressappUtils.run_stressapp"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils.run_stressapp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">run_stressapp</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">option_dict</span><span class="p">,</span> <span class="n">duration</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">StressappUtils</span><span class="o">.</span><span class="n">_gen_cmd_line</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">option_dict</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running - </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">command_output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">duration</span> <span class="o">+</span> <span class="mi">300</span>
+        <span class="p">)</span>
+        <span class="n">test_results</span> <span class="o">=</span> <span class="n">StressappUtils</span><span class="o">.</span><span class="n">parse_values</span><span class="p">(</span><span class="n">command_output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">test_results</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_gen_cmd_line</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">option_dict</span><span class="p">):</span>
+        <span class="n">default_options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;-W&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;--cc_test&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;--pause_delay&quot;</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span>
+            <span class="s2">&quot;--pause_duration&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;mem_percent&quot;</span><span class="p">:</span> <span class="mi">75</span>
+        <span class="p">}</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;stressapptest &quot;</span>
+        <span class="n">default_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">option_dict</span><span class="p">)</span>
+
+        <span class="n">mem_perc</span> <span class="o">=</span> <span class="n">default_options</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;mem_percent&quot;</span><span class="p">)</span>
+        <span class="n">mem</span> <span class="o">=</span> <span class="n">StressappUtils</span><span class="o">.</span><span class="n">get_test_memory</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">mem_perc</span><span class="p">)</span>
+        <span class="n">default_options</span><span class="p">[</span><span class="s2">&quot;-M&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mem</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">default_options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd</span>
+
+<div class="viewcode-block" id="StressappUtils.get_test_memory"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils.get_test_memory">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_test_memory</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">mem_perc</span><span class="p">,</span> <span class="n">total_mem</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a percentage of the total free memory in MB using `free -m`</span>
+<span class="sd">        based on the &quot;memory_perc&quot; argument.</span>
+<span class="sd">        If total_mem is specified returns the percentage of the &quot;total&quot; column,</span>
+<span class="sd">        otherwise percentage of the &quot;free&quot; column</span>
+<span class="sd">        &#39;free -m&#39; output:-</span>
+<span class="sd">                      total        used        free      shared  buff/cache   available</span>
+<span class="sd">        Mem:          57244        5618        1522         253       50103       49809</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_free</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;free -m&quot;</span><span class="p">)</span>
+
+        <span class="n">freemem</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">_free</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;Mem&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="c1"># Referencing above output line.split()[1] = total</span>
+                <span class="c1"># and line.split()[3] = free</span>
+                <span class="k">if</span> <span class="n">total_mem</span><span class="p">:</span>
+                    <span class="n">freemem</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">freemem</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">mem_perc</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">freemem</span><span class="p">))</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StressappUtils.parse_results"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils.parse_results">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses the stressapptest log</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">test_results</span> <span class="o">=</span> <span class="n">StressappUtils</span><span class="o">.</span><span class="n">parse_values</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">passed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">test_results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result_handler</span> <span class="o">=</span> <span class="n">ResultHandler</span><span class="p">()</span>
+            <span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">(</span><span class="n">test_results</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;FAIL&quot;</span> <span class="ow">in</span> <span class="n">test_results</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Detected failure&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;PASS&quot;</span> <span class="ow">in</span> <span class="n">test_results</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">passed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">passed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Did not find &#39;PASS&#39; status in output&quot;</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Stressapp passed&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">test_results</span></div>
+
+<div class="viewcode-block" id="StressappUtils.parse_values"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils.parse_values">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_values</span><span class="p">(</span><span class="n">cmd_output</span><span class="p">):</span>
+        <span class="n">test_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cmd_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Stats:|Status:&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">StressappUtils</span><span class="o">.</span><span class="n">parse_stats</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tmp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">test_results</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;total_copy_speed&quot;</span> <span class="ow">in</span> <span class="n">test_results</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Stressapp total bandwidth: </span><span class="si">{}</span><span class="s2"> MB/s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">test_results</span><span class="p">[</span><span class="s2">&quot;total_copy_speed&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">test_results</span></div>
+
+<div class="viewcode-block" id="StressappUtils.parse_stats"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.stressapp_utils.StressappUtils.parse_stats">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_stats</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses all lines beginning with Stats:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;Found&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Found\s(\d+)\shardware\sincidents&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;hw_incidents&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;Completed&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?P&lt;total_copy_size&gt;[0-9.]+)M\s+in\s+&quot;</span>
+                            <span class="s2">&quot;(?P&lt;total_copy_sec&gt;[0-9.]+)s&quot;</span>
+                            <span class="sa">r</span><span class="s2">&quot;\s+(?P&lt;total_copy_speed&gt;[0-9.]+)MB\/s,\s+&quot;</span>
+                            <span class="sa">r</span><span class="s2">&quot;with\s+(?P&lt;hw_incidents&gt;\d+)&quot;</span>
+                            <span class="sa">r</span><span class="s2">&quot;\s+hardware\s+incidents,\s+&quot;</span>
+                            <span class="sa">r</span><span class="s2">&quot;(?P&lt;copy_errors&gt;\d+)\s+errors&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s2">&quot;Memory Copy&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Memory\sCopy:\s([0-9.]+)M\sat\s([0-9.]+)MB/s&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;mem_copy_size&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;mem_copy_speed&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;File Copy&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;File\sCopy:\s([0-9.]+)M\sat\s([0-9.]+)MB/s&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;file_copy_size&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;file_copy_speed&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;Net Copy&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Net\sCopy:\s([0-9.]+)M\sat\s([0-9.]+)MB/s&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;net_copy_size&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;net_copy_speed&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;Data Check&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Data\sCheck:\s([0-9.]+)M\sat\s([0-9.]+)MB/s&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;data_check_size&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;data_check_speed&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;Invert Data:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Invert\sData:\s([0-9.]+)M\sat\s([0-9.]+)MB/s&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;invert_data_size&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;invert_data_speed&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;Disk:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Disk:\s([0-9.]+)M\sat\s([0-9.]+)MB/s&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;data_check_size&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;data_check_speed&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="s2">&quot;Status:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Status:\s(\w+)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

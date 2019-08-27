@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.inband &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.inband</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.inband</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">PCR_COMMANDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;cat /sys/class/tpm/tpm0/device/pcrs&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;cat /sys/class/misc/tpm0/device/pcrs&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Inband"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband">[docs]</a><span class="k">class</span> <span class="nc">Inband</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Inband.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">localhost</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">localhost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">product_obj</span><span class="o">.</span><span class="n">bmc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">oob_addr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bmc</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Inband.get_ipmi_host"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_ipmi_host">[docs]</a>    <span class="k">def</span> <span class="nf">get_ipmi_host</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span></div>
+
+<div class="viewcode-block" id="Inband.shutdown"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This command will just shutdown the system using &#39;init 0&#39; command and</span>
+<span class="sd">        the system is not brought back up</span>
+<span class="sd">        This is mainly used in the time of bios flashing to do a graceful</span>
+<span class="sd">        shutdown to avoid Tboot issue</span>
+<span class="sd">        This supports only OpenBMC systems currently</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">power_cmd</span> <span class="o">=</span> <span class="s2">&quot;shutdown -h now&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">power_cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">expected_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">100</span>
+            <span class="n">shutdown_status</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">expected_time</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># this is expected to fail as system goes down and unable to</span>
+                    <span class="c1"># connect else wait for 10 secs for the system to go down</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;hostname&quot;</span><span class="p">)</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="c1"># unable to run the command as system is down</span>
+                    <span class="n">shutdown_status</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">shutdown_status</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;The system din&#39;t shutdown in expected time&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Inband.reboot"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.reboot">[docs]</a>    <span class="k">def</span> <span class="nf">reboot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shutdown_cmd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">):</span>
+        <span class="c1"># Get last reboot time from system and use it to validate the reconnect</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">shutdown_cmd</span><span class="p">:</span>
+            <span class="n">power_cmd</span> <span class="o">=</span> <span class="s1">&#39;shutdown -r +0&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">power_cmd</span> <span class="o">=</span> <span class="s1">&#39;/sbin/reboot&#39;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">power_cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;/sbin/reboot.* failed&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)):</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Server reboot started&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+        <span class="c1"># Reconnect the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Inband.get_ip"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_ip">[docs]</a>    <span class="k">def</span> <span class="nf">get_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip_type</span><span class="o">=</span><span class="s2">&quot;inet&quot;</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="s2">&quot;eth0&quot;</span><span class="p">):</span>
+        <span class="c1"># ip_type can be inet or inet6</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ip addr show </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">interface</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">ip_type</span> <span class="o">==</span> <span class="s2">&quot;inet&quot;</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> (\S+)\/.*&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ip_type</span><span class="p">),</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">ip</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;IP is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ip</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">ip</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Did not find IP type </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                   <span class="p">(</span><span class="n">ip_type</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">ip_type</span> <span class="o">==</span> <span class="s2">&quot;inet6&quot;</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;inet6 (\S+)\/.*scope global&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">ip</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;IP is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ip</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">ip</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Did not find IP type </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%s</span><span class="s2">&quot;</span>
+                                    <span class="o">%</span> <span class="p">(</span><span class="n">ip_type</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unknown IP type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ip_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Inband.check_tpm"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.check_tpm">[docs]</a>    <span class="k">def</span> <span class="nf">check_tpm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ls /sys/class/tpm/&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;tpm0&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Some systems have different location</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ls /sys/class/misc/tpm/&quot;</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;tpm0&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Inband.get_tpm_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_tpm_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_tpm_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;dmesg | grep -i TPM&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">ver</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[1-2].[0-9]+\s+TPM&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">ver</span><span class="p">,</span> <span class="s2">&quot;check for TPM version&quot;</span><span class="p">,</span>
+                <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="n">ver</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">version</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_tpm</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Unable to detect TPM version&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;TPM is not detected&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Inband.get_tpm_sha"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_tpm_sha">[docs]</a>    <span class="k">def</span> <span class="nf">get_tpm_sha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="c1"># Return supported TPM_Bank/Algorithm</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tpm_version</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">SHA</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;not available for TPM 1.2&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="o">&gt;=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/sbin/tpm2_listpcrs -s&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">SHA</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;0x000\S&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_greater</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">SHA</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Verify SHA value&quot;</span><span class="p">,</span>
+                <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SHA</span></div>
+
+<div class="viewcode-block" id="Inband.get_pcr0"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_pcr0">[docs]</a>    <span class="k">def</span> <span class="nf">get_pcr0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">pcrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pcrs</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pcrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Inband.get_pcrs"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_pcrs">[docs]</a>    <span class="k">def</span> <span class="nf">get_pcrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">SHA</span><span class="o">=</span><span class="s2">&quot;0x0004&quot;</span><span class="p">):</span>
+        <span class="c1"># PCR location and command to get PCR differs depending on</span>
+        <span class="c1"># kernel version determine the location and fetch the PCR value</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tpm_version</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="o">&gt;=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/sbin/tpm2_listpcrs -g </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">SHA</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">PCR_COMMANDS</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^PCR[-_]\d+:\s+(.+)$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">pcrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">pcrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pcrs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t extract PCR value&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pcrs</span></div>
+
+<div class="viewcode-block" id="Inband.get_kernel_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.get_kernel_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_kernel_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;uname -r&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">kernel_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">short</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\d+.\d+.\d+-\d+_fbk\d+&quot;</span>
+            <span class="n">kernel_ver</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">kernel_ver</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">kernel_ver</span></div>
+
+<div class="viewcode-block" id="Inband.kernel_installer"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.kernel_installer">[docs]</a>    <span class="k">def</span> <span class="nf">kernel_installer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel_version</span><span class="p">,</span> <span class="n">reinstall</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; When kernel_version is set to &quot;latest&quot; it gets updated to the latest</span>
+<span class="sd">        available version. If reinstall is true, kernel gets reinstalled. &quot;&quot;&quot;</span>
+
+        <span class="n">bios_vendor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">bios</span><span class="o">.</span><span class="n">get_bios_vendor</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kernel_version</span> <span class="o">!=</span> <span class="s1">&#39;latest&#39;</span><span class="p">:</span>
+                <span class="n">new_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_kernel_version</span><span class="p">(</span><span class="n">kernel_version</span><span class="p">)</span>
+                <span class="n">cur_ver_full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_kernel_version</span><span class="p">()</span>
+                <span class="n">cur_ver</span> <span class="o">=</span> <span class="n">extract_kernel_version</span><span class="p">(</span><span class="n">cur_ver_full</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">cur_ver</span> <span class="o">!=</span> <span class="n">new_ver</span><span class="p">)</span> <span class="ow">or</span> <span class="n">reinstall</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Curr Ver:</span><span class="si">%s</span><span class="s2"> - Starting Kernel&quot;</span>
+                            <span class="s2">&quot; update&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cur_ver_full</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Curr Ver:</span><span class="si">%s</span><span class="s2">, New Ver:</span><span class="si">%s</span><span class="s2">, No&quot;</span>
+                            <span class="s2">&quot; update needed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cur_ver_full</span><span class="p">,</span> <span class="n">kernel_version</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+                <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;/usr/local/bin/kernel-installer -k </span><span class="si">%s</span><span class="s2"> --devel --headers -q&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="n">new_ver</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">bios_vendor</span> <span class="o">!=</span> <span class="s2">&quot;coreboot&quot;</span><span class="p">:</span>
+                    <span class="c1"># @@@ TODO: Chef is currently broken with coreboot.</span>
+                    <span class="c1"># Remove this when it&#39;s fixed</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;chefctl -i&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">(</span><span class="n">shutdown_cmd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="n">updated_version_full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_kernel_version</span><span class="p">()</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;After update, current version reported is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                      <span class="p">(</span><span class="n">updated_version_full</span><span class="p">))</span>
+                <span class="n">updated_version</span> <span class="o">=</span> <span class="n">extract_kernel_version</span><span class="p">(</span><span class="n">updated_version_full</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">updated_version</span> <span class="o">==</span> <span class="n">new_ver</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;Update to </span><span class="si">%s</span><span class="s2"> completed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kernel_version</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                        <span class="s2">&quot;Kernel update to </span><span class="si">{}</span><span class="s2"> failed </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">new_ver</span><span class="p">,</span> <span class="n">updated_version</span><span class="p">))</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Starting kernel upgrade to latest version.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;kernel-installer --imp -q&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">bios_vendor</span> <span class="o">!=</span> <span class="s2">&quot;coreboot&quot;</span><span class="p">:</span>
+                    <span class="c1"># @@@ TODO: Chef is currently broken with coreboot.</span>
+                    <span class="c1"># Remove this when it&#39;s fixed</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;chefctl -i&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reboot</span><span class="p">(</span><span class="n">shutdown_cmd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">updated_version_full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_kernel_version</span><span class="p">()</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;After update, current version reported is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">updated_version_full</span><span class="p">))</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Kernel update to </span><span class="si">{}</span><span class="s2"> failed: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kernel_version</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Inband.validate_kernel_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.validate_kernel_version">[docs]</a>    <span class="k">def</span> <span class="nf">validate_kernel_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_version</span><span class="p">):</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">extract_kernel_version</span><span class="p">(</span><span class="n">check_version</span><span class="p">)</span>
+
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/kernel-installer -l&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">valid_kernel</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">valid_kernel</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_kernel</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Kernel </span><span class="si">%s</span><span class="s2"> not available&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">version</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ## Function to check if a kernel module is enabled or disabled</span>
+<span class="sd">    # @param - List of kernel modules to check</span>
+<span class="sd">    # @return - dict with each module,Enabled or disabled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Inband.check_kernel_module"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.Inband.check_kernel_module">[docs]</a>    <span class="k">def</span> <span class="nf">check_kernel_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernel_parms</span><span class="p">):</span>
+        <span class="n">config_status</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;uname -r&quot;</span><span class="p">)</span>
+        <span class="n">conf_file</span> <span class="o">=</span> <span class="s2">&quot;/boot/config-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ver</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">k_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;cat </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">conf_file</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">conf_file</span> <span class="o">=</span> <span class="s2">&quot;/usr/src/kernels/*/.config&quot;</span>
+            <span class="n">k_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;cat </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">conf_file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">kernel_parms</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">=y&quot;</span> <span class="o">%</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">k_config</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;enabled&quot;</span>
+            <span class="n">config_status</span><span class="p">[</span><span class="n">params</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="k">return</span> <span class="n">config_status</span></div></div>
+
+
+<div class="viewcode-block" id="extract_kernel_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.inband.extract_kernel_version">[docs]</a><span class="k">def</span> <span class="nf">extract_kernel_version</span><span class="p">(</span><span class="n">full_version</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+.\d+.\d+-\d+_fbk\d+)&quot;</span><span class="p">,</span> <span class="n">full_version</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Invalid Kernel version </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">full_version</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

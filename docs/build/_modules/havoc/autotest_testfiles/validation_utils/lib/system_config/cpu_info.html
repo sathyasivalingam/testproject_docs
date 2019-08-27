@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">..autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">.system_config_utils</span> <span class="k">import</span> <span class="n">match_in_file</span><span class="p">,</span> <span class="n">match_in_dmidecode</span>
+<span class="kn">from</span> <span class="nn">..kernel_utils</span> <span class="k">import</span> <span class="n">KernelUtils</span>
+
+<div class="viewcode-block" id="get_cpuinfo"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info.get_cpuinfo">[docs]</a><span class="k">def</span> <span class="nf">get_cpuinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs current module either locally or remotely based on &quot;run_remotely&quot;</span>
+<span class="sd">    setting in AutovalUtils</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cpu_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">cpu_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_dmidecode_proc</span><span class="p">())</span>
+    <span class="n">cpu_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_lscpu</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_remotely</span><span class="p">():</span>
+        <span class="n">cpu_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_remote_module</span><span class="p">(</span>
+                <span class="s2">&quot;validation_utils.lib.system_config.cpu_info&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;_get_cpuinfo&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cpu_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_get_cpuinfo</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">cpu_dict</span></div>
+
+
+<div class="viewcode-block" id="get_dmidecode_proc"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info.get_dmidecode_proc">[docs]</a><span class="k">def</span> <span class="nf">get_dmidecode_proc</span><span class="p">():</span>
+    <span class="n">cpuinfo</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;dmidecode_cpu_json&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">match_in_dmidecode</span><span class="p">(</span><span class="s2">&quot;processor&quot;</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">cpuinfo</span></div>
+
+
+<div class="viewcode-block" id="_get_cpuinfo"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info._get_cpuinfo">[docs]</a><span class="k">def</span> <span class="nf">_get_cpuinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets cpu information</span>
+<span class="sd">    (model name, count, cores per socket, sockets, siblings, maximum bogo,</span>
+<span class="sd">    stepping, hyperthreading, turbo supported, turbo core enabled %)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cpuinfo</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">cpu_id_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;1067&quot;</span><span class="p">:</span> <span class="s2">&quot;SanClemente_Penryn&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;106&quot;</span><span class="p">:</span> <span class="s2">&quot;Nehalem&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;206e&quot;</span><span class="p">:</span> <span class="s2">&quot;Nehalem&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2065&quot;</span><span class="p">:</span> <span class="s2">&quot;Westmere&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;206c&quot;</span><span class="p">:</span> <span class="s2">&quot;Westmere&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;206f&quot;</span><span class="p">:</span> <span class="s2">&quot;Westmere&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;206a&quot;</span><span class="p">:</span> <span class="s2">&quot;SandyBridge&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;206d&quot;</span><span class="p">:</span> <span class="s2">&quot;SandyBridge&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;306&quot;</span><span class="p">:</span> <span class="s2">&quot;IvyBridge&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;100f9&quot;</span><span class="p">:</span> <span class="s2">&quot;AMD Magny-Cours&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;100f8&quot;</span><span class="p">:</span> <span class="s2">&quot;AMD Lisbon&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;306f1&quot;</span><span class="p">:</span> <span class="s2">&quot;Haswell&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;306f2&quot;</span><span class="p">:</span> <span class="s2">&quot;Haswell&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;406f0&quot;</span><span class="p">:</span> <span class="s2">&quot;Broadwell EP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;406f1&quot;</span><span class="p">:</span> <span class="s2">&quot;Broadwell EP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50660&quot;</span><span class="p">:</span> <span class="s2">&quot;Broadwell DE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50662&quot;</span><span class="p">:</span> <span class="s2">&quot;Broadwell DE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50663&quot;</span><span class="p">:</span> <span class="s2">&quot;Broadwell DE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50664&quot;</span><span class="p">:</span> <span class="s2">&quot;Broadwell DE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50651&quot;</span><span class="p">:</span> <span class="s2">&quot;Skylake EP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50654&quot;</span><span class="p">:</span> <span class="s2">&quot;Skylake EP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;50652&quot;</span><span class="p">:</span> <span class="s2">&quot;Skylake DE&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">cpuinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cpuinfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">match_in_file</span><span class="p">(</span><span class="s2">&quot;/proc/cpuinfo&quot;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s2">&quot;cpu_modelname&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;model\s*name\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="s2">&quot;unique&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_count&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;processor\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_cores_per_socket&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;cpu\s*cores\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="s2">&quot;unique&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_sockets&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;physical\s*id\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="s2">&quot;countunique&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_siblings&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;siblings\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="s2">&quot;unique&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_max_bogo&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;bogomips\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;cpu_stepping&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;stepping\s*:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">}))</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_max_bogo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="nb">float</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_max_bogo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_cores_total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_cores_per_socket&quot;</span><span class="p">])</span> <span class="o">*</span> \
+        <span class="nb">int</span><span class="p">(</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_sockets&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_cores_per_socket&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_siblings&quot;</span><span class="p">]:</span>
+        <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_hyperthreading&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_hyperthreading&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;enabled&quot;</span>
+    <span class="c1"># Turbo Settings</span>
+    <span class="c1"># Bit 38, if set disables turbo</span>
+    <span class="n">TURBO_MASK</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">38</span><span class="p">)</span>
+    <span class="n">turbo_supported</span> <span class="o">=</span> <span class="p">(</span><span class="n">cpuid</span><span class="p">(</span><span class="mi">6</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span>
+    <span class="n">turbo_enabled</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span><span class="n">rdmsr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0x1a0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">TURBO_MASK</span><span class="p">)</span>
+    <span class="n">ncpus</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sysconf</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;SC_NPROCESSORS_ONLN&quot;</span><span class="p">)))</span>
+    <span class="n">total_enabled</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">cpu</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncpus</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">rdmsr</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span> <span class="mh">0x1a0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">TURBO_MASK</span><span class="p">)])</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">turbo_enabled</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_supported&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">turbo_supported</span><span class="p">)</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_core_enabled_percent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">total_enabled</span> <span class="o">/</span> <span class="n">ncpus</span>
+
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cpuid</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cpu_id_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_id&quot;</span><span class="p">]:</span>
+            <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpu_id_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Unknown processor type - No mapping for cpu_id: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                     <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_id&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">cpuinfo</span></div>
+
+
+<div class="viewcode-block" id="get_lscpu"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info.get_lscpu">[docs]</a><span class="k">def</span> <span class="nf">get_lscpu</span><span class="p">():</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lscpu&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+        <span class="c1"># BogoMIPS is the number of million times per second a processor can</span>
+        <span class="c1"># do absolutely nothing. This is found changing for some platform</span>
+        <span class="c1"># Will revisit this code change once T28042813 is closed</span>
+        <span class="c1"># CPU MHz value is not giving the nominal CPU frequency from 4.13 to 4.20 kernel</span>
+        <span class="c1"># So commenting &quot;CPU Mhz&quot; as a workaround</span>
+        <span class="k">if</span> <span class="s2">&quot;BogoMIPS&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">elif</span> <span class="s2">&quot;CPU MHz&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">kernel_version</span> <span class="o">=</span> <span class="n">KernelUtils</span><span class="o">.</span><span class="n">get_kernel_version</span><span class="p">()</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(\d*.\d*).&quot;</span><span class="p">,</span> <span class="n">kernel_version</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">_kernel_version</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">_kernel_version</span> <span class="o">&gt;</span> <span class="mf">4.13</span> <span class="ow">and</span> <span class="n">_kernel_version</span> <span class="o">&lt;</span> <span class="mf">4.20</span><span class="p">:</span>
+                    <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dic</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">cpuinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;lscpu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span>
+    <span class="n">cpu_arch</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;lscpu&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Architecture&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_architecture&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpu_arch</span>
+    <span class="k">return</span> <span class="n">cpuinfo</span></div>
+
+
+<div class="viewcode-block" id="cpuid"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info.cpuid">[docs]</a><span class="k">def</span> <span class="nf">cpuid</span><span class="p">(</span><span class="n">eax</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns cpu id &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;/dev/cpu/0/cpuid&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDONLY</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">lseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">eax</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;IIII&quot;</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rdmsr"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info.rdmsr">[docs]</a><span class="k">def</span> <span class="nf">rdmsr</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Reads MSR &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;/dev/cpu/</span><span class="si">%d</span><span class="s2">/msr&quot;</span> <span class="o">%</span> <span class="n">cpu</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDONLY</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">lseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">),</span> <span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="wrmsr"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.system_config.html#havoc.autotest_testfiles.validation_utils.lib.system_config.cpu_info.wrmsr">[docs]</a><span class="k">def</span> <span class="nf">wrmsr</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Writes MSR &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;/dev/cpu/</span><span class="si">%d</span><span class="s2">/msr&quot;</span> <span class="o">%</span> <span class="n">cpu</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">lseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">),</span> <span class="n">val</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

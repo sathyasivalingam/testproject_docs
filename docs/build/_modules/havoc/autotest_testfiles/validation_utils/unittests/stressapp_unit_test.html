@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.unittests.stressapp_unit_test &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.unittests.stressapp_unit_test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.unittests.stressapp_unit_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># Load a mock class so that Python doesn&#39;t try to import the actual autoval.py</span>
+<span class="c1"># module which requires autotest to be installed on the system</span>
+<span class="kn">from</span> <span class="nn">.mock_autoval</span> <span class="k">import</span> <span class="n">MockAutoval</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;validation_utils.lib.autoval&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MockAutoval</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">..lib.stressapp_utils</span> <span class="k">import</span> <span class="n">StressappUtils</span>
+
+<div class="viewcode-block" id="TestConfigChecki"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.unittests.html#havoc.autotest_testfiles.validation_utils.unittests.stressapp_unit_test.TestConfigChecki">[docs]</a><span class="k">class</span> <span class="nc">TestConfigChecki</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Unit Test for stressapp &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestConfigChecki.test_output_file"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.unittests.html#havoc.autotest_testfiles.validation_utils.unittests.stressapp_unit_test.TestConfigChecki.test_output_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_output_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stress</span> <span class="o">=</span> <span class="n">StressappUtils</span><span class="p">()</span>
+        <span class="c1"># This is the part of the input data from stressapp test which renders</span>
+        <span class="c1"># the data into database, listed here  just for information</span>
+        <span class="n">example_input</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Stats: Found 0 hardware incidents</span>
+<span class="s2">Stats: Completed: 26071012.00M in 600.50s 43415.80MB/s, with 0 hardware incidents, 0 errors</span>
+<span class="s2">Stats: Memory Copy: 25272276.00M at 42118.27MB/s</span>
+<span class="s2">Stats: File Copy: 239792.00M at 399.63MB/s</span>
+<span class="s2">Stats: Net Copy: 0.00M at 0.00MB/s</span>
+<span class="s2">Stats: Data Check: 0.00M at 0.00MB/s</span>
+<span class="s2">Stats: Invert Data: 558944.00M at 931.53MB/s Stats: Disk: 0.00M at 0.00MB/s</span>
+<span class="s2">Status: PASS - please verify no corrected errors&quot;&quot;&quot;</span>
+
+        <span class="c1"># Expected results form of a ict assigned</span>
+        <span class="n">expected_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hw_incidents&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;copy_errors&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;total_copy_size&quot;</span><span class="p">:</span> <span class="s2">&quot;26071012.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;total_copy_sec&quot;</span><span class="p">:</span> <span class="s2">&quot;600.50&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;total_copy_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;43415.80&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;hw_incidents&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;mem_copy_size&quot;</span><span class="p">:</span> <span class="s2">&quot;25272276.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;mem_copy_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;42118.27&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;file_copy_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;399.63&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;file_copy_size&quot;</span><span class="p">:</span> <span class="s2">&quot;239792.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;net_copy_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;0.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;net_copy_size&quot;</span><span class="p">:</span> <span class="s2">&quot;0.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;data_check_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;0.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;data_check_size&quot;</span><span class="p">:</span> <span class="s2">&quot;0.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;invert_data_size&quot;</span><span class="p">:</span> <span class="s2">&quot;558944.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;invert_data_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;931.53&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;data_check_speed&quot;</span><span class="p">:</span> <span class="s2">&quot;0.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;data_check_size&quot;</span><span class="p">:</span> <span class="s2">&quot;0.00&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="s2">&quot;PASS&quot;</span><span class="p">}</span>
+
+        <span class="c1"># Calling the Stressapp_Utils function &quot;stress.parse_stats&quot;</span>
+        <span class="c1"># reading index from the list for each multiple lines</span>
+        <span class="c1"># using assert method to comapre 2 dictl</span>
+        <span class="n">actual_dict</span> <span class="o">=</span> <span class="n">stress</span><span class="o">.</span><span class="n">parse_values</span><span class="p">(</span><span class="n">example_input</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertDictEqual</span><span class="p">(</span><span class="n">actual_dict</span><span class="p">,</span> <span class="n">expected_dict</span><span class="p">,</span> <span class="s1">&#39;Actual and expected results match&#39;</span><span class="p">)</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage.drive_firmware_update &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage.drive_firmware_update</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.storage.drive_firmware_update</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2016-present, Facebook, Inc.</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Description     : This util installs/updates the Drive&#39;s firmware and</span>
+<span class="c1">#                   verify IO using FIO.</span>
+<span class="c1"># ==============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.storage_test_base</span> <span class="k">import</span> <span class="n">StorageTestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.drive</span> <span class="k">import</span> <span class="n">DriveType</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.fio.fio_runner</span> <span class="k">import</span> <span class="n">FioRunner</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">abstractmethod</span>
+
+
+<div class="viewcode-block" id="DriveFirmwareUpdate"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate">[docs]</a><span class="k">class</span> <span class="nc">DriveFirmwareUpdate</span><span class="p">(</span><span class="n">StorageTestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Drive Firmware Update</span>
+
+<span class="sd">    Test installing drive firmware and validate installation. Optionally</span>
+<span class="sd">    perform IO after firmware update.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    versions:  :obj:`list` of :obj:`str`</span>
+<span class="sd">        Firmware version to find and install on test drives.</span>
+<span class="sd">    cycle: Integer</span>
+<span class="sd">        How many times to perform the upgrade/downgrade cycle.</span>
+<span class="sd">    verify_io: Boolean</span>
+<span class="sd">        If set to True will perform IO on test drives post firmware update.</span>
+<span class="sd">    fio_template: String</span>
+<span class="sd">        Path to fio_template file to be used.</span>
+<span class="sd">    fio_options: Dictionary</span>
+<span class="sd">        Mapping of entries to fill in the given template file.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    Sample control file:</span>
+<span class="sd">        {</span>
+<span class="sd">          &quot;cycle&quot;: 2,</span>
+<span class="sd">          &quot;versions&quot;: [&quot;stable&quot;, &quot;latest&quot;],</span>
+<span class="sd">          &quot;verify_io&quot;: true,</span>
+<span class="sd">          &quot;fio_template&quot;: &quot;basic_verify.job&quot;,</span>
+<span class="sd">          &quot;fio_options&quot;: {</span>
+<span class="sd">            &quot;RW&quot;:&quot;randrw&quot;,</span>
+<span class="sd">            &quot;BLKSIZE&quot;:&quot;128k&quot;,</span>
+<span class="sd">            &quot;SIZE&quot;:&quot;10G&quot;,</span>
+<span class="sd">            &quot;RUNTIME&quot;:&quot;30m&quot;,</span>
+<span class="sd">            &quot;DEPTH&quot;:&quot;128&quot;,</span>
+<span class="sd">            &quot;VERIFY&quot;: &quot;crc32c&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate.execute"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        This method gets the test drive details, using firmware information</span>
+<span class="sd">        from fw_version_map.json, constructs the binary file path, updates the</span>
+<span class="sd">        firmware based on the binary file path and verifies IO using FIO job.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When fails to update the firmware for the drive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">verify_io</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verify_io&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">fw_versions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;versions&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="s2">&quot;stable&quot;</span><span class="p">])</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cycle&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Cycle </span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">test_firmware_update</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">fw_versions</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">TestError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">errors</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;Test failed on /dev/</span><span class="si">%s</span><span class="s2"> - Serial No. </span><span class="si">%s</span><span class="s2">. Error: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">drive</span><span class="o">.</span><span class="n">serial_number</span><span class="p">,</span> <span class="n">e</span>
+                    <span class="p">))</span>
+            <span class="k">if</span> <span class="n">verify_io</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_run_io</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Errors captured during test:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">errors</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate.test_firmware_update"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.test_firmware_update">[docs]</a>    <span class="k">def</span> <span class="nf">test_firmware_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">fw_versions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Firmware update</span>
+
+<span class="sd">        This method installs firmware for a drive and verifies if</span>
+<span class="sd">        installation is successful.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        drive: :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+<span class="sd">        fw_versions: :obj:`list` of :obj:`str`</span>
+<span class="sd">            List of firmware to install on DUT.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When comparison fails between expected and actual values of MD5 Checksum and</span>
+<span class="sd">        Firmware version values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ver</span> <span class="ow">in</span> <span class="n">fw_versions</span><span class="p">:</span>
+            <span class="n">fw_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_firmware_info</span><span class="p">(</span><span class="n">ver</span><span class="p">,</span> <span class="n">drive</span><span class="p">)</span>
+            <span class="n">version_name</span> <span class="o">=</span> <span class="n">fw_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="n">bin_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bin_path</span><span class="p">(</span><span class="n">fw_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bin&quot;</span><span class="p">),</span> <span class="n">drive</span><span class="p">)</span>
+            <span class="n">md5</span> <span class="o">=</span> <span class="n">fw_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">md5</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                    <span class="n">md5</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">disk_utils</span><span class="o">.</span><span class="n">get_md5_sum</span><span class="p">(</span><span class="n">bin_path</span><span class="p">),</span>
+                    <span class="s2">&quot;md5 sums matches.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Installing firmware </span><span class="si">%s</span><span class="s2"> to /dev/</span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">version_name</span><span class="p">,</span> <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span>
+            <span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_drive_firmware</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">version_name</span><span class="p">,</span> <span class="n">bin_path</span><span class="p">)</span>
+
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">version_name</span><span class="p">,</span>
+                <span class="n">drive</span><span class="o">.</span><span class="n">get_firmware_version</span><span class="p">(),</span>
+                <span class="s2">&quot;Firmware version </span><span class="si">%s</span><span class="s2"> updated successfully&quot;</span> <span class="o">%</span> <span class="n">version_name</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate.update_drive_firmware"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate.update_drive_firmware">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update_drive_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate._get_firmware_path"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_path">[docs]</a>    <span class="k">def</span> <span class="nf">_get_firmware_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets Firmware Binaries file Path.</span>
+
+<span class="sd">        This method uses drive data to determine its firmware directory.</span>
+<span class="sd">        The returned directory should contains firmware binaries</span>
+<span class="sd">        and a json file which map a version to a binary file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        drive : :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sample fw_version_map.json:</span>
+<span class="sd">            {</span>
+<span class="sd">              &quot;latest&quot;: {</span>
+<span class="sd">                &quot;name&quot;: &quot;EDA72F2Q&quot;,</span>
+<span class="sd">                &quot;bin&quot;: &quot;EDA72F2Q.bin&quot;,</span>
+<span class="sd">                &quot;md5&quot;: &quot;&quot;</span>
+<span class="sd">              },</span>
+<span class="sd">              &quot;stable&quot;: {</span>
+<span class="sd">                &quot;name&quot;: &quot;CXV96F1Q&quot;,</span>
+<span class="sd">                &quot;bin&quot;: &quot;CXV96F1Q.bin&quot;,</span>
+<span class="sd">                &quot;md5&quot;: &quot;&quot;</span>
+<span class="sd">              },</span>
+<span class="sd">            }</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bin_file_path : String</span>
+<span class="sd">            Constructed binary file path with vendor and model details.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When unsupported drive type is mentioned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vendor</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">manufacturer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">root_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_firmware_path</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">drive</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">DriveType</span><span class="o">.</span><span class="n">SSD</span><span class="p">:</span>
+            <span class="n">root_path</span> <span class="o">+=</span> <span class="s2">&quot;/flash&quot;</span>
+        <span class="k">elif</span> <span class="n">drive</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">DriveType</span><span class="o">.</span><span class="n">HDD</span><span class="p">:</span>
+            <span class="n">root_path</span> <span class="o">+=</span> <span class="s2">&quot;/hdd&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_msg</span> <span class="o">=</span> <span class="s2">&quot;Unsupported type: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">drive</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_path</span><span class="p">,</span> <span class="n">vendor</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate._get_firmware_map"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_map">[docs]</a>    <span class="k">def</span> <span class="nf">_get_firmware_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets Firmware map.</span>
+
+<span class="sd">        This method Pulls firmware information from a JSON file in the</span>
+<span class="sd">        firmware path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        drive : :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fw_info : Dictionary</span>
+<span class="sd">            Content of drive model&#39;s fw_version_map.json.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When fails to load the json file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mapping_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_firmware_path</span><span class="p">(</span><span class="n">drive</span><span class="p">),</span>
+            <span class="s2">&quot;fw_version_map.json&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mapping_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">fw_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Fail to load </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mapping_file</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">fw_info</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate._get_firmware_info"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_firmware_info">[docs]</a>    <span class="k">def</span> <span class="nf">_get_firmware_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets Drive&#39;s Firmware Information.</span>
+
+<span class="sd">        This method pulls firmware information from firmware mapping file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        version : String</span>
+<span class="sd">            Drive&#39;s firmware version value.</span>
+<span class="sd">        drive : :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fw_info : Dictionary</span>
+<span class="sd">            Drive&#39;s Firmware information related to the version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fw_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_firmware_map</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fw_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate._get_bin_path"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._get_bin_path">[docs]</a>    <span class="k">def</span> <span class="nf">_get_bin_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bin_name</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets Binary file Path.</span>
+
+<span class="sd">        This method gets binary file for a firmware in a common location for a</span>
+<span class="sd">        given model.</span>
+
+<span class="sd">        Firmware binary path follows this format:</span>
+<span class="sd">            &lt;siteutils_firmware_path&gt;/&lt;drive_type&gt;/&lt;vendor&gt;/&lt;MODEL&gt;/fw_binary/&lt;bin_name&gt;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bin_name : String</span>
+<span class="sd">            Binary file name for the corresponding firmware.</span>
+<span class="sd">        drive: :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bin_path : String</span>
+<span class="sd">            Binary file path for the given firmware.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bin_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_firmware_path</span><span class="p">(</span><span class="n">drive</span><span class="p">),</span>
+            <span class="s2">&quot;fw_binary&quot;</span><span class="p">,</span>
+            <span class="n">bin_name</span>
+        <span class="p">)</span>
+        <span class="c1"># Model names might have spaces in them, if that is the case</span>
+        <span class="c1"># the path to firmware binary will have spaces as well.</span>
+        <span class="c1"># Escape spaces in returned binary path here.</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;\ &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bin_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DriveFirmwareUpdate._run_io"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.test_utils.storage.html#havoc.autoval.lib.test_utils.storage.drive_firmware_update.DriveFirmwareUpdate._run_io">[docs]</a>    <span class="k">def</span> <span class="nf">_run_io</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates and Runs FIO job file.</span>
+
+<span class="sd">        This method installs FIO, creates the basic_verify job file and</span>
+<span class="sd">        runs IO on test drives. After successful FIO run, parses the output</span>
+<span class="sd">        file for any error.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When fails to</span>
+<span class="sd">                - Installs FIO</span>
+<span class="sd">                - Creates job file</span>
+<span class="sd">                - Runs job file</span>
+<span class="sd">                - Parsing the output file for FIO.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">drive_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">drive</span><span class="o">.</span><span class="n">block_name</span> <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;drives&quot;</span><span class="p">:</span> <span class="n">drive_list</span><span class="p">,</span>
+            <span class="s2">&quot;template_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fio_template&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;replace_values&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fio_options&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;filesystem&quot;</span><span class="p">:</span> <span class="kc">False</span>
+        <span class="p">}</span>
+        <span class="n">fio_runner</span> <span class="o">=</span> <span class="n">FioRunner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">fio_runner</span><span class="o">.</span><span class="n">test_setup</span><span class="p">,</span> <span class="p">[],</span> <span class="s2">&quot;Fio setup()&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Starting fio to the DUT now&quot;</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">output_file</span> <span class="o">=</span> <span class="n">fio_runner</span><span class="o">.</span><span class="n">start_test</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;Ran fio on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output_file</span><span class="p">))</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">fio_runner</span><span class="o">.</span><span class="n">parse_results</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_handler</span><span class="o">.</span><span class="n">add_test_results</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="s2">&quot;Saved results for fio run&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.security_bios_config_check.security_bios_config_check &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.security_bios_config_check.security_bios_config_check</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.security_bios_config_check.security_bios_config_check</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.system.system_config</span> <span class="k">import</span> <span class="n">SystemConfig</span>
+
+<div class="viewcode-block" id="SecurityBIOSConfigCheck"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.security_bios_config_check.html#havoc.autoval.tests.security_bios_config_check.security_bios_config_check.SecurityBIOSConfigCheck">[docs]</a><span class="k">class</span> <span class="nc">SecurityBIOSConfigCheck</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SecurityBIOSConfigCheck.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.security_bios_config_check.html#havoc.autoval.tests.security_bios_config_check.security_bios_config_check.SecurityBIOSConfigCheck.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;This is the BIOS configuration settings change test&quot;</span><span class="p">)</span>
+
+        <span class="n">cfg1</span> <span class="o">=</span> <span class="n">SystemConfig</span><span class="o">.</span><span class="n">config_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">cfg1</span><span class="p">,</span> <span class="s2">&quot;Config check&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Copy over bios files and unarchive them</span>
+        <span class="n">bios_file</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;/mnt/vol/havoc/autoval/bin/&#39;</span>
+                <span class="s1">&#39;leopard_fw/F06_ME_BIOS_Update_Rev06.tar.gz&#39;</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">bios_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;/bin/tar xvf &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span>
+                <span class="s1">&#39;/F06_ME_BIOS_Update_Rev06.tar.gz&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Make SCELNX executable</span>
+        <span class="n">SCELNX_PATH</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/F06_ME_BIOS_Update_Rev06/SCELNX_64&#39;</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">SCELNX_PATH</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">SCELNX_PATH</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">X_OK</span><span class="p">)):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;chmod +x &#39;</span> <span class="o">+</span> <span class="n">SCELNX_PATH</span><span class="p">)</span>
+
+        <span class="c1"># Now run SCELNX and extract the bios settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Reading original BIOS settings&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">SCELNX_PATH</span> <span class="o">+</span> <span class="s1">&#39; /o /s &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/bios.out&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check if security settings are properly applied</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Checking for Security BIOS Setting&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_settings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/bios.out&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;Setting Check&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
+        <span class="n">i_f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="n">settings_to_chk</span> <span class="o">=</span> <span class="p">[[</span><span class="sa">r</span><span class="s1">&#39;Intel TXT Support&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enabled&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;VMX&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enabled&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;SMX&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enabled&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;Intel(R) VT for Directed I/O (VT-d)&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enable&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;Interrupt Remapping&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enabled&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;Security Device Support&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enable&#39;</span><span class="p">],</span>
+                            <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;TPM State&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Enabled&#39;</span><span class="p">]]</span>
+
+        <span class="n">heading_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^Setup Question\s+=\s+(?P&lt;options&gt;.+)$&#39;</span><span class="p">)</span>
+        <span class="n">search_setting</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">start_looking</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The code below extract the fields associated with each BIOS setting</span>
+<span class="sd">        and checks specifically if the option field has the right setting</span>
+<span class="sd">        applied</span>
+
+<span class="sd">        The procedure is as follows:</span>
+<span class="sd">        1. loop until the line with &quot;Setup Question&quot; is found</span>
+<span class="sd">        2. Set the start_looking to true, i.e. loop until the setting value</span>
+<span class="sd">           is reached and checked if it is selected</span>
+<span class="sd">        3. If selected correctly, unset start_looking and the loop</span>
+<span class="sd">           will go back to Step 1; if not, exit the function to return false</span>
+<span class="sd">        4. This will be done until the full file pass-thru is complete</span>
+<span class="sd">        5. One final check to ensure all the settings are checked is added</span>
+<span class="sd">           in the very end.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">i_f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">start_looking</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">search_setting</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">l</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;*[&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Setting </span><span class="si">%s</span><span class="s2"> Found, verified correct&quot;</span>
+                            <span class="o">%</span> <span class="n">search_setting</span><span class="p">)</span>
+                    <span class="n">start_looking</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">heading_re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">setting</span><span class="p">)</span> <span class="ow">in</span> <span class="n">settings_to_chk</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">option</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Locate </span><span class="si">%s</span><span class="s2">, start check&quot;</span> <span class="o">%</span> <span class="n">option</span><span class="p">)</span>
+                        <span class="n">search_setting</span> <span class="o">=</span> <span class="n">setting</span>
+                        <span class="n">settings_to_chk</span><span class="o">.</span><span class="n">remove</span><span class="p">([</span><span class="n">option</span><span class="p">,</span> <span class="n">setting</span><span class="p">])</span>
+                        <span class="n">start_looking</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">i_f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">settings_to_chk</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Not all fields are checked&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;All settings have been verified&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.security_bios_config_check.html#havoc.autoval.tests.security_bios_config_check.security_bios_config_check.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">SecurityBIOSConfigCheck</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

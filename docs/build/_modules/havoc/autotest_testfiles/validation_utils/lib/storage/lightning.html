@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.storage.lightning &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.storage.lightning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.storage.lightning</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,))</span>
+<span class="kn">from</span> <span class="nn">validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">validation_utils.lib.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">..autoval_exceptions</span> <span class="k">import</span> <span class="n">CmdError</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="Lightning"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.lightning.Lightning">[docs]</a><span class="k">class</span> <span class="nc">Lightning</span><span class="p">:</span>
+<div class="viewcode-block" id="Lightning.gen_nvme_smartlogs"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.lightning.Lightning.gen_nvme_smartlogs">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">gen_nvme_smartlogs</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="n">runtime</span><span class="p">,</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nvme_delay</span><span class="o">=</span><span class="mi">675</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Periodically collect NVMe smart log data. Arguments:</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            logdir (str): log directory</span>
+<span class="sd">            runtime (int or str): run time in seconds</span>
+<span class="sd">            verbose (bool): print extra information</span>
+<span class="sd">            nvme_delay (int): delay between log operations&quot;&quot;&quot;</span>
+
+        <span class="n">nvmelogdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s2">&quot;nvme-smart-log&quot;</span><span class="p">)</span>
+
+        <span class="c1"># find how many devices are present</span>
+        <span class="n">nvme_devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_storage_devices</span><span class="p">()</span>
+        <span class="n">nvme_dev_cnt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nvme_devices</span><span class="p">)</span>
+
+        <span class="c1"># how many times should we write log files?</span>
+        <span class="n">cycles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span> <span class="o">/</span>
+                     <span class="p">(</span><span class="n">nvme_delay</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">nvme_dev_cnt</span><span class="p">))))</span>
+
+        <span class="c1"># make sure at least two log files are always collected</span>
+        <span class="c1"># even in short test runs</span>
+        <span class="k">if</span> <span class="n">cycles</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">cycles</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">cycles</span><span class="p">):</span>
+            <span class="n">log_time</span> <span class="o">=</span> <span class="s1">&#39;{:%Y%m</span><span class="si">%d</span><span class="s1">_%H%M}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s1">&#39;Storing NVMe log at datetime </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_time</span><span class="p">))</span>
+
+            <span class="n">sm_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">,</span> <span class="s1">&#39;smartlog-&#39;</span> <span class="o">+</span> <span class="n">log_time</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">sm_dir</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">sm_dir</span><span class="p">)</span>
+
+<span class="c1">#            # create directory for additional log data</span>
+<span class="c1">#            # deprecated</span>
+<span class="c1">#            sm_add_dir = os.path.join(nvmelogdir, &#39;smart-add-log-&#39; + log_time)</span>
+<span class="c1">#            if not os.path.exists(sm_add_dir):</span>
+<span class="c1">#                os.makedirs(sm_add_dir)</span>
+
+            <span class="c1"># loop through the NVMe devices and request an NVMe SMART log page</span>
+            <span class="c1"># from each one</span>
+            <span class="k">for</span> <span class="n">dnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nvme_dev_cnt</span><span class="p">):</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                <span class="n">sm_log_name</span> <span class="o">=</span> <span class="s2">&quot;smartlog-nvme</span><span class="si">{:02}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dnum</span><span class="p">)</span>
+                <span class="n">sm_log</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sm_dir</span><span class="p">,</span> <span class="n">sm_log_name</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sm_log</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                    <span class="n">smlog_cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme smart-log /dev/nvme&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dnum</span><span class="p">)</span>
+                    <span class="n">smartlog_output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">smlog_cmd</span><span class="p">)</span>
+                    <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">smartlog_output</span><span class="p">)</span>
+
+<span class="c1">#                # get the &#39;additional&#39; log data as well</span>
+<span class="c1">#                # deprecated</span>
+<span class="c1">#                time.sleep(1)</span>
+<span class="c1">#                sm_add_log = &quot;{}smartlog-add-nvme{:02}&quot;.format(sm_add_dir, dnum)</span>
+<span class="c1">#                with open(sm_add_log, &#39;w&#39;) as stdout:</span>
+<span class="c1">#                    smlog_cmd = &quot;nvme intel smart-log-add /dev/nvme&quot; + str(dnum)</span>
+<span class="c1">#                    smartlog_output = AutovalUtils.run_get_output(smlog_cmd)</span>
+<span class="c1">#                    stdout.write(smartlog_output)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">nvme_delay</span><span class="p">)</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;NVMe smart logging completed successfully.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lightning.sel_psxapp"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.lightning.Lightning.sel_psxapp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sel_psxapp</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="n">runtime</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">switchtec_delay</span><span class="o">=</span><span class="mi">720</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Periodically gather SEL and sensor logs.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            logdir (str): log directory</span>
+<span class="sd">            runtime (int or str): run time in seconds</span>
+<span class="sd">            verbose (bool): print extra information</span>
+<span class="sd">            switchtec_delay: delay between log operations&quot;&quot;&quot;</span>
+
+        <span class="n">cycles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">runtime</span><span class="p">)</span> <span class="o">/</span> <span class="n">switchtec_delay</span><span class="p">))</span>
+        <span class="n">psxdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;psxapp-log/&#39;</span><span class="p">)</span>
+
+        <span class="c1"># make sure sshpass is installed</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">install_rpms</span><span class="p">(</span><span class="n">rpm_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sshpass&#39;</span><span class="p">])</span>
+
+        <span class="c1"># IP address fixed for Lightning modules (BMC connected to main server</span>
+        <span class="c1"># over USB)</span>
+        <span class="n">bmc_ip</span> <span class="o">=</span> <span class="s2">&quot;fe80::ff:fe00:1</span><span class="si">%u</span><span class="s2">sb0&quot;</span>
+
+        <span class="n">ssh_cmd_front</span> <span class="o">=</span> <span class="s1">&#39;sshpass -p 0penBmc ssh root@&#39;</span>
+
+        <span class="c1"># list of commands to gather sensor data at start and end of runtime</span>
+        <span class="c1"># second element of each list is the log directory</span>
+        <span class="n">start_cmds</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">ssh_cmd_front</span> <span class="o">+</span> <span class="n">bmc_ip</span> <span class="o">+</span> <span class="s2">&quot; &#39;/usr/local/bin/sensor-util all&#39;&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;sensor-util-start&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">ssh_cmd_front</span> <span class="o">+</span> <span class="n">bmc_ip</span> <span class="o">+</span> <span class="s2">&quot; &#39;/usr/local/bin/fan-util --get&#39;&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;fan-util-start&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">ssh_cmd_front</span> <span class="o">+</span> <span class="n">bmc_ip</span> <span class="o">+</span> <span class="s2">&quot; &#39;/usr/local/bin/log-util all --print&#39;&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;log-util-start&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="s2">&quot;ipmitool sel elist&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;sel-elist-start&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="s2">&quot;lspci&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;lspci-start&#39;</span><span class="p">)]]</span>
+
+        <span class="n">end_cmds</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">ssh_cmd_front</span> <span class="o">+</span> <span class="n">bmc_ip</span> <span class="o">+</span> <span class="s2">&quot; &#39;/usr/local/bin/sensor-util all&#39;&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;sensor-util-end&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">ssh_cmd_front</span> <span class="o">+</span> <span class="n">bmc_ip</span> <span class="o">+</span> <span class="s2">&quot; &#39;/usr/local/bin/fan-util --get&#39;&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;fan-util-end&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="n">ssh_cmd_front</span> <span class="o">+</span> <span class="n">bmc_ip</span> <span class="o">+</span> <span class="s2">&quot; &#39;/usr/local/bin/log-util all --print&#39;&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;log-util-end&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="s2">&quot;ipmitool sel elist&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;sel-elist-end&#39;</span><span class="p">)],</span>
+            <span class="p">[</span><span class="s2">&quot;lspci&quot;</span><span class="p">,</span>
+              <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;lspci-end&#39;</span><span class="p">)]]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">psxdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">psxdir</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">logfile</span> <span class="ow">in</span> <span class="n">start_cmds</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                    <span class="n">results</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                    <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+            <span class="c1"># deal with occasional ipmitool failures</span>
+            <span class="c1"># these errors are harmless and we don&#39;t want them to block the</span>
+            <span class="c1"># entire test</span>
+            <span class="k">except</span> <span class="n">CmdError</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Warning: Command failed: &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">cycles</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;switchtec evcntr /dev/switchtec0&quot;</span>
+
+            <span class="n">psxapp_logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">psxdir</span><span class="p">,</span> <span class="s1">&#39;psxapp-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">psxapp_logfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                <span class="n">psxapp_log</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">psxapp_log</span><span class="p">)</span>
+
+            <span class="n">msg_logfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">logdir</span><span class="p">,</span> <span class="s1">&#39;msgs-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">msg_logfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                <span class="n">messages</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;dmesg | grep -i aer&quot;</span><span class="p">)</span>
+                <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">switchtec_delay</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">logfile</span> <span class="ow">in</span> <span class="n">end_cmds</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">:</span>
+                    <span class="n">results</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+                    <span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">CmdError</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Warning: command failed: &quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;SEL and sensor data gathered successfully.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Lightning.check_for_bit_errors"><a class="viewcode-back" href="../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.html#havoc.autotest_testfiles.validation_utils.lib.storage.lightning.Lightning.check_for_bit_errors">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_for_bit_errors</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check for bit errors in an I/O test.  This function looks</span>
+<span class="sd">        through the files in the NVMe log directory to find the first and last</span>
+<span class="sd">        log files.  Then the error counts in the initial and final logs are</span>
+<span class="sd">        compared.  If they are different, then an error must have occurred</span>
+<span class="sd">        at some point during the test.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nvmelogdir: location of log files to review</span>
+<span class="sd">            verbose: print extra information&quot;&quot;&quot;</span>
+
+        <span class="c1"># find how many NVMe devices are present</span>
+        <span class="n">nvme_devices</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_storage_devices</span><span class="p">()</span>
+        <span class="n">nvme_dev_cnt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nvme_devices</span><span class="p">)</span>
+
+        <span class="n">nvme_logs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">)</span>
+        <span class="n">nvme_logs</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">nvme_logs</span> <span class="o">=</span> <span class="p">[</span><span class="n">dirname</span> <span class="k">for</span> <span class="n">dirname</span> <span class="ow">in</span> <span class="n">nvme_logs</span> <span class="k">if</span> <span class="s1">&#39;smartlog-&#39;</span> <span class="ow">in</span> <span class="n">dirname</span><span class="p">]</span>
+        <span class="n">nvme_start_logdir</span> <span class="o">=</span> <span class="n">nvme_logs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nvme_end_logdir</span> <span class="o">=</span> <span class="n">nvme_logs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">((</span><span class="s1">&#39;Checking for bit errors on x16 Upstream &#39;</span>
+                                   <span class="s1">&#39;Port and x4/x2 Downstream Ports Lightning&#39;</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s1">&#39;Using NVMe log files located at &#39;</span> <span class="o">+</span>
+                                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">,</span>
+                                               <span class="n">nvme_start_logdir</span><span class="p">)</span> <span class="o">+</span>
+                                  <span class="s1">&#39; and &#39;</span> <span class="o">+</span>
+                                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">,</span>
+                                               <span class="n">nvme_end_logdir</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">((</span><span class="s1">&#39;Error counts are usually on lines 14 and &#39;</span>
+                                   <span class="s1">&#39;15.&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s1">&#39;Starting bit error check.&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">dnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nvme_dev_cnt</span><span class="p">):</span>
+            <span class="n">log_start</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">,</span>
+                                     <span class="n">nvme_start_logdir</span><span class="p">,</span>
+                                     <span class="s1">&#39;smartlog-nvme</span><span class="si">{:02}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dnum</span><span class="p">))</span>
+            <span class="n">log_end</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nvmelogdir</span><span class="p">,</span>
+                                   <span class="n">nvme_end_logdir</span><span class="p">,</span>
+                                   <span class="s1">&#39;smartlog-nvme</span><span class="si">{:02}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dnum</span><span class="p">))</span>
+
+            <span class="c1"># get the smart log lines showing:</span>
+            <span class="c1"># media_errors (usually line 14)</span>
+            <span class="c1"># num_err_log_entries (usually line 15)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_start</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="n">error_lines_start</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;media_errors&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">error_lines_start</span> <span class="o">+=</span> <span class="n">line</span>
+                    <span class="k">elif</span> <span class="s2">&quot;num_err_log_entries&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">error_lines_start</span> <span class="o">+=</span> <span class="n">line</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_end</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="n">error_lines_end</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;media_errors&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">error_lines_end</span> <span class="o">+=</span> <span class="n">line</span>
+                    <span class="k">elif</span> <span class="s2">&quot;num_err_log_entries&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">error_lines_end</span> <span class="o">+=</span> <span class="n">line</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Checking device &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dnum</span><span class="p">))</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Error lines at start: &quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">error_lines_start</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()):</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Error lines at end: &quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">error_lines_end</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()):</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+            <span class="c1"># if the number of errors in the log is the same before and</span>
+            <span class="c1"># after the test, no new bit errors were generated during the test</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">error_lines_start</span> <span class="o">==</span>
+                                            <span class="n">error_lines_end</span><span class="p">,</span>
+                                            <span class="s2">&quot;Check for bit errors.&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

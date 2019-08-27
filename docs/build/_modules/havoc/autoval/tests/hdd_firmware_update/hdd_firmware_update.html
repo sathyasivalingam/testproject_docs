@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2016-present, Facebook, Inc.</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Description     : This test installs/updates the firmware for the drive type HDD.</span>
+<span class="c1"># TestCase IDs    : UHDDT_005</span>
+<span class="c1"># ==============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.drive</span> <span class="k">import</span> <span class="n">DriveType</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.drive_firmware_update</span> <span class="k">import</span> \
+    <span class="n">DriveFirmwareUpdate</span>
+
+
+<div class="viewcode-block" id="HDDFirmwareUpdate"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hdd_firmware_update.html#havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update.HDDFirmwareUpdate">[docs]</a><span class="k">class</span> <span class="nc">HDDFirmwareUpdate</span><span class="p">(</span><span class="n">DriveFirmwareUpdate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;HDD Firmware Update.</span>
+
+<span class="sd">    This test installs/updates the firmware for the drive type HDD and</span>
+<span class="sd">    resets the drive to cross check the installed/updated firmware version</span>
+<span class="sd">    reflects in the drive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># @override</span>
+<div class="viewcode-block" id="HDDFirmwareUpdate.storage_test_setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hdd_firmware_update.html#havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update.HDDFirmwareUpdate.storage_test_setup">[docs]</a>    <span class="k">def</span> <span class="nf">storage_test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Storage Test Setup.</span>
+
+<span class="sd">        This method gets the drive list from the DUT, creates the test drives</span>
+<span class="sd">        based on drive config for the drive type &#39;HDD&#39;, validates the drive count</span>
+<span class="sd">        and firmware version for the test drives and collects the drive data as a</span>
+<span class="sd">        part of prerequisite.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When TestDrive lists is empty and Drive count mismatches</span>
+<span class="sd">            between expected and actual values.</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When fails to unmount and/or remove the partition from the drive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># only pick HDD for testing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;drive_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DriveType</span><span class="o">.</span><span class="n">HDD</span><span class="o">.</span><span class="n">value</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HDDFirmwareUpdate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">storage_test_setup</span><span class="p">()</span></div>
+
+    <span class="c1"># @override</span>
+<div class="viewcode-block" id="HDDFirmwareUpdate.update_drive_firmware"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hdd_firmware_update.html#havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update.HDDFirmwareUpdate.update_drive_firmware">[docs]</a>    <span class="k">def</span> <span class="nf">update_drive_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">version_name</span><span class="p">,</span> <span class="n">bin_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates HDD&#39;s Firmware.</span>
+
+<span class="sd">        This method updates the firmware based on the interface(sas/sata)</span>
+<span class="sd">        and resets the drive by running power cycle command on jbod</span>
+<span class="sd">        for each slot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        drive : :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+<span class="sd">        version_name : String</span>
+<span class="sd">            Firmware version to find and install on test drives.</span>
+<span class="sd">        bin_path : String</span>
+<span class="sd">            Binary file path for the given firmware.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        SASDriveException</span>
+<span class="sd">            When fails to find the SAS Slot for HDD&#39;s Interface SAS.</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When fails to update the firmware for the Drive and block</span>
+<span class="sd">            name while drive reset.</span>
+<span class="sd">        FbjbodUtilException</span>
+<span class="sd">            When fails to map the jbod slots for the drive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">drive</span><span class="o">.</span><span class="n">update_firmware</span><span class="p">(</span><span class="n">version_name</span><span class="p">,</span> <span class="n">bin_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Resetting drive&quot;</span><span class="p">)</span>
+        <span class="n">drive</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.hdd_firmware_update.html#havoc.autoval.tests.hdd_firmware_update.hdd_firmware_update.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">HDDFirmwareUpdate</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

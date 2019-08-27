@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.bmc &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.bmc</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.bmc</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+
+
+<div class="viewcode-block" id="BMCSystemInfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.bmc.BMCSystemInfo">[docs]</a><span class="k">class</span> <span class="nc">BMCSystemInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="BMCSystemInfo.get_systeminfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.bmc.BMCSystemInfo.get_systeminfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_systeminfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">systeminfo</span><span class="p">):</span>
+        <span class="n">board_mfg</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;fru_board_mfg&#39;</span><span class="p">]</span>
+        <span class="n">board_product</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;fru_board_product&#39;</span><span class="p">]</span>
+        <span class="n">bmcinfo</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting BMC bios info&quot;</span><span class="p">)</span>
+        <span class="n">bmcinfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_biosinfo</span><span class="p">(</span><span class="n">board_mfg</span><span class="p">,</span> <span class="n">board_product</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="s1">&#39;bmc_version&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bmcinfo</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;mc_firmware_revision&#39;</span> <span class="ow">in</span> <span class="n">systeminfo</span><span class="p">:</span>
+                <span class="c1"># BMC version is stored in Firmware Revision field</span>
+                <span class="n">bmcinfo</span><span class="p">[</span><span class="s1">&#39;bmc_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;mc_firmware_revision&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">bmcinfo</span></div>
+
+<div class="viewcode-block" id="BMCSystemInfo.get_systemlogs"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.bmc.BMCSystemInfo.get_systemlogs">[docs]</a>    <span class="k">def</span> <span class="nf">get_systemlogs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">systemlogs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">systemlogs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_syslogs</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">systemlogs</span></div></div>
+
+<div class="viewcode-block" id="get_biosinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.bmc.get_biosinfo">[docs]</a><span class="k">def</span> <span class="nf">get_biosinfo</span><span class="p">(</span><span class="n">mfg</span><span class="p">,</span> <span class="n">product</span><span class="p">):</span>
+    <span class="n">biosinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">vrkeys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;vr_fw_cpu0&quot;</span><span class="p">,</span> <span class="s2">&quot;vr_fw_cpu1&quot;</span><span class="p">,</span> <span class="s2">&quot;vr_fw_ddrab&quot;</span><span class="p">,</span> <span class="s2">&quot;vr_fw_ddrcd&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;vr_fw_ddref&quot;</span><span class="p">,</span> <span class="s2">&quot;vr_fw_ddrgh&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">vrkeys</span><span class="p">:</span>
+        <span class="n">biosinfo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;me_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;me_vendor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;bmc_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;fsc_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;cpld_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;cpld_checksum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mfg</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;QUANTA&#39;</span><span class="p">:</span>
+        <span class="c1"># ME version</span>
+        <span class="k">if</span> <span class="s1">&#39;LEOPARD&#39;</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+            <span class="c1"># Leopard ME version</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool -t 0x2c -b 0x6 raw 0x6 0x1&quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| awk &#39;{print substr($0,8,2) </span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; substr($0,11,1) </span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2"> substr($0,12,1) &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2"> substr($0,38,4)}&#39; | tr -d &#39; &#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;me_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard ME vendor ID</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool -t 0x2c -b 0x6 raw 0x2e 0xe0 0x57 0x1 0x00&quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| head -1 | awk &#39;{print </span><span class="se">\&quot;</span><span class="s2">0x</span><span class="se">\&quot;</span><span class="s2"> substr($0,20,2) &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;substr($0,17,2) substr($0,14,2) substr($0,11,2)}&#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;me_vendor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard BMC version</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x6 0x1 | awk &#39;{print substr($0,8,2) &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2"> substr($0,11,2)}&#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;bmc_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard FSC version</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x69 | awk &#39;{print </span><span class="se">\&quot;</span><span class="s2">0x</span><span class="se">\&quot;</span><span class="s2"> substr($0,5,2) &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;substr($0,2,2) </span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2"> substr($0,11,2) substr($0,8,2)}&#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;fsc_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard CPLD</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x17 0x1 | tr -d &#39; &#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;cpld_checksum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x17 0x2 | tr -d &#39; &#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;cpld_device_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x32 0x88 0x3 | tr -d &#39; &#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;cpld_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard VR FW</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vrkeys</span><span class="p">)):</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x51 0x</span><span class="si">%x</span><span class="s2"> | tr -d &#39; &#39;&quot;</span> <span class="o">%</span> <span class="n">i</span>
+                <span class="n">biosinfo</span><span class="p">[</span><span class="n">vrkeys</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard BIOS version through BMC</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x83 | tr -d &#39; &#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;bios_bmc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard FSC version using raw</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x30 0x29 | awk &#39;{print </span><span class="se">\&quot;</span><span class="s2">Major version: 0x</span><span class="se">\&quot;</span><span class="s2"> &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;$2 $1 </span><span class="se">\&quot;</span><span class="s2"> Minor version: 0x</span><span class="se">\&quot;</span><span class="s2"> $4 $3}&#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;fsc_raw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Leopard OOB MAC / IP Address</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool lan print 8 | grep </span><span class="se">\&quot;</span><span class="s2">MAC Address</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;MAC Address\s*:\s*(.*)&#39;</span><span class="p">)</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;oob_mac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_search_pattern</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool lan print 8 | grep </span><span class="se">\&quot;</span><span class="s2">IP Address</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;IP Address\s*:\s*(.*)&#39;</span><span class="p">)</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;oob_ip&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_search_pattern</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># ME version</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x2E 0xE0 0x57 0x01 0x00 &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| head -1 | awk &#39;{print substr($0,17,1) &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">.</span><span class="se">\&quot;</span><span class="s2"> substr($0,18,1) substr($0,14,1)}&#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;me_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># FSC Version</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool raw 0x2e 0x2A 0x57 0x01 0x00 &quot;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| head -1 | awk &#39;{print $7 $6 $5 $4}&#39;&quot;</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s2">&quot;fsc_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+<span class="c1">#    elif mfg.upper() == &quot;WIWYNN&quot;:</span>
+<span class="c1">#    elif mfg.upper() == &quot;MITAC&quot;:</span>
+<span class="c1">#    elif mfg.upper() == &quot;HP&quot;:</span>
+<span class="c1">#    elif mfg.upper() == &quot;ZT&quot;:</span>
+    <span class="k">return</span> <span class="n">biosinfo</span></div>
+
+<div class="viewcode-block" id="get_syslogs"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.bmc.get_syslogs">[docs]</a><span class="k">def</span> <span class="nf">get_syslogs</span><span class="p">():</span>
+    <span class="n">sys_log</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool sel elist&quot;</span>
+    <span class="n">sys_log</span><span class="p">[</span><span class="s1">&#39;sel_elist&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sys_log</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

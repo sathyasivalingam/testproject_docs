@@ -1,0 +1,1043 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.system_config_info &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.system_config_info</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.system_config_info</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">.fbjbod_utils</span> <span class="k">import</span> <span class="n">FbjbodUtils</span>
+<span class="kn">from</span> <span class="nn">.freezeray_config</span> <span class="k">import</span> <span class="n">FreezeRaySystemInfo</span>
+<span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">.bmc</span> <span class="k">import</span> <span class="n">BMCSystemInfo</span>
+<span class="kn">from</span> <span class="nn">.openbmc</span> <span class="k">import</span> <span class="n">OpenBMCSystemInfo</span>
+<span class="kn">from</span> <span class="nn">.storage.storage_device</span> <span class="k">import</span> <span class="n">StorageDeviceFactory</span>
+<span class="kn">from</span> <span class="nn">.system_config.lspci_parser</span> <span class="k">import</span> <span class="n">LspciParser</span>
+<span class="kn">from</span> <span class="nn">.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">.system_config.system_config_utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">match_in_dmidecode</span><span class="p">,</span>
+    <span class="n">SystemInfoException</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.system_config.system_logs</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">get_last_gzip_syslog_mtime</span><span class="p">,</span>
+    <span class="n">get_syslogs</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.system_config.cpu_info</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">get_cpuinfo</span><span class="p">,</span>
+    <span class="n">get_lscpu</span>
+<span class="p">)</span>
+
+<div class="viewcode-block" id="SystemInfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo">[docs]</a><span class="k">class</span> <span class="nc">SystemInfo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SystemInfo.__init__"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_syslog</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openbmc</span> <span class="o">=</span> <span class="n">OpenBMCSystemInfo</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_systeminfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_systeminfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_systeminfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dump_location</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary of all system info.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++Start of Havoc SystemInfo collection&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize special system types to False</span>
+        <span class="n">wedge</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">systeminfo</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># set something in case it can&#39;t parse</span>
+        <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;fru_board_mfg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;fru_board_product&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Load ipmi drivers before using any ipmi command</span>
+        <span class="c1"># This command will fail for Wedge or if module</span>
+        <span class="c1"># already loaded. So, ignore status</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="s1">&#39;modprobe ipmi_si&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span>
+            <span class="s1">&#39;modprobe ipmi_devintf&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;autotest-local&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">pkg</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_rpm_info</span><span class="p">(</span><span class="s2">&quot;fb-havoc-autotest-testfiles&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Running Autotest version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pkg</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting CPU info&quot;</span><span class="p">)</span>
+        <span class="n">cpu_info</span> <span class="o">=</span> <span class="n">get_cpuinfo</span><span class="p">()</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cpu_info</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting bios info&quot;</span><span class="p">)</span>
+        <span class="n">bios_info</span> <span class="o">=</span> <span class="n">get_biosinfo</span><span class="p">()</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bios_info</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++BIOS vendor is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bios_vendor&#39;</span><span class="p">]))</span>
+
+        <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bmc_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bmc_type</span><span class="p">()</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++BMC type is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bmc_type&#39;</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bmc_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;openbmc&#39;</span><span class="p">:</span>
+            <span class="n">wedge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openbmc</span><span class="o">.</span><span class="n">is_wedge</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">wedge</span><span class="p">:</span>
+                <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;product_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;wedge&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wedge</span> <span class="ow">and</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bios_vendor&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;coreboot&#39;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++System check&quot;</span><span class="p">)</span>
+            <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">run_system_check</span><span class="p">())</span>
+
+            <span class="c1"># get FRU first so the ipmi raw commands can be determined from ODM</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting FRU info&quot;</span><span class="p">)</span>
+            <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_fruinfo</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bmc_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;openbmc&#39;</span><span class="p">:</span>
+            <span class="n">_sys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openbmc</span><span class="o">.</span><span class="n">get_systeminfo</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_sys</span> <span class="o">=</span> <span class="n">BMCSystemInfo</span><span class="p">()</span><span class="o">.</span><span class="n">get_systeminfo</span><span class="p">(</span>
+                <span class="n">systeminfo</span>
+            <span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_sys</span><span class="p">)</span>
+
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting general info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_generalinfo</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting bios info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_biosinfo</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting mem info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_meminfo</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting net info&quot;</span><span class="p">)</span>
+        <span class="n">eth</span> <span class="o">=</span> <span class="n">get_eth_device</span><span class="p">()</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_netinfo</span><span class="p">(</span><span class="n">eth</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting eth affinity&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_eth_affinity</span><span class="p">(</span><span class="n">eth</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting sda info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_bootdriveinfo</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting lspci info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_lspci</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting Storage info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">get_storage_info</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">is_cold_storage</span><span class="p">(</span><span class="n">systeminfo</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">systemlogs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting lspci verbose info&quot;</span><span class="p">)</span>
+        <span class="n">systemlogs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_lspci_verbose</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;bmc_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;openbmc&#39;</span><span class="p">:</span>
+            <span class="n">_sys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openbmc</span><span class="o">.</span><span class="n">get_systemlogs</span><span class="p">()</span>
+            <span class="n">systemlogs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_sys</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_sys</span> <span class="o">=</span> <span class="n">BMCSystemInfo</span><span class="p">()</span><span class="o">.</span><span class="n">get_systemlogs</span><span class="p">()</span>
+            <span class="n">systemlogs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_sys</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting system log errors&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+            <span class="n">systemlogs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_syslogs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_syslog</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">systemlogs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">get_syslogs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_syslog</span><span class="p">,</span> <span class="n">dump_location</span><span class="o">=</span><span class="n">dump_location</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting project info&quot;</span><span class="p">)</span>
+        <span class="n">systeminfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_project_info</span><span class="p">(</span><span class="n">systeminfo</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Collected system info&quot;</span><span class="p">)</span>
+
+        <span class="n">_sys</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;systeminfo&#39;</span><span class="p">:</span> <span class="n">systeminfo</span><span class="p">,</span>
+            <span class="s1">&#39;systemlogs&#39;</span><span class="p">:</span> <span class="n">systemlogs</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_syslog</span> <span class="o">=</span> <span class="n">get_last_gzip_syslog_mtime</span><span class="p">()</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++End of Havoc SystemInfo collection&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_sys</span></div>
+
+<div class="viewcode-block" id="SystemInfo.is_cold_storage"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.is_cold_storage">[docs]</a>    <span class="k">def</span> <span class="nf">is_cold_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys_info</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fru_product_version&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Type 7&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_server_model"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_server_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_server_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wedge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openbmc</span><span class="o">.</span><span class="n">is_wedge</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">wedge</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Wedge&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool fru&quot;</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;Product Name \s+:(.+)$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+            <span class="p">)</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">server_model</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">server_model</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;Unknown server model in </span><span class="si">%s</span><span class="s2">&quot;</span>
+                                           <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_bmc_type"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_bmc_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_bmc_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">is_openbmc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openbmc</span><span class="o">.</span><span class="n">check_if_openbmc</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">is_openbmc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;openbmc&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;bmc&quot;</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_centos_release"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_centos_release">[docs]</a>    <span class="k">def</span> <span class="nf">get_centos_release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /etc/centos-release&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">centos</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;release\s(\d+.\d+)&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">centos</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">centos</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_nic_speed"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_nic_speed">[docs]</a>    <span class="k">def</span> <span class="nf">get_nic_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ethtool eth0&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+Speed:\s+(\d+)&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">speed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">speed</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_nic_fw"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_nic_fw">[docs]</a>    <span class="k">def</span> <span class="nf">get_nic_fw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ethtool -i eth0&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;firmware-version:\s+(.*)&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">version</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_mellanox_nic_value"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_mellanox_nic_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_mellanox_nic_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lspci | grep -i mellanox&quot;</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed, Mellanox nic not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;mlxreg -d 01:00.0 -g --reg_name SLRG -i local_port=1,pnat=0,lane=0&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;grade\s*\|(.*)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">nic_value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">nic_value</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_nvme_dev_fw"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_nvme_dev_fw">[docs]</a>    <span class="k">def</span> <span class="nf">get_nvme_dev_fw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;nvme id-ctrl </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">nvme_fw</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;fr\s+:\s+(\w+)&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nvme_fw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nvme_fw</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemInfo.get_nvme_dev_list"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.SystemInfo.get_nvme_dev_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_nvme_dev_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme list&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;CMD: </span><span class="si">%s</span><span class="s2"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+
+        <span class="n">nvme_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\/dev\/nvme0n\d+)\s+.*&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">nvme_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">nvme_list</span></div></div>
+
+
+<div class="viewcode-block" id="run_system_check"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.run_system_check">[docs]</a><span class="k">def</span> <span class="nf">run_system_check</span><span class="p">():</span>
+    <span class="c1"># We run the &#39;mc info&#39; command as a basic sanity check.</span>
+    <span class="c1"># If this doesn&#39;t work then we should immediately bail out of the test.</span>
+    <span class="c1"># Returns output of mc info</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool mc info&quot;</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mc_info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;run_system_check failure </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">mc_info</span> <span class="o">=</span> <span class="n">data_str_to_dict</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;mc_&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span>
+            <span class="s2">&quot;Failed to run &#39;</span><span class="si">%s</span><span class="s2">&#39;. Check BMC access!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mc_info</span></div>
+
+
+<div class="viewcode-block" id="get_fruinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_fruinfo">[docs]</a><span class="k">def</span> <span class="nf">get_fruinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of ipmitool fru information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool fru print 0&quot;</span>
+    <span class="c1"># Ignore exit code of command as it can fail on some systems</span>
+    <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">:</span>
+            <span class="c1"># After a reboot the command can fail for a while. Sleep and retry.</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;+++Getting FRU&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="n">fru_info</span> <span class="o">=</span> <span class="n">data_str_to_dict</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="s2">&quot;fru_&quot;</span><span class="p">)</span>
+    <span class="c1"># Standarize some names</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fru_board_product&#39;</span><span class="p">,</span> <span class="s1">&#39;fru_product_name&#39;</span><span class="p">]</span>
+    <span class="n">standard_names</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;Mono Lake.*&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;MonoLake&quot;</span>
+    <span class="n">fru_info</span> <span class="o">=</span> <span class="n">normalize_keys</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">standard_names</span><span class="p">,</span> <span class="n">fru_info</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fru_info</span></div>
+
+
+<div class="viewcode-block" id="data_str_to_dict"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.data_str_to_dict">[docs]</a><span class="k">def</span> <span class="nf">data_str_to_dict</span><span class="p">(</span><span class="n">data_str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms data_str into a dictionary by looking for lines separated by the</span>
+<span class="sd">    &quot;:&quot; character. Adds an optional prefix if passed in. Adds a counter if</span>
+<span class="sd">    multiple lines with same entry are detected (_1, _2, ...)</span>
+<span class="sd">    Example with &quot;mc&quot; prefix: Transforms this line:</span>
+<span class="sd">    Firmware Revision         : 2.07</span>
+<span class="sd">    Into this dictionary entry:</span>
+<span class="sd">    &quot;mc_firmware_revision&quot;: &quot;2.07&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s*(.*?):(.*)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">key</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">key_count</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">while</span> <span class="p">((</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key_count</span><span class="p">))</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key_count</span><span class="p">)]</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+                        <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                    <span class="n">key_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">key</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key_count</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
+                <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">data_dict</span></div>
+
+
+<div class="viewcode-block" id="normalize_keys"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.normalize_keys">[docs]</a><span class="k">def</span> <span class="nf">normalize_keys</span><span class="p">(</span><span class="n">key_list</span><span class="p">,</span> <span class="n">normalization</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalizes all &#39;config_dict&#39; keys specified in key_list using the</span>
+<span class="sd">    normalization dictionary which contains a regular expression that if</span>
+<span class="sd">    matched is replaced with a normalized string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config_dict</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">regex</span><span class="p">,</span> <span class="n">normal</span> <span class="ow">in</span> <span class="n">normalization</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">config_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">normal</span>
+
+    <span class="k">return</span> <span class="n">config_dict</span></div>
+
+
+<div class="viewcode-block" id="get_generalinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_generalinfo">[docs]</a><span class="k">def</span> <span class="nf">get_generalinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of general system info.</span>
+<span class="sd">    (hostname, kernel, os version)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">generalinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">generalinfo</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;hostname&quot;</span><span class="p">)</span>
+    <span class="n">generalinfo</span><span class="p">[</span><span class="s2">&quot;kernel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span>
+        <span class="s2">&quot;uname --kernel-release&quot;</span>
+    <span class="p">)</span>
+    <span class="n">os_version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os_version</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;cat /etc/system-release&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="c1"># Pass for ramdisks</span>
+        <span class="k">pass</span>
+    <span class="n">generalinfo</span><span class="p">[</span><span class="s2">&quot;os_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os_version</span>
+    <span class="n">generalinfo</span><span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;cat /proc/cmdline&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">generalinfo</span></div>
+
+
+<div class="viewcode-block" id="get_biosinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_biosinfo">[docs]</a><span class="k">def</span> <span class="nf">get_biosinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of all bios/me/bmc/cpld/vr/fsc information.</span>
+<span class="sd">    (bios vendor, bios version, bios release, me version, fsc version)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">biosinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">bios_dict</span> <span class="o">=</span> <span class="n">match_in_dmidecode</span><span class="p">(</span><span class="s2">&quot;bios&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">b_info</span> <span class="ow">in</span> <span class="n">bios_dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">b_info</span><span class="p">[</span><span class="s1">&#39;device_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;BIOS Information&quot;</span><span class="p">:</span>
+            <span class="n">biosinfo</span><span class="p">[</span><span class="s1">&#39;bios_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b_info</span><span class="p">[</span><span class="s1">&#39;Version&#39;</span><span class="p">]</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s1">&#39;dmidecode_bios_json&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">bios_dict</span><span class="p">)</span>
+    <span class="n">biosinfo</span><span class="p">[</span><span class="s1">&#39;bios_vendor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;dmidecode --string bios-vendor&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">biosinfo</span></div>
+
+
+<div class="viewcode-block" id="get_meminfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_meminfo">[docs]</a><span class="k">def</span> <span class="nf">get_meminfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of memory information.</span>
+<span class="sd">    (total ram, maximum capacity, speed, manufacturer, serial, size, part no.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">meminfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ram_total_kb</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ram_total_kb</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_match</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;MemTotal:\s*(\d+)\s*kB&#39;</span><span class="p">,</span> <span class="s2">&quot;cat /proc/meminfo&quot;</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">meminfo</span><span class="p">[</span><span class="s2">&quot;ram_total_kb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ram_total_kb</span>
+    <span class="n">meminfo</span><span class="p">[</span><span class="s1">&#39;dmidecode_memory_json&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">match_in_dmidecode</span><span class="p">(</span><span class="s2">&quot;memory&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">meminfo</span></div>
+
+
+<div class="viewcode-block" id="get_eth_device"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_eth_device">[docs]</a><span class="k">def</span> <span class="nf">get_eth_device</span><span class="p">():</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="s2">&quot;ifconfig&quot;</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(eth\d):\sflag&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(eth\d)\s+Link&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span><span class="s2">&quot;Unable to get eth device&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_netinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_netinfo">[docs]</a><span class="k">def</span> <span class="nf">get_netinfo</span><span class="p">(</span><span class="n">eth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of network informtion.</span>
+<span class="sd">    (driver, firware, ring buffer, speed, version, oob MAC, oob ip)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">net_info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ethtool -i </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;(.*):(.*)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;net_eth_&quot;</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;bus&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">key_count</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">net_info</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">key_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">key</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key_count</span><span class="p">)</span>
+            <span class="n">net_info</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ethtool </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">net_info</span><span class="p">[</span><span class="s1">&#39;net_eth_speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s1">&#39;Speed:\s*(.*)\n&#39;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ethtool -g </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">stdout</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">net_info</span><span class="p">[</span><span class="s1">&#39;net_eth_ring_buf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> \
+            <span class="o">%</span> <span class="p">(</span><span class="n">stdout</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">stdout</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">stdout</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">stdout</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">mac</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_mac&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ifconfig </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;ether\s([\w\d:]+)&#39;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">net_info</span><span class="p">[</span><span class="n">mac</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;HWaddr\s*(.*)&#39;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">net_info</span><span class="p">[</span><span class="n">mac</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SystemInfoException</span><span class="p">(</span>
+                <span class="s2">&quot;Unable to find MAC address for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="c1"># @@@ TODO: Add IP methods</span>
+<span class="c1">#    net_info[&#39;net_ip&#39;], net_info[&#39;net_hwaddr&#39;] = get_ip_mac(eth)</span>
+<span class="c1">#</span>
+<span class="c1">#    net_info[&#39;net_oob_ip&#39;], net_info[&#39;net_oob_hwaddr&#39;] = get_oob_ip_mac()</span>
+
+    <span class="k">return</span> <span class="n">net_info</span></div>
+
+
+<div class="viewcode-block" id="get_eth_affinity"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_eth_affinity">[docs]</a><span class="k">def</span> <span class="nf">get_eth_affinity</span><span class="p">(</span><span class="n">eth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary with one key/value pair showing eth affinity</span>
+<span class="sd">    information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">affinity_info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">affinity_info</span><span class="p">[</span><span class="s1">&#39;net_affinity_irq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">affinity_info</span><span class="p">[</span><span class="s1">&#39;net_affinity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /proc/interrupts | grep </span><span class="si">%s</span><span class="s2">- &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">eth</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;| awk &#39;{print $1}&#39; | sed &#39;s/://&#39;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">irqs</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">irqcount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">irqs</span><span class="p">:</span>
+        <span class="n">irq</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /proc/irq/</span><span class="si">%s</span><span class="s2">/smp_affinity&quot;</span> <span class="o">%</span> <span class="n">irq</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">stdout</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">stdout</span> <span class="o">=</span> <span class="s2">&quot;??,????????&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;***error: [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">irqcount</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">affinity_info</span><span class="p">[</span><span class="s1">&#39;net_affinity_irq&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">irq</span>
+        <span class="n">affinity_info</span><span class="p">[</span><span class="s1">&#39;net_affinity&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">affinity_info</span><span class="p">[</span><span class="s1">&#39;net_affinity_irq&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;(total: </span><span class="si">%s</span><span class="s2"> )&quot;</span> <span class="o">%</span> <span class="n">irqcount</span>
+    <span class="k">return</span> <span class="n">affinity_info</span></div>
+
+
+
+<div class="viewcode-block" id="get_bootdriveinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_bootdriveinfo">[docs]</a><span class="k">def</span> <span class="nf">get_bootdriveinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of boot drive information.</span>
+<span class="sd">    (capacity, hw configuration, partition inf)</span>
+<span class="sd">    Boot drive may be sda or nvme (flash)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">boot_drive</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_boot_drive</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="c1"># No boot drive detected, continue anyhow</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">boot_drive</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;sda&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_sdainfo</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">boot_drive</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;nvme&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_nvmeinfo</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No boot drive detected&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_sdainfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_sdainfo">[docs]</a><span class="k">def</span> <span class="nf">get_sdainfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of bootdisk information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fdisk -l /dev/sda&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">stdout</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">parse_fdisk</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;smartctl -i /dev/sda&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">stdout</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parse_smartctl</span><span class="p">(</span><span class="n">stdout</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="get_nvmeinfo"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_nvmeinfo">[docs]</a><span class="k">def</span> <span class="nf">get_nvmeinfo</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of bookdisk/nvme information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme list&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">return_code</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No boot drive by name /dev/nvme&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span>
+    <span class="n">stdout</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+
+    <span class="n">nvme_table</span> <span class="o">=</span> <span class="n">parse_table</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bootdrive_partition&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvme_table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;node&#39;</span><span class="p">]</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bootdrive_sn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvme_table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sn&#39;</span><span class="p">]</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bootdrive_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvme_table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bootdrive_fw_rev&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nvme_table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;fw rev&#39;</span><span class="p">]</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bootdrive_partition&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;/dev/nvme*&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fdisk -l </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">node</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">stdout</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parse_fdisk</span><span class="p">(</span><span class="n">stdout</span><span class="p">))</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme smart-log </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">node</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_non_verbose</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;nvme_smart-log_json&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">parse_nvme_smartlog</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="parse_smartctl"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.parse_smartctl">[docs]</a><span class="k">def</span> <span class="nf">parse_smartctl</span><span class="p">(</span><span class="n">cmd_output</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Parse smartctl -i /dev/sda command output and return a dictionary &quot;&quot;&quot;</span>
+    <span class="n">pat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(.*?)\s*:\s*(.*)$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+    <span class="n">key_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Device Model&#39;</span><span class="p">:</span> <span class="s1">&#39;bootdrive_model&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Serial Number&#39;</span><span class="p">:</span> <span class="s1">&#39;bootdrive_sn&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;Firmware Version&#39;</span><span class="p">:</span> <span class="s1">&#39;bootdrive_fw_rev&#39;</span><span class="p">}</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bootdrive_partition&#39;</span><span class="p">:</span> <span class="s1">&#39;/dev/sda&#39;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">cmd_output</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">key_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">key_map</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)]]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="parse_nvme_smartlog"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.parse_nvme_smartlog">[docs]</a><span class="k">def</span> <span class="nf">parse_nvme_smartlog</span><span class="p">(</span><span class="n">cmd_output</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Parse nvme smart-log command output and return a dictionary &quot;&quot;&quot;</span>
+    <span class="n">pat</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(.*?)\s*:\s*(.*)$&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;critical_warning&#39;</span><span class="p">,</span> <span class="s1">&#39;media_errors&#39;</span><span class="p">]</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">cmd_output</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="parse_fdisk"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.parse_fdisk">[docs]</a><span class="k">def</span> <span class="nf">parse_fdisk</span><span class="p">(</span><span class="n">cmd_output</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Parse fdisk command output and return a dictionary &quot;&quot;&quot;</span>
+    <span class="c1"># Use named capture groups to assign to info dictionary</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Disk.*?dev.*?:\s*(?P&lt;bootdrive_capacity&gt;.*?)&#39;</span>
+                   <span class="sa">r</span><span class="s1">&#39;,\s*(?P&lt;bootdrive_capacity_bytes&gt;.*?) bytes&#39;</span><span class="p">,</span> <span class="n">cmd_output</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span>
+
+    <span class="n">partition</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cmd_output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^/dev/&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+            <span class="n">dev</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">partition</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span> <span class="o">=</span> <span class="n">size</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;partition_size_json&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">partition</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="parse_table"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.parse_table">[docs]</a><span class="k">def</span> <span class="nf">parse_table</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Parse column data from a table. Example:</span>
+<span class="sd">table = parse_table(</span>
+<span class="sd">&#39;Node             SN                   Model</span>
+<span class="sd">---------------- -------------------- ----------------------------------------</span>
+<span class="sd">/dev/nvme0n1     FI5BQ00851CY6BI03    HFS256GD9MNC-5310A</span>
+<span class="sd">/dev/nvme0n2     FI5BQ00851CY6BI04    HFS256GD9MNC-5310B</span>
+<span class="sd">&#39;)</span>
+<span class="sd">table[0][&#39;node&#39;] = &#39;/dev/nvme0n1&#39;</span>
+<span class="sd">table[1][&#39;sn&#39;] = &#39;FI5BQ00851CY6BI04&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">col_hint</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Use space characters for column separators</span>
+    <span class="n">col_start</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\S+&#39;</span><span class="p">,</span> <span class="n">col_hint</span><span class="p">)]</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">split_at</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">col_start</span><span class="p">)]</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">split_at</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">col_start</span><span class="p">)))</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span></div>
+
+<div class="viewcode-block" id="split_at"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.split_at">[docs]</a><span class="k">def</span> <span class="nf">split_at</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">positions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Split a line at positions, strip white space and return list &quot;&quot;&quot;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">positions</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)]</span>  <span class="c1"># Final position is end of line</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">line</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="get_lspci"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_lspci">[docs]</a><span class="k">def</span> <span class="nf">get_lspci</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns lspci output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lspci</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">lspci</span><span class="p">[</span><span class="s1">&#39;lspci&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LspciParser</span><span class="p">()</span><span class="o">.</span><span class="n">get_lspci_output</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">lspci</span></div>
+
+<div class="viewcode-block" id="get_storage_info"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_storage_info">[docs]</a><span class="k">def</span> <span class="nf">get_storage_info</span><span class="p">(</span><span class="n">is_cold_storage</span><span class="p">):</span>
+
+    <span class="n">storage</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">storage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_drive_list</span><span class="p">(</span><span class="n">is_cold_storage</span><span class="p">))</span>
+    <span class="n">jbod_data</span> <span class="o">=</span> <span class="n">get_jbod_data</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">jbod_data</span><span class="p">:</span>
+        <span class="n">storage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">jbod_data</span><span class="p">)</span>
+        <span class="n">storage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_jbod_event_status</span><span class="p">())</span>
+        <span class="n">storage</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_jbod_event_logs</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">storage</span></div>
+
+<div class="viewcode-block" id="get_drive_list"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_drive_list">[docs]</a><span class="k">def</span> <span class="nf">get_drive_list</span><span class="p">(</span><span class="n">is_cold_storage</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the list of SSD/Flash devices connected to this host</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ssd_list</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">drive_list</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">drives</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">power_on_all_slots</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="c1"># Type 7 systems doesn&#39;t need all the drives of expander to be powered-on</span>
+    <span class="c1"># It is expected to have only few drives in all expander at any time.</span>
+    <span class="k">if</span> <span class="n">is_cold_storage</span><span class="p">:</span>
+        <span class="n">power_on_all_slots</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">drive_list</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_storage_devices</span><span class="p">(</span><span class="n">power_on_all_slots</span><span class="o">=</span><span class="n">power_on_all_slots</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drive_list</span><span class="p">:</span>
+        <span class="n">drive_list_obj</span> <span class="o">=</span> <span class="n">StorageDeviceFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">drive_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="n">drive_list_obj</span><span class="p">:</span>
+            <span class="n">serial</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+            <span class="n">manufacturer</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+            <span class="k">if</span> <span class="s1">&#39;serial_number&#39;</span> <span class="ow">in</span> <span class="n">drive</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">serial</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;serial_number&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;manufacturer&#39;</span> <span class="ow">in</span> <span class="n">drive</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">manufacturer</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">]</span>
+            <span class="n">drives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">))</span>
+        <span class="n">drives</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">ssd_list</span><span class="p">[</span><span class="s1">&#39;ssd_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">drives</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ssd_list</span></div>
+
+<div class="viewcode-block" id="get_jbod_data"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_jbod_data">[docs]</a><span class="k">def</span> <span class="nf">get_jbod_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns jbod data (if present)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jbod_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_jbod_info_dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">flattened</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">flatten_dict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">device</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;jbod_&#39;</span><span class="p">)</span>
+            <span class="n">jbod_data</span> <span class="o">=</span> <span class="n">flattened</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jbod_data</span>
+
+    <span class="k">return</span> <span class="n">jbod_data</span></div>
+
+
+<div class="viewcode-block" id="get_jbod_event_status"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_jbod_event_status">[docs]</a><span class="k">def</span> <span class="nf">get_jbod_event_status</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the event status of all jbod devices if present</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">event_log</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">status_info</span> <span class="o">=</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_event_status</span><span class="p">()</span>
+        <span class="n">event_log</span><span class="p">[</span><span class="s1">&#39;fbjbod_event&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status_info</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">event_log</span></div>
+
+
+<div class="viewcode-block" id="get_jbod_event_logs"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_jbod_event_logs">[docs]</a><span class="k">def</span> <span class="nf">get_jbod_event_logs</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the Expander logs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">expander_log</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">log_info</span> <span class="o">=</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_expander_logs</span><span class="p">()</span>
+        <span class="n">expander_log</span><span class="p">[</span><span class="s1">&#39;fbjbod_event_log&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_info</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">expander_log</span></div>
+
+<div class="viewcode-block" id="get_lspci_verbose"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_lspci_verbose">[docs]</a><span class="k">def</span> <span class="nf">get_lspci_verbose</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns lspci -vvv / lspci -xxx output</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lspci</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ipmitool fru list&quot;</span>
+    <span class="n">sys_chk</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">try_run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="c1"># Skip -xxx for now as it creates problems with the config check</span>
+<span class="c1">#    cmd = &quot;lspci -xxx&quot;</span>
+<span class="c1">#    lspci[&#39;lspci_xxx&#39;] = AutovalUtils.try_run_get_output(cmd)</span>
+
+    <span class="c1"># Exclude DevSta lines as they include current device status, which can</span>
+    <span class="c1"># change during test.</span>
+    <span class="c1"># cmd = &quot;lspci -vvv | grep -v DevSta | grep -v Status&quot;</span>
+    <span class="c1"># lspci[&#39;lspci_vvv&#39;] = AutovalUtils.try_run_get_output(cmd)</span>
+    <span class="k">if</span> <span class="n">sys_chk</span> <span class="ow">and</span> <span class="s1">&#39;BIGSUR&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+        <span class="n">lspci</span><span class="p">[</span><span class="s1">&#39;lspci_v&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LspciParser</span><span class="p">()</span><span class="o">.</span><span class="n">get_lspci_output</span><span class="p">(</span>
+            <span class="n">options</span><span class="o">=</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+            <span class="n">custom_logfile</span><span class="o">=</span><span class="s2">&quot;lspci_vvv.log&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lspci</span><span class="p">[</span><span class="s1">&#39;lspci_vvv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LspciParser</span><span class="p">()</span><span class="o">.</span><span class="n">get_lspci_output</span><span class="p">(</span>
+            <span class="n">options</span><span class="o">=</span><span class="s2">&quot;-vvv&quot;</span><span class="p">,</span>
+            <span class="n">custom_logfile</span><span class="o">=</span><span class="s2">&quot;lspci_vvv.log&quot;</span><span class="p">,</span>
+            <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DevSta&quot;</span><span class="p">,</span> <span class="s2">&quot;Status&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="n">lspci</span><span class="p">[</span><span class="s2">&quot;lspci_lnksta_lnkcap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compare_lspci_lnksta_lnkcap</span><span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">lspci</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">lspci</span></div>
+
+
+<div class="viewcode-block" id="compare_lspci_lnksta_lnkcap"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.compare_lspci_lnksta_lnkcap">[docs]</a><span class="k">def</span> <span class="nf">compare_lspci_lnksta_lnkcap</span><span class="p">(</span><span class="n">lspci_output</span><span class="p">):</span>
+    <span class="c1"># compare lspci lnksta speed and capacity woth lnkcap only for network</span>
+    <span class="c1"># and nvme devices</span>
+    <span class="n">devices</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nvm&quot;</span><span class="p">,</span> <span class="s2">&quot;ethernet&quot;</span><span class="p">]</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+        <span class="n">dev_list</span> <span class="o">=</span> <span class="n">LspciParser</span><span class="p">()</span><span class="o">.</span><span class="n">get_lnksta_lnkcap</span><span class="p">(</span><span class="n">lspci_output</span><span class="p">,</span> <span class="n">dev</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">dev_list</span><span class="p">:</span>
+            <span class="n">cap_speed</span> <span class="o">=</span> <span class="n">each</span><span class="p">[</span><span class="s2">&quot;cap_speed&quot;</span><span class="p">]</span>
+            <span class="n">sta_speed</span> <span class="o">=</span> <span class="n">each</span><span class="p">[</span><span class="s2">&quot;sta_speed&quot;</span><span class="p">]</span>
+            <span class="n">cap_width</span> <span class="o">=</span> <span class="n">each</span><span class="p">[</span><span class="s2">&quot;cap_width&quot;</span><span class="p">]</span>
+            <span class="n">sta_width</span> <span class="o">=</span> <span class="n">each</span><span class="p">[</span><span class="s2">&quot;sta_width&quot;</span><span class="p">]</span>
+            <span class="n">dev_line</span> <span class="o">=</span> <span class="n">each</span><span class="p">[</span><span class="s2">&quot;dev_line&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">dev_line</span><span class="p">:</span>
+                <span class="n">st_speed</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">: &#39;cap_speed&#39; </span><span class="si">%s</span><span class="s2"> compare to &#39;sta_speed&#39; </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="n">st_width</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">: &#39;cap_width&#39; </span><span class="si">%s</span><span class="s2"> compare to &#39;sta_width&#39; </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">cap_speed</span> <span class="ow">and</span> <span class="n">sta_speed</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cap_speed</span> <span class="o">!=</span> <span class="n">sta_speed</span><span class="p">:</span>
+                        <span class="n">status</span> <span class="o">+=</span> <span class="n">st_speed</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_line</span><span class="p">,</span> <span class="n">cap_speed</span><span class="p">,</span> <span class="n">sta_speed</span><span class="p">,</span> <span class="s2">&quot;Failed&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">status</span> <span class="o">+=</span> <span class="n">st_speed</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_line</span><span class="p">,</span> <span class="n">cap_speed</span><span class="p">,</span> <span class="n">sta_speed</span><span class="p">,</span> <span class="s2">&quot;Failed&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cap_width</span> <span class="ow">and</span> <span class="n">sta_width</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cap_width</span> <span class="o">!=</span> <span class="n">sta_width</span><span class="p">:</span>
+                        <span class="n">status</span> <span class="o">+=</span> <span class="n">st_width</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_line</span><span class="p">,</span> <span class="n">cap_width</span><span class="p">,</span> <span class="n">sta_width</span><span class="p">,</span> <span class="s2">&quot;Failed&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">status</span> <span class="o">+=</span> <span class="n">st_width</span> <span class="o">%</span> <span class="p">(</span><span class="n">dev_line</span><span class="p">,</span> <span class="n">cap_width</span><span class="p">,</span> <span class="n">sta_width</span><span class="p">,</span> <span class="s2">&quot;Failed&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="get_project_info"><a class="viewcode-back" href="../../../../../havoc.autotest_testfiles.validation_utils.lib.html#havoc.autotest_testfiles.validation_utils.lib.system_config_info.get_project_info">[docs]</a><span class="k">def</span> <span class="nf">get_project_info</span><span class="p">(</span><span class="n">systeminfo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns information about Hardware project</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">projectinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
+    <span class="c1"># Higher priority fields for project name should go last so they overwrite</span>
+    <span class="c1"># the lower priority fields</span>
+
+    <span class="k">if</span> <span class="s1">&#39;fru_product_name&#39;</span> <span class="ow">in</span> <span class="n">systeminfo</span><span class="p">:</span>
+        <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;fru_product_name&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s1">&#39;product_type&#39;</span> <span class="ow">in</span> <span class="n">systeminfo</span><span class="p">:</span>
+        <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;product_type&#39;</span><span class="p">]</span>
+    <span class="c1"># Special case for Yosemite where project name is stored in</span>
+    <span class="c1"># fru_device_description:</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fru_device_description&#39;</span><span class="p">,</span> <span class="s1">&#39;fru_device_description_1&#39;</span><span class="p">]:</span>
+        <span class="n">yosemite</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">yosemite</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Yosemite&#39;</span><span class="p">):</span>
+            <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Yosemite&#39;</span>
+    <span class="k">if</span> <span class="n">systeminfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fru_product_version&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;YoMo01&#39;</span><span class="p">:</span>
+        <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Yosemite&#39;</span>
+    <span class="k">elif</span> <span class="n">systeminfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fru_product_version&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;YoTL02&#39;</span><span class="p">:</span>
+        <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Yosemite V2&#39;</span>
+    <span class="k">if</span> <span class="s1">&#39;jbod_product&#39;</span> <span class="ow">in</span> <span class="n">systeminfo</span><span class="p">:</span>
+        <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;jbod_product&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Type8 Tioga Pass Single Side&quot;</span><span class="p">:</span>
+        <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Lightning V2&quot;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span>
+    <span class="n">standard_names</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*Mono Lake.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Mono Lake&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*Leopard.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Leopard&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*Tioga Pass.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Tioga Pass&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*Lightning V2.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Lightning V2&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*Wedge.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Wedge&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;BC4U&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Bryce Canyon&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;HB2U&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Honey Badger&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;Knox2U&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Knox&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;Robinson Creek.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Robinson Creek&quot;</span>
+    <span class="n">standard_names</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;Eagle Peak.*&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;Eagle Peak&quot;</span>
+
+    <span class="n">projectinfo</span> <span class="o">=</span> <span class="n">normalize_keys</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">standard_names</span><span class="p">,</span> <span class="n">projectinfo</span><span class="p">)</span>
+
+    <span class="c1"># Special case for Wedge:</span>
+    <span class="c1"># Project name can be retrieved from CPU Model ID:</span>
+    <span class="c1"># C2550 = Wedge 40</span>
+    <span class="c1"># E3845 = Wedge 100</span>
+    <span class="c1"># D1508 = Wedge 100S.</span>
+    <span class="k">if</span> <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Wedge&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">systeminfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cpu_modelname&#39;</span><span class="p">):</span>
+            <span class="n">models</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;C2550&#39;</span><span class="p">):</span> <span class="s1">&#39;Wedge40&#39;</span><span class="p">,</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;E3845&#39;</span><span class="p">):</span> <span class="s1">&#39;Wedge100&#39;</span><span class="p">,</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;D1508&#39;</span><span class="p">):</span> <span class="s1">&#39;Wedge100S&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">cpu_model</span><span class="p">,</span> <span class="n">wedge_model</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">cpu_model</span><span class="p">,</span> <span class="n">systeminfo</span><span class="p">[</span><span class="s1">&#39;cpu_modelname&#39;</span><span class="p">]):</span>
+                    <span class="n">projectinfo</span><span class="p">[</span><span class="s1">&#39;project_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wedge_model</span>
+
+    <span class="k">return</span> <span class="n">projectinfo</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

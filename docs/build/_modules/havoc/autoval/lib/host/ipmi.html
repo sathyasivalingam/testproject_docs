@@ -1,0 +1,917 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.ipmi &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.ipmi</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.ipmi</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.credentials</span> <span class="k">import</span> <span class="n">Credentials</span>
+
+
+<div class="viewcode-block" id="IPMI"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI">[docs]</a><span class="k">class</span> <span class="nc">IPMI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="IPMI.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">bmc_host</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">,</span> <span class="n">slot_info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span> <span class="o">=</span> <span class="n">bmc_host</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span> <span class="o">=</span> <span class="n">Credentials</span><span class="p">()</span><span class="o">.</span><span class="n">get_legacybmc_credentials</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_base_cmd</span><span class="p">(</span><span class="n">oob_addr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IPMI.get_base_cmd"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_base_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">get_base_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oob_addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">oob_addr</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ipmitool -I lanplus -U </span><span class="si">{}</span><span class="s2"> -P </span><span class="si">{}</span><span class="s2"> -H </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">oob_addr</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ipmitool &quot;</span></div>
+
+<div class="viewcode-block" id="IPMI.clear_boot_order_cmos"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.clear_boot_order_cmos">[docs]</a>    <span class="k">def</span> <span class="nf">clear_boot_order_cmos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis bootdev none clear-cmos=yes&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Clearing CMOS: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.post_cycle_check"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.post_cycle_check">[docs]</a>    <span class="k">def</span> <span class="nf">post_cycle_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IPMI.get_scelnx_tool_path"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_scelnx_tool_path">[docs]</a>    <span class="k">def</span> <span class="nf">get_scelnx_tool_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tool_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">()</span>
+        <span class="n">scelnx</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tool_path</span><span class="p">,</span> <span class="s2">&quot;SCELNX_64&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scelnx</span></div>
+
+<div class="viewcode-block" id="IPMI.add_sel_message"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.add_sel_message">[docs]</a>    <span class="k">def</span> <span class="nf">add_sel_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IPMI.get_crash_dump"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_crash_dump">[docs]</a>    <span class="k">def</span> <span class="nf">get_crash_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IPMI.bmc_health_check"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.bmc_health_check">[docs]</a>    <span class="k">def</span> <span class="nf">bmc_health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_reboot</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IPMI.health_check"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.health_check">[docs]</a>    <span class="k">def</span> <span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IPMI.check_critical_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.check_critical_errors">[docs]</a>    <span class="k">def</span> <span class="nf">check_critical_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="c1"># TODO: Add IPMI based configuration information</span>
+<div class="viewcode-block" id="IPMI.get_config"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_config">[docs]</a>    <span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="IPMI.update_config_filter"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.update_config_filter">[docs]</a>    <span class="k">def</span> <span class="nf">update_config_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_filter</span><span class="p">):</span>
+        <span class="c1"># IPMI does not support a config filter.</span>
+        <span class="c1"># This simply provides an empty method for host.oob object</span>
+        <span class="c1"># of legacy BMC types.</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IPMI.collect_debug_logs"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.collect_debug_logs">[docs]</a>    <span class="k">def</span> <span class="nf">collect_debug_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_dir</span><span class="p">):</span>
+        <span class="c1"># TODO: Add IPMI based debug log collection</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="IPMI.get_cycle_command"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_cycle_command">[docs]</a>    <span class="k">def</span> <span class="nf">get_cycle_command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">boot_dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">ac_cycle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ac_cycle_raw_cmd</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ac_cycle</span><span class="p">:</span>
+            <span class="n">boot_dic</span><span class="p">[</span><span class="s2">&quot;ac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="n">ac_cycle</span>
+        <span class="n">boot_dic</span><span class="p">[</span><span class="s2">&quot;dc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot;chassis power cycle&quot;</span>
+        <span class="n">boot_dic</span><span class="p">[</span><span class="s2">&quot;warm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot;chassis power reset&quot;</span>
+        <span class="k">return</span> <span class="n">boot_dic</span></div>
+
+<div class="viewcode-block" id="IPMI.get_fio_trigger_cmd"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_fio_trigger_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">get_fio_trigger_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TODO: Ideally, we should be calling get_cycle_command</span>
+<span class="sd">        through the &#39;self&#39; object. Now we&#39;re calling it through</span>
+<span class="sd">        &#39;host.oob&#39; to use HWC.get_cycle_command instead. This is to circumvent</span>
+<span class="sd">        an issue with testing on HP servers.</span>
+
+<span class="sd">        Should change it back self.get_cycle_command eventually.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">cycle_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_cycle_command</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;warm&quot;</span> <span class="ow">in</span> <span class="n">cmd_type</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;--trigger=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">cycle_cmd</span><span class="p">[</span><span class="s1">&#39;warm&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">&quot;ac&quot;</span> <span class="ow">in</span> <span class="n">cmd_type</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;--trigger=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">cycle_cmd</span><span class="p">[</span><span class="s1">&#39;ac&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">&quot;dc&quot;</span> <span class="ow">in</span> <span class="n">cmd_type</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;--trigger=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">cycle_cmd</span><span class="p">[</span><span class="s1">&#39;dc&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;No supported trigger command found&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Trigger command: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">cmd</span></div>
+
+<div class="viewcode-block" id="IPMI.get_ac_cycle_raw_cmd"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_ac_cycle_raw_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">get_ac_cycle_raw_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">system_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sys_type</span><span class="p">()</span>
+        <span class="n">ipmicmd</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">system_type</span> <span class="o">==</span> <span class="s1">&#39;Yosemite&#39;</span><span class="p">:</span>
+            <span class="n">ipmicmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x00 0x02 0x0f&quot;</span>
+        <span class="k">elif</span> <span class="n">system_type</span> <span class="o">==</span> <span class="s1">&#39;HoneyBadger&#39;</span><span class="p">:</span>
+            <span class="n">ipmicmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x6 0x52 0x9 0x22 0x0 0xd9&quot;</span>
+        <span class="k">elif</span> <span class="n">system_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;Quanta-Leopard&#39;</span><span class="p">,</span> <span class="s1">&#39;Quanta-TiogaPass&#39;</span><span class="p">):</span>
+            <span class="n">ipmicmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x6 0x52 0xf 0x22 0x00 0xd9&quot;</span>
+        <span class="k">elif</span> <span class="n">system_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;Wiwynn-Leopard&#39;</span><span class="p">,</span> <span class="s1">&#39;Wiwynn-TiogaPass&#39;</span><span class="p">):</span>
+            <span class="n">ipmicmd</span> <span class="o">=</span> <span class="s2">&quot;raw 0x6 0x52 0x3 0x22 0x0 0xd9&quot;</span>
+        <span class="k">elif</span> <span class="n">system_type</span> <span class="o">==</span> <span class="s1">&#39;HP-ProLiant&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ipmicmd</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Unsupported system type for ac cycle raw command&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ipmicmd</span></div>
+
+<div class="viewcode-block" id="IPMI.sys_type"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.sys_type">[docs]</a>    <span class="k">def</span> <span class="nf">sys_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sys_chk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fru_list</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s1">&#39;Yosemite&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;Yosemite&#39;</span>
+            <span class="k">elif</span> <span class="s1">&#39;HoneyBadger&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;HoneyBadger&#39;</span>
+            <span class="k">elif</span> <span class="s1">&#39;Leopard&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;Quanta&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                    <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;Quanta-Leopard&#39;</span>
+                <span class="k">if</span> <span class="s1">&#39;Wiwynn&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                    <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;Wiwynn-Leopard&#39;</span>
+            <span class="k">elif</span> <span class="s1">&#39;Tioga&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;Quanta&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                    <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;Quanta-TiogaPass&#39;</span>
+                <span class="k">if</span> <span class="s1">&#39;Wiwynn&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                    <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;Wiwynn-TiogaPass&#39;</span>
+            <span class="k">elif</span> <span class="s1">&#39;ProLiant&#39;</span> <span class="ow">in</span> <span class="n">sys_chk</span><span class="p">:</span>
+                <span class="n">systype</span> <span class="o">=</span> <span class="s1">&#39;HP-ProLiant&#39;</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># Leave default &quot;Unknown&quot; type if we can&#39;t determine it</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Failed to determine system type&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">systype</span></div>
+
+<div class="viewcode-block" id="IPMI.cycle"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.cycle">[docs]</a>    <span class="k">def</span> <span class="nf">cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">):</span>
+        <span class="n">cycle_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_cycle_command</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;dc&quot;</span> <span class="ow">in</span> <span class="n">cycle_type</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cycle_type</span><span class="p">[</span><span class="s1">&#39;dc&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Host doesn&#39;t support DC cycle&quot;</span><span class="p">)</span>
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Cycling now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IPMI.ac_cycle"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.ac_cycle">[docs]</a>    <span class="k">def</span> <span class="nf">ac_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">):</span>
+        <span class="n">cycle_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_cycle_command</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;ac&quot;</span> <span class="ow">in</span> <span class="n">cycle_type</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">cycle_type</span><span class="p">[</span><span class="s1">&#39;ac&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Host doesn&#39;t support AC cycle&quot;</span><span class="p">)</span>
+
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_ac_cycle</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="c1"># Command failed, system might either be rebooting already or</span>
+            <span class="c1"># command failed to go through, in this case try again</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">reconnect</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="c1"># Host is not accessible, so most likely the cmd went through.</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Host is still accessible, so try again:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_try_ac_cycle</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="c1"># Now wait for reconnect. If the cycle failed this will throw an</span>
+        <span class="c1"># exception</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_try_ac_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;AC Cycling now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="IPMI.run_ipmicmd"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.run_ipmicmd">[docs]</a>    <span class="k">def</span> <span class="nf">run_ipmicmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ipmicmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ipmicmd</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing ipmi </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ipmicmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.power_on"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.power_on">[docs]</a>    <span class="k">def</span> <span class="nf">power_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis power on&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering on now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_powered_on</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to power on.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.status"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.status">[docs]</a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis power status&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.check_powered_on"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.check_powered_on">[docs]</a>    <span class="k">def</span> <span class="nf">check_powered_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="IPMI.validate_powered_on"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.validate_powered_on">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">validate_powered_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_powered_on</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IPMI.power_off"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.power_off">[docs]</a>    <span class="k">def</span> <span class="nf">power_off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis power off&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">timeout</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="c1"># Sleep for some time to let shutdown complete</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed to power down system&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Power Down complete&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.power_reset"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.power_reset">[docs]</a>    <span class="k">def</span> <span class="nf">power_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1800</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis power reset&quot;</span>
+
+        <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Reseting system now: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.bmc_reset"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.bmc_reset">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bmc_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;mc reset cold&quot;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Inband BMC Reset&quot;</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, wait 120s: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">cmd</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;BMC reset FAILED&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.bmc_sol"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.bmc_sol">[docs]</a>    <span class="k">def</span> <span class="nf">bmc_sol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;screen -S sol -L -dm &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sol activate&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Start screen of BMC </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.fru_list"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.fru_list">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fru_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;fru print 0&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.policy"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.policy">[docs]</a>    <span class="k">def</span> <span class="nf">policy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        policy name can be;</span>
+<span class="sd">        list        : return supported policies</span>
+<span class="sd">        always-on   : turn on when power is restored</span>
+<span class="sd">        previous    : return to previous state when power is restored</span>
+<span class="sd">        always-off  : stay off after power is restored</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis policy </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.get_boot_order"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_boot_order">[docs]</a>    <span class="k">def</span> <span class="nf">get_boot_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x53&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.replay_sol_buffer"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.replay_sol_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">replay_sol_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x48&quot;</span>
+
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing replay SOL buffer&quot;</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.set_boot_order"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.set_boot_order">[docs]</a>    <span class="k">def</span> <span class="nf">set_boot_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">,</span> <span class="n">fourth</span><span class="p">,</span> <span class="n">fifth</span><span class="p">,</span> <span class="n">UEFI</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        To set the boot order, you MUST specify all 5 devices to boot from,</span>
+<span class="sd">        in the desired order. Note that when specifying to boot from the</span>
+<span class="sd">        network, you should choose either IPv4 first OR IPv6 first, not both.</span>
+<span class="sd">        If you violate either of these rules, the boot order may not end up</span>
+<span class="sd">        being what you wanted (but the ipmi command will still work)!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x52&quot;</span>
+
+        <span class="k">if</span> <span class="n">UEFI</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; 0x81&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Legacy boot instead of UEFI boot.</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; 0x80&quot;</span>
+
+        <span class="n">devices_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;SATA&#39;</span><span class="p">:</span> <span class="s1">&#39;0x02&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;NETWORK6&#39;</span><span class="p">:</span> <span class="s1">&#39;0x09&#39;</span><span class="p">,</span>  <span class="c1"># IPv6 first, then IPv4.</span>
+            <span class="s1">&#39;NETWORK4&#39;</span><span class="p">:</span> <span class="s1">&#39;0x01&#39;</span><span class="p">,</span>  <span class="c1"># IPv4 first, then IPv6. Pick one.</span>
+            <span class="s1">&#39;OTHER&#39;</span><span class="p">:</span> <span class="s1">&#39;0x04&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;CDROM&#39;</span><span class="p">:</span> <span class="s1">&#39;0x03&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;USB&#39;</span><span class="p">:</span> <span class="s1">&#39;0x00&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">devices_map</span><span class="p">[</span><span class="n">first</span><span class="p">])</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">devices_map</span><span class="p">[</span><span class="n">second</span><span class="p">])</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">devices_map</span><span class="p">[</span><span class="n">third</span><span class="p">])</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">devices_map</span><span class="p">[</span><span class="n">fourth</span><span class="p">])</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">devices_map</span><span class="p">[</span><span class="n">fifth</span><span class="p">])</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.boot_dev"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.boot_dev">[docs]</a>    <span class="k">def</span> <span class="nf">boot_dev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Common names, but could be different for different platforms.</span>
+<span class="sd">        none  : Do not change boot device order</span>
+<span class="sd">        pxe   : Force PXE boot</span>
+<span class="sd">        disk  : Force boot from default Hard-drive</span>
+<span class="sd">        safe  : Force boot from default Hard-drive, request Safe Mode</span>
+<span class="sd">        diag  : Force boot from Diagnostic Partition</span>
+<span class="sd">        cdrom : Force boot from CD/DVD</span>
+<span class="sd">        bios  : Force boot into BIOS Setup</span>
+<span class="sd">        floppy: Force boot from Floppy/primary removable media</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sdr type </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.sdr_type"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.sdr_type">[docs]</a>    <span class="k">def</span> <span class="nf">sdr_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="c1">#TODO: need to fill out complete list, for now these are the</span>
+        <span class="c1">#subset we use for testing. (Common)</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Temperature&#39;</span><span class="p">:</span> <span class="mh">0x01</span><span class="p">,</span>
+            <span class="s1">&#39;Voltage&#39;</span><span class="p">:</span> <span class="mh">0x02</span><span class="p">,</span>
+            <span class="s1">&#39;Current&#39;</span><span class="p">:</span> <span class="mh">0x03</span><span class="p">,</span>
+            <span class="s1">&#39;Fan&#39;</span><span class="p">:</span> <span class="mh">0x04</span><span class="p">,</span>
+            <span class="s1">&#39;PhysicalSecurity&#39;</span><span class="p">:</span> <span class="mh">0x05</span><span class="p">,</span>
+            <span class="s1">&#39;PlatformSecurity&#39;</span><span class="p">:</span> <span class="mh">0x06</span><span class="p">,</span>
+            <span class="s1">&#39;Processor&#39;</span><span class="p">:</span> <span class="mh">0x07</span><span class="p">,</span>
+            <span class="s1">&#39;PowerSupply&#39;</span><span class="p">:</span> <span class="mh">0x08</span><span class="p">,</span>
+            <span class="s1">&#39;PowerUnit&#39;</span><span class="p">:</span> <span class="mh">0x09</span><span class="p">,</span>
+            <span class="s1">&#39;CoolingDevice&#39;</span><span class="p">:</span> <span class="mh">0x0a</span><span class="p">,</span>
+            <span class="s1">&#39;Other&#39;</span><span class="p">:</span> <span class="mh">0x0b</span><span class="p">,</span>
+            <span class="s1">&#39;Memory&#39;</span><span class="p">:</span> <span class="mh">0x0c</span><span class="p">,</span>
+            <span class="s1">&#39;DriveSlot/Bay&#39;</span><span class="p">:</span> <span class="mh">0x0d</span><span class="p">,</span>
+            <span class="s1">&#39;POSTMemoryResize&#39;</span><span class="p">:</span> <span class="mh">0x0e</span><span class="p">,</span>
+            <span class="s1">&#39;SystemFirmwares&#39;</span><span class="p">:</span> <span class="mh">0x0f</span><span class="p">,</span>
+            <span class="s1">&#39;EventLoggingDisabled&#39;</span><span class="p">:</span> <span class="mh">0x10</span><span class="p">,</span>
+            <span class="s1">&#39;Watchdog1&#39;</span><span class="p">:</span> <span class="mh">0x11</span><span class="p">,</span>
+            <span class="s1">&#39;SystemEvent&#39;</span><span class="p">:</span> <span class="mh">0x12</span><span class="p">,</span>
+            <span class="s1">&#39;CriticalInterrupt&#39;</span><span class="p">:</span> <span class="mh">0x13</span><span class="p">,</span>
+            <span class="s1">&#39;Button&#39;</span><span class="p">:</span> <span class="mh">0x14</span><span class="p">,</span>
+            <span class="s1">&#39;Module/Board&#39;</span><span class="p">:</span> <span class="mh">0x15</span><span class="p">,</span>
+            <span class="s1">&#39;Microcontroller&#39;</span><span class="p">:</span> <span class="mh">0x16</span><span class="p">,</span>
+            <span class="s1">&#39;Add-inCard&#39;</span><span class="p">:</span> <span class="mh">0x17</span><span class="p">,</span>
+            <span class="s1">&#39;Chassis&#39;</span><span class="p">:</span> <span class="mh">0x18</span><span class="p">,</span>
+            <span class="s1">&#39;ChipSet&#39;</span><span class="p">:</span> <span class="mh">0x19</span><span class="p">,</span>
+            <span class="s1">&#39;OtherFRU&#39;</span><span class="p">:</span> <span class="mh">0x1a</span><span class="p">,</span>
+            <span class="s1">&#39;Cable/Interconnect&#39;</span><span class="p">:</span> <span class="mh">0x1b</span><span class="p">,</span>
+            <span class="s1">&#39;Terminator&#39;</span><span class="p">:</span> <span class="mh">0x1c</span><span class="p">,</span>
+            <span class="s1">&#39;SystemBootInitiated&#39;</span><span class="p">:</span> <span class="mh">0x1d</span><span class="p">,</span>
+            <span class="s1">&#39;BootError&#39;</span><span class="p">:</span> <span class="mh">0x1e</span><span class="p">,</span>
+            <span class="s1">&#39;OSBoot&#39;</span><span class="p">:</span> <span class="mh">0x1f</span><span class="p">,</span>
+            <span class="s1">&#39;OSCriticalStop&#39;</span><span class="p">:</span> <span class="mh">0x20</span><span class="p">,</span>
+            <span class="s1">&#39;Slot/Connector&#39;</span><span class="p">:</span> <span class="mh">0x21</span><span class="p">,</span>
+            <span class="s1">&#39;SystemACPIPowerState&#39;</span><span class="p">:</span> <span class="mh">0x22</span><span class="p">,</span>
+            <span class="s1">&#39;Watchdog2&#39;</span><span class="p">:</span> <span class="mh">0x23</span><span class="p">,</span>
+            <span class="s1">&#39;PlatformAlert&#39;</span><span class="p">:</span> <span class="mh">0x24</span><span class="p">,</span>
+            <span class="s1">&#39;EntityPresence&#39;</span><span class="p">:</span> <span class="mh">0x25</span><span class="p">,</span>
+            <span class="s1">&#39;MonitorASIC&#39;</span><span class="p">:</span> <span class="mh">0x26</span><span class="p">,</span>
+            <span class="s1">&#39;LAN&#39;</span><span class="p">:</span> <span class="mh">0x27</span><span class="p">,</span>
+            <span class="s1">&#39;ManagementSubsysHealth&#39;</span><span class="p">:</span> <span class="mh">0x28</span><span class="p">,</span>
+            <span class="s1">&#39;Battery&#39;</span><span class="p">:</span> <span class="mh">0x29</span><span class="p">,</span>
+            <span class="s1">&#39;SessionAudit&#39;</span><span class="p">:</span> <span class="mh">0x2a</span><span class="p">,</span>
+            <span class="s1">&#39;VersionChange&#39;</span><span class="p">:</span> <span class="mh">0x2b</span><span class="p">,</span>
+            <span class="s1">&#39;FRUState&#39;</span><span class="p">:</span> <span class="mh">0x2c</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="n">type_name</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sdr type </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">types</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.clear_cmos"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.clear_cmos">[docs]</a>    <span class="k">def</span> <span class="nf">clear_cmos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        TODO: Need to determine a method to test this command was</span>
+<span class="sd">        successfully completed. Still researching how to test this</span>
+<span class="sd">        programatically.?? Need to command for other test for now.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis bootdev none clear-cmos&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.bios_boot"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.bios_boot">[docs]</a>    <span class="k">def</span> <span class="nf">bios_boot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis bootparam set bootflag force_bios&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        TODO: add check of value being set (get 0x05)</span>
+<span class="sd">        Boot parameter version: 1</span>
+<span class="sd">        Boot parameter 5 is valid/unlocked</span>
+<span class="sd">        Boot parameter data: 0000000000</span>
+<span class="sd">        Boot parameter version: 1</span>
+<span class="sd">        Boot parameter 5 is valid/unlocked</span>
+<span class="sd">        Boot parameter data: 8018000000</span>
+<span class="sd">        &#39;&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="IPMI.lan_print"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.lan_print">[docs]</a>    <span class="k">def</span> <span class="nf">lan_print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;lan print&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.chassis_status"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.chassis_status">[docs]</a>    <span class="k">def</span> <span class="nf">chassis_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;chassis status&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.sel_clear"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.sel_clear">[docs]</a>    <span class="nd">@retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">sel_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sel clear&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Needs a second or two to clear logs.</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.set_sel_log_filter"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.set_sel_log_filter">[docs]</a>    <span class="k">def</span> <span class="nf">set_sel_log_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">critical_only</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If critical_only is True, the BMC will only log critical events.</span>
+<span class="sd">        If False, the BMC will log critical, information, and warning events.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x46 &quot;</span>
+
+        <span class="k">if</span> <span class="n">critical_only</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x01&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x00&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">filter_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sel_log_filter</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">critical_only</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;01&quot;</span> <span class="ow">in</span> <span class="n">filter_settings</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;SEL filter is set to log &quot;</span> <span class="o">+</span> <span class="s2">&quot;only critical events.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;SEL filter was not set to &quot;</span> <span class="o">+</span> <span class="s2">&quot;log only critical events.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;00&quot;</span> <span class="ow">in</span> <span class="n">filter_settings</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;SEL filter is set to log all events.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;SEL filter was not set to log all events.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.get_sel_log_filter"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_sel_log_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_sel_log_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x47&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.set_dual_bios_auto_recovery"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.set_dual_bios_auto_recovery">[docs]</a>    <span class="k">def</span> <span class="nf">set_dual_bios_auto_recovery</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x44 &quot;</span>
+        <span class="k">if</span> <span class="n">enable</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x01&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;0x00&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">bios_stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dual_bios_status</span><span class="p">()</span>
+        <span class="n">first_byte</span> <span class="o">=</span> <span class="n">bios_stat</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">enable</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;01&quot;</span> <span class="o">==</span> <span class="n">first_byte</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Dual BIOS automatic recovery &quot;</span> <span class="o">+</span> <span class="s2">&quot;is enabled in the BMC&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Dual BIOS automatic recovery &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;was not enabled in the BMC&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;00&quot;</span> <span class="o">==</span> <span class="n">first_byte</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Dual BIOS automatic recovery &quot;</span> <span class="o">+</span> <span class="s2">&quot;is disabled in the BMC&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Dual BIOS automatic recovery &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;was not disabled in the BMC&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.get_dual_bios_status"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_dual_bios_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_dual_bios_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;raw 0x30 0x45&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.get_sel_entries"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_sel_entries">[docs]</a>    <span class="k">def</span> <span class="nf">get_sel_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a list, where each element is a single entry of the SEL</span>
+<span class="sd">        parsed into a dictionary (so it&#39;s a list of dictionaries). SEL info</span>
+<span class="sd">        from the verbose and non-verbose outputs are combined together to give</span>
+<span class="sd">        comprehensive records. The SEL entries are stored in order in the list,</span>
+<span class="sd">        making it easy to iterate through desired entries from the SEL.</span>
+
+<span class="sd">        To access the value of an attribute in a SEL record from the list use:</span>
+
+<span class="sd">        sel_entry_list[zero_indexed_line_number][attribute_name]</span>
+
+<span class="sd">        NOTE:</span>
+<span class="sd">        Attribute_name must match the output from &#39;sel elist -v&#39; EXACTLY</span>
+<span class="sd">        (case sensitive, spaces, etc).</span>
+<span class="sd">        --OR--</span>
+<span class="sd">        Match one of these attributes which come from the non-verbose output:</span>
+<span class="sd">        &#39;Decoded Sensor Data&#39;</span>
+<span class="sd">        &#39;Reading&#39;</span>
+
+<span class="sd">        NOTE:</span>
+<span class="sd">        OEM entries are in this list as well. The attributes reported by OEM</span>
+<span class="sd">        entries are different then non-OEM entries. Therefore, you must check</span>
+<span class="sd">        that the attribute you want exists within each entry.</span>
+
+<span class="sd">        EXAMPLE:</span>
+<span class="sd">        Getting the record type for the last line in the SEL:</span>
+<span class="sd">        rec_type = sel_entry_list[-1][&#39;Record Type&#39;]</span>
+
+<span class="sd">        EXAMPLE:</span>
+<span class="sd">        Getting the record type of the last 5 lines in the SEL:</span>
+<span class="sd">        for entry in sel_entry_list[-5:]:</span>
+<span class="sd">            x = entry[&#39;Record Type&#39;]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+
+        <span class="n">sel_cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> sel elist&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">sel_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">sel_cmd</span><span class="p">)</span>
+        <span class="n">sel_out_iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">sel_out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+
+        <span class="n">sel_verbose_cmd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> sel elist -v&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">sel_verbose_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">sel_verbose_cmd</span><span class="p">)</span>
+
+        <span class="n">sel_entries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cur_entry</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">first_entry</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">sel_verbose_out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># Skip blank lines.</span>
+
+            <span class="c1"># Get the tokens before and after the &quot;:&quot;.</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">attribute</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s2">&quot;SEL Record ID&quot;</span> <span class="ow">in</span> <span class="n">attribute</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">first_entry</span><span class="p">:</span>
+                    <span class="n">sel_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_entry</span><span class="p">)</span>
+
+                <span class="n">cur_entry</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># start of a new entry</span>
+                <span class="n">cur_entry</span><span class="p">[</span><span class="s1">&#39;SEL Record ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+                <span class="c1"># We can iterate though the non-verbose and non-verbose entries</span>
+                <span class="c1"># in sync if we parse the non-verbose output whenever we see</span>
+                <span class="c1"># the corresponding verbose entry. This keeps the algoritmn</span>
+                <span class="c1"># runtime efficient at O(n).</span>
+                <span class="n">sel_entry</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">next</span><span class="p">(</span><span class="n">sel_out_iterator</span><span class="p">)</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sel_entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)]</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;OEM&quot;</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+                    <span class="c1"># OEM entries don&#39;t have extra info in non-verbose output.</span>
+                    <span class="n">cur_entry</span><span class="p">[</span><span class="s1">&#39;Decoded Sensor Data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># This 7th column is only present in some entries.</span>
+                        <span class="n">cur_entry</span><span class="p">[</span><span class="s1">&#39;Reading&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+                <span class="n">first_entry</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cur_entry</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">cur_entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Edge case: Make sure the final entry is added.</span>
+            <span class="n">sel_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_entry</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sel_entries</span></div>
+
+<div class="viewcode-block" id="IPMI.get_verbose_sensor_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_verbose_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_verbose_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a dictionary of dictionaries containing the data from</span>
+<span class="sd">        &#39;ipmitool sensor -v&#39;. To access elements in the dictionary use:</span>
+
+<span class="sd">        dictionary[&lt;sensor_ID/name)][attribute_name]</span>
+
+<span class="sd">        NOTE:</span>
+<span class="sd">        The sensor_ID/name and attribute_name must match the output from</span>
+<span class="sd">        &#39;sensor -v&#39; EXACTLY (case sensitive, spaces, etc).</span>
+
+<span class="sd">        EXAMPLE:</span>
+<span class="sd">        Accessing a sensor&#39;s upper critial field:</span>
+<span class="sd">        upp_crit = dictionary[&#39;P1 DIMM VR1 PIN (0x16)&#39;][&#39;Upper Critical&#39;]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sensor -v&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="n">sensor_data</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># This will be a dictionary filled with dictionaries.</span>
+        <span class="n">cur_sensor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># Skip blank lines</span>
+
+            <span class="c1"># Get the tokens before and after the &quot;:&quot;.</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">attribute</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="c1"># Sometimes error/warning output is displayed when</span>
+                <span class="c1"># &#39;sensor -v&#39; is run, but isn&#39;t a severe error.</span>
+                <span class="c1"># Ignore this output. This also handles blank lines.</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;WARNING: An error/warning message was &quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot;produced in &#39;ipmitool sensor -v&#39;:&quot;</span>
+                <span class="p">)</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="s2">&quot;Sensor ID&quot;</span> <span class="ow">in</span> <span class="n">attribute</span><span class="p">:</span>
+                <span class="c1"># Add this sensor to the dictionary.</span>
+                <span class="n">cur_sensor</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">sensor_data</span><span class="p">[</span><span class="n">cur_sensor</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sensor_data</span><span class="p">[</span><span class="n">cur_sensor</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">sensor_data</span></div>
+
+<div class="viewcode-block" id="IPMI.sensor_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_cmd</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;sdr&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="IPMI.get_full_sensor_data"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.host.html#havoc.autoval.lib.host.ipmi.IPMI.get_full_sensor_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_full_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># For compatibility with openbmc module</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">sensor_data</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

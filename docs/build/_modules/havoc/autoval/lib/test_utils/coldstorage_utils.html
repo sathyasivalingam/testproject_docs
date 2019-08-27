@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.coldstorage_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.coldstorage_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.coldstorage_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.fbjbod_utils</span> <span class="k">import</span> <span class="n">FbjbodUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.hdparm_utils</span> <span class="k">import</span> <span class="n">HdparmUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.storage.storage_utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">StorageUtils</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="ColdStorageUtils"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils">[docs]</a><span class="k">class</span> <span class="nc">ColdStorageUtils</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_bancsi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ps -A&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;bancsi&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;bancsi is active.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;bancsi&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Calling bancsi to stop csi services.&quot;</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/local/bin/bancsi &gt; /dev/null 2&gt;&amp;1 &amp;&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ColdStorageUtils.check_max_hdd_on"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.check_max_hdd_on">[docs]</a>    <span class="k">def</span> <span class="nf">check_max_hdd_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">,</span> <span class="n">maxhdd</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Get max_hdd_on per expander&quot;</span><span class="p">)</span>
+        <span class="n">max_hdd</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_max_hdd_on</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">max_hdd</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">max_hdd</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">maxhdd</span><span class="p">,</span>
+                <span class="s2">&quot;counter&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.check_fw_version"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.check_fw_version">[docs]</a>    <span class="k">def</span> <span class="nf">check_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;exp-27.14.0.16&quot;</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Get expander FW version&quot;</span><span class="p">)</span>
+        <span class="n">fw_version</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_fw_version</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fw_version</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">fw_version</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">==</span> <span class="n">version</span><span class="p">,</span>
+                <span class="s2">&quot;JBOD fw version&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.clear_phy_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.clear_phy_errors">[docs]</a>    <span class="k">def</span> <span class="nf">clear_phy_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Clearing physical errors, events and logs&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">clear_phy_errors</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">clear_expander_logs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.clear_adapter_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.clear_adapter_errors">[docs]</a>    <span class="k">def</span> <span class="nf">clear_adapter_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Clearing physical errors on HBA&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -a 13,0,0,0 20&quot;</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="c1"># setting sleep time for system to be able to obtain an output.</span>
+        <span class="c1"># Otherwise getting an empty output</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_hdd_latency"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_hdd_latency">[docs]</a>    <span class="k">def</span> <span class="nf">get_hdd_latency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="s2">&quot;write&quot;</span><span class="p">):</span>
+        <span class="n">latency_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="s2">&quot;write&quot;</span><span class="p">:</span>
+                <span class="c1">#Use writes rather than reads</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ioping -L -D -WWW -w 60 /dev/</span><span class="si">%s</span><span class="s2"> | tail -n 1&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="k">elif</span> <span class="n">flag</span> <span class="o">==</span> <span class="s2">&quot;read&quot;</span><span class="p">:</span>
+                <span class="c1">#Only reads</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ioping -L -D -w 60 /dev/</span><span class="si">%s</span><span class="s2"> | tail -n 1&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#Alternate read and write requests</span>
+                <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ioping -GL -D -WWW -w 60 /dev/</span><span class="si">%s</span><span class="s2"> | tail -n 1&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="c1"># Get max value</span>
+            <span class="n">latency_dict</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">latency_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_jbod_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_jbod_errors">[docs]</a>    <span class="k">def</span> <span class="nf">get_jbod_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">):</span>
+        <span class="n">errors_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">expander</span> <span class="ow">in</span> <span class="n">expander_list</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fbjbod phyerr </span><span class="si">%s</span><span class="s2"> | tail -n +2&quot;</span> <span class="o">%</span> <span class="n">expander</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">errors_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">errors_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">errors_list</span><span class="p">)</span>
+            <span class="n">errors_dict</span><span class="p">[</span><span class="n">expander</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_value</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> : </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expander</span><span class="p">,</span> <span class="n">max_value</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">errors_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_event_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_event_errors">[docs]</a>    <span class="k">def</span> <span class="nf">get_event_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Getting events&quot;</span><span class="p">)</span>
+        <span class="n">events_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">expander</span> <span class="ow">in</span> <span class="n">expander_list</span><span class="p">:</span>
+            <span class="c1"># Get only not (0) events</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;fbjbod event --status </span><span class="si">%s</span><span class="s1"> | grep -v 0&#39;</span> <span class="o">%</span> <span class="n">expander</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">out</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">events_dict</span><span class="p">[</span><span class="n">expander</span><span class="p">]</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="n">events_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_adapter_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_adapter_errors">[docs]</a>    <span class="k">def</span> <span class="nf">get_adapter_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">errors_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -p</span><span class="si">%s</span><span class="s2"> -a 12,0,0,0 20 | grep -A1 Up | grep Invalid&quot;</span> <span class="o">%</span> <span class="n">i</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+                <span class="n">errors_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
+                    <span class="n">errors_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+                <span class="n">errors_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">errors_list</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">errors_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;HBA port </span><span class="si">%s</span><span class="s2"> : </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">errors_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">errors_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_hdd_errors"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_hdd_errors">[docs]</a>    <span class="k">def</span> <span class="nf">get_hdd_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_output</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">error_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Raw_Read_Error_Rate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Seek_Error_Rate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;UDMA_CRC_Error_Count&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Current_Pending_Sector&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">smart_dict</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">smart_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">error_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">error_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.check_hdd_status"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.check_hdd_status">[docs]</a>    <span class="k">def</span> <span class="nf">check_hdd_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">hdd</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">secured</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">is_device_secure_with_pass</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">frozen</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">is_device_frozen</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">locked</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">is_device_locked</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">locked</span> <span class="ow">or</span> <span class="n">frozen</span> <span class="ow">or</span> <span class="n">secured</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                    <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">ssd_security_disable</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">secured</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">is_device_secure_with_pass</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">frozen</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">is_device_frozen</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">locked</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">is_device_locked</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="ow">not</span> <span class="n">secured</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> secured&quot;</span> <span class="o">%</span> <span class="n">hdd</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="ow">not</span> <span class="n">frozen</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> frozen&quot;</span> <span class="o">%</span> <span class="n">hdd</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="ow">not</span> <span class="n">locked</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> locked&quot;</span> <span class="o">%</span> <span class="n">hdd</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.make_bad_sector"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.make_bad_sector">[docs]</a>    <span class="k">def</span> <span class="nf">make_bad_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">sector</span><span class="o">=</span><span class="mi">320000</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">hdd</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">make_bad_sector</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">read_sector</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">hdd</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.repair_bad_sector"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.repair_bad_sector">[docs]</a>    <span class="k">def</span> <span class="nf">repair_bad_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">sector</span><span class="o">=</span><span class="mi">320000</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">hdd</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">repair_sector</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">hdd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">read_sector</span><span class="p">,</span> <span class="n">sector</span><span class="p">,</span> <span class="n">hdd</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_hdd_written"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_hdd_written">[docs]</a>    <span class="k">def</span> <span class="nf">get_hdd_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="n">written_Gb</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">hdd</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;awk &#39;/</span><span class="si">%s</span><span class="s2">/ {print $10 / 2 / 1024 / 1024}&#39; /proc/diskstats&quot;</span> <span class="o">%</span> <span class="n">hdd</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">written_Gb</span><span class="p">[</span><span class="n">hdd</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> : </span><span class="si">%.2f</span><span class="s2"> Gb&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdd</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">written_Gb</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.clear_inventory_counter"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.clear_inventory_counter">[docs]</a>    <span class="k">def</span> <span class="nf">clear_inventory_counter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rm -rf /var/log/cold_storage/inventory.anr.*&quot;</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_inventory_counter"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_inventory_counter">[docs]</a>    <span class="k">def</span> <span class="nf">get_inventory_counter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ls -1 /var/log/cold_storage/inventory.anr.* | grep -c inventory.anr&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.inventory_missing"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.inventory_missing">[docs]</a>    <span class="k">def</span> <span class="nf">inventory_missing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">number_disks</span><span class="o">=</span><span class="mi">36</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cat /var/log/cold_storage/inventory.anr.* | egrep -c /[0-9]</span><span class="si">{2}</span><span class="s2">/smartctl&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;drives&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">%</span> <span class="n">number_disks</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;missing drives&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.inventory_run"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.inventory_run">[docs]</a>    <span class="k">def</span> <span class="nf">inventory_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cold_storage_inventory --current&quot;</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.fio_read_write"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.fio_read_write">[docs]</a>    <span class="k">def</span> <span class="nf">fio_read_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="s2">&quot;write&quot;</span><span class="p">,</span>
+            <span class="n">runtime_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">interrupt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;avg=\s*\d*.\d*&#39;</span><span class="p">)</span>
+        <span class="n">pattern_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;slat&quot;</span><span class="p">,</span> <span class="s2">&quot;clat&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;bw&quot;</span><span class="p">,</span> <span class="s2">&quot;iops&quot;</span><span class="p">]</span>
+        <span class="n">bw_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">hdd</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">temp_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fio --filename=/dev/</span><span class="si">%s</span><span class="s2"> --direct=1 --iodepth=32&quot;</span> <span class="o">%</span> <span class="n">hdd</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --group_reporting --rw=</span><span class="si">%s</span><span class="s2"> --bs=10m&quot;</span> <span class="o">%</span> <span class="n">flag</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --scramble_buffers=1 --verify_async=4 --name=</span><span class="si">%s</span><span class="s2">.10MB&quot;</span> <span class="o">%</span> <span class="n">hdd</span>
+            <span class="k">if</span> <span class="n">runtime_flag</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --runtime=45 --size=20G&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --size=10G&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;write&quot;</span> <span class="ow">in</span> <span class="n">flag</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --verify_state_save=1 --do_verify=0&quot;</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --verify_dump=1 --verify=md5&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;read&quot;</span> <span class="o">==</span> <span class="n">flag</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --verify_backlog=10000000 --verify_state_load=1&quot;</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --do_verify=1 --verify=md5&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;randread&quot;</span> <span class="o">==</span> <span class="n">flag</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --verify_backlog=10000000 --verify_state_load=1 --do_verify=1&quot;</span>
+            <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --ioengine=sync --thread=1 --numjobs=15&quot;</span>
+                <span class="n">pattern_name</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;clat&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;bw&quot;</span><span class="p">,</span> <span class="s2">&quot;iops&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --ioengine=libaio --numjobs=1&quot;</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;fail&quot;</span> <span class="ow">in</span> <span class="n">out</span> <span class="ow">or</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">interrupt</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdd</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span>
+
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_name</span><span class="p">),</span>
+                    <span class="s2">&quot;length match: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">match</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pattern_name</span><span class="p">)):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;avg=&quot;</span><span class="p">))</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_greater</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> value is not 0&quot;</span> <span class="o">%</span> <span class="n">pattern_name</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="n">temp_dict</span><span class="p">[</span><span class="n">pattern_name</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="n">bw_dict</span><span class="p">[</span><span class="n">hdd</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_dict</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hdd</span><span class="p">,</span> <span class="n">temp_dict</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bw_dict</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Match not found for hdd </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">hdd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bw_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_os_hdds"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_os_hdds">[docs]</a>    <span class="k">def</span> <span class="nf">get_os_hdds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsblk --all | grep sd[^a] | wc -l&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_os_expanders"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_os_expanders">[docs]</a>    <span class="k">def</span> <span class="nf">get_os_expanders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;ls /sys/class/sas_expander/ | wc -l&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_drive_manufacturer"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_drive_manufacturer">[docs]</a>    <span class="k">def</span> <span class="nf">get_drive_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">manufacturer</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">manufacturer</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_smart_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_smart_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_smart_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Raw_Read_Error_Rate&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+            <span class="s2">&quot;Spin_Up_Time&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+            <span class="s2">&quot;Reallocated_Sector_Ct&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>
+            <span class="s2">&quot;Seek_Error_Rate&quot;</span><span class="p">:</span> <span class="mi">51</span><span class="p">,</span>
+            <span class="s2">&quot;Spin_Retry_Count&quot;</span><span class="p">:</span> <span class="mi">51</span><span class="p">,</span>
+            <span class="s2">&quot;Temperature_Celsius&quot;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+            <span class="s2">&quot;Current_Pending_Sector&quot;</span><span class="p">:</span> <span class="mi">51</span><span class="p">,</span>
+            <span class="s2">&quot;UDMA_CRC_Error_Count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">smart_attributes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;smartctl -A /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Collecting SMART attributes</span>
+            <span class="n">smart</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                        <span class="n">real</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">9</span><span class="p">])</span>
+                        <span class="n">smart</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">real</span>
+                        <span class="n">temp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Temperature_Celsius&quot;</span><span class="p">:</span>
+                            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_less_equal</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">pattern</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                            <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%d</span><span class="s2"> is less than </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">pattern</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_greater_equal</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span>
+                            <span class="n">pattern</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%d</span><span class="s2"> is greater than </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">pattern</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">smart_attributes</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="n">smart</span>
+        <span class="k">return</span> <span class="n">smart_attributes</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_hdds_temp"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_hdds_temp">[docs]</a>    <span class="k">def</span> <span class="nf">get_hdds_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_output</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">temp_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+            <span class="n">smart_dict</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">smart_dict</span><span class="p">[</span><span class="s2">&quot;Temperature_Celsius&quot;</span><span class="p">]</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;/dev/</span><span class="si">%s</span><span class="s2"> : </span><span class="si">%d</span><span class="s2"> Celsius&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">temp</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+                <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">temp_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+        <span class="k">return</span> <span class="n">temp_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_expanders_temp"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_expanders_temp">[docs]</a>    <span class="k">def</span> <span class="nf">get_expanders_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">):</span>
+        <span class="n">temp_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">expander</span> <span class="ow">in</span> <span class="n">expander_list</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_expander_temp</span><span class="p">,</span>
+                <span class="n">expander</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> : </span><span class="si">%d</span><span class="s2"> Celsius&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expander</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">out</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">temp_dict</span><span class="p">[</span><span class="n">expander</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">temp_dict</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_expanders_power"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_expanders_power">[docs]</a>    <span class="k">def</span> <span class="nf">get_expanders_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">):</span>
+        <span class="n">dict_power</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">expander</span> <span class="ow">in</span> <span class="n">expander_list</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">get_power_usage</span><span class="p">,</span> <span class="n">expander</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> : </span><span class="si">%d</span><span class="s2"> Watt&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">expander</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">dict_power</span><span class="p">[</span><span class="n">expander</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dict_power</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_controllers"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_controllers">[docs]</a>    <span class="k">def</span> <span class="nf">get_controllers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_hba_slots</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.drive_interface_speed_check"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.drive_interface_speed_check">[docs]</a>    <span class="k">def</span> <span class="nf">drive_interface_speed_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">speed</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">linkspd</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_link_spd</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">linkspd</span> <span class="o">==</span> <span class="n">speed</span><span class="p">,</span>
+                <span class="s2">&quot;link speed&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.disable_writecache_hdd"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.disable_writecache_hdd">[docs]</a>    <span class="k">def</span> <span class="nf">disable_writecache_hdd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">device_obj</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">device_obj</span><span class="o">.</span><span class="n">writecache_disable</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.disable_writecache_hba"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.disable_writecache_hba">[docs]</a>    <span class="k">def</span> <span class="nf">disable_writecache_hba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="c1"># Make a change</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -p</span><span class="si">%s</span><span class="s2"> -a 14,,,0,0&quot;</span> <span class="o">%</span> <span class="n">i</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Write changes</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -p</span><span class="si">%s</span><span class="s2"> -a 55,0&quot;</span> <span class="o">%</span> <span class="n">i</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.enable_hdd_cache"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.enable_hdd_cache">[docs]</a>    <span class="k">def</span> <span class="nf">enable_hdd_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Enabling write and read cache on each HDD&quot;</span><span class="p">)</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">device_obj</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Check write cache enabled</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">device_obj</span><span class="o">.</span><span class="n">writecache_enable</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">write_state</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">device_obj</span><span class="o">.</span><span class="n">writecache_get</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">write_state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;write cache enabled&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Check read cache enabled</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">readlookahead_enable</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">read_state</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">get_readlookahead_state</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">read_state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;read cache enabled&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.disable_hdd_cache"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.disable_hdd_cache">[docs]</a>    <span class="k">def</span> <span class="nf">disable_hdd_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Disabling write and read cache on each HDD&quot;</span><span class="p">)</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">device_obj</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Check write cache disable</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">device_obj</span><span class="o">.</span><span class="n">writecache_disable</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">write_state</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">device_obj</span><span class="o">.</span><span class="n">writecache_get</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">write_state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;write cache disabled&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Check read cache disabled</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">readlookahead_disable</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">read_state</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">get_readlookahead_state</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">read_state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;read cache disabled&quot;</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.check_cache_config"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.check_cache_config">[docs]</a>    <span class="k">def</span> <span class="nf">check_cache_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">device_obj</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Check current status and size</span>
+            <span class="n">write_state</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">device_obj</span><span class="o">.</span><span class="n">writecache_get</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">read_state</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">get_readlookahead_state</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;default write cache </span><span class="si">%s</span><span class="s2"> on </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">write_state</span><span class="p">,</span> <span class="n">device</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">write_state</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;default write cache on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;default read cache </span><span class="si">%s</span><span class="s2"> on </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">read_state</span><span class="p">,</span> <span class="n">device</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">read_state</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;default read cache on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.check_cache_size"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.check_cache_size">[docs]</a>    <span class="k">def</span> <span class="nf">check_cache_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">HdparmUtils</span><span class="o">.</span><span class="n">get_device_cachesize</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">size</span> <span class="o">!=</span> <span class="s2">&quot;unknown&quot;</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1024</span><span class="p">,</span>
+                    <span class="s2">&quot;default cache size on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span><span class="p">,</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.check_device_type"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.check_device_type">[docs]</a>    <span class="k">def</span> <span class="nf">check_device_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">hdd_type</span><span class="o">=</span><span class="s1">&#39;SATA&#39;</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">device_obj</span> <span class="ow">in</span> <span class="n">devices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">device_obj</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">hdd_type</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> type of disk </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">device</span><span class="p">),</span> <span class="n">log_on_pass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_hba_hdds"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_hba_hdds">[docs]</a>    <span class="k">def</span> <span class="nf">get_hba_hdds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -s | grep Disk | wc -l&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_jbod_hdds"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_jbod_hdds">[docs]</a>    <span class="k">def</span> <span class="nf">get_jbod_hdds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fbjbod hdd --all | grep On | wc -l&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.get_hba_expanders"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.get_hba_expanders">[docs]</a>    <span class="k">def</span> <span class="nf">get_hba_expanders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -s | grep EnclServ | wc -l&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.getExpanderlist"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.getExpanderlist">[docs]</a>    <span class="k">def</span> <span class="nf">getExpanderlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Getting list of Expanders.&quot;</span><span class="p">)</span>
+        <span class="n">expander_list</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">list_alljbod</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">expander_list</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.powercycle_enclosure"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.powercycle_enclosure">[docs]</a>    <span class="k">def</span> <span class="nf">powercycle_enclosure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powercycle all the jbods.&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">powercycle_alljbods</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.powercycle"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.powercycle">[docs]</a>    <span class="k">def</span> <span class="nf">powercycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">cycle_type</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Rebooting device by </span><span class="si">%s</span><span class="s2"> method. Wait 5 min&quot;</span> <span class="o">%</span> <span class="n">cycle_type</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">host</span><span class="o">.</span><span class="n">cycle_host</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">cycle_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.call_fbjbod_power_command"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.call_fbjbod_power_command">[docs]</a>    <span class="k">def</span> <span class="nf">call_fbjbod_power_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">onoff</span><span class="p">,</span> <span class="n">slot</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This function powers on and off the virtual slot. It requires</span>
+<span class="sd">        the vslot number and the Expander name.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">onoff</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">retry</span><span class="p">(</span><span class="n">tries</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sleep_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">)(</span><span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweron_hddslot</span><span class="p">),</span>
+                <span class="n">keys</span><span class="p">,</span>
+                <span class="n">slot</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweroff_hddslot</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">slot</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                    <span class="n">graceful</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.power_off_all"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.power_off_all">[docs]</a>    <span class="k">def</span> <span class="nf">power_off_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweroff_allhddslot</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.virtual_slot_power_onoff"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.virtual_slot_power_onoff">[docs]</a>    <span class="k">def</span> <span class="nf">virtual_slot_power_onoff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">onoff</span><span class="p">,</span> <span class="n">vslot</span><span class="p">,</span> <span class="n">expander_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This function maps the physical expander slot to 15 virtual slot(vslot),</span>
+<span class="sd">        vlsot are in the range of 0-14.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">keys</span> <span class="ow">in</span> <span class="n">expander_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span><span class="p">),</span> <span class="n">keys</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">15</span><span class="p">),</span> <span class="n">keys</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vslot</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">30</span><span class="p">),</span> <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">30</span><span class="p">),</span> <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">vslot</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">25</span><span class="p">),</span> <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">25</span><span class="p">),</span> <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">vslot</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">20</span><span class="p">),</span> <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">onoff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">vslot</span> <span class="o">+</span> <span class="mi">20</span><span class="p">),</span> <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">5</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Out of range value entered for virtualSlot.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vslot</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">call_fbjbod_power_command</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">onoff</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span>
+                <span class="n">expander_list</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="nb">int</span><span class="p">(</span><span class="n">vslot</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="ColdStorageUtils.tools_check"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.coldstorage_utils.ColdStorageUtils.tools_check">[docs]</a>    <span class="k">def</span> <span class="nf">tools_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;yum install ioping fio -y&quot;</span>
+        <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

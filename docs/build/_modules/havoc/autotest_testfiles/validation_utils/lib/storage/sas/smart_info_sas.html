@@ -1,0 +1,603 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">...autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">...autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">...fbjbod_utils</span> <span class="k">import</span> <span class="n">FbjbodUtils</span>
+<span class="kn">from</span> <span class="nn">...disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">...generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">...storage.smart_validation_abstract</span> <span class="k">import</span> <span class="n">SmartValidationAbstract</span>
+<span class="kn">from</span> <span class="nn">...sdparm_utils</span> <span class="k">import</span> <span class="n">SdparmUtils</span>
+
+
+<div class="viewcode-block" id="SMARTInfoSas"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas">[docs]</a><span class="k">class</span> <span class="nc">SMARTInfoSas</span><span class="p">(</span><span class="n">SmartValidationAbstract</span><span class="p">):</span>
+<div class="viewcode-block" id="SMARTInfoSas.__init__"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">external_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blockname</span> <span class="o">=</span> <span class="n">drive</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">external_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;sas&#39;</span> <span class="ow">in</span> <span class="n">external_file</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_file</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span><span class="n">external_file</span><span class="p">[</span><span class="s1">&#39;sas&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_file</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span>
+                <span class="s2">&quot;smart_hdd_check_sas.txt&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">autoval_utils</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SMARTInfoSas.get_smart_output"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.get_smart_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_smart_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;smartctl -x /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Failed to get SMART output for device: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">device</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+    <span class="k">def</span> <span class="nf">_extract_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Didn&#39;t find </span><span class="si">%s</span><span class="s2"> in SMART output&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_device_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Vendor:\s+([a-zA-Z]+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_serial_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Serial number:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;serial number&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_fw_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Revision:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;firmware version&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_user_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;User Capacity:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;user capacity&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">capacity</span>
+
+    <span class="k">def</span> <span class="nf">_get_model_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Product:\s+(\w+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;device model&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_sector_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Logical block size:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;sector size&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+<div class="viewcode-block" id="SMARTInfoSas.get_counter_fields"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.get_counter_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_counter_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Invalid DWORD count:\s+(\S+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;Invalid DWORD count&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.get_common_fields"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.get_common_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_common_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;manufacturer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_device_manufacturer</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;logical_drive&#39;</span><span class="p">:</span> <span class="n">device</span><span class="p">})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;serial_number&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_serial_number</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;firmware_version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fw_version</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;user_capacity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_user_capacity</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;sector_size&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sector_size</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_number</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;device_health&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_health_status</span><span class="p">(</span><span class="n">out</span><span class="p">)})</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;read_uncorrected_errors&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_uncorrected_read_errors</span><span class="p">(</span><span class="n">out</span><span class="p">)}</span>
+        <span class="p">)</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;write_uncorrected_errors&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_uncorrected_write_errors</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_target_error</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;element_in_grown_defect&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_in_grown_defect</span><span class="p">(</span><span class="n">out</span><span class="p">)}</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">fields</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_uncorrected_read_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;read:\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+.\w+\s+(\w+)&#39;</span><span class="p">,</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+        <span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;read uncorrected errors&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_uncorrected_write_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;write:\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+\s+\w+.\w+\s+(\w+)&#39;</span><span class="p">,</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+        <span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;write uncorrected errors&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_target_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="s1">&#39;attached device type: no device attached&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span>
+            <span class="p">):</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;attached device type: expander device&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="n">patt1</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Invalid DWORD count = (\w+)&quot;</span>
+                <span class="n">patt2</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Running disparity error count = (\w+)&quot;</span>
+                <span class="n">patt3</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Loss of DWORD synchronization = (\w+)&quot;</span>
+                <span class="n">patt4</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Phy reset problem = (\w+)&quot;</span>
+                <span class="n">patt5</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Invalid word count:\s+(\w+)&quot;</span>
+                <span class="n">patt6</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Running disparity error count:\s+(\w+)&quot;</span>
+                <span class="n">patt7</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Loss of dword synchronization count:\s+(\w+)&quot;</span>
+                <span class="n">patt8</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Phy reset problem count:\s+(\w+)&quot;</span>
+
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt1</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Invalid DWORD count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt2</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;disparity error count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt3</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Loss of DWORD synchronization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt4</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Phy reset problem&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt5</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Invalid word count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt6</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Phy event disparity error count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt7</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Loss of dword synchronization count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">patt8</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Phy reset problem count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_get_element_in_grown_defect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;Elements in grown defect list:\s+(\w+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+        <span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;Elements in grown defect&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+    <span class="k">def</span> <span class="nf">_get_health_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;SMART Health Status:\s+(\w+)&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_field</span><span class="p">(</span><span class="s1">&#39;Health Status&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">field</span>
+
+<div class="viewcode-block" id="SMARTInfoSas.to_config_dict"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.to_config_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_config_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transforms smart_data dict as generated by self.get_data into</span>
+<span class="sd">        human readable key value pairs that can be stored in test config data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">smart_values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">smart_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">smart_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+            <span class="n">smart_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">smart_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">smart_values</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.get_data"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="n">smart_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_output</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_device_type</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">smart_data</span><span class="p">[</span><span class="s2">&quot;interface&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sas&quot;</span>
+        <span class="n">smart_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_common_fields</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">smart_data</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.validate_rules"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.validate_rules">[docs]</a>    <span class="k">def</span> <span class="nf">validate_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">smart_data</span><span class="p">,</span> <span class="n">smart_attr_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates SMART min / max attribute rules as defined in</span>
+<span class="sd">        self.attribute_desc. Raises an exception if any errors found</span>
+<span class="sd">        @param smart_data: Parsed SMART data as generated by self.get_data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Validating SMART rules&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.compare_attributes"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.compare_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">compare_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config1</span><span class="p">,</span> <span class="n">config2</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="n">dev_start_config</span> <span class="o">=</span> <span class="n">config1</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+            <span class="n">dev_end_config</span> <span class="o">=</span> <span class="n">config2</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compare_dict</span><span class="p">(</span><span class="n">dev_start_config</span><span class="p">,</span> <span class="n">dev_end_config</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.compare_dict"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.compare_dict">[docs]</a>    <span class="k">def</span> <span class="nf">compare_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">):</span>
+        <span class="n">diff_in_smart</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">compare_configs</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">diff_in_smart</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;the difference in smart data is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">diff_in_smart</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.update_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.update_firmware">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_firmware</span><span class="p">(</span><span class="n">versions</span><span class="p">,</span> <span class="n">upgrade</span><span class="p">,</span> <span class="n">devices</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fw_slot</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update a set of firmware on a list of devices.</span>
+
+<span class="sd">        @param {} versions: dictionary of version info. Earlier versions should have</span>
+<span class="sd">        lower indices than later versions.</span>
+<span class="sd">        @param bool upgrade: True means upgrade</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">my_list</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">versions</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">upgrade</span><span class="p">:</span>
+            <span class="n">my_list</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">my_list</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">my_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">upgrade</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">firmware_file</span> <span class="o">=</span> <span class="n">versions</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;lspci | grep -i lsi&#39;</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="s1">&#39;Serial Attached SCSI controller&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span>
+            <span class="p">):</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Found Serial Attached SCSI controller&quot;</span><span class="p">)</span>
+                <span class="n">slot_nums</span> <span class="o">=</span> <span class="n">SMARTInfoSas</span><span class="o">.</span><span class="n">get_sas_devices_slot_numbers</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">slot_nums</span><span class="p">)):</span>
+                    <span class="n">SMARTInfoSas</span><span class="o">.</span><span class="n">update_sas_device_firmware</span><span class="p">(</span>
+                        <span class="n">slot_nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">firmware_file</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;RAID bus controller&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">):</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Found RAID bus controller&quot;</span><span class="p">)</span>
+                <span class="n">enc_dev_id</span><span class="p">,</span> <span class="n">slot_num</span> <span class="o">=</span> <span class="n">SMARTInfoSas</span><span class="o">.</span><span class="n">get_raid_devices_enc_n_slot_ids</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">enc_dev_id</span><span class="p">)):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">slot_num</span><span class="p">)):</span>
+                        <span class="n">SMARTInfoSas</span><span class="o">.</span><span class="n">update_raid_device_firmware</span><span class="p">(</span>
+                            <span class="n">enc_dev_id</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">slot_num</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                            <span class="n">firmware_file</span>
+                        <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No supported target device found&quot;</span><span class="p">)</span>
+
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering off all slots&quot;</span><span class="p">)</span>
+            <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweroff_allhddslot</span><span class="p">()</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Powering on all slots&quot;</span><span class="p">)</span>
+            <span class="n">FbjbodUtils</span><span class="o">.</span><span class="n">poweron_allhddslot</span><span class="p">()</span>
+            <span class="n">SMARTInfoSas</span><span class="o">.</span><span class="n">check_version</span><span class="p">(</span><span class="n">versions</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">],</span> <span class="n">devices</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.check_version"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.check_version">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="n">firmware_output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="s2">&quot;sg_map -i&quot;</span><span class="p">)</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">firmware_output</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s1">&#39;One or more drive are not with version </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.get_sas_devices_slot_numbers"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.get_sas_devices_slot_numbers">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_sas_devices_slot_numbers</span><span class="p">():</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;lsiutil -p1 -a 19,,0,0 20&#39;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">line_num</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">device_num</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">line_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+B___T\s+Type\s+Vendor\s+Product\s+Rev&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="k">break</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="n">line_num</span><span class="p">:]:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+).\s+\d+\s+\d+\s+Disk&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">device_no</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">device_num</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">device_no</span><span class="p">))</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Device Number(s): [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">device_num</span><span class="p">)))</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">device_num</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.update_sas_device_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.update_sas_device_firmware">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_sas_device_firmware</span><span class="p">(</span><span class="n">device_num</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsiutil -p1 -a 19,</span><span class="si">%d</span><span class="s2">,,,Yes,0,0,0,0 -f </span><span class="si">%s</span><span class="s2"> 20&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">device_num</span><span class="p">,</span> <span class="n">filename</span>
+            <span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing command: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Adding delay to avoid failure doing back to back FW upgrade.</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Going to wait for 15 secs.&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;lsiutil command failed for device no </span><span class="si">%d</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">device_num</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.get_raid_devices_enc_n_slot_ids"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.get_raid_devices_enc_n_slot_ids">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_raid_devices_enc_n_slot_ids</span><span class="p">():</span>
+        <span class="n">enclosure_device_id</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">slot_number</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;megacli -PDList -aALL&quot;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^Enclosure Device ID: (\d+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^Slot Number: (\d+)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">enclosure_device_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">n</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">n</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">slot_number</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="n">enclosure_device_id</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">enclosure_device_id</span><span class="p">))</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;Enclosure Device ID(s): [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span>
+            <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">enclosure_device_id</span><span class="p">)))</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;Slot Number(s): [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">slot_number</span><span class="p">)))</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">enclosure_device_id</span><span class="p">,</span> <span class="n">slot_number</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.update_raid_device_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.update_raid_device_firmware">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_raid_device_firmware</span><span class="p">(</span>
+        <span class="n">enclosure_device_id</span><span class="p">,</span> <span class="n">slot_number</span><span class="p">,</span> <span class="n">filename</span>
+    <span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;megacli -PdFwDownload -PhysDrv[</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">] &quot;</span>
+                <span class="s2">&quot;-f </span><span class="si">%s</span><span class="s2"> -a0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">enclosure_device_id</span><span class="p">,</span> <span class="n">slot_number</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing command: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_get_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># Adding delay to avoid failure doing back to back FW upgrade.</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Going to wait for 30 secs.&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;megacli command failed for device no </span><span class="si">%d</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">slot_number</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.writecache_get"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.writecache_get">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_get</span><span class="p">(</span><span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        @param str device: path of drive under /dev/ (e.g. sdb)</span>
+<span class="sd">        @return int: 1 for enabled, 0 or disabled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">get_writecache_state</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.writecache_enable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.writecache_enable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        @param str device: path of drive under /dev/ (e.g. sdb)</span>
+<span class="sd">        @param boolean save: if True will set current mode and the saved mode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">writecache_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.writecache_disable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.writecache_disable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">writecache_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">writecache_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.read_lookahead_get"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.read_lookahead_get">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_get</span><span class="p">(</span><span class="n">drive</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">get_readlookahead_state</span><span class="p">(</span><span class="n">drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.read_lookahead_disable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.read_lookahead_disable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">read_lookahead_disable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SMARTInfoSas.read_lookahead_enable"><a class="viewcode-back" href="../../../../../../../havoc.autotest_testfiles.validation_utils.lib.storage.sas.html#havoc.autotest_testfiles.validation_utils.lib.storage.sas.smart_info_sas.SMARTInfoSas.read_lookahead_enable">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_lookahead_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">SdparmUtils</span><span class="o">.</span><span class="n">read_lookahead_enable</span><span class="p">(</span><span class="n">drive</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="n">save</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage.nvme.nvme_drive &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage.nvme.nvme_drive</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.storage.nvme.nvme_drive</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.utils</span> <span class="k">import</span> <span class="n">strip_white_spaces_from_keys</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.drive</span> <span class="k">import</span> <span class="n">Drive</span><span class="p">,</span> <span class="n">DriveInterface</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.nvme.nvme_utils</span> <span class="k">import</span> <span class="n">NVMeUtils</span>
+
+<span class="n">DEFAULT_VALIDATE_CONFIG</span> <span class="o">=</span> <span class="s2">&quot;nvme_validate.json&quot;</span>
+
+
+<div class="viewcode-block" id="NVMeDrive"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive">[docs]</a><span class="k">class</span> <span class="nc">NVMeDrive</span><span class="p">(</span><span class="n">Drive</span><span class="p">):</span>
+
+    <span class="n">VID</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># vendor id</span>
+
+<div class="viewcode-block" id="NVMeDrive.__init__"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">block_name</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class for storing data and interacting with NVME drives</span>
+
+<span class="sd">        @param Host host: host object</span>
+<span class="sd">        @param String block_name: drive name in /dev/ path</span>
+<span class="sd">        @param String config: name of json file that control how drive data is</span>
+<span class="sd">            validated. NVMe configs are in directory</span>
+<span class="sd">            NVME validate config are placed in two directories in</span>
+<span class="sd">                havoc/autotest_testfiles/validation_utils</span>
+<span class="sd">                    - cfg/nvme_smart</span>
+<span class="sd">                    - cfg/nvme_smart_fdi</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NVMeDrive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">block_name</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">DEFAULT_VALIDATE_CONFIG</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">=</span> <span class="n">DriveInterface</span><span class="o">.</span><span class="n">NVME</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nvme_util</span> <span class="o">=</span> <span class="n">NVMeUtils</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_serial_number</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_manufacturer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_vid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_ctrl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_id_ctrl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.load_config"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param string config_file:</span>
+<span class="sd">        @return dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">cfg_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_config_dir</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">config_file</span><span class="p">,</span>
+            <span class="n">cfg_dir</span><span class="o">=</span><span class="n">cfg_dir</span>
+        <span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="s2">&quot;nvme&quot;</span><span class="p">])</span>
+
+        <span class="n">vendor_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_vendor_config</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="n">cfg_dir</span><span class="p">)</span>
+        <span class="n">vendor_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_vendor_config</span><span class="p">(</span><span class="n">vendor_config</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">vendor_config</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flatten_validate_config_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_load_vendor_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="p">,</span> <span class="n">cfg_dir</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vid</span><span class="p">:</span>  <span class="c1"># self.vid = 0</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="c1"># Vendor specific files has string _vid_&lt;vendor_id&gt;</span>
+        <span class="c1"># at the end of the name</span>
+        <span class="c1"># e.g. nvme_validate_vid_5197.json</span>
+        <span class="n">vendor_file</span> <span class="o">=</span> <span class="n">config_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_vid_</span><span class="si">%d</span><span class="s2">.json&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">vid</span>
+
+        <span class="k">return</span> <span class="n">GenericUtils</span><span class="o">.</span><span class="n">load_validate_config</span><span class="p">(</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">vendor_file</span><span class="p">,</span> <span class="n">cfg_dir</span><span class="o">=</span><span class="n">cfg_dir</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="NVMeDrive._get_config_dir"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive._get_config_dir">[docs]</a>    <span class="k">def</span> <span class="nf">_get_config_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ext_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        JSON files specific for Flash Data Integirty tests are placed in</span>
+<span class="sd">            nvme_smart_fdi. Other files go in nvme_smart.</span>
+
+<span class="sd">        @param string ext_file: NVME json file name</span>
+<span class="sd">        @return string: directory with config file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;fdi&quot;</span> <span class="ow">in</span> <span class="n">ext_file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cfg/nvme_smart_fdi&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;cfg/nvme_smart&quot;</span></div>
+
+<div class="viewcode-block" id="NVMeDrive._filter_vendor_config"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive._filter_vendor_config">[docs]</a>    <span class="k">def</span> <span class="nf">_filter_vendor_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Only get validate instructions for specific for this drive vendor</span>
+
+<span class="sd">        @param {} config: dictionary contains validate instructions</span>
+<span class="sd">            for a specified vendor</span>
+<span class="sd">        @return {}: filtered dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span><span class="p">,</span> <span class="p">{})</span></div>
+
+<div class="viewcode-block" id="NVMeDrive._flatten_validate_config_dict"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive._flatten_validate_config_dict">[docs]</a>    <span class="k">def</span> <span class="nf">_flatten_validate_config_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reduce config with nested comparing instructions, like this</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;smart-log&quot;: {&quot;item_1&quot;: &quot;==&quot;, ...  },</span>
+<span class="sd">                &quot;Samsung&quot;: {</span>
+<span class="sd">                    &quot;vs-smart-add-log&quot;: {&quot;item_a&quot;: &quot;&lt;&quot;, ...  }</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+<span class="sd">        to</span>
+<span class="sd">            { &quot;item_1&quot;: &quot;==&quot;, &quot;item_a&quot;: &quot;&lt;&quot;, ...  }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flat</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">each</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">flat</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flatten_validate_config_dict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">each</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">flat</span><span class="p">[</span><span class="n">each</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">each</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">flat</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.validate_arbitration_mechanism"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.validate_arbitration_mechanism">[docs]</a>    <span class="k">def</span> <span class="nf">validate_arbitration_mechanism</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to get the controller properties</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;show-regs output validation&quot;</span><span class="p">)</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme show-regs </span><span class="si">%s</span><span class="s2"> -H&quot;</span> <span class="o">%</span> <span class="n">nvme_drive</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">arbitration_mechanism_match</span> <span class="o">=</span> \
+            <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Arbitration Mechanism Selected\s*\(AMS\):.*&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">arbitration_mechanism</span> <span class="o">=</span> <span class="n">arbitration_mechanism_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">arbitration_mechanism</span><span class="p">,</span>
+            <span class="s2">&quot;Arbitration Mechanism Selected (AMS): Round Robin&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Validating Arbitration Mechanism for drive </span><span class="si">%s</span><span class="s2"> is Round Robin.&quot;</span>
+            <span class="o">%</span> <span class="n">nvme_drive</span><span class="p">)</span>
+        <span class="n">csts_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;csts\s*:\s*\d+&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">csts</span> <span class="o">=</span> <span class="n">csts_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">csts</span><span class="p">,</span> <span class="s2">&quot;csts:1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Validating csts for drive </span><span class="si">%s</span><span class="s2"> is 1.&quot;</span> <span class="o">%</span> <span class="n">nvme_drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_fw_log"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_fw_log">[docs]</a>    <span class="k">def</span> <span class="nf">get_fw_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to retrieve the firmware log for the specified device</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme fw-log </span><span class="si">%s</span><span class="s2"> -o json&quot;</span> <span class="o">%</span> <span class="n">nvme_drive</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.validate_crypto_erase_support"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.validate_crypto_erase_support">[docs]</a>    <span class="k">def</span> <span class="nf">validate_crypto_erase_support</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to validate if the drive has crypto erase support</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme id-ctrl -H </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvme_drive</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Crypto Erase Supported&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span>
+            <span class="s2">&quot;Crypto Erase is supported in drive </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">nvme_drive</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_error_log"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_error_log">[docs]</a>    <span class="k">def</span> <span class="nf">get_error_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to retrieve specified number of error log entries from a given device</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme error-log </span><span class="si">%s</span><span class="s2"> -o json&quot;</span> <span class="o">%</span> <span class="n">nvme_drive</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Error Log Entries for device </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="n">nvme_drive</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_id_ns"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_id_ns">[docs]</a>    <span class="k">def</span> <span class="nf">get_id_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to log the properties of the specified namespace</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme id-ns </span><span class="si">%s</span><span class="s2"> -o json&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nvme_drive</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Device: </span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="n">nvme_drive</span><span class="p">,</span> <span class="n">out</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_feature"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_feature">[docs]</a>    <span class="k">def</span> <span class="nf">get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to get the operating parameters of the specified controller</span>
+<span class="sd">        identified by the Feature Identifier.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># according to the nvme specs</span>
+        <span class="n">feature_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;0x01&quot;</span><span class="p">,</span> <span class="s2">&quot;0x02&quot;</span><span class="p">,</span> <span class="s2">&quot;0x03&quot;</span><span class="p">,</span> <span class="s2">&quot;0x04&quot;</span><span class="p">,</span> <span class="s2">&quot;0x05&quot;</span><span class="p">,</span> <span class="s2">&quot;0x07&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x08&quot;</span><span class="p">,</span> <span class="s2">&quot;0x09&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0A&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0B&quot;</span><span class="p">]</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="k">for</span> <span class="n">feature_id</span> <span class="ow">in</span> <span class="n">feature_ids</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;nvme get-feature </span><span class="si">%s</span><span class="s2"> -f </span><span class="si">%s</span><span class="s2"> -H&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nvme_drive</span><span class="p">,</span> <span class="n">feature_id</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>    <span class="c1"># noqa</span>
+            <span class="n">feature_info</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()])</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">feature_info</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_serial_number"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_serial_number">[docs]</a>    <span class="k">def</span> <span class="nf">get_serial_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvme_util</span><span class="o">.</span><span class="n">get_from_nvme_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="s2">&quot;SerialNumber&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvme_util</span><span class="o">.</span><span class="n">get_from_nvme_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="s2">&quot;ModelNumber&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NVMeDrive.get_firmware_version"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_firmware_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_firmware_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvme_util</span><span class="o">.</span><span class="n">get_from_nvme_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="s2">&quot;Firmware&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_manufacturer"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_manufacturer">[docs]</a>    <span class="k">def</span> <span class="nf">get_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;GenericNVMe&quot;</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_smart_log"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_smart_log">[docs]</a>    <span class="k">def</span> <span class="nf">get_smart_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;nvme smart-log /dev/</span><span class="si">%s</span><span class="s2"> -o json&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;smart-log&#39;</span><span class="p">:</span> <span class="n">log</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_id_ctrl"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_id_ctrl">[docs]</a>    <span class="k">def</span> <span class="nf">get_id_ctrl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvme_util</span><span class="o">.</span><span class="n">get_id_ctrl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_nand_write_param"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_nand_write_param">[docs]</a>    <span class="k">def</span> <span class="nf">get_nand_write_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Can be provided in vendor subclass</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_bit_error_ratio_param"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_bit_error_ratio_param">[docs]</a>    <span class="k">def</span> <span class="nf">get_bit_error_ratio_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: implement when moving bit_error_ratio_test to Autoval</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_write_amplification"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_write_amplification">[docs]</a>    <span class="k">def</span> <span class="nf">get_write_amplification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO import get_write_amplification from Autotest</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_vid"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_vid">[docs]</a>    <span class="k">def</span> <span class="nf">get_vid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">VID</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.get_drive_name"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.get_drive_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_drive_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get NVMe drive name without the namespace part</span>
+<span class="sd">            e.g. &quot;nvme1n1&quot; -&gt; &quot;nvme1&quot;</span>
+<span class="sd">        @return string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(nvme\d+)&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">_msg</span> <span class="o">=</span> <span class="s2">&quot;Failed to get NVMe drive name from block name </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.collect_data"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.collect_data">[docs]</a>    <span class="k">def</span> <span class="nf">collect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;SMART&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_smart_log</span><span class="p">(),</span>
+            <span class="s2">&quot;firmware&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_firmware_version</span><span class="p">(),</span>
+            <span class="s2">&quot;serial_number&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="s2">&quot;interface&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="s2">&quot;manufacturer&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span><span class="p">,</span>
+            <span class="s2">&quot;id_ctrl&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_ctrl</span>
+        <span class="p">}</span>
+        <span class="n">strip_white_spaces_from_keys</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.update_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.update_firmware">[docs]</a>    <span class="k">def</span> <span class="nf">update_firmware</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">fw_version</span><span class="p">,</span> <span class="n">fw_bin_loc</span><span class="p">,</span> <span class="n">fw_slots</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param String fw_version</span>
+<span class="sd">        @param String fw_bin_loc: binary path</span>
+<span class="sd">        @param int[] fw_slots: slots to install firmware</span>
+<span class="sd">        @param int action: provide param for nvme fw-activate --action option</span>
+<span class="sd">        @param boolean force</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">drive_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_drive_name</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fw_slots</span><span class="p">:</span>
+            <span class="n">fw_slots</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+            <span class="n">fw_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_firmware_version</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">fw_version</span> <span class="o">==</span> <span class="n">fw_ver</span><span class="p">:</span>
+                <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;Device already updated with latest version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fw_ver</span>
+                <span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_firmware</span><span class="p">(</span><span class="n">drive_name</span><span class="p">,</span> <span class="n">fw_bin_loc</span><span class="p">,</span> <span class="n">fw_slots</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive._update_firmware"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive._update_firmware">[docs]</a>    <span class="k">def</span> <span class="nf">_update_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive_name</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">fw_slots</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param String drive_name</span>
+<span class="sd">        @param String file_name: firmware binary path</span>
+<span class="sd">        @param int[] fw_slots: firmware slots to update</span>
+<span class="sd">        @param int action: provide param for nvme fw-activate --action option</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">fw_slot</span> <span class="ow">in</span> <span class="n">fw_slots</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;nvme fw-download /dev/</span><span class="si">%s</span><span class="s2"> -f </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drive_name</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">))</span>  <span class="c1"># noqa</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;nvme fw-activate /dev/</span><span class="si">%s</span><span class="s2"> --slot=</span><span class="si">%d</span><span class="s2"> --action=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">drive_name</span><span class="p">,</span>
+                <span class="n">fw_slot</span><span class="p">,</span>
+                <span class="n">action</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Flashing device </span><span class="si">%s</span><span class="s2">, serial </span><span class="si">%s</span><span class="s2"> with </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">drive_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial_number</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>  <span class="c1"># noqa</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># thrift.py run() throws base Exception</span>
+                <span class="n">ret_msg</span> <span class="o">=</span> <span class="s2">&quot;Success activating firmware action:1 slot:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fw_slot</span>
+                <span class="k">if</span> <span class="n">ret_msg</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                        <span class="s2">&quot;Activation of firmware is successful, but requires a reset.&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Unknown exception occured: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.reset"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">drive_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_drive_name</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;nvme reset /dev/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">drive_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NVMeDrive.nvme_flush"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.nvme.html#havoc.autoval.lib.test_utils.storage.nvme.nvme_drive.NVMeDrive.nvme_flush">[docs]</a>    <span class="k">def</span> <span class="nf">nvme_flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method to commit data and metadata associated</span>
+<span class="sd">        with given namespaces to nonvolatile media</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">nvme_drive</span> <span class="o">=</span> <span class="s1">&#39;/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;nvme flush </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">nvme_drive</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run nvme flush&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

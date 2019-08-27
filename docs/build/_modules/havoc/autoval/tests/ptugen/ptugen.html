@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.ptugen.ptugen &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.ptugen.ptugen</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.ptugen.ptugen</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">))</span>
+
+<span class="kn">from</span> <span class="nn">havoc.lib.filesystem_actions</span> <span class="k">import</span> <span class="n">FilesystemActions</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.generic_utils</span> <span class="k">import</span> <span class="n">GenericUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="ne">TimeoutError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.host.host</span> <span class="k">import</span> <span class="n">Host</span>
+
+<div class="viewcode-block" id="Ptugen"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen">[docs]</a><span class="k">class</span> <span class="nc">Ptugen</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This test module will run ptugen and allows you to choose a sequence of</span>
+<span class="sd">    power levels.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    mode: sequence = follow &#39;sequence&#39; list and &#39;interval&#39;</span>
+<span class="sd">          random sequence = randomize &#39;sequence&#39; and follow &#39;interval&#39;</span>
+<span class="sd">          random = randomize &#39;sequence&#39; and &#39;interval&#39;</span>
+<span class="sd">    sequence: a list power levels [c0, c1, c3, c6, c7]</span>
+<span class="sd">    interval: interval between power level changes in seconds</span>
+<span class="sd">    runtime: total run time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">REQ_ARGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span> <span class="s2">&quot;run_definition&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Ptugen.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Ptugen</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">srcdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tooldir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;run_definition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;run_definition&quot;</span><span class="p">)</span>
+
+        <span class="c1"># CPU test selection</span>
+        <span class="c1"># 0 = none    1 = TDP test    2 = Core power level test (default)</span>
+        <span class="c1"># 3 = Core AVX test    4 = Pmax test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;cputest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cputest&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># 64-bit mask for cpu (2 cpu)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;cpumask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cpumask&quot;</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">)</span>
+
+        <span class="c1"># 64-bit mask for cores (all)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;coremask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;coremask&quot;</span><span class="p">,</span> <span class="mh">0xFFFFFFFFFFFFFFFF</span><span class="p">)</span>
+
+        <span class="c1"># Memory test selection</span>
+        <span class="c1"># 0 = none</span>
+        <span class="c1"># 1 = Read test</span>
+        <span class="c1"># 2 = Write test</span>
+        <span class="c1"># 3 = Read/Write test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;memtest&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memtest&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># sequence = repeat sequence until end</span>
+        <span class="c1"># randseq = random sequence (TODO)</span>
+        <span class="c1"># randint = random interval (TODO)</span>
+        <span class="c1"># randseqint = random seq and int (TODO)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">)</span>
+
+        <span class="c1"># put ptugen into single core stress mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;corescan&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># time to stress each core</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan_interval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;corescan_interval&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+        <span class="c1"># (applicable to core scan)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;turbo_freq_check&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;turbo_freq_check&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_skylake</span> <span class="o">=</span> <span class="s2">&quot;skylake&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_broadwell</span> <span class="o">=</span> <span class="s2">&quot;broadwell&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_looping</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs_actions</span> <span class="o">=</span> <span class="n">FilesystemActions</span><span class="p">()</span>
+
+        <span class="c1"># will hold list of dictionaries based on socket count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;frequencies&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]</span></div>
+
+<div class="viewcode-block" id="Ptugen.set_binaries_paths"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.set_binaries_paths">[docs]</a>    <span class="k">def</span> <span class="nf">set_binaries_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skylake_package_folder</span> <span class="o">=</span> <span class="s2">&quot;ptu_skylake_rev1.9&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broadwell_de_package_folder</span> <span class="o">=</span> <span class="s2">&quot;ptu_bdw_de_rev1.6&quot;</span>
+        <span class="n">tool_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tooldir</span><span class="p">,</span> <span class="s2">&quot;ptugen&quot;</span><span class="p">)</span>
+
+        <span class="c1">#get binary based on cpu type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ptugen_binaries</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;skylake ep&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tar&quot;</span><span class="p">:</span> <span class="n">tool_path</span> <span class="o">+</span> <span class="s2">&quot;/ptu_skylake_rev1.9.tgz&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ptugen&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                       <span class="s2">&quot;ptu_skylake_rev1.9&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptugen&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;ptumon&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                       <span class="s2">&quot;ptu_skylake_rev1.9&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptumon&quot;</span><span class="p">)},</span>
+            <span class="s2">&quot;skylake de&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tar&quot;</span><span class="p">:</span> <span class="n">tool_path</span> <span class="o">+</span> <span class="s2">&quot;/ptu_skylake_rev1.9.tgz&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ptugen&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                       <span class="s2">&quot;ptu_skylake_rev1.9&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptugen&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;ptumon&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                       <span class="s2">&quot;ptu_skylake_rev1.9&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptumon&quot;</span><span class="p">)},</span>
+            <span class="s2">&quot;broadwell ep&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tar&quot;</span><span class="p">:</span> <span class="n">tool_path</span> <span class="o">+</span> <span class="s2">&quot;/ptu_bdw_rev0.9.tgz&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ptugen&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                       <span class="s2">&quot;ptu_bdw_rev0.9&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptugen&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;ptumon&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                        <span class="s2">&quot;ptu_bdw_rev0.9&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptumon&quot;</span><span class="p">)},</span>
+            <span class="s2">&quot;broadwell de&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tar&quot;</span> <span class="p">:</span> <span class="n">tool_path</span> <span class="o">+</span> <span class="s2">&quot;/ptu_bdw_de_rev1.6.tgz&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ptugen&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                        <span class="s2">&quot;ptu_bdw_de_rev1.6&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptugen&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;ptumon&quot;</span> <span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">,</span>
+                        <span class="s2">&quot;ptu_bdw_de_rev1.6&quot;</span> <span class="o">+</span> <span class="s2">&quot;/ptumon&quot;</span><span class="p">)}</span>
+        <span class="p">}</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;tmpdir is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">)</span>
+
+        <span class="n">new_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ptugen_binaries</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">)</span>
+        <span class="n">tarball</span> <span class="o">=</span> <span class="n">new_dict</span><span class="p">[</span><span class="s2">&quot;tar&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptugen</span> <span class="o">=</span> <span class="n">new_dict</span><span class="p">[</span><span class="s2">&quot;ptugen&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptumon</span> <span class="o">=</span> <span class="n">new_dict</span><span class="p">[</span><span class="s2">&quot;ptumon&quot;</span><span class="p">]</span>
+
+        <span class="n">GenericUtils</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">tarball</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmpdir</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">tarball</span><span class="p">,</span> <span class="s2">&quot;ptugen tool path </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">tarball</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ptugen.setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts the ptugen binary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Ptugen</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpuinfo</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_processor_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_sockets&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_binaries_paths</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># add another item to list of cpu frequencies</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;frequencies&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+
+        <span class="c1"># same number for all sockets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_cpuinfo"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_cpuinfo">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpuinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">class_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">remote_module_function</span> <span class="o">=</span> <span class="s2">&quot;get_cpuinfo&quot;</span>
+        <span class="n">remote_module</span> <span class="o">=</span> <span class="s2">&quot;validation_utils.lib.system_config.cpu_info&quot;</span>
+        <span class="n">controller_host</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_host</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">cpu_info</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_remote_module</span><span class="p">(</span>
+            <span class="n">remote_module</span><span class="p">,</span> <span class="n">remote_module_function</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">class_name</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">controller_host</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cpu_info</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_target_package_frequency"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_target_package_frequency">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_package_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpuinfo</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;CPU type is </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">)</span>
+        <span class="c1"># Set up a core scan sequence based on core count</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan&quot;</span><span class="p">]:</span>
+            <span class="n">corescan_seq</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">corecnt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_cores_per_socket&quot;</span><span class="p">])</span>
+            <span class="n">initmask</span> <span class="o">=</span> <span class="mh">0x1</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">corecnt</span><span class="p">:</span>
+                <span class="n">corescan_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">initmask</span><span class="p">)</span>
+                <span class="n">initmask</span> <span class="o">=</span> <span class="n">initmask</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Check turbo</span>
+        <span class="n">turbo_supported</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_supported&quot;</span><span class="p">]</span>
+        <span class="n">turbo_enabled</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_enabled&quot;</span><span class="p">]</span>
+        <span class="n">percent</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_core_enabled_percent&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;turbo_freq_check&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">turbo_supported</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">turbo_enabled</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">percent</span> <span class="o">==</span> <span class="mf">100.0</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;CPU TURBO is disabled. Enabling&quot;</span><span class="p">)</span>
+                <span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_turbo</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">turbo_supported</span> <span class="ow">or</span> <span class="n">turbo_enabled</span> <span class="ow">or</span> <span class="n">percent</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;CPU TURBO is enabled. Disabling&quot;</span><span class="p">)</span>
+                <span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_turbo</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># set up a turbo freq check on core count</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_turbo_freq_ptumon</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span><span class="p">,</span>
+            <span class="s2">&quot;Target package frequency is </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span>
+        <span class="p">)</span>
+        <span class="c1"># updating again self.cpuinfo after enabling or disabling turbo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpuinfo</span> <span class="o">=</span> <span class="n">cpuinfo</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_cpu_frequencies"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_cpu_frequencies">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpu_frequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;frequencies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Parsing</span>
+        <span class="n">frequencies_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/frequencies&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;cat </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">frequencies_file</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;frequency file is: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">frequencies_file</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="c1"># if skylake, skylake can have more than 1 socket but there is</span>
+            <span class="c1"># no comma between to use the else part of the if.</span>
+            <span class="c1"># Both sockets have same frequencies and that&#39;s</span>
+            <span class="c1"># why we check here for skylake.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_skylake</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span>
+                    <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">cpu0_freq</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;frequencies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpu0_freq</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">cpu0_freq</span><span class="p">,</span> <span class="n">cpu1_freq</span><span class="p">)</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;frequencies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpu0_freq</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_sokets</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;frequencies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cpu1_freq</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="n">socket</span><span class="p">][</span><span class="s2">&quot;frequencies&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_cpu_top_freq"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_cpu_top_freq">[docs]</a>    <span class="k">def</span> <span class="nf">get_cpu_top_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
+        <span class="n">frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpu_frequencies</span><span class="p">(</span><span class="n">socket</span><span class="p">)</span>
+        <span class="n">top_cpu_freq</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frequencies</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span><span class="p">)</span>
+                       <span class="ow">and</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">top_cpu_freq</span><span class="p">))):</span>
+                <span class="n">top_cpu_freq</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">frequencies</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">top_cpu_freq</span></div>
+
+<div class="viewcode-block" id="Ptugen.check_cpu_hit_turbo_freq"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.check_cpu_hit_turbo_freq">[docs]</a>    <span class="k">def</span> <span class="nf">check_cpu_hit_turbo_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Checking whether CPU hits the turbo freq</span>
+        <span class="n">sockets_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span>
+        <span class="k">for</span> <span class="n">socket</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sockets_count</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="n">socket</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpu_top_freq</span><span class="p">(</span><span class="n">socket</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_turbo</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Ptugen.validate_turbo"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.validate_turbo">[docs]</a>    <span class="k">def</span> <span class="nf">validate_turbo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Validate 10% difference if Turbo</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;turbo_freq_check&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_greater</span><span class="p">(</span>
+                <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">]),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">,</span>
+                <span class="s2">&quot;CPU0 Turbo - Target: </span><span class="si">%f</span><span class="s2">, Top: </span><span class="si">%f</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span><span class="p">,</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">]))</span>
+            <span class="p">)</span>
+            <span class="c1"># don&#39;t include skylake</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_skylake</span> <span class="ow">not</span> <span class="ow">in</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">validate_greater</span><span class="p">(</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">]),</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">,</span>
+                        <span class="s2">&quot;CPU1 Turbo - Target: </span><span class="si">%f</span><span class="s2">, Top: </span><span class="si">%f</span><span class="s2">&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span><span class="p">,</span>
+                            <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">])),</span>
+                    <span class="p">)</span>
+        <span class="c1"># Print without Turbo</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;CPU0 without Turbo - Target: </span><span class="si">%f</span><span class="s2">, Top: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+        <span class="c1"># don&#39;t include skylake</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_skylake</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_sockets</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">True</span><span class="p">,</span>
+                    <span class="s2">&quot;CPU1 without Turbo </span><span class="se">\</span>
+<span class="s2">                    - Target: </span><span class="si">%f</span><span class="s2">, Top : </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_package_freq</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_freq_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;top_cpu_freq&quot;</span><span class="p">]),</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ptugen.generate_command"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.generate_command">[docs]</a>    <span class="k">def</span> <span class="nf">generate_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpupower</span><span class="p">,</span> <span class="n">cpumask</span><span class="p">,</span> <span class="n">coremask</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a ptugen command line based on self.args</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ptu_dir</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptugen</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadwell_de_package_folder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="p">:</span>
+            <span class="c1"># ptugen for bdw de has different CLI options</span>
+            <span class="n">ptu_dir</span><span class="p">,</span> <span class="n">ptu_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;yes y | ./</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ptu_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan&quot;</span><span class="p">]:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-core0x</span><span class="si">%x</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">coremask</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-P</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cpupower</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;turbo_freq_check&quot;</span><span class="p">]:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-b&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">skylake_package_folder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="p">:</span>
+            <span class="c1"># ptugen for skylake has different CLI options</span>
+            <span class="n">ptu_dir</span><span class="p">,</span> <span class="n">ptu_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;yes y | ./</span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ptu_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan&quot;</span><span class="p">]:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-cpu 0x</span><span class="si">%x</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cpumask</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-core 0x</span><span class="si">%x</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">coremask</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;turbo_freq_check&quot;</span><span class="p">]:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-ct 6 -b 1 &quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-ct 2 -cp </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cpupower</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># ptugen always requires to acknowledge the license with &quot;y&quot;</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;yes y | &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan&quot;</span><span class="p">]:</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-cpu 0x</span><span class="si">%x</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cpumask</span>
+                <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-core 0x</span><span class="si">%x</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">coremask</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-ct </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;cputest&quot;</span><span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-mt </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;memtest&quot;</span><span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot;-p </span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cpupower</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;cmd </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ptu_dir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_turbo_freq_ptumon"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_turbo_freq_ptumon">[docs]</a>    <span class="k">def</span> <span class="nf">get_turbo_freq_ptumon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># if broadwell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_broadwell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">:</span>
+            <span class="n">turbo_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_turbo_freq_ptumon_broadwell</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">turbo_val</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># if skylake</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_skylake</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">:</span>
+            <span class="n">turbo_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_turbo_freq_ptumon_skylake</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">turbo_val</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">err_msg</span> <span class="o">=</span> <span class="s2">&quot;This method is not supported for your CPU.&quot;</span>
+            <span class="n">err_msg</span> <span class="o">+=</span> <span class="s2">&quot;Please implement the check in your CPU or &quot;</span>
+            <span class="n">err_msg</span> <span class="o">+=</span> <span class="s2">&quot;disable the turbo_freq_check option.&quot;</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">turbo_val</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_turbo_freq_ptumon_broadwell"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_turbo_freq_ptumon_broadwell">[docs]</a>    <span class="k">def</span> <span class="nf">get_turbo_freq_ptumon_broadwell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptumon</span>
+            <span class="c1"># find core reported by ptumon</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;yes y | &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">+</span> <span class="s2">&quot; -y -t 1&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;command </span><span class="si">%s</span><span class="s2">  &quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="c1"># use raw string to prevent invalid escape sequence</span>
+            <span class="n">find_core</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Number of Cores\W+(\d+)&quot;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">find_core</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">core</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cannot find core&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="c1"># find freq associated with all cores</span>
+            <span class="n">find_turbo_bash</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">C:&quot;</span> <span class="o">%</span> <span class="n">core</span>
+            <span class="c1"># use raw string to prevent invalid escape sequence</span>
+            <span class="n">search_string</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(\d+)x&quot;</span> <span class="o">%</span> <span class="n">find_turbo_bash</span>
+            <span class="n">find_turbo_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">search_string</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">find_turbo_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">turbo_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">turbo_val</span> <span class="o">=</span> <span class="n">turbo_val</span> <span class="o">*</span> <span class="mi">100</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cannot find max core turbo frequency&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">turbo_val</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_turbo_freq_ptumon_skylake"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_turbo_freq_ptumon_skylake">[docs]</a>    <span class="k">def</span> <span class="nf">get_turbo_freq_ptumon_skylake</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptumon</span>
+            <span class="c1"># find core reported by ptumon</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;yes y | &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">+</span> <span class="s2">&quot; -y -t 1&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;command </span><span class="si">%s</span><span class="s2">  &quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">find_core</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Number of Physcial Cores\W+(\d+)&quot;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">find_core</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">core</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cannot find core&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="c1"># find freq associated with all cores</span>
+            <span class="n">find_turbo_bash</span> <span class="o">=</span> <span class="s2">&quot;Core Count Range </span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">core</span>
+            <span class="n">search_string</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ([0-9]*) (\w+)&quot;</span> <span class="o">%</span> <span class="n">find_turbo_bash</span>
+            <span class="n">find_turbo_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">search_string</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">find_turbo_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">unit</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;GHz&quot;</span> <span class="ow">in</span> <span class="n">unit</span><span class="p">:</span>
+                    <span class="n">turbo_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">turbo_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cannot find max core turbo frequency&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">turbo_val</span></div>
+
+<div class="viewcode-block" id="Ptugen.get_current_pkg_freq"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.get_current_pkg_freq">[docs]</a>    <span class="k">def</span> <span class="nf">get_current_pkg_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># if broadwell</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_broadwell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptumon</span>
+            <span class="n">find_heading</span> <span class="o">=</span> <span class="s2">&quot;CPU CORE THREAD&quot;</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;yes y | &quot;</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span>
+                <span class="o">+</span> <span class="s1">&#39; -y -t 1 | grep &quot;</span><span class="si">%s</span><span class="s1">&quot; -A 1 | tail -n 1&#39;</span> <span class="o">%</span> <span class="n">find_heading</span>
+            <span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">freq_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">regex_str</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+(\S+)&quot;</span>
+            <span class="n">regex_obj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex_str</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">regex_obj</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="n">freq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># if skylake</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu_skylake</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cputype</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_ptumon</span>
+            <span class="n">find_heading</span> <span class="o">=</span> <span class="s2">&quot;Cor Thr MC&quot;</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;yes y | &quot;</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin</span>
+                <span class="o">+</span> <span class="s1">&#39; -y -t 1 | grep &quot;</span><span class="si">%s</span><span class="s1">&quot; -A 1 | tail -n 1&#39;</span> <span class="o">%</span> <span class="n">find_heading</span>
+            <span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">freq_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">regex_str</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?&lt;!\d)(\d</span><span class="si">{4}</span><span class="s2">)(?!\d)&quot;</span>
+            <span class="n">regex_obj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex_str</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">regex_obj</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="c1"># frequency is in GHz</span>
+                    <span class="n">freq_mhz</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">freq_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">freq_mhz</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">freq_list</span></div>
+
+<div class="viewcode-block" id="Ptugen.poll_frequency_and_update"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.poll_frequency_and_update">[docs]</a>    <span class="k">def</span> <span class="nf">poll_frequency_and_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_looping</span><span class="p">:</span>
+            <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_current_pkg_freq</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fs_actions</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/frequencies&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">,</span>
+                <span class="n">append</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">json_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ptugen.enable_turbo"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.enable_turbo">[docs]</a>    <span class="k">def</span> <span class="nf">enable_turbo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="c1"># Enable turbo</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;wrmsr --all 0x1a0 0x850089&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpuinfo</span><span class="p">()</span>
+            <span class="n">turbo_supported</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_supported&quot;</span><span class="p">]</span>
+            <span class="n">turbo_enabled</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_enabled&quot;</span><span class="p">]</span>
+            <span class="n">percent</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_core_enabled_percent&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">turbo_supported</span><span class="p">,</span> <span class="s2">&quot;CPU TURBO is supported&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">turbo_enabled</span><span class="p">,</span> <span class="s2">&quot;CPU TURBO is enabled&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">percent</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="s2">&quot;CPU TURBO is enabled on 100%&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Disable turbo</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;wrmsr --all 0x1a0 0x4000850089&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cpuinfo</span><span class="p">()</span>
+            <span class="n">turbo_supported</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_supported&quot;</span><span class="p">]</span>
+            <span class="n">turbo_enabled</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_enabled&quot;</span><span class="p">]</span>
+            <span class="n">percent</span> <span class="o">=</span> <span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_turbo_core_enabled_percent&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="ow">not</span> <span class="n">turbo_supported</span><span class="p">,</span> <span class="s2">&quot;CPU TURBO is not supported&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="ow">not</span> <span class="n">turbo_enabled</span><span class="p">,</span> <span class="s2">&quot;CPU TURBO is not enabled&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span><span class="n">percent</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;CPU TURBO is enabled on 0%&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cpuinfo</span></div>
+
+<div class="viewcode-block" id="Ptugen.run_ptugen"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.run_ptugen">[docs]</a>    <span class="k">def</span> <span class="nf">run_ptugen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">corescan_seq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cpuinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpuinfo</span>
+        <span class="n">corecnt</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cpuinfo</span><span class="p">[</span><span class="s2">&quot;cpu_cores_per_socket&quot;</span><span class="p">])</span>
+        <span class="n">run_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">endtime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">endtime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keep_looping</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">queue_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">queue_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">poll_frequency_and_update</span><span class="p">))</span>
+            <span class="c1"># Corescan Specifc Iteration Update</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan&quot;</span><span class="p">]:</span>
+                <span class="n">setcpumask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;cpumask&quot;</span><span class="p">]</span>
+                <span class="n">setcoremask</span> <span class="o">=</span> <span class="n">corescan_seq</span><span class="p">[</span><span class="n">run_index</span><span class="p">]</span>
+                <span class="n">setpower</span> <span class="o">=</span> <span class="mi">100</span>
+                <span class="n">setinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;corescan_interval&quot;</span><span class="p">]</span>
+
+                <span class="c1"># increment sequence</span>
+                <span class="n">run_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">run_index</span> <span class="o">&gt;=</span> <span class="n">corecnt</span><span class="p">:</span>
+                    <span class="n">run_index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">setcpumask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;cpumask&quot;</span><span class="p">]</span>
+                <span class="n">setcoremask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;coremask&quot;</span><span class="p">]</span>
+                <span class="n">setpower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;run_definition&quot;</span><span class="p">][</span><span class="n">run_index</span><span class="p">][</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span>
+                <span class="n">setinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;run_definition&quot;</span><span class="p">][</span><span class="n">run_index</span><span class="p">][</span><span class="s2">&quot;interval&quot;</span><span class="p">]</span>
+
+                <span class="c1"># increment sequence</span>
+                <span class="n">run_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">run_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;run_definition&quot;</span><span class="p">]):</span>
+                    <span class="n">run_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;***** Starting sequence. </span><span class="si">%d</span><span class="s2"> seconds remaining *****&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">endtime</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">setpower</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Power level 0 can be used to indicate a sleep instead of</span>
+                <span class="c1"># ptugen run (simulate 0% load)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;***** Sleeping </span><span class="si">%s</span><span class="s2"> seconds *****&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">setinterval</span><span class="p">))</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">setinterval</span><span class="p">)</span>
+                <span class="c1"># cause the thread to exit when self.keep_looping is False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">keep_looping</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">queue_list</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;***** P</span><span class="si">%s</span><span class="s2"> - </span><span class="si">%s</span><span class="s2"> sec *****&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">setpower</span><span class="p">,</span> <span class="n">setinterval</span><span class="p">))</span>
+
+            <span class="c1"># TODO: modify this method to include core and cpu mask</span>
+            <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_command</span><span class="p">(</span><span class="n">setpower</span><span class="p">,</span> <span class="n">setcpumask</span><span class="p">,</span>
+                    <span class="n">setcoremask</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Runnig command from  working directory </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">working_dir</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;==[</span><span class="si">%s</span><span class="s2">]== timeout: [</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">setinterval</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">setinterval</span><span class="p">,</span>
+                        <span class="n">working_directory</span><span class="o">=</span><span class="n">working_dir</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="c1"># cause the thread to exit when self.keep_looping is False.</span>
+            <span class="c1"># It causes exit from the function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keep_looping</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">(</span><span class="n">queue_list</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ptugen completed successfully&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;pkill ptugen&quot;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ptugen.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.Ptugen.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run sequence of ptugen tests</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_target_package_frequency</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_ptugen</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_cpu_hit_turbo_freq</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.ptugen.html#havoc.autoval.tests.ptugen.ptugen.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">Ptugen</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

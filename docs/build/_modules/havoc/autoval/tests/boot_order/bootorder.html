@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.boot_order.bootorder &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.boot_order.bootorder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.boot_order.bootorder</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.screenwithsol</span> <span class="k">import</span> <span class="n">ScreenWithSOL</span>
+
+<span class="n">START_TIME</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>  <span class="c1"># The start time of this python script/process.</span>
+
+<div class="viewcode-block" id="BootOrder"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder">[docs]</a><span class="k">class</span> <span class="nc">BootOrder</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    TODO:</span>
+<span class="sd">    - While it works, using screen to log the boot sequence output is a hacky</span>
+<span class="sd">      strategy. In the future, maybe modify get_bootseq_output() to use</span>
+<span class="sd">      a less hacky strategy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BootOrder.setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BootOrder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BootOrder.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;This is the BIOS boot order test&quot;</span><span class="p">)</span>
+        <span class="n">boot_order</span><span class="p">,</span> <span class="n">network_first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_boot_order</span><span class="p">()</span>
+        <span class="n">bootseq_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bootseq_output</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_bootseq_output</span><span class="p">(</span><span class="n">boot_order</span><span class="p">,</span> <span class="n">network_first</span><span class="p">,</span> <span class="n">bootseq_log</span><span class="p">)</span>
+
+        <span class="n">new_boot_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">get_boot_order</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">new_boot_order</span> <span class="o">==</span> <span class="n">boot_order</span><span class="p">,</span>
+                                <span class="s2">&quot;new boot order &#39;stuck&#39; after rebooting&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BootOrder.set_boot_order"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder.set_boot_order">[docs]</a>    <span class="k">def</span> <span class="nf">set_boot_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cur_boot_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">get_boot_order</span><span class="p">()</span>
+        <span class="n">first_device</span> <span class="o">=</span> <span class="n">cur_boot_order</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">first_device</span> <span class="o">==</span> <span class="s2">&quot;09&quot;</span><span class="p">:</span>
+            <span class="c1"># First boot device is network, change to be SATA HDD first.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Changing boot order to &quot;</span> <span class="o">+</span>
+                          <span class="s2">&quot;UEFI: SATA HDD, IPv6/v4, Other, CDROM, USB.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">set_boot_order</span><span class="p">(</span><span class="s2">&quot;SATA&quot;</span><span class="p">,</span> <span class="s2">&quot;NETWORK6&quot;</span><span class="p">,</span> <span class="s2">&quot;OTHER&quot;</span><span class="p">,</span>
+                                       <span class="s2">&quot;CDROM&quot;</span><span class="p">,</span> <span class="s2">&quot;USB&quot;</span><span class="p">)</span>
+            <span class="n">boot_order_bytes</span> <span class="o">=</span> <span class="s2">&quot;01 02 09 04 03 00&quot;</span>  <span class="c1"># this boot order in bytes</span>
+            <span class="n">network_first</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># First boot device is SATA HDD, change to be network first.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Changing boot order to &quot;</span> <span class="o">+</span>
+                          <span class="s2">&quot;UEFI: IPv6/v4, SATA HDD, Other, CDROM, USB.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">set_boot_order</span><span class="p">(</span><span class="s2">&quot;NETWORK6&quot;</span><span class="p">,</span> <span class="s2">&quot;SATA&quot;</span><span class="p">,</span> <span class="s2">&quot;OTHER&quot;</span><span class="p">,</span>
+                                       <span class="s2">&quot;CDROM&quot;</span><span class="p">,</span> <span class="s2">&quot;USB&quot;</span><span class="p">)</span>
+            <span class="n">boot_order_bytes</span> <span class="o">=</span> <span class="s2">&quot;01 09 02 04 03 00&quot;</span>  <span class="c1"># this boot order in bytes</span>
+            <span class="n">network_first</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="n">boot_order_bytes</span><span class="p">,</span> <span class="n">network_first</span></div>
+
+<div class="viewcode-block" id="BootOrder.get_bootseq_output"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder.get_bootseq_output">[docs]</a>    <span class="k">def</span> <span class="nf">get_bootseq_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Right now screen is used to capture the output displayed while the</span>
+<span class="sd">        machine boots. Screen is run on a remote machine, then the Serial-over-</span>
+<span class="sd">        LAN (SOL) is activated on the screen session to capture the boot</span>
+<span class="sd">        sequence output produced by the server under test. Screen logs this</span>
+<span class="sd">        booting output into a text file which we can parse later.</span>
+
+<span class="sd">        It&#39;s possible to just redirect the boot sequence output to somewhere</span>
+<span class="sd">        else so we can log it without using screen, but we don&#39;t know how to do</span>
+<span class="sd">        this yet, and initial research shows it&#39;s not a trival thing to do.</span>
+<span class="sd">        Using screen is much easier right now. If someone learns how to redirect</span>
+<span class="sd">        the boot sequence output, we can update this function to utilize it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sws</span> <span class="o">=</span> <span class="n">ScreenWithSOL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">sws</span><span class="o">.</span><span class="n">setup_cleanup</span><span class="p">()</span>
+        <span class="n">screenlog_name</span> <span class="o">=</span> <span class="n">sws</span><span class="o">.</span><span class="n">start_SOL_on_logged_screen_session</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_reset</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>  <span class="c1"># Give system extra time to begin booting an image</span>
+        <span class="n">screenlog_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">screenlog_name</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="n">sws</span><span class="o">.</span><span class="n">setup_cleanup</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">screenlog_file</span></div>
+
+<div class="viewcode-block" id="BootOrder.validate_bootseq_output"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder.validate_bootseq_output">[docs]</a>    <span class="k">def</span> <span class="nf">validate_bootseq_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boot_order</span><span class="p">,</span> <span class="n">network_first</span><span class="p">,</span> <span class="n">bootseq_log</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses the boot sequence output log to verify that the first boot device</span>
+<span class="sd">        was either the network or a SATA HDD. Verifying only the first boot</span>
+<span class="sd">        device is all we need for this functionality test.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">boot_lines</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line_num</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bootseq_log</span><span class="p">):</span>
+            <span class="c1"># Matching the output in lines must be very specific, unfortunately.</span>
+            <span class="k">if</span> <span class="s2">&quot;Booting...&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;booting&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">line_num</span>
+            <span class="k">elif</span> <span class="s2">&quot;Start PXE over IPv6&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">line_num</span>
+            <span class="k">elif</span> <span class="s2">&quot;GNU GRUB&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="c1"># We can assume a HDD is always present and bootable, therefore</span>
+                <span class="c1"># &quot;GNU GRUB&quot; should always appear if booting from the HDD.</span>
+                <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;hdd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">line_num</span>
+        <span class="n">bootseq_log</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">network_first</span><span class="p">:</span>
+            <span class="n">num_line_diff</span> <span class="o">=</span> <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;network&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;booting&#39;</span><span class="p">]</span>
+            <span class="n">network_was_first</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">num_line_diff</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num_line_diff</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">network_was_first</span><span class="p">,</span>
+                                    <span class="s2">&quot;BIOS booted from the network first&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">num_line_diff</span> <span class="o">=</span> <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;hdd&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">boot_lines</span><span class="p">[</span><span class="s1">&#39;booting&#39;</span><span class="p">]</span>
+            <span class="n">hdd_was_first</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">num_line_diff</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num_line_diff</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">hdd_was_first</span><span class="p">,</span>
+                                    <span class="s2">&quot;BIOS booted from a SATA HDD first&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BootOrder.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.BootOrder.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BootOrder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.boot_order.html#havoc.autoval.tests.boot_order.bootorder.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">BootOrder</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.host.system.system_abstract &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../" src="../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.host.system.system_abstract</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.host.system.system_abstract</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_thread</span> <span class="k">import</span> <span class="n">AutovalThread</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.bg_runner</span> <span class="k">import</span> <span class="n">BgRunner</span>
+
+
+<div class="viewcode-block" id="SystemAbstract"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract">[docs]</a><span class="k">class</span> <span class="nc">SystemAbstract</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SystemAbstract.__init__"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">host_connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oob_only</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">oob_only</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">localhost</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">localhost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oob_addr</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">oob_addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_connection</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">bmc_connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rack_sub_position_slot</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">rack_sub_position_slot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autotest</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">autotest</span></div>
+
+<div class="viewcode-block" id="SystemAbstract.system_health_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.system_health_check">[docs]</a>    <span class="k">def</span> <span class="nf">system_health_check</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dut_last_reboot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">dut_connect_timeout</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+        <span class="n">bmc_last_reboot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">bmc_reconnect_timeout</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method is to check the basic health of the system on both BMC/HOST is</span>
+<span class="sd">        good and is running all the services required</span>
+<span class="sd">        Host : It checks if the &#39;havoc-client&#39;, &#39;sshd&#39;, &#39;ipmi.service&#39; are running</span>
+<span class="sd">               Also checks if the thrift/ssh connectivity is working good</span>
+<span class="sd">        BMC : checks if the services like healthd, sensord, are running</span>
+<span class="sd">        Calling this method is recommended after the powercycles on server</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">health_thread</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++Starting system health check&quot;</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++Waiting for system to reconnect&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">wait_for_reconnect</span><span class="p">(</span>
+            <span class="n">dut_last_reboot</span><span class="p">,</span>
+            <span class="n">dut_connect_timeout</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++Reconnect completed&quot;</span><span class="p">)</span>
+        <span class="c1"># Run health check in parallel on both BMC and server</span>
+        <span class="n">health_thread</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">AutovalThread</span><span class="o">.</span><span class="n">start_autoval_thread</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_health_check</span><span class="p">,</span> <span class="n">bmc_last_reboot</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dut_health_check</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;DUT Health Check&quot;</span><span class="p">,</span>
+                <span class="kc">None</span>
+            <span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="n">AutovalThread</span><span class="o">.</span><span class="n">wait_for_autoval_thread</span><span class="p">,</span> <span class="p">[</span><span class="n">health_thread</span><span class="p">],</span>
+                <span class="s2">&quot;BMC Health Check&quot;</span>
+            <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++Restarting BG operations&quot;</span><span class="p">)</span>
+        <span class="n">BgRunner</span><span class="o">.</span><span class="n">start_bg_runners</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="s2">&quot;+++System health check completed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SystemAbstract.dut_health_check"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.dut_health_check">[docs]</a>    <span class="k">def</span> <span class="nf">dut_health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method will check the health of the system by checking if all the</span>
+<span class="sd">        necessary services are active and the connection is properly established.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># First check for the connection integrity by checking for 5 consecutive</span>
+        <span class="c1"># successful checks for every 10 secs</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="mi">60</span>
+        <span class="c1"># Check if host is ready for the thrift connection</span>
+        <span class="c1"># and is stable for 60 seconds</span>
+        <span class="c1"># services_list = [&#39;sshd&#39;, &#39;autotest&#39;, &#39;smartd&#39;]</span>
+        <span class="n">no_of_attempts_succesful</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Running &quot;ipmitool mc info&quot;  to cover the inband oob check</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ipmitool mc info&quot;</span><span class="p">)</span>
+                <span class="n">no_of_attempts_succesful</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">no_of_attempts_succesful</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">):</span>
+                    <span class="k">break</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">no_of_attempts_succesful</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">continue</span>
+
+        <span class="n">critical_services</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sshd&quot;</span><span class="p">]</span>
+        <span class="n">critical_services</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_critical_services</span><span class="p">())</span>
+        <span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">max_time</span> <span class="o">=</span> <span class="n">current_time</span> <span class="o">+</span> <span class="mi">120</span>
+        <span class="k">for</span> <span class="n">each_service</span> <span class="ow">in</span> <span class="n">critical_services</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_if_services_active</span><span class="p">(</span><span class="n">each_service</span><span class="p">,</span> <span class="n">max_time</span><span class="p">)</span>
+        <span class="n">critical_rpms</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fb-havoc-autotest-testfiles&#39;</span><span class="p">,</span> <span class="s1">&#39;fb-havoc-autotest&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">rpm</span> <span class="ow">in</span> <span class="n">critical_rpms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_if_rpms_installed</span><span class="p">(</span><span class="n">rpm</span><span class="p">,</span> <span class="n">max_time</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SystemAbstract.cycle_host"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.cycle_host">[docs]</a>    <span class="k">def</span> <span class="nf">cycle_host</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">cycle_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;dc&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">cycle</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;ac&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ac_cycle</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;warm&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_reset</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;power_off_on&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_off</span><span class="p">()</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;graceful_shutdown&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">graceful_shutdown</span><span class="p">()</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_on</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;reboot&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">inband</span><span class="o">.</span><span class="n">reboot</span><span class="p">(</span><span class="n">shutdown_cmd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;bc_ac&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bc_ac_cycle</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">cycle_type</span> <span class="o">==</span> <span class="s1">&#39;reset&#39;</span><span class="p">:</span>
+            <span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">power_util_reset</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown cycle type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cycle_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SystemAbstract.check_if_rpms_installed"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.check_if_rpms_installed">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_rpms_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rpm</span><span class="p">,</span> <span class="n">max_time</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;rpm -qa </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rpm</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.*&quot;</span> <span class="o">%</span> <span class="n">rpm</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">output</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">max_time</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;RPM </span><span class="si">%s</span><span class="s2"> is not installed&quot;</span> <span class="o">%</span> <span class="n">rpm</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SystemAbstract.check_if_services_active"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.check_if_services_active">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_services_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">each_service</span><span class="p">,</span> <span class="n">max_time</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method just checks if the service is active and running</span>
+<span class="sd">        if not it will wait until the timeout and throws error</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_service_active</span><span class="p">(</span><span class="n">each_service</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">max_time</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Service </span><span class="si">%s</span><span class="s2"> not active&quot;</span> <span class="o">%</span> <span class="n">each_service</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SystemAbstract.is_service_active"><a class="viewcode-back" href="../../../../../../havoc.autoval.lib.host.system.html#havoc.autoval.lib.host.system.system_abstract.SystemAbstract.is_service_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_service_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_to_check</span><span class="p">):</span>
+        <span class="n">run_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="s2">&quot;systemctl is-active --quiet </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">service_to_check</span><span class="p">,</span>
+            <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">run_obj</span><span class="o">.</span><span class="n">return_code</span> <span class="o">==</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

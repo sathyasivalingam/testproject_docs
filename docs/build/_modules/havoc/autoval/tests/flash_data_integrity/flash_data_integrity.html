@@ -1,0 +1,777 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.flash_data_integrity.flash_data_integrity &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.flash_data_integrity.flash_data_integrity</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.flash_data_integrity.flash_data_integrity</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">libfb.py.parutil</span> <span class="k">as</span> <span class="nn">parutil</span>
+    <span class="kn">from</span> <span class="nn">servicerouter.srproxy</span> <span class="k">import</span> <span class="n">TServiceRouterException</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.storage.storage_utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">StorageUtils</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TestError</span><span class="p">,</span>
+    <span class="ne">TimeoutError</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.lib.decorators</span> <span class="k">import</span> <span class="n">retry</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">IO_SIZE</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1%&quot;</span><span class="p">,</span> <span class="s2">&quot;3%&quot;</span><span class="p">,</span> <span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="s2">&quot;10%&quot;</span><span class="p">]</span>
+
+<span class="n">PREP_FIO_JOB</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;rw=randwrite&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;blocksize=4k&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size=100%&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;direct=1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ioengine=libaio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;iodepth=256&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;invalidate=1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;group_reporting=1&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">FIO_JOB</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;blocksize=4k&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;iodepth=128&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;direct=1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;group_reporting=1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;numjobs=1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ioengine=libaio&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">LIB_PATH</span> <span class="o">=</span> <span class="s2">&quot;havoc/autotest_testfiles/validation_utils&quot;</span>
+
+<span class="n">RETRY_COUNT</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">RETRY_SLEEP_TIME</span> <span class="o">=</span> <span class="mi">30</span>
+
+
+<div class="viewcode-block" id="FioErrorParsingException"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FioErrorParsingException">[docs]</a><span class="k">class</span> <span class="nc">FioErrorParsingException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="GlusterFsError"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.GlusterFsError">[docs]</a><span class="k">class</span> <span class="nc">GlusterFsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="FlashDataIntegrityTest"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest">[docs]</a><span class="k">class</span> <span class="nc">FlashDataIntegrityTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="FlashDataIntegrityTest.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FlashDataIntegrityTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;cycle_count&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;cycle_type&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smart_benchmark_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;ext_json_file&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;nvme&quot;</span><span class="p">:</span> <span class="s2">&quot;nvme_validate_fdi.json&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precondition</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pre_condition&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_md&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_boot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_boot&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_size&quot;</span><span class="p">,</span> <span class="n">IO_SIZE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fio_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fio_ver&quot;</span><span class="p">,</span> <span class="s2">&quot;3.11&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_seq_io</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;number_of_seq_io&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote_fio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;remote_fio&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive_interface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_interface&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drive_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drives&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">precondition_loops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;precondition_loops&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.setup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FlashDataIntegrityTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">install_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_supported_fio_version</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_log_dir</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_hostname_ip4</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_is_hostname_ip4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ipv4_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\b(?:\d{1,3}\.)</span><span class="si">{3}</span><span class="s2">\d{1,3}\b&quot;</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">ipv4_re</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest._get_log_dir"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest._get_log_dir">[docs]</a>    <span class="k">def</span> <span class="nf">_get_log_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign a log directory for fio output depending on mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_fio</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">control_server_logdir</span><span class="p">,</span> <span class="s2">&quot;fio_results&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="s2">&quot;fio_results&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.save_drive_logs"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.save_drive_logs">[docs]</a>    <span class="k">def</span> <span class="nf">save_drive_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="n">backup</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Function to save drive log before each cycle &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">backup</span><span class="p">:</span>
+            <span class="n">bkpsmart_log</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.tar.gz&quot;</span>
+            <span class="p">)</span>
+            <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">bkpsmart_log</span><span class="p">,</span> <span class="s2">&quot;w:gz&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar</span><span class="p">:</span>
+                <span class="n">tar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span><span class="p">,</span>
+                    <span class="n">arcname</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">control_server_logdir</span><span class="p">,</span> <span class="s2">&quot;drive_logs&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span><span class="p">)</span>
+        <span class="n">StorageUtils</span><span class="o">.</span><span class="n">save_drive_logs</span><span class="p">(</span><span class="n">test_drives</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.get_drives"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.get_drives">[docs]</a>    <span class="k">def</span> <span class="nf">get_drives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">drives</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">test_drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_test_drives</span><span class="p">()</span>
+        <span class="n">drives</span> <span class="o">=</span> <span class="n">test_drives</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">verify</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_drive_logs</span><span class="p">(</span><span class="n">test_drives</span><span class="p">,</span> <span class="n">verify</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">validate_drive_logs</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_log_directory</span>
+            <span class="p">)</span>
+            <span class="c1"># Collecting/Saving new smart log for next cycle comparison</span>
+            <span class="n">test_drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_test_drives</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_drive_logs</span><span class="p">(</span><span class="n">test_drives</span><span class="p">,</span> <span class="n">backup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">drives</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_test_drives</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test_drives</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">run_on_host</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+            <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">,</span>
+            <span class="n">drive_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">drive_type</span><span class="p">,</span>
+            <span class="n">drive_interface</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">drive_interface</span><span class="p">,</span>
+            <span class="n">drives</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">drives</span><span class="p">,</span>
+            <span class="n">ext_json_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">smart_benchmark_file</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">test_drives</span>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.get_md_array"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.get_md_array">[docs]</a>    <span class="k">def</span> <span class="nf">get_md_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">active_array</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">get_host</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">active_array</span> <span class="o">=</span> <span class="n">StorageUtils</span><span class="o">.</span><span class="n">get_test_drives</span><span class="p">(</span><span class="n">drive_type</span><span class="o">=</span><span class="s2">&quot;md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="n">active_array</span><span class="p">,</span> <span class="s2">&quot;MD not present. Please check the host.&quot;</span> <span class="o">%</span> <span class="n">active_array</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">active_array</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get available drives from host</span>
+        <span class="n">available_drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_drives</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_test_setup</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_cmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_fio_trigger_cmd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cycle_type</span><span class="p">)</span>
+        <span class="c1"># Get test drives from host</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_md</span><span class="p">:</span>
+            <span class="n">test_drives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_md_array</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_boot</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">test_drives</span> <span class="o">=</span> <span class="p">(</span><span class="n">DiskUtils</span><span class="o">.</span><span class="n">get_boot_drive</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;No boot drive detected, assuming RamDisk&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">test_drives</span> <span class="o">=</span> <span class="n">available_drives</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;Available drives: </span><span class="si">%s</span><span class="s2">, Drives under test: </span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">available_drives</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">test_drives</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Validate if &quot;test drive&quot; is not empty</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="n">test_drives</span> <span class="o">!=</span> <span class="p">[],</span>
+            <span class="s2">&quot;Validate Test Drive list is Not empty - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">test_drives</span>
+        <span class="p">)</span>
+
+        <span class="c1"># precondition if the test is not on MD or BOOT drive</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">precondition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_md</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_boot</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pre_condition_drives</span><span class="p">(</span><span class="n">available_drives</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fio_test</span><span class="p">(</span><span class="n">test_drives</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Verify Flash Data Integrity for Cycle - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_cycle</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_drives_presence</span><span class="p">(</span><span class="n">available_drives</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.fio_test"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.fio_test">[docs]</a>    <span class="k">def</span> <span class="nf">fio_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;trigger_timeout&quot;</span><span class="p">,</span> <span class="mi">30</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="c1"># Get a random trigger_timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_io</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">],</span>
+            <span class="s2">&quot;Cycle </span><span class="si">%d</span><span class="s2">: Fio write job completed.&quot;</span> <span class="o">%</span> <span class="n">cycle</span>
+        <span class="p">)</span>
+        <span class="c1"># When using a trigger, last in-flight IO will not be loaded</span>
+        <span class="c1"># into the state file, but reading back the last wrote IO</span>
+        <span class="c1"># can cause MPECC error. This read is to capture that MPECC error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_io</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">],</span>
+            <span class="s2">&quot;Cycle </span><span class="si">%d</span><span class="s2">: Fio read job completed.&quot;</span> <span class="o">%</span> <span class="n">cycle</span>
+        <span class="p">)</span>
+        <span class="c1"># read with verify</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">verify_io</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">],</span>
+            <span class="s2">&quot;Cycle </span><span class="si">%d</span><span class="s2">: Fio verify job completed.&quot;</span> <span class="o">%</span> <span class="n">cycle</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.write_io"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.write_io">[docs]</a>    <span class="k">def</span> <span class="nf">write_io</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Cycle </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cycle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Write in progress&quot;</span><span class="p">)</span>
+        <span class="n">write_job</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">FIO_JOB</span><span class="p">)</span>
+        <span class="n">io</span> <span class="o">=</span> <span class="s2">&quot;rw=randwrite&quot;</span>
+        <span class="n">w_params</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">io</span><span class="p">,</span>
+            <span class="s2">&quot;runtime=1d&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;time_based&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify=md5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_backlog=10000000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_state_save=1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_async=4&quot;</span>
+        <span class="p">]</span>
+        <span class="n">write_job</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">w_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_fio</span><span class="p">(</span><span class="n">write_job</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="n">cycle</span><span class="p">,</span>
+                     <span class="n">power_trigger</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.read_io"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.read_io">[docs]</a>    <span class="k">def</span> <span class="nf">read_io</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+        <span class="n">read_job</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">FIO_JOB</span><span class="p">)</span>
+        <span class="n">runtime</span> <span class="o">=</span> <span class="s2">&quot;runtime=</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trigger_timeout</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">io</span> <span class="o">=</span> <span class="s2">&quot;rw=randread&quot;</span>
+        <span class="n">r_params</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">io</span><span class="p">,</span>
+            <span class="n">runtime</span><span class="p">,</span>
+            <span class="s2">&quot;verify=md5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_backlog=10000000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_state_load=1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_async=4&quot;</span>
+        <span class="p">]</span>
+        <span class="n">read_job</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Read in progress&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_fio</span><span class="p">(</span><span class="n">read_job</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="n">cycle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.verify_io"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.verify_io">[docs]</a>    <span class="k">def</span> <span class="nf">verify_io</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
+        <span class="n">verify_job</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">FIO_JOB</span><span class="p">)</span>
+        <span class="n">io</span> <span class="o">=</span> <span class="s2">&quot;rw=randread&quot;</span>
+        <span class="n">r_params</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">io</span><span class="p">,</span>
+            <span class="s2">&quot;runtime=0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify=md5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_backlog=10000000&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_state_load=1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;verify_async=4&quot;</span>
+        <span class="p">]</span>
+        <span class="n">verify_job</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Verify in progress&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_fio</span><span class="p">(</span><span class="n">verify_job</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="s2">&quot;verify&quot;</span><span class="p">,</span> <span class="n">cycle</span><span class="p">)</span>
+
+        <span class="c1"># If test is on boot drive delete the file FIO created</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_boot</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;rm -f /root/havoc_fio_file.txt&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.run_fio"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.run_fio">[docs]</a>    <span class="k">def</span> <span class="nf">run_fio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_args</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cycle</span><span class="p">,</span>
+                <span class="n">power_trigger</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param string[] job_args: fio global options</span>
+<span class="sd">        @param string[] test_drives: drive names of drives to run fio on</span>
+<span class="sd">        @param string name: fio file name</span>
+<span class="sd">        @param int cycle: iteration number</span>
+<span class="sd">        @param bool power_trigger: if True fio will run with trigger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fio_output_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">+</span> <span class="s2">&quot;/fio-cycle</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">.log&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cycle</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">di_job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fio_job</span><span class="p">(</span>
+            <span class="n">job_args</span><span class="p">,</span> <span class="n">test_drives</span><span class="p">,</span> <span class="s2">&quot;seq_io_</span><span class="si">%s</span><span class="s2">.fio&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_fio</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_fio_remote</span><span class="p">(</span>
+                <span class="n">di_job</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">,</span> <span class="n">power_trigger</span><span class="o">=</span><span class="n">power_trigger</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_fio_local</span><span class="p">(</span>
+                <span class="n">di_job</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">,</span> <span class="n">power_trigger</span><span class="o">=</span><span class="n">power_trigger</span><span class="p">)</span></div>
+
+    <span class="nd">@retry</span><span class="p">(</span>
+        <span class="n">RETRY_COUNT</span><span class="p">,</span>
+        <span class="n">RETRY_SLEEP_TIME</span><span class="p">,</span>
+        <span class="n">exceptions</span><span class="o">=</span><span class="p">(</span><span class="n">FioErrorParsingException</span><span class="p">,</span> <span class="n">GlusterFsError</span><span class="p">),</span>
+        <span class="n">exponential</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_run_fio_local</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">di_job</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">,</span> <span class="n">power_trigger</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run fio from the DUT (local mode). Trigger command will interrupt the</span>
+<span class="sd">            fio process.</span>
+<span class="sd">            Retry if fio output is not collected due to interruption</span>
+
+<span class="sd">        @param string di_job: path to fio job file</span>
+<span class="sd">        @param string fio_output_file: where to dump fio output</span>
+<span class="sd">        @param bool power_trigger: if True fio will run with trigger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fio --output-format=json --output=</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">fio_output_file</span><span class="p">,</span>
+            <span class="n">di_job</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">timeout_exc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_timeout_exceptions</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">power_trigger</span><span class="p">:</span>
+            <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --trigger-timeout=</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trigger_timeout</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">power_cmd</span>
+            <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running command: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">timeout_exc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">reconnect</span><span class="p">()</span>
+            <span class="c1"># If `fio` command runs on host with `trigger` option it will</span>
+            <span class="c1"># most likely be interrupted by the trigger and won&#39;t exit</span>
+            <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_as_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">_msg</span> <span class="o">=</span> <span class="s2">&quot;[HAVOC]: fio interrupted due to power trigger&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_fio_error</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">_msg</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;No such file or directory&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">GlusterFsError</span><span class="p">(</span><span class="s2">&quot;Fail to access GlusterFS: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">power_trigger</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest._get_timeout_exceptions"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest._get_timeout_exceptions">[docs]</a>    <span class="k">def</span> <span class="nf">_get_timeout_exceptions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @return tuple of timeout exceptions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exc</span> <span class="o">=</span> <span class="p">(</span><span class="ne">TimeoutError</span><span class="p">)</span>
+
+        <span class="c1"># Hi5 can&#39;t import TServiceRouterException</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">exc</span> <span class="o">=</span> <span class="p">(</span><span class="ne">TimeoutError</span><span class="p">,</span> <span class="n">TServiceRouterException</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">exc</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest._run_fio_remote"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest._run_fio_remote">[docs]</a>    <span class="k">def</span> <span class="nf">_run_fio_remote</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">di_job</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">,</span> <span class="n">power_trigger</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run fio in client-server mode.</span>
+
+<span class="sd">        @param string di_job: path to fio job file</span>
+<span class="sd">        @param string fio_output_file: where to dump fio output</span>
+<span class="sd">        @param bool power_trigger: if True fio will run with trigger</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_fio_daemon</span><span class="p">()</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fio --client=ip</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> --output-format=json --output=</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip4</span> <span class="k">else</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+            <span class="n">fio_output_file</span><span class="p">,</span>
+            <span class="n">di_job</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">power_trigger</span><span class="p">:</span>
+            <span class="n">current_reboot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_last_reboot</span><span class="p">()</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s2">&quot; --trigger-timeout=</span><span class="si">%d</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trigger_timeout</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">power_cmd</span>
+            <span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">get_result_obj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ret</span><span class="o">.</span><span class="n">return_code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_fio_error</span><span class="p">(</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">return_code</span><span class="p">,</span> <span class="n">ret</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">power_trigger</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">system_health_check</span><span class="p">(</span><span class="n">current_reboot</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.install_dependencies"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.install_dependencies">[docs]</a>    <span class="k">def</span> <span class="nf">install_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="n">autoval_host</span> <span class="o">=</span> <span class="n">AutovalUtils</span><span class="p">()</span>
+        <span class="n">autoval_host</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">autoval_host</span><span class="o">.</span><span class="n">install_rpms</span><span class="p">(</span><span class="n">rpm_list</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;fio&quot;</span><span class="p">,</span> <span class="s2">&quot;sshpass&quot;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.pre_condition_drives"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.pre_condition_drives">[docs]</a>    <span class="k">def</span> <span class="nf">pre_condition_drives</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drives</span><span class="p">):</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;/tmp/fio-</span><span class="si">%s</span><span class="s2">-prep.log&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Precondition card before cycle0&quot;</span><span class="p">)</span>
+
+        <span class="c1">### For Lightning running 2x pre-condition is taking more than 12hrs</span>
+        <span class="c1">### So getting loops as parameter, others projects still would use</span>
+        <span class="c1">### loops count as 2</span>
+        <span class="n">prep_job</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">PREP_FIO_JOB</span><span class="p">)</span>
+        <span class="n">loops</span> <span class="o">=</span> <span class="s2">&quot;loops=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">precondition_loops</span>
+        <span class="n">prep_job</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">loops</span><span class="p">])</span>
+
+        <span class="c1">### Precondition FIO runs from Host not from DevServer</span>
+        <span class="c1">### hence log_dir path need to be set</span>
+        <span class="n">job_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fio_job</span><span class="p">(</span><span class="n">prep_job</span><span class="p">,</span>
+                <span class="n">drives</span><span class="p">,</span>
+                <span class="s2">&quot;prep_flash.fio&quot;</span><span class="p">,</span>
+                <span class="n">log_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>
+        <span class="n">fio_prep_cmd</span> <span class="o">=</span> <span class="s2">&quot;fio </span><span class="si">%s</span><span class="s2"> --output-format=json --output=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">job_file</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fio_prep_cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">43200</span><span class="p">)</span>  <span class="c1"># noqa</span>
+
+        <span class="c1">#  Check for any fio error</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;fio&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;PreCondition Failed - &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.check_drives_presence"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.check_drives_presence">[docs]</a>    <span class="k">def</span> <span class="nf">check_drives_presence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">existing_drives</span><span class="p">):</span>
+        <span class="n">available_drives</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_drives</span><span class="p">(</span><span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">available_drives</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">existing_drives</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+            <span class="n">existing_drives</span><span class="p">,</span> <span class="n">available_drives</span><span class="p">,</span> <span class="s2">&quot;Check drive availability &quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.get_custom_filter"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.get_custom_filter">[docs]</a>    <span class="k">def</span> <span class="nf">get_custom_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cfg_filter</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cfg_filter</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;filter_name&quot;</span><span class="p">:</span> <span class="s2">&quot;cycletest&quot;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">cfg_filter</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.create_fio_job"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.create_fio_job">[docs]</a>    <span class="k">def</span> <span class="nf">create_fio_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_str</span><span class="p">,</span> <span class="n">drives</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;data_integrity.fio&quot;</span><span class="p">,</span>
+            <span class="n">log_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dev_str</span> <span class="o">=</span> <span class="s2">&quot;[global]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">job_str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_boot</span><span class="p">:</span>
+            <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;[job</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">idx</span>
+            <span class="c1"># TODO: Get Random file size for boot drive fio test</span>
+            <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;size=6g</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;filename=/root/havoc_fio_file.txt</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drives</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">device</span><span class="p">,</span> <span class="n">options</span> <span class="ow">in</span> <span class="n">drives</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;[job</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">idx</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;filename=/dev/</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+                    <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">option</span>
+                <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">drives</span><span class="p">:</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;[job</span><span class="si">%d</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">idx</span>
+                <span class="n">dev_str</span> <span class="o">+=</span> <span class="s2">&quot;filename=/dev/</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">log_dir</span><span class="p">:</span>
+            <span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span>
+        <span class="n">job_file</span> <span class="o">=</span> <span class="n">log_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">filename</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">job_file</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">prep_f</span><span class="p">:</span>
+            <span class="n">prep_f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dev_str</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">job_file</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.start_fio_daemon"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.start_fio_daemon">[docs]</a>    <span class="k">def</span> <span class="nf">start_fio_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># In case previous run did not clear the FIO daemons properly</span>
+        <span class="c1"># test may fail with &quot;bad server cmd version&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;killall fio&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="c1"># Setup fio server on the host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;rm -rf /tmp/fio.pid&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;fio --server=ip</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> --daemonize=/tmp/fio.pid&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip4</span> <span class="k">else</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.parse_fio_error"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.parse_fio_error">[docs]</a>    <span class="k">def</span> <span class="nf">parse_fio_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        @param int exit_code: fio cmd exit code</span>
+<span class="sd">        @param string cmd_out: output of fio command</span>
+<span class="sd">        @param fio_output_file: fio results file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Ignoring if &quot;timeout on cmd SEND_ETA&quot; while FIO</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;timeout on cmd SEND_ETA&quot;</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;SEND_ETA timed out with exit code: </span><span class="si">%s</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> cmd_out:- </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">exit_code</span><span class="p">,</span> <span class="n">cmd_out</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">err_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count_fio_err</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">err_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                    <span class="s2">&quot;FIO Failed, </span><span class="se">\n</span><span class="s2"> cmd_out:- </span><span class="si">%s</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> log file:- </span><span class="si">%s</span><span class="s2">&quot;</span>
+                    <span class="o">%</span> <span class="p">(</span><span class="n">cmd_out</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">))</span>
+                <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest._count_fio_err"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest._count_fio_err">[docs]</a>    <span class="k">def</span> <span class="nf">_count_fio_err</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fio_output_file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Match error count from an fio result file and return error count</span>
+
+<span class="sd">        @param string fio_output_file: path to fio result file</span>
+<span class="sd">        @return int: fio error count</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fio_output_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">fio_output</span> <span class="o">=</span> <span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&quot;error&quot; : (\d*)&#39;</span><span class="p">,</span> <span class="n">fio_output</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">FioErrorParsingException</span><span class="p">(</span>
+                        <span class="s2">&quot;Could not find error count from fio output file </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="n">fio_output_file</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span>
+                <span class="s2">&quot;Fio output file does not exist: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fio_output_file</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.check_supported_fio_version"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.check_supported_fio_version">[docs]</a>    <span class="k">def</span> <span class="nf">check_supported_fio_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_fio_version_controller</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_fio_version_dut</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.check_fio_version_controller"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.check_fio_version_controller">[docs]</a>    <span class="k">def</span> <span class="nf">check_fio_version_controller</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the fio version of controller matches the</span>
+<span class="sd">        latest, if not it gets updated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fio_ver_controller</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">localhost</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;fio -v&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;fio-&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))</span>
+        <span class="n">fio_version</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fio_ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">fio_ver_controller</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">fio_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">fio_ver_controller</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fio_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;FIO version on controller is not latest,the current version &quot;</span>
+                <span class="s2">&quot;is </span><span class="si">{0}</span><span class="s2">, update needed to </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fio_ver_controller</span><span class="p">,</span> <span class="n">fio_version</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fio_ver_controller</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fio_version</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;FIO version on controller is not latest,the current version &quot;</span>
+                    <span class="s2">&quot;is </span><span class="si">{0}</span><span class="s2">, update needed to </span><span class="si">{1}</span><span class="s2">&quot;</span>
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fio_ver_controller</span><span class="p">,</span> <span class="n">fio_version</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.check_fio_version_dut"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.check_fio_version_dut">[docs]</a>    <span class="k">def</span> <span class="nf">check_fio_version_dut</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the fio version of dut matches the</span>
+<span class="sd">        latest, if not it gets updated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fio_ver_dut</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;fio -v&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;fio-&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))</span>
+        <span class="n">fio_version</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fio_ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">fio_ver_dut</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">fio_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">fio_ver_dut</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fio_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_fio_version</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fio_ver_dut</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fio_version</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_fio_version</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.update_fio_version"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.update_fio_version">[docs]</a>    <span class="k">def</span> <span class="nf">update_fio_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;yum install -y fio&quot;</span><span class="p">)</span>
+        <span class="n">fio_ver_dut</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;fio -v&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;fio-&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">fio_ver_dut</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fio_ver</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;FIO update on dut failed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlashDataIntegrityTest.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.FlashDataIntegrityTest.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FlashDataIntegrityTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">inband_config_check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.flash_data_integrity.html#havoc.autoval.tests.flash_data_integrity.flash_data_integrity.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">FlashDataIntegrityTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

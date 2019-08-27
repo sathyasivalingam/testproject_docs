@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.drive_capacity_check.drive_capacity_check &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.drive_capacity_check.drive_capacity_check</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.drive_capacity_check.drive_capacity_check</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2016-present, Facebook, Inc.</span>
+<span class="c1"># All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Description     : This test compares the expected capacity with drive&#39;s capacity.</span>
+<span class="c1"># TestCase IDs    : UHDDT_001</span>
+<span class="c1"># ==============================================================================</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.storage_test_base</span> <span class="k">import</span> <span class="n">StorageTestBase</span>
+
+
+<div class="viewcode-block" id="DriveCapacityCheck"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_capacity_check.html#havoc.autoval.tests.drive_capacity_check.drive_capacity_check.DriveCapacityCheck">[docs]</a><span class="k">class</span> <span class="nc">DriveCapacityCheck</span><span class="p">(</span><span class="n">StorageTestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Drive Capacity Check Test.</span>
+
+<span class="sd">    This test lists all the drives present in the host, calculates the</span>
+<span class="sd">    capacity for each drives and compares with the expected capacity</span>
+<span class="sd">    (test parameter). Also validates for TestError exception when a data is</span>
+<span class="sd">    written in the Last Logical Block Address(LBA).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DriveCapacityCheck.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_capacity_check.html#havoc.autoval.tests.drive_capacity_check.drive_capacity_check.DriveCapacityCheck.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates drive&#39;s capacity with test parameter value.</span>
+
+<span class="sd">        This method gets the drives list present in the host, calculates the</span>
+<span class="sd">        capacity value in bytes for drives if the test parameter is not provided,</span>
+<span class="sd">        compares the drives capacity value (bytes) with expected input value,</span>
+<span class="sd">        and validates the write operation on drive&#39;s Last Logical Block Address(LBA).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestError</span>
+<span class="sd">            When fails to get the Drive&#39;s Capacity value.</span>
+<span class="sd">        TestStepError</span>
+<span class="sd">            When comparison fails between &quot;expected&quot; value and &quot;actual&quot; value, and</span>
+<span class="sd">        for any other exception while writing data into the Last LBA.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Begin checking drive capacity&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get capacity of the first test drive if test parameter is not provided</span>
+        <span class="k">if</span> <span class="s2">&quot;capacity&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">:</span>
+            <span class="n">_cap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;capacity&quot;</span><span class="p">)</span>
+            <span class="n">size</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_capacity_string</span><span class="p">(</span><span class="n">_cap</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_capacity</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s2">&quot;byte&quot;</span><span class="p">)</span>
+            <span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;byte&quot;</span>
+
+        <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">:</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">drive</span><span class="o">.</span><span class="n">get_capacity</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+            <span class="n">expected</span> <span class="o">=</span> <span class="n">size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">actual</span><span class="p">,</span>
+                <span class="n">expected</span><span class="p">,</span>
+                <span class="s2">&quot;Verify /dev/</span><span class="si">%s</span><span class="s2"> capacity in unit </span><span class="si">%s</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">drive</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">write_to_last_sector</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">drive</span><span class="p">],</span>
+                <span class="s2">&quot;Write to the last sector was successful.&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DriveCapacityCheck.split_capacity_string"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_capacity_check.html#havoc.autoval.tests.drive_capacity_check.drive_capacity_check.DriveCapacityCheck.split_capacity_string">[docs]</a>    <span class="k">def</span> <span class="nf">split_capacity_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Splits the capacity into size and unit.</span>
+
+<span class="sd">        This method splits the capacity value into the size(digit) and unit.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        The capacity value to be &quot;14TB&quot;, the values will be splits into (14, &quot;tb&quot;).</span>
+<span class="sd">        where size is 14 and unit is &quot;TB&quot;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        capacity : String</span>
+<span class="sd">            The test parameter capacity value of the drive.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        (size,unit) : Tuple(Integer,String)</span>
+<span class="sd">            Collection of &#39;size&#39; and &#39;unit&#39; value derived from &#39;capacity&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+)(\w+)&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DriveCapacityCheck.write_to_last_sector"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_capacity_check.html#havoc.autoval.tests.drive_capacity_check.drive_capacity_check.DriveCapacityCheck.write_to_last_sector">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_last_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes Data to last sector(LBA) of the drive.</span>
+
+<span class="sd">        This method gets the drive&#39;s Last Logical Block Address(LBA),</span>
+<span class="sd">        writes the data into the LBA with Block Size(bs) of 4K and</span>
+<span class="sd">        raises TestError exception when failed to write the data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        drive : :obj: &#39;Drive&#39;</span>
+<span class="sd">            The drive&#39;s name present in the host for the specific drive type.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TestError</span>
+<span class="sd">           When fails to get the Last LBA value from the drive and writes</span>
+<span class="sd">           data into the last sector of the drive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;dd bs=4k count=1 if=/dev/zero seek=</span><span class="si">%d</span><span class="s1"> of=/dev/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">drive</span><span class="o">.</span><span class="n">get_last_lba</span><span class="p">(),</span>
+            <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># noqa</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">_msg</span> <span class="o">=</span> <span class="s2">&quot;Fail to write to last sector of /dev/</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">drive</span><span class="o">.</span><span class="n">block_name</span><span class="p">,</span> <span class="n">e</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="n">_msg</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.drive_capacity_check.html#havoc.autoval.tests.drive_capacity_check.drive_capacity_check.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">DriveCapacityCheck</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

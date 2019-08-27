@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Openbmc Vboot Feature Unit Tests</span>
+<span class="sd">1. Blocking Update to SPI0.0 with Hardware Enforcement On</span>
+<span class="sd">   --Once hardware enforcement is applied, SPI0.0 cannot be updated.</span>
+<span class="sd">2. Blocking Update to first 64KB of SPI0.1 with Hardware Enforcement On</span>
+<span class="sd">   --Once hardware enforcement is applied, first 64KB of SPI0.1 cannot be updated.</span>
+<span class="sd">3. Manually inducing the AST alternate boot source</span>
+<span class="sd">   --ROM resumes execution from SPI0.0</span>
+<span class="sd">   --if the AST is set to swap the source of SPI0.1 and SPI0.0.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests">[docs]</a><span class="k">class</span> <span class="nc">OpenbmcVbootFeatureTests</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenbmcVbootFeatureTests</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rom_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;rom_update&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bmc_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;bmc_update&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ast_boot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;ast_boot&quot;</span><span class="p">]</span>
+        <span class="n">firmware_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_firmware_path</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fwimage_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">firmware_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;fwimage-file&quot;</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+            <span class="s2">&quot;This is the OpenBMC FW upgrade downgrade vboot validation&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_json_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fwimage_file</span><span class="p">)</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span>
+        <span class="n">current_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_version</span>
+        <span class="n">curversion_subfiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">curversion_subfiles</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rom_update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Blocking Update to SPI0.0 with hardware enforcement on&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rom_update_validation</span><span class="p">(</span>
+                <span class="n">current_version</span><span class="p">,</span> <span class="n">curversion_subfiles</span><span class="p">,</span> <span class="n">filepath</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;skipped ROM update check&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bmc_update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot; Blocking Update to first 64KB of SPI0.1 with hardware enforcement on&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bmc_update_validation</span><span class="p">(</span>
+                <span class="n">current_version</span><span class="p">,</span> <span class="n">curversion_subfiles</span><span class="p">,</span> <span class="n">filepath</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;skipped BMC update check&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ast_boot</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;AST alteranate boot&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">ast_alternate_boot_source</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;skipped AST alteranate boot&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.rom_update_validation"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.rom_update_validation">[docs]</a>    <span class="k">def</span> <span class="nf">rom_update_validation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">current_version</span><span class="p">,</span> <span class="n">curversion_subfiles</span><span class="p">,</span> <span class="n">filepath</span>
+    <span class="p">):</span>
+        <span class="n">hardware_enforced</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">check_hardware_enforcement</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">hardware_enforced</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">change_content_in_rom</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;Verify that we can&#39;t change contents in ROM with HW enforcement&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">change_content_in_rom</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;Verify that we can change contents in ROM&quot;</span><span class="p">,</span>
+                <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fw_util_rom_update</span><span class="p">(</span>
+                <span class="n">current_version</span><span class="p">,</span> <span class="n">curversion_subfiles</span><span class="p">,</span> <span class="n">filepath</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.bmc_update_validation"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.bmc_update_validation">[docs]</a>    <span class="k">def</span> <span class="nf">bmc_update_validation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">current_version</span><span class="p">,</span> <span class="n">curversion_subfiles</span><span class="p">,</span> <span class="n">filepath</span>
+    <span class="p">):</span>
+        <span class="n">hardware_enforced</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">check_hardware_enforcement</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">hardware_enforced</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">modify_first_64kb_of_bmc</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;Verify that we can&#39;t change the first 64KB of BMC with HW enforcement&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">modify_first_64kb_of_bmc</span><span class="p">,</span>
+                <span class="p">[],</span>
+                <span class="s2">&quot;Verify that we can change the first 64KB of BMC&quot;</span><span class="p">,</span>
+                <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fw_util_bmc_update</span><span class="p">(</span>
+                <span class="n">current_version</span><span class="p">,</span> <span class="n">curversion_subfiles</span><span class="p">,</span> <span class="n">filepath</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.change_content_in_rom"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.change_content_in_rom">[docs]</a>    <span class="k">def</span> <span class="nf">change_content_in_rom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_obmccmd</span><span class="p">(</span><span class="s2">&quot;/bin/rm&quot;</span><span class="p">,</span> <span class="s2">&quot;-f /tmp/block&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/dd  if=/dev/mtd12  of=/tmp/block bs=1M&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/md5sum  /tmp/block  &gt; /tmp/block.md5&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/dd  if=/dev/zero  of=/dev/mtd12  bs=1M&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/dd  if=/dev/mtd12  of=/tmp/block  bs=1M&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/md5sum -c /tmp/block.md5&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to change ROM&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.modify_first_64kb_of_bmc"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.modify_first_64kb_of_bmc">[docs]</a>    <span class="k">def</span> <span class="nf">modify_first_64kb_of_bmc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_obmccmd</span><span class="p">(</span><span class="s2">&quot;/bin/rm&quot;</span><span class="p">,</span> <span class="s2">&quot;-f /tmp/block&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/dd  if=/dev/mtd5  of=/tmp/block  bs=64k  count=1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/md5sum  /tmp/block  &gt; /tmp/block.md5&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/dd  if=/dev/zero  of=/dev/mtd5  bs=64k  count=1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/bin/dd  if=/dev/mtd5  of=/tmp/block  bs=64k  count=1&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/md5sum -c /tmp/block.md5&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_output</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Failed to modify BMC&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.validate_output"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.validate_output">[docs]</a>    <span class="k">def</span> <span class="nf">validate_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/tmp/block:&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">&quot;OK&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.copy_required_files"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.copy_required_files">[docs]</a>    <span class="k">def</span> <span class="nf">copy_required_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
+        <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">directory_tocopy</span><span class="p">)</span>
+        <span class="n">destination_location</span> <span class="o">=</span> <span class="s2">&quot;/tmp&quot;</span>
+        <span class="n">copied_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">scp_file</span><span class="p">(</span>
+            <span class="n">absolute_path</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">,</span> <span class="n">destination_location</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.fw_util_bmc_update"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.fw_util_bmc_update">[docs]</a>    <span class="k">def</span> <span class="nf">fw_util_bmc_update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">,</span> <span class="n">filepath</span>
+    <span class="p">):</span>
+        <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy_required_files</span><span class="p">(</span>
+            <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">,</span> <span class="n">filepath</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;BMC update with version: &quot;</span> <span class="o">+</span> <span class="n">directory_tocopy</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bmc</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;BMC update completed: &quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.fw_util_rom_update"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.fw_util_rom_update">[docs]</a>    <span class="k">def</span> <span class="nf">fw_util_rom_update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">,</span> <span class="n">filepath</span>
+    <span class="p">):</span>
+        <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy_required_files</span><span class="p">(</span>
+            <span class="n">directory_tocopy</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">,</span> <span class="n">filepath</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;ROM update with version: &quot;</span> <span class="o">+</span> <span class="n">directory_tocopy</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_rom</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;ROM update completed: &quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.get_json_data"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.get_json_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_json_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">):</span>
+        <span class="c1"># Parse the parameters to be used in this test from json file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+            <span class="n">datadict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+        <span class="n">firmware_path</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_firmware_path</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">firmware_path</span><span class="p">,</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;filepath&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_version</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;current_version&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curversion_subfiles</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;curversion_subfiles&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenbmcVbootFeatureTests.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.OpenbmcVbootFeatureTests.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenbmcVbootFeatureTests</span><span class="p">,</span>
+              <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span><span class="n">cfg_filter</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;openbmc_version&quot;</span><span class="p">,</span> <span class="s2">&quot;product_data&quot;</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_vboot_feature_tests.html#havoc.autoval.tests.openbmc_vboot_feature_tests.openbmc_vboot_feature_tests.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">OpenbmcVbootFeatureTests</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.sg_utils &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.sg_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.sg_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval</span> <span class="k">import</span> <span class="n">AutovalUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.disk_utils</span> <span class="k">import</span> <span class="n">DiskUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.autoval_exceptions</span> <span class="k">import</span> <span class="n">TestError</span>
+
+
+<div class="viewcode-block" id="SgUtils"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils">[docs]</a><span class="k">class</span> <span class="nc">SgUtils</span><span class="p">:</span>
+<div class="viewcode-block" id="SgUtils.validate_sg_readcap"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_readcap">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_readcap</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_readcap </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_readcap_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_readcap_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_readcap_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sg_readcap output validation&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_readcap </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">last_blk_addr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Last logical block address=(\d+)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">last_blk_addr</span><span class="p">,</span> <span class="s2">&quot;last_blk_addr is valid&quot;</span><span class="p">)</span>
+        <span class="n">no_of_blocks</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Number of blocks=(\d+)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">no_of_blocks</span><span class="p">,</span> <span class="s2">&quot;no_of_blocks is valid&quot;</span><span class="p">)</span>
+        <span class="n">blk_len</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Logical block length=(\d+)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">blk_len</span><span class="p">,</span> <span class="s2">&quot;blk_len is valid&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_inq"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_inq">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_inq</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_inq </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sg_device</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_inq_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_inq_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_inq_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sg_inq output validation&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_inq </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sg_device</span><span class="p">)</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">vi</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Vendor identification:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">vi</span><span class="p">,</span> <span class="s2">&quot;Vendor id is valid&quot;</span><span class="p">)</span>
+        <span class="n">pi</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Product identification:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="s2">&quot;Product id is valid&quot;</span><span class="p">)</span>
+        <span class="n">prl</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Product revision level:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">prl</span><span class="p">,</span> <span class="s2">&quot;Product revision is valid&quot;</span><span class="p">)</span>
+        <span class="n">usn</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Unit serial number:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">usn</span><span class="p">,</span> <span class="s2">&quot;serial num is valid&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_luns"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_luns">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_luns</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_luns </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_command_capacity"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_command_capacity">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_command_capacity</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --command=capacity </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_command_capacity_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_command_capacity_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_command_capacity_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sdparm_command_capacity output validation&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --command=capacity </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;blocks:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="s2">&quot;blocks is valid&quot;</span><span class="p">)</span>
+        <span class="n">blk_len</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;block_length:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">blk_len</span><span class="p">,</span> <span class="s2">&quot;blk_len is valid&quot;</span><span class="p">)</span>
+        <span class="n">capacity_mib</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;capacity_mib:\s(.*)&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">capacity_mib</span><span class="p">,</span> <span class="s2">&quot;capacity_mib is valid&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_command_ready"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_command_ready">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_command_ready</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --command=ready </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_command_ready_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_command_ready_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_command_ready_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --command=ready </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Ready&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="s2">&quot;sdparm-command-ready output is valid&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_command_sense"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_command_sense">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_command_sense</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --command=sense </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_all"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_all">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_all</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --all </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sdparm_inquiry"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sdparm_inquiry">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sdparm_inquiry</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sdparm --inquiry </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_test_rwbuf"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_test_rwbuf">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_test_rwbuf</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">buffer_size</span> <span class="o">=</span> <span class="n">SgUtils</span><span class="o">.</span><span class="n">get_scsi_device_buffer_size</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_test_rwbuf --size=</span><span class="si">%d</span><span class="s2"> --times=</span><span class="si">%d</span><span class="s2"> --verbose </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">buffer_size</span><span class="p">,</span>
+            <span class="n">times</span><span class="p">,</span>
+            <span class="n">sg_device</span>
+        <span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_test_rwbuf_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_test_rwbuf_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_test_rwbuf_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">buffer_size</span> <span class="o">=</span> <span class="n">SgUtils</span><span class="o">.</span><span class="n">get_scsi_device_buffer_size</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sg_test_rwbuf output validation&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_test_rwbuf --size=</span><span class="si">%d</span><span class="s2"> --times=</span><span class="si">%d</span><span class="s2"> --verbose </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">buffer_size</span><span class="p">,</span>
+            <span class="n">times</span><span class="p">,</span>
+            <span class="n">sg_device</span>
+        <span class="p">)</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Success&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="s2">&quot;Verified the string success&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_verify"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_verify">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_verify</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_verify -c 0x10000 -l 0 -v </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_verify_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_verify_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_verify_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sg_verify output validation&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_verify -c 0x10000 -l 0 -v </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">m1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Verified&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="s2">&quot;verified the string Verified&quot;</span><span class="p">)</span>
+        <span class="n">m2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;without error&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">m2</span><span class="p">,</span> <span class="s2">&quot;verified the string withouterror&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_turs"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_turs">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_turs</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_turs -p -v </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_no_exception</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="p">[</span><span class="n">cmd</span><span class="p">],</span> <span class="s2">&quot;Run </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.validate_sg_turs_output"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.validate_sg_turs_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">validate_sg_turs_output</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;sg_turs output validation&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;sg_turs -p -v </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;test unit ready&quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="s2">&quot;Verified the string testunitready&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SgUtils.list_scsi_devices"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.list_scsi_devices">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">list_scsi_devices</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;lsscsi -g &quot;</span>
+        <span class="n">op</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(\[\w*.*\])\s*(\w*)\s*\w*.*(\/dev\/sd\w*)\s*(\/dev\/sg\d*)&quot;</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">device</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;channel_target_lun&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                    <span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="s2">&quot;sg_device&quot;</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">devices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">AutovalUtils</span><span class="o">.</span><span class="n">set_host</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="n">boot_drive</span> <span class="o">=</span> <span class="n">DiskUtils</span><span class="p">()</span><span class="o">.</span><span class="n">get_boot_drive</span><span class="p">()</span>
+        <span class="c1">#Exclude boot drive record from devices</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">devices</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;device&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">boot_drive</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">devices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">devices</span></div>
+
+<div class="viewcode-block" id="SgUtils.get_scsi_device_buffer_size"><a class="viewcode-back" href="../../../../../havoc.autoval.lib.test_utils.html#havoc.autoval.lib.test_utils.sg_utils.SgUtils.get_scsi_device_buffer_size">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_scsi_device_buffer_size</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">sg_device</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Buffer size provided by `sg_test_rwbuf --quick` does not always work</span>
+<span class="sd">        for `sg_test_rwbuf --size`. Limit buffer size to 4096 bytes as a work</span>
+<span class="sd">        around</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_buffer_size</span> <span class="o">=</span> <span class="mi">4096</span>  <span class="c1"># in bytes</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;sg_test_rwbuf --quick </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sg_device</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;buffer\sof\s(\d+)\sbytes&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">buffer_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TestError</span><span class="p">(</span><span class="s2">&quot;Fail to get buffer size of SCSI device: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sg_device</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">buffer_size</span> <span class="o">&lt;</span> <span class="n">max_buffer_size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">buffer_size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">max_buffer_size</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This function flashes the openBMC with requested version by the user.</span>
+<span class="sd">It is a stress test where it toggles between previous version and requested</span>
+<span class="sd">version.</span>
+<span class="sd">This function updates the OpenbMC firmware of all machine types</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="OpenbmcFlashcpStress"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.OpenbmcFlashcpStress">[docs]</a><span class="k">class</span> <span class="nc">OpenbmcFlashcpStress</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="OpenbmcFlashcpStress.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.OpenbmcFlashcpStress.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenbmcFlashcpStress</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upgrade_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;upgrade_method&quot;</span><span class="p">,</span> <span class="s2">&quot;defaultflash&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flashinfo_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="p">[</span><span class="s2">&quot;flashinfo-file&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenbmcFlashcpStress.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.OpenbmcFlashcpStress.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;This is the OpenBMC FW flashcp test&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_json_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flashinfo_file</span><span class="p">)</span>
+        <span class="n">cycle_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span>
+        <span class="n">filepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span>
+        <span class="n">destination_location</span> <span class="o">=</span> <span class="s2">&quot;/tmp&quot;</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cycle_count</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;started the cycle </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_openbmc_version</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;The BMC is running with version:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">out</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_version</span><span class="p">:</span>
+                <span class="n">directory_tocopy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_version</span>
+                <span class="n">subfiles_tocopy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prevversion_subfiles</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">directory_tocopy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_version</span>
+                <span class="n">subfiles_tocopy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reqversion_subfiles</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Copying the required files to OpenBMC&quot;</span><span class="p">)</span>
+            <span class="n">copiedfiles_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">directory_tocopy</span><span class="p">)</span>
+            <span class="c1"># code starts to check whether its kernel-rootfsflash/ defaultflash</span>
+            <span class="c1"># if its kernel-rootfs, perform flash on only kernel and rootfs</span>
+            <span class="c1">#  and reboot the OpenBMC to reflect new version</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">validate_version</span><span class="p">(</span><span class="n">directory_tocopy</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                    <span class="s2">&quot;validate_version not available. Setting version check to False&quot;</span>
+                <span class="p">)</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">version</span> <span class="ow">and</span> <span class="n">cycle_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># on tiogapass fw-util is used to update bmc from  1.5 onwards</span>
+                <span class="c1"># version below 1.5 will use existing flashcp method</span>
+                <span class="c1"># pass the version that bmc should update to and check if its</span>
+                <span class="c1"># 1.5 or higher to execute the newly added fw-util bmc command</span>
+                <span class="c1"># On Brycecanyon fw-util command is used for updating chips</span>
+                <span class="c1"># fw-util is used from version 1.0</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">fw_util_bmc_update</span><span class="p">(</span>
+                    <span class="n">absolute_path</span><span class="p">,</span>
+                    <span class="n">subfiles_tocopy</span><span class="p">,</span>
+                    <span class="n">destination_location</span><span class="p">,</span>
+                    <span class="n">directory_tocopy</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">copied_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">scp_file</span><span class="p">(</span>
+                    <span class="n">absolute_path</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">destination_location</span>
+                <span class="p">)</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_rom</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Completed Executing fw-util with rom option </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">version</span> <span class="ow">and</span> <span class="n">cycle_count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fw_util_bmc_update</span><span class="p">(</span>
+                        <span class="n">absolute_path</span><span class="p">,</span>
+                        <span class="n">subfiles_tocopy</span><span class="p">,</span>
+                        <span class="n">destination_location</span><span class="p">,</span>
+                        <span class="n">directory_tocopy</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upgrade_method</span> <span class="o">==</span> <span class="s2">&quot;kernel-rootfsflash&quot;</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subfiles_tocopy</span><span class="p">)):</span>
+                            <span class="n">copied_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">scp_file</span><span class="p">(</span>
+                                <span class="n">absolute_path</span><span class="p">,</span>
+                                <span class="n">subfiles_tocopy</span><span class="p">[</span><span class="n">value</span><span class="p">],</span>
+                                <span class="n">destination_location</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">copiedfiles_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copied_file</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                                <span class="s2">&quot;Performing kernel flashcp-update with copied version: &quot;</span>
+                                <span class="o">+</span> <span class="n">directory_tocopy</span>
+                            <span class="p">)</span>
+                            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">flashcp_kernel</span><span class="p">(</span><span class="n">copiedfiles_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; The command output is&quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+                            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">flashcp_rootfs</span><span class="p">(</span><span class="n">copiedfiles_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; The command output is&quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">upgrade_method</span> <span class="o">==</span> <span class="s2">&quot;defaultflash&quot;</span><span class="p">:</span>
+                        <span class="c1"># yosemite-v1.0 is the only exception where preenvironment</span>
+                        <span class="c1"># needs to be set and reboot</span>
+                        <span class="c1"># then copy the file and flash proceeded with reboot again</span>
+                        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">openbmc_flashcp_upgrade</span><span class="p">(</span>
+                            <span class="n">absolute_path</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">destination_location</span>
+                        <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot; The command output is&quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">reboot</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="p">(</span><span class="s2">&quot;Unsuported flash_type&quot;</span><span class="p">)</span>
+            <span class="n">newversion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">get_openbmc_version</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                <span class="n">newversion</span> <span class="o">==</span> <span class="n">directory_tocopy</span><span class="p">,</span>
+                <span class="s2">&quot;OpenBMC is successfully flashed with new version&quot;</span> <span class="o">+</span> <span class="n">newversion</span><span class="p">,</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcFlashcpStress.fw_util_bmc_update"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.OpenbmcFlashcpStress.fw_util_bmc_update">[docs]</a>    <span class="k">def</span> <span class="nf">fw_util_bmc_update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">absolute_path</span><span class="p">,</span>
+        <span class="n">subfiles_tocopy</span><span class="p">,</span>
+        <span class="n">destination_location</span><span class="p">,</span>
+        <span class="n">directory_tocopy</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subfiles_tocopy</span><span class="p">)):</span>
+            <span class="n">copied_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">bmc_host</span><span class="o">.</span><span class="n">scp_file</span><span class="p">(</span>
+                <span class="n">absolute_path</span><span class="p">,</span> <span class="n">subfiles_tocopy</span><span class="p">[</span><span class="n">value</span><span class="p">],</span> <span class="n">destination_location</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="s2">&quot;Performing fw-util command with copied version: &quot;</span> <span class="o">+</span> <span class="n">directory_tocopy</span>
+            <span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">fw_update_bmc</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">destination_location</span><span class="p">,</span> <span class="n">copied_file</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Completed Executing fw-util with bmc option </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OpenbmcFlashcpStress.get_json_data"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.OpenbmcFlashcpStress.get_json_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_json_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">):</span>
+        <span class="c1"># Parse the parameters to be used in this test from json file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+            <span class="n">datadict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;filepath&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_version</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;required_version&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_version</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;previous_version&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_count</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;cycle_count&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prevversion_subfiles</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;prevversion_subfiles&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reqversion_subfiles</span> <span class="o">=</span> <span class="n">datadict</span><span class="p">[</span><span class="s2">&quot;reqversion_subfiles&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="OpenbmcFlashcpStress.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.OpenbmcFlashcpStress.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OpenbmcFlashcpStress</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">(</span>
+            <span class="n">cfg_filter</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;bmc_version&quot;</span><span class="p">,</span> <span class="s2">&quot;openbmc_version&quot;</span><span class="p">,</span> <span class="s2">&quot;rom_version&quot;</span><span class="p">,</span> <span class="s2">&quot;product_data&quot;</span><span class="p">]</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.openbmc_flashcp_stress.html#havoc.autoval.tests.openbmc_flashcp_stress.openbmc_flashcp_stress.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">OpenbmcFlashcpStress</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

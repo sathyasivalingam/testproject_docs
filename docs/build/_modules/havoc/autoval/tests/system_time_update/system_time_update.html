@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.system_time_update.system_time_update &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.system_time_update.system_time_update</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.system_time_update.system_time_update</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+
+
+<div class="viewcode-block" id="screen_session"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.screen_session">[docs]</a><span class="k">class</span> <span class="nc">screen_session</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="screen_session.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.screen_session.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oob_addr</span> <span class="o">=</span> <span class="n">oob_addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_command</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;ipmitool -I lanplus -U&#39;</span>
+                <span class="s1">&#39; USERID -P PASSW0RD -H </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oob_addr</span><span class="p">))</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;screen -S </span><span class="si">%s</span><span class="s2"> -X quit&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hostname</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;screen -dmS </span><span class="si">%s</span><span class="s2"> -L&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hostname</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="screen_session.start_sol"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.screen_session.start_sol">[docs]</a>    <span class="k">def</span> <span class="nf">start_sol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># `echo -ne &#39;#&#39;` is sending a key input</span>
+        <span class="c1"># through screen to execute a command in</span>
+        <span class="c1"># the screen session</span>
+        <span class="c1"># all input translation codes for the GNU</span>
+        <span class="c1"># screen found here:</span>
+        <span class="c1"># https://www.gnu.org/software/screen/manual/html_node/Input-Translation.html</span>
+        <span class="c1"># \015 is enter, \033 is ESC, \033[B is down</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                 <span class="p">(</span><span class="s1">&#39;screen -S </span><span class="si">%s</span><span class="s1"> -p 0 -X stuff &quot;</span><span class="si">%s</span><span class="s1">&#39;</span>
+                 <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_command</span><span class="p">)</span>
+                 <span class="o">+</span> <span class="s2">&quot; sol deactivate `echo -ne &#39;</span><span class="se">\015</span><span class="s2">&#39;`</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                <span class="s1">&#39;screen -S </span><span class="si">%s</span><span class="s1"> -p 0 -X stuff &quot;</span><span class="si">%s</span><span class="s1">&#39;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_command</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot; sol activate `echo -ne &#39;</span><span class="se">\015</span><span class="s2">&#39;`</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="screen_session.end_sol"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.screen_session.end_sol">[docs]</a>    <span class="k">def</span> <span class="nf">end_sol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                 <span class="p">(</span><span class="s1">&#39;screen -S </span><span class="si">%s</span><span class="s1"> -p 0 -X stuff &quot;</span><span class="si">%s</span><span class="s1">&#39;</span>
+                 <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipmi_command</span><span class="p">)</span>
+                 <span class="o">+</span> <span class="s2">&quot; sol deactivate `echo -ne &#39;</span><span class="se">\015</span><span class="s2">&#39;`</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="screen_session.exit_bios"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.screen_session.exit_bios">[docs]</a>    <span class="k">def</span> <span class="nf">exit_bios</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;screen -S </span><span class="si">%s</span><span class="s2"> -p 0 -X stuff `echo -ne &#39;</span><span class="se">\033</span><span class="s2">&#39;`&quot;</span>
+                 <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">))</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;screen -S </span><span class="si">%s</span><span class="s2"> -p 0 -X stuff `echo -ne &#39;</span><span class="se">\015</span><span class="s2">&#39;`&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="screen_session.end_session"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.screen_session.end_session">[docs]</a>    <span class="k">def</span> <span class="nf">end_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;screen -S </span><span class="si">%s</span><span class="s2"> -X quit&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="System_Time_Update"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.System_Time_Update">[docs]</a><span class="k">class</span> <span class="nc">System_Time_Update</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="System_Time_Update.reboot_into_bios"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.System_Time_Update.reboot_into_bios">[docs]</a>    <span class="k">def</span> <span class="nf">reboot_into_bios</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;echo r &gt; /proc/sysrq-trigger&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="s2">&quot;raw 0x00 0x08 0x03 0x08&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span>
+                <span class="s2">&quot;chassis bootdev bios options=persistent&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="s2">&quot;power reset&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System_Time_Update.disable_chef_temporarily"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.System_Time_Update.disable_chef_temporarily">[docs]</a>    <span class="k">def</span> <span class="nf">disable_chef_temporarily</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;/usr/facebook/ops/scripts/chef/stop_chef_temporarily&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="System_Time_Update.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.System_Time_Update.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;This is the system time update test&quot;</span><span class="p">)</span>
+        <span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span>
+        <span class="n">oob_addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;oob_addr&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disable_chef_temporarily</span><span class="p">()</span>
+
+        <span class="n">bmc_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">oob</span><span class="o">.</span><span class="n">run_ipmicmd</span><span class="p">(</span><span class="s2">&quot;sel time get&quot;</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">split</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)),</span> <span class="s2">&quot;%m</span><span class="si">%d</span><span class="s2">%Y%H%M%S&quot;</span><span class="p">)</span>
+
+        <span class="n">system_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;date +%m</span><span class="si">%d</span><span class="s2">%Y%H%M%S --utc&quot;</span><span class="p">)),</span>
+                <span class="s2">&quot;%m</span><span class="si">%d</span><span class="s2">%Y%H%M%S&quot;</span><span class="p">)</span>
+
+        <span class="c1"># keep checking if bmc time is same as system time, if so</span>
+        <span class="c1"># add three days to system time. We want bmc time and system</span>
+        <span class="c1"># time to be different.</span>
+        <span class="c1"># %m%d%Y are date format specifiers, ex. 07/28/2015</span>
+        <span class="c1"># more date format specifiers found here:</span>
+        <span class="c1"># http://www.cyberciti.biz/faq/linux-unix-formatting-dates-for-display/</span>
+
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">((</span><span class="n">system_time</span> <span class="o">-</span> <span class="n">bmc_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">24</span><span class="p">:</span>
+            <span class="n">system_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;date -s &#39;+3 days&#39; +%m</span><span class="si">%d</span><span class="s2">%Y%H%M%S --utc&quot;</span><span class="p">)),</span>
+                <span class="s2">&quot;%m</span><span class="si">%d</span><span class="s2">%Y%H%M%S&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">((</span><span class="n">system_time</span> <span class="o">-</span> <span class="n">bmc_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">)</span>
+            <span class="o">&gt;=</span> <span class="mi">48</span><span class="p">,</span>
+            <span class="s2">&quot;system time and bmc time are at least 2 days apart&quot;</span><span class="p">)</span>
+
+        <span class="c1"># update rtc time to system time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;hwclock --systohc&quot;</span><span class="p">)</span>
+
+        <span class="n">rtc_test_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;hwclock --local&quot;</span><span class="p">)</span>
+                        <span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">6</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)),</span> <span class="s2">&quot;</span><span class="si">%a%d</span><span class="s2">%b%Y%I%M%S%p&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ensure rtc has been updated to system time</span>
+        <span class="c1"># rtc has natural drift in time, unsure how big that</span>
+        <span class="c1"># drift is, but giving a day buffer to validate</span>
+        <span class="c1"># rtc clock has been updated to system clock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">((</span><span class="n">system_time</span> <span class="o">-</span> <span class="n">rtc_test_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">)</span>
+            <span class="o">&lt;=</span> <span class="mi">24</span><span class="p">,</span>
+            <span class="s2">&quot;rtc and system clock are within are within a day from eachother&quot;</span><span class="p">)</span>
+
+        <span class="c1"># start screen session and start sol to monitor host as it boots up</span>
+        <span class="n">screen_sess</span> <span class="o">=</span> <span class="n">screen_session</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">oob_addr</span><span class="p">)</span>
+        <span class="n">screen_sess</span><span class="o">.</span><span class="n">start_sol</span><span class="p">()</span>
+
+        <span class="c1"># restart host and boot into bios</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reboot_into_bios</span><span class="p">()</span>
+
+        <span class="c1"># wait a long enough time for system to enter bios</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+
+        <span class="c1"># get the latest screen. Terminal output is in</span>
+        <span class="c1"># unicode because we imported unicode_literals for</span>
+        <span class="c1"># compliance with python 3. So we have to decode it</span>
+        <span class="c1"># to our file system&#39;s encoding, and we ignore</span>
+        <span class="c1"># any characters that our file system&#39;s encoding</span>
+        <span class="c1"># can&#39;t recognize.</span>
+        <span class="n">new_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;tail -n 1 screenlog.0 &#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;| sed -r &quot;s/</span><span class="se">\x1B\\</span><span class="s1">[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g&quot;&#39;</span><span class="p">)</span>\
+                 <span class="o">.</span><span class="n">read</span><span class="p">()</span>\
+                 <span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getfilesystemencoding</span><span class="p">(),</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+        <span class="c1"># parse out date and time, this will break when bios UI changes</span>
+        <span class="c1"># regex&#39;s below are looking at the bios screen, snippet shown</span>
+        <span class="c1"># below</span>
+        <span class="c1">#</span>
+        <span class="c1"># | System Date                  [Fri 07/24/2015]      * |</span>
+        <span class="c1"># | System Time                  [19:00:28]            * |</span>
+        <span class="n">date_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;\[(?P&lt;word_day&gt;\D</span><span class="si">{3}</span><span class="s1">) (?P&lt;date_s&gt;\d</span><span class="si">{2}</span><span class="s1">[/]+\d\d[/]+\d</span><span class="si">{4}</span><span class="s1">)\]&#39;</span><span class="p">)</span>
+        <span class="n">time_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?P&lt;hour&gt;\d\d):(?P&lt;minute&gt;\d\d):\d\d\]&#39;</span><span class="p">)</span>
+
+        <span class="n">find_system_time</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Time&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">))</span>
+        <span class="n">find_system_date</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Date&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                           <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">))</span>
+
+        <span class="c1"># Scroll down the bios screen until we see a line with</span>
+        <span class="c1"># &#39;system time&#39; and &#39;system date&#39;. If we scrolled down</span>
+        <span class="c1"># 100 times and still can&#39;t find it, fail the test,</span>
+        <span class="c1"># because otherwise it&#39;ll just infinitely loop</span>
+        <span class="c1"># example of what we are parsing out:</span>
+        <span class="c1">#</span>
+        <span class="c1"># | System Date                  [Fri 07/24/2015]      * |</span>
+        <span class="c1"># | System Time                  [19:00:28]            * |</span>
+        <span class="c1"># note: If BIOS UI changes so we no longer have System</span>
+        <span class="c1"># time and system date in the format it&#39;s currently</span>
+        <span class="c1"># specified this will break, but i can&#39;t think of a way</span>
+        <span class="c1"># around it, because parsing out strings.</span>
+
+        <span class="k">for</span> <span class="n">dead_count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">find_system_time</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">find_system_date</span><span class="p">)):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                        <span class="s2">&quot;screen -S </span><span class="si">%s</span><span class="s2"> -p 0 -X stuff `echo -ne &#39;</span><span class="se">\033</span><span class="s2">[B&#39;`&quot;</span>
+                        <span class="o">%</span> <span class="p">(</span><span class="n">hostname</span><span class="p">))</span>
+                <span class="n">new_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;tail -n 1 screenlog.0 | &#39;</span> <span class="o">+</span>
+                        <span class="s1">&#39;sed -r &quot;s/</span><span class="se">\x1B\\</span><span class="s1">[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g&quot;&#39;</span><span class="p">)</span>\
+                        <span class="o">.</span><span class="n">read</span><span class="p">()</span>\
+                        <span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getfilesystemencoding</span><span class="p">(),</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+                <span class="n">find_system_time</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Time&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                        <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">))</span>
+                <span class="n">find_system_date</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Date&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                           <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">))</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+                <span class="n">dead_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">time_regex</span><span class="o">.</span><span class="n">search</span><span class="p">,</span>
+                            <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Time&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                                <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">))))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s2">&quot;We found a system time&quot;</span><span class="p">)</span>
+
+                <span class="n">the_time</span> <span class="o">=</span> <span class="n">time_regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="nb">filter</span><span class="p">(</span><span class="n">time_regex</span><span class="o">.</span><span class="n">search</span><span class="p">,</span>
+                        <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Time&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                            <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)))[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">date_regex</span><span class="o">.</span><span class="n">search</span><span class="p">,</span>
+                        <span class="nb">filter</span><span class="p">(</span>
+                            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Date&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                            <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">))))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s2">&quot;We found a system date&quot;</span><span class="p">)</span>
+
+                <span class="n">date_time</span> <span class="o">=</span> <span class="n">date_regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="nb">filter</span><span class="p">(</span><span class="n">date_regex</span><span class="o">.</span><span class="n">search</span><span class="p">,</span>
+                           <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;System Date&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span>
+                                  <span class="n">new_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)))[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="n">bios_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                        <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">date_time</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;date_s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+                        <span class="o">+</span> <span class="n">the_time</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;hour&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">the_time</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;minute&#39;</span><span class="p">),</span>
+                        <span class="s2">&quot;%m</span><span class="si">%d</span><span class="s2">%Y%H%M&quot;</span><span class="p">)</span>
+
+                <span class="c1"># comparison of bios time and system time,</span>
+                <span class="c1"># see if they are a day within eachother</span>
+                <span class="c1"># if so, we know it was not changed by the</span>
+                <span class="c1"># bmc, so pass the test.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">((</span><span class="n">system_time</span> <span class="o">-</span> <span class="n">bios_time</span><span class="p">)</span>
+                        <span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mi">24</span><span class="p">,</span>
+                    <span class="s2">&quot;clock was not changed by bmc&quot;</span><span class="p">)</span>
+
+                <span class="c1"># clean up by restarting host,</span>
+                <span class="c1"># deactivating sol connection and killing the screen session</span>
+                <span class="n">screen_sess</span><span class="o">.</span><span class="n">exit_bios</span><span class="p">()</span>
+                <span class="n">screen_sess</span><span class="o">.</span><span class="n">end_sol</span><span class="p">()</span>
+                <span class="n">screen_sess</span><span class="o">.</span><span class="n">end_session</span><span class="p">()</span>
+                <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;We never found a system time and system date in bios&quot;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.system_time_update.html#havoc.autoval.tests.system_time_update.system_time_update.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">System_Time_Update</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

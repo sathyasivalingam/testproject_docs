@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.innosim.innosim &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.innosim.innosim</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.innosim.innosim</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.storage.storage_test_base</span> <span class="k">import</span> <span class="n">StorageTestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.filesystem_utils</span> <span class="k">import</span> <span class="n">FilesystemUtils</span>
+<span class="kn">from</span> <span class="nn">havoc.autotest_testfiles.validation_utils.lib.site_utils</span> <span class="k">import</span> <span class="n">SiteUtils</span>
+
+
+<span class="n">innosim_dir</span> <span class="o">=</span> <span class="n">SiteUtils</span><span class="o">.</span><span class="n">get_tool_path</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Innosim"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim">[docs]</a><span class="k">class</span> <span class="nc">Innosim</span><span class="p">(</span><span class="n">StorageTestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Innosim.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Innosim</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verify&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;trim&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Innosim.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="p">[</span><span class="n">drive</span><span class="o">.</span><span class="n">block_name</span> <span class="k">for</span> <span class="n">drive</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_non_empty_list</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="s2">&quot;Fetching test drives&quot;</span><span class="p">)</span>
+
+        <span class="c1"># get vendor name to be used as key prefix later</span>
+        <span class="c1">#TODO Need to change the logic for performance checker to validate all drives</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_manufacturer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_drives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">manufacturer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">part_and_raid</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Innosim.part_and_raid"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.part_and_raid">[docs]</a>    <span class="k">def</span> <span class="nf">part_and_raid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">devices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to create partition and raid0</span>
+<span class="sd">        if multiple drives and mount the filesystem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fstype</span> <span class="o">=</span> <span class="s1">&#39;xfs&#39;</span>
+        <span class="c1"># TODO need to port raid0 functionality in mdutils from autotest to autoval</span>
+        <span class="n">_device</span> <span class="o">=</span> <span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">mnt</span> <span class="o">=</span> <span class="s2">&quot;/mnt/havoc_test&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Creating xfs File System:&quot;</span><span class="p">)</span>
+        <span class="n">FilesystemUtils</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">_device</span><span class="p">,</span>
+            <span class="n">mnt_point</span><span class="o">=</span><span class="n">mnt</span><span class="p">,</span> <span class="n">filesystem_type</span><span class="o">=</span><span class="n">fstype</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">FilesystemUtils</span><span class="o">.</span><span class="n">get_df_info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">_device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="c1"># we use 85% available space</span>
+        <span class="n">db_file_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;available&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="o">.</span><span class="mi">85</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">))</span>
+        <span class="c1"># uncomment this for testing with 10G files</span>
+        <span class="c1"># db_file_size = 10</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">fstype</span><span class="p">,</span>
+            <span class="s2">&quot;Mounted </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2">, and will use </span><span class="si">%d</span><span class="s2"> GB&quot;</span> <span class="o">%</span>
+            <span class="p">(</span><span class="n">_device</span><span class="p">,</span> <span class="n">mnt</span><span class="p">,</span> <span class="n">db_file_size</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trim</span><span class="p">:</span>
+            <span class="n">FilesystemUtils</span><span class="o">.</span><span class="n">fstrim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">mnt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Trim on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mnt</span><span class="p">))</span>
+        <span class="c1"># Copy innosim to the mount location since Innosim</span>
+        <span class="c1"># runs locally from there</span>
+        <span class="n">innosim_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">innosim_dir</span><span class="p">,</span> <span class="s2">&quot;innosim&quot;</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;cp </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">innosim_path</span><span class="p">,</span> <span class="n">mnt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="c1"># noqa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">innosim_dir</span> <span class="o">=</span> <span class="n">mnt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_innosim</span><span class="p">(</span><span class="n">db_file_size</span><span class="p">)</span></div>
+        <span class="c1">#TODO Port mdutils to autoval</span>
+
+<div class="viewcode-block" id="Innosim.setup_innosim"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.setup_innosim">[docs]</a>    <span class="k">def</span> <span class="nf">setup_innosim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_file_size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to setup innosim parameters and</span>
+<span class="sd">        run innosim for read, write and read-write phases.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define size constants</span>
+        <span class="c1"># 1 means to create DB files, 0 means reuse</span>
+        <span class="n">prepare</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Seconds for which innosim runs each time it is stared</span>
+        <span class="n">secs</span> <span class="o">=</span> <span class="mi">1800</span>
+        <span class="c1"># Seconds to sleep between each run of innosim</span>
+        <span class="n">sleep_secs</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Size of database file in GB</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="n">db_file_size</span>
+        <span class="c1"># 1 means use compression (simulate CPU cost of it)</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># IO rate (per second per thread), 0 means no limit.</span>
+        <span class="c1"># Might be useful for write heavy workloads.</span>
+        <span class="n">write_limit</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Max concurrency for which test is run.</span>
+        <span class="c1"># Should be a power of 2.</span>
+        <span class="n">max_concur</span> <span class="o">=</span> <span class="mi">128</span>
+        <span class="c1"># 1 means use binlog &amp; trxlog</span>
+        <span class="n">use_bltl</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># 1 means use doublewrite buffer</span>
+        <span class="n">use_dblw</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Number of database files</span>
+        <span class="n">dfn</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="c1"># Args for run_innosim are:</span>
+        <span class="c1">#   binlog&amp;trxlog</span>
+        <span class="c1">#   doublewrite</span>
+        <span class="c1">#   nwriters</span>
+        <span class="c1">#   nusers</span>
+        <span class="c1">#   dirty_pct</span>
+        <span class="c1">#   read_hit_pct</span>
+        <span class="c1">#   test_duration</span>
+        <span class="c1">#   prepare</span>
+        <span class="c1">#   database_size_in_GB</span>
+        <span class="c1">#   use_compression</span>
+        <span class="c1">#   write_limit</span>
+        <span class="c1">#   number of database files</span>
+        <span class="n">G1</span> <span class="o">=</span> <span class="mi">1073741824</span>
+        <span class="c1"># The parameters dict</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Default parms below</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;binlog&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_bltl</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;trxlog&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_bltl</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;doublewrite&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_dblw</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;writers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;test_duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;prepare&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepare</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">comp</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;write_limit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">write_limit</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfn</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfs_by&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="n">dfs</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;bls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">G1</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;tls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">G1</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;max_dirty_pages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10000</span>
+
+        <span class="c1"># Innosim prep phase</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">prepare</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># Run prep with default params</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Innosim prep&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_innosim</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Prepare&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Innosim read-only phase</span>
+        <span class="n">concur</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">concur</span> <span class="o">&lt;=</span> <span class="n">max_concur</span><span class="p">):</span>
+            <span class="c1"># Variable params</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">concur</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;test_duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">secs</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;prepare&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Innosim read-only&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_innosim</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;Read-only &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">concur</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; concur&quot;</span><span class="p">)</span>
+            <span class="c1"># Sleep before running next</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>
+            <span class="n">concur</span> <span class="o">*=</span> <span class="mi">2</span>
+
+        <span class="c1"># Innosim write-only phase</span>
+        <span class="n">concur</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">concur</span> <span class="o">&lt;=</span> <span class="n">max_concur</span><span class="p">):</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">concur</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Innosim write-only&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_innosim</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;Write-only &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">concur</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; concur&quot;</span><span class="p">)</span>
+            <span class="c1"># Sleep before running next</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>
+            <span class="n">concur</span> <span class="o">*=</span> <span class="mi">2</span>
+
+        <span class="c1"># Innosim read-write phase</span>
+        <span class="n">concur</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">concur</span> <span class="o">&lt;=</span> <span class="n">max_concur</span><span class="p">):</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">concur</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">25</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;write_limit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Innosim read-write&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_innosim</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;Read-write &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">concur</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; concur dirty =25, 100 page reads to 50 page writes&quot;</span><span class="p">)</span>
+            <span class="c1"># Sleep before running next</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">17</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_innosim</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;Read-write &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">concur</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; concur dirty =17, 100 page reads to 34 page writes&quot;</span><span class="p">)</span>
+            <span class="c1"># Sleep before running next</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_innosim</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;Read-write &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">concur</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; concur dirty =6, 100 page reads to 12 page writes&quot;</span><span class="p">)</span>
+            <span class="c1"># Sleep before running next</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>
+            <span class="n">concur</span> <span class="o">*=</span> <span class="mi">2</span>
+
+        <span class="c1"># Now collect all the relevant statistics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_stats_file</span><span class="p">(</span><span class="n">max_concur</span><span class="p">,</span> <span class="n">use_bltl</span><span class="p">,</span> <span class="n">use_dblw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;Finished collecting stats&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Innosim.run_innosim"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.run_innosim">[docs]</a>    <span class="k">def</span> <span class="nf">run_innosim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="c1"># Get innosim directory</span>
+        <span class="n">innosim</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innosim_dir</span><span class="p">,</span> <span class="s2">&quot;innosim&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Setup innosim parameter based on the params dict</span>
+        <span class="n">innosim_params</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;--prepare &#39;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;prepare&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --max-dirty-pages &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;max_dirty_pages&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --binlog-file-size &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;bls&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --trxlog-file-size &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;tls&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --database-size &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfs_by&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --data-file-number &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfn&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --trxlog &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;trxlog&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --binlog &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;binlog&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --doublewrite &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;doublewrite&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --num-writers &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;writers&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --num-users &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --dirty-pct &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --read-hit-pct &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --compress-level &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --io-per-thread-per-second &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;write_limit&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39; --test-duration &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;test_duration&#39;</span><span class="p">]))</span>
+
+        <span class="c1"># Directory suffix to store the resulsts of vmstat and iostat in</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bl_&#39;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;binlog&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.trx_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;trxlog&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.dblwr_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;doublewrite&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.wthr_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;writers&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.uthr_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.dirty_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dirty_pct&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.rh_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;read_hit_pct&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.tls_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;tls&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.bls_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;bls&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.dfs_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfs&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.comp_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;comp&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.wlim_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;write_limit&#39;</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s1">&#39;.dfn_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;dfn&#39;</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;killall vmstat&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;killall iostat&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Start collecting vmstat and iostat</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;vmstat 1 &gt; </span><span class="si">%s</span><span class="s2">/v.</span><span class="si">%s</span><span class="s2"> &amp;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innosim_dir</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="c1"># noqa</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;iostat 1 &gt; </span><span class="si">%s</span><span class="s2">/i.</span><span class="si">%s</span><span class="s2"> &amp;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">innosim_dir</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="c1"># noqa</span>
+
+        <span class="c1"># Form the command to run innosim</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">(</span><span class="n">innosim</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">innosim_params</span><span class="p">)</span>
+        <span class="n">log_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/o.&#39;</span> <span class="o">+</span> <span class="n">suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Running </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">259200</span><span class="p">)</span> <span class="c1"># noqa</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_file</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="c1"># vmstat creates multiple processes, killing all with killall</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;killall vmstat&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;killall iostat&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Innosim.cleanup"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.cleanup">[docs]</a>    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#In case innosim failed with non-zero exit code,</span>
+        <span class="c1">#it will leave these processes running. Hence killling them here.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;killall vmstat&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;killall iostat&#39;</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Innosim</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Innosim.generate_stats_file"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.generate_stats_file">[docs]</a>    <span class="k">def</span> <span class="nf">generate_stats_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_concur</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">use_bltl</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_dblw</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to generate different statistic</span>
+<span class="sd">        files for various read and write metrics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Cleanup stray files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">o_files</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perf_result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1">#self.perf_result_key_prefix = self.device_manufacturer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;r_IO&#39;</span><span class="p">,</span> <span class="s1">&#39;r_avlat&#39;</span><span class="p">,</span> <span class="s1">&#39;r_99lat&#39;</span><span class="p">,</span> <span class="s1">&#39;w_IO&#39;</span><span class="p">,</span> <span class="s1">&#39;w_avlat&#39;</span><span class="p">,</span> <span class="s1">&#39;w_99lat&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">perf_result</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="s1">&#39;*.*&#39;</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(((</span><span class="s2">&quot;dr.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;dw.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)),</span>
+                            <span class="p">(</span><span class="s2">&quot;p.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;percentile_iops.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)),</span>
+                            <span class="p">(</span><span class="s2">&quot;report.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)))):</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s2">&quot;/r&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">collect_stats</span><span class="p">(</span><span class="n">max_concur</span><span class="p">,</span> <span class="n">use_bltl</span><span class="p">,</span> <span class="n">use_dblw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populate_report_file</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">populate_percentile_file</span><span class="p">(</span><span class="n">max_concur</span><span class="p">,</span> <span class="n">use_bltl</span><span class="p">,</span> <span class="n">use_dblw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Innosim.collect_stats"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.collect_stats">[docs]</a>    <span class="k">def</span> <span class="nf">collect_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_concur</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">use_bltl</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_dblw</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to generate read and write files with the performance data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Now collect the read/write stats</span>
+        <span class="n">rd_re</span> <span class="o">=</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^read: final.*ops,\s+(\d+.\d+)\s+ops/sec,\s+(\d+.\d+)\s+&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;millis/op.*p95,\s+(\d+.\d+)\s+p99&#39;</span><span class="p">)</span>
+        <span class="n">wr_re</span> <span class="o">=</span> <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^write: final.*ops,\s+(\d+.\d+)\s+ops/sec,\s+(\d+.\d+)\s+&#39;</span>
+                <span class="sa">r</span><span class="s1">&#39;millis/op.*p95,\s+(\d+.\d+)\s+p99&#39;</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;=</span> <span class="n">max_concur</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;o.bl_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_bltl</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.trx_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_bltl</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.dblwr_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_dblw</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.wthr_8.uthr_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.dirty_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+                <span class="c1"># Parse out the read and write perf</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> \
+                        <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">+</span> <span class="s1">&#39;.*&#39;</span><span class="p">)):</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">o_f</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">o_f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                            <span class="n">match_rd</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">rd_re</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                            <span class="n">match_wr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">wr_re</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                            <span class="k">if</span> <span class="n">match_rd</span><span class="p">:</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/dr.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> \
+                                        <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">((</span>
+                                        <span class="s2">&quot;</span><span class="si">%.0f</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+                                            <span class="nb">float</span><span class="p">(</span><span class="n">match_rd</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+                                            <span class="nb">str</span><span class="p">(</span><span class="n">match_rd</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                                            <span class="nb">str</span><span class="p">(</span><span class="n">match_rd</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))))</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/r&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r_f</span><span class="p">:</span>
+                                    <span class="n">r_f</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="s2">&quot;</span><span class="si">%.0f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+                                        <span class="nb">float</span><span class="p">(</span><span class="n">match_rd</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))))</span>
+                            <span class="k">elif</span> <span class="n">match_wr</span><span class="p">:</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/dw.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> \
+                                        <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">((</span>
+                                        <span class="s2">&quot;</span><span class="si">%.0f</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+                                            <span class="nb">float</span><span class="p">(</span><span class="n">match_wr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+                                            <span class="nb">str</span><span class="p">(</span><span class="n">match_wr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                                            <span class="nb">str</span><span class="p">(</span><span class="n">match_wr</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))))</span>
+            <span class="n">u</span> <span class="o">*=</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="Innosim.populate_report_file"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.populate_report_file">[docs]</a>    <span class="k">def</span> <span class="nf">populate_report_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to create report file that groups</span>
+<span class="sd">        in both read and write performance statistics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;paste dr.</span><span class="si">%s</span><span class="s2"> dw.</span><span class="si">%s</span><span class="s2"> r &gt; p.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ignore_status</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">)</span>   <span class="c1"># noqa</span>
+
+        <span class="c1"># Populate report file with perf stats</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+            <span class="n">report_str</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;r_IO - average read IOPs</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;r_avlat - average read IO latency in millisecs</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;r_99lat - 99th percentile read latency in millisecs</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;w_IO - average write IOPs</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;w_avlat - average write IO latency in millisecs</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;w_99lat - 99th percentile write latency in millisecs</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;r_IO</span><span class="se">\t</span><span class="s2">r_avlat</span><span class="se">\t</span><span class="s2">r_99lat</span><span class="se">\t</span><span class="s2">w_IO</span><span class="se">\t</span><span class="s2">w_avlat</span><span class="se">\t</span><span class="s2">w_99lat</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/report.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
+                <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report_str</span><span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/p.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">p_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">p_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                    <span class="n">stats</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/report.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> \
+                                <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
+                            <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">((</span>
+                                <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                    <span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
+                                    <span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="mi">6</span><span class="p">])))</span>
+                            <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">perf_result</span><span class="p">[</span><span class="n">m</span><span class="p">]:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">perf_result</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">perf_result</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="n">d</span><span class="p">][</span><span class="n">user</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                                <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/report.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> \
+                                <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
+                            <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">user</span> <span class="o">*=</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="Innosim.populate_percentile_file"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.Innosim.populate_percentile_file">[docs]</a>    <span class="k">def</span> <span class="nf">populate_percentile_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_concur</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">use_bltl</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_dblw</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to create percentile file that includes</span>
+<span class="sd">        read IOPs at different percentiles over per-interval output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Populate percentile file with perf stats</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+            <span class="n">p_str</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;read IOPs at different percentiles &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;over per-interval output</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;p50</span><span class="se">\t</span><span class="s2">p75</span><span class="se">\t</span><span class="s2">p90</span><span class="se">\t</span><span class="s2">p95</span><span class="se">\t</span><span class="s2">p96</span><span class="se">\t</span><span class="s2">p97</span><span class="se">\t</span><span class="s2">p98</span><span class="se">\t</span><span class="s2">p99</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/percentile_iops.&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> \
+                    <span class="k">as</span> <span class="n">percentile_file</span><span class="p">:</span>
+                <span class="n">percentile_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">p_str</span><span class="p">)</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">u</span> <span class="o">&lt;=</span> <span class="n">max_concur</span><span class="p">):</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;o.bl_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_bltl</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.trx_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_bltl</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.dblwr_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_dblw</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.wthr_8.uthr_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;.dirty_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> \
+                        <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span><span class="p">,</span> <span class="n">suffix</span> <span class="o">+</span> <span class="s1">&#39;.*&#39;</span><span class="p">)):</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">o_f</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">o_f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+                            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;^final percentile rd IOPs.*&quot;</span><span class="p">,</span>
+                                    <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                                <span class="n">a</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+                                <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">]:</span>
+                                    <span class="n">b</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resultsdir</span> <span class="o">+</span> <span class="s1">&#39;/percentile_iops.&#39;</span>
+                                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">percentile_file</span><span class="p">:</span>
+                                    <span class="n">percentile_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">))</span>
+                <span class="n">u</span> <span class="o">*=</span> <span class="mi">2</span></div></div>
+
+    <span class="c1">#TODO port perf_checker from autotest to autoval</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.innosim.html#havoc.autoval.tests.innosim.innosim.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">Innosim</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

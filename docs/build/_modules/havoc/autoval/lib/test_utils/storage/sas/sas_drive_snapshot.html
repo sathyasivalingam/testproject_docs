@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../" src="../../../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+
+<div class="viewcode-block" id="SASDriveSnapshot"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot.SASDriveSnapshot">[docs]</a><span class="k">class</span> <span class="nc">SASDriveSnapshot</span><span class="p">:</span>
+
+<div class="viewcode-block" id="SASDriveSnapshot.__init__"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot.SASDriveSnapshot.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">smart_data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Collect and store drive data at one point in time. Used to compare</span>
+<span class="sd">            drive data before vs. after test and validate drive health,</span>
+<span class="sd">            performance etc.</span>
+
+<span class="sd">        @param Drive drive: drive object of this snapshot</span>
+<span class="sd">        @param str smart_data: SMART data of drive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drive</span> <span class="o">=</span> <span class="n">drive</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">smart_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">get_smartctl_output</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_health_status</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_uncorrected_read_errors</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_uncorrected_write_errors</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_element_in_grown_defect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_error</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_firmware_version</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_firmware_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firmware</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">get_firmware_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SASDriveSnapshot._get_uncorrected_read_errors"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot.SASDriveSnapshot._get_uncorrected_read_errors">[docs]</a>    <span class="k">def</span> <span class="nf">_get_uncorrected_read_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sample output to capture.</span>
+<span class="sd">            read:      0    2      0    2      31570      53213.844           0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;read:(?:\s+\d+)+\s+\d+\.(?:\d+)?\s+(\d)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uncorrected_read_errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;read uncorrected errors&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASDriveSnapshot._get_uncorrected_write_errors"><a class="viewcode-back" href="../../../../../../../havoc.autoval.lib.test_utils.storage.sas.html#havoc.autoval.lib.test_utils.storage.sas.sas_drive_snapshot.SASDriveSnapshot._get_uncorrected_write_errors">[docs]</a>    <span class="k">def</span> <span class="nf">_get_uncorrected_write_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Sample output to capture.</span>
+<span class="sd">            write:      0     0      0      0     7030  112011.922           0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;write:(?:\s+\d+)+\s+\d+\.(?:\d+)?\s+(\d)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uncorrected_write_errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;write uncorrected errors&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_element_in_grown_defect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;Elements in grown defect list:\s+(\w+)&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element_in_grown_defect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;Elements in grown defect&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_health_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;SMART Health Status:\s+(\w+)&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">health_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+            <span class="s1">&#39;Health status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_target_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;attached device type: expander device&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_invalid_word_count</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_disparity_error_count</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_loss_of_dword_synchronization</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_invalid_word_count</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_phy_event_disparity_error_count</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_loss_of_dword_sync_count</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_phy_reset_problem_count</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_invalid_dword_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Invalid DWORD count = (\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">invalid_dword_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid dword count&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_disparity_error_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Running disparity error count = (\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disparity_error_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Disparity error count&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_loss_of_dword_synchronization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Loss of DWORD synchronization = (\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_of_dword_synchronization</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Loss of dword sync&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_invalid_word_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Invalid word count:\s+(\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">invalid_word_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid word count&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_phy_event_disparity_error_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Running disparity error count:\s+(\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phy_event_disparity_error_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Running disparity error count&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_loss_of_dword_sync_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Loss of dword synchronization count:\s+(\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_of_dword_synchronization_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Loss of DWORD sync count&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_phy_reset_problem_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;Phy reset problem count:\s+(\d+)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phy_reset_problem_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="o">.</span><span class="n">extract_smart_field</span><span class="p">(</span>
+                <span class="s2">&quot;Phy reset problem count&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">smart_data</span><span class="p">,</span>
+                <span class="n">patt</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

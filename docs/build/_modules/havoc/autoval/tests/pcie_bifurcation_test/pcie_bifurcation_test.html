@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test &mdash; UHDDT PyDoc 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../../_static/fbicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">havoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">UHDDT PyDoc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_base</span> <span class="k">import</span> <span class="n">TestBase</span>
+<span class="kn">from</span> <span class="nn">havoc.autoval.lib.test_utils.pci_utils</span> <span class="k">import</span> <span class="n">PciUtils</span>
+
+
+<div class="viewcode-block" id="PcieBifurcationTest"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.PcieBifurcationTest">[docs]</a><span class="k">class</span> <span class="nc">PcieBifurcationTest</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+<div class="viewcode-block" id="PcieBifurcationTest.__init__"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.PcieBifurcationTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PcieBifurcationTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;device_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m2type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Mdot2_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m2id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Mdot2_id&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gen3&quot;</span> <span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;gen2&quot;</span> <span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;off&quot;</span> <span class="p">:</span> <span class="p">[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_of_m2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_control</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;num_of_mdot2&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pciUtils</span> <span class="o">=</span> <span class="n">PciUtils</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PcieBifurcationTest.execute"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.PcieBifurcationTest.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Executing PCie Bifurcation test for Gpv2&quot;</span><span class="p">)</span>
+        <span class="n">pcie_ports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">get_device_ports</span><span class="p">()</span>
+
+        <span class="c1"># Validate if its a GPv2 system with 2 x16width 11f8:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validateGPv2</span><span class="p">(</span><span class="n">pcie_ports</span><span class="p">[</span><span class="s2">&quot;switch&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Validate the information of the respective device is found</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_of_m2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">findall_gpv2_devices</span><span class="p">(</span><span class="n">pcie_ports</span><span class="p">[</span><span class="s2">&quot;mdot2&quot;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="PcieBifurcationTest.validateGPv2"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.PcieBifurcationTest.validateGPv2">[docs]</a>    <span class="k">def</span> <span class="nf">validateGPv2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">switch_port</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This validates the LnkCap &amp; LnkSta matches for Speed &amp; Width</span>
+<span class="sd">        for 2 ports for qualifying GPv2</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Validating GPv2 switch Link&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_port</span> <span class="ow">in</span> <span class="n">switch_port</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">lspci_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pciUtils</span><span class="o">.</span><span class="n">get_lnksta_lnkcap_port</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">_port</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+            <span class="p">)</span>
+            <span class="c1">#validate that the sta_width is x16 for GPv2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">lspci_out</span><span class="p">[</span><span class="s2">&quot;sta_width&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;x16&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Validating LnkSta Width </span><span class="si">{}</span><span class="s2"> for GPv2 matches x16&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_port</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1">#check the LnkCap speed matches LnkSta speed</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">lspci_out</span><span class="p">[</span><span class="s2">&quot;cap_speed&quot;</span><span class="p">],</span>
+                <span class="n">lspci_out</span><span class="p">[</span><span class="s2">&quot;sta_speed&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;Validating LnkCap and LnkSta speed for </span><span class="si">{}</span><span class="s2"> for GPv2&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_port</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1">#check the LnkCap width matches LnkSta width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+                <span class="n">lspci_out</span><span class="p">[</span><span class="s2">&quot;cap_width&quot;</span><span class="p">],</span>
+                <span class="n">lspci_out</span><span class="p">[</span><span class="s2">&quot;sta_width&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;Validating LnkCap and LnkSta width </span><span class="si">{}</span><span class="s2"> for GPv2&quot;</span>
+                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_port</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PcieBifurcationTest.findall_gpv2_devices"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.PcieBifurcationTest.findall_gpv2_devices">[docs]</a>    <span class="k">def</span> <span class="nf">findall_gpv2_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m2_ports</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Makes use of the Bridge port address in host file to</span>
+<span class="sd">        validate and identify current system configuration for M.2 devices</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Validating M.2 devices&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_port_num</span><span class="p">,</span> <span class="n">_port</span> <span class="ow">in</span> <span class="n">m2_ports</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># retrieve the lspci port info</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pciUtils</span><span class="o">.</span><span class="n">get_lnksta_lnkcap_port</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">_port</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device_id</span>
+            <span class="p">)</span>
+            <span class="c1">#check if the LnkSta: speed shows correctly as Gen3</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;8GT&#39;</span> <span class="o">==</span> <span class="n">out</span><span class="p">[</span><span class="s1">&#39;sta_speed&#39;</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">[</span><span class="s2">&quot;gen3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_port</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;secondary_port&quot;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parse_for_device_type</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;secondary_port&quot;</span><span class="p">],</span> <span class="n">_port_num</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="s1">&#39;5GT&#39;</span> <span class="o">==</span> <span class="n">out</span><span class="p">[</span><span class="s1">&#39;sta_speed&#39;</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;Device on </span><span class="si">{}</span><span class="s2"> is @ Gen2 speed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_port_num</span><span class="p">),</span>
+                    <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">[</span><span class="s2">&quot;gen2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_port</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span>
+                    <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;Device on </span><span class="si">{}</span><span class="s2"> not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_port_num</span><span class="p">),</span>
+                    <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">[</span><span class="s2">&quot;off&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_port</span><span class="p">)</span>
+        <span class="c1"># Shows the current config as discovered on server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">&quot;Config found on system: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">))</span>
+        <span class="c1"># verify the test_control provided no. of devices matches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_equal</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">[</span><span class="s2">&quot;gen3&quot;</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_of_m2</span><span class="p">,</span>
+            <span class="s2">&quot;Verifying given count matches found count of M.2 devices&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PcieBifurcationTest.parse_for_device_type"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.PcieBifurcationTest.parse_for_device_type">[docs]</a>    <span class="k">def</span> <span class="nf">parse_for_device_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">port_num</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        PMC-Sierra Inc --&gt; connected to --&gt; Processing Accelerators</span>
+<span class="sd">        This function finds out details and data corresponding to</span>
+<span class="sd">        Processing Accelerators.</span>
+
+<span class="sd">        From json file:</span>
+<span class="sd">        self.m2id = { &quot;Processing Accelerator&quot; : 5e87,</span>
+<span class="sd">                        &quot;Inference Card&quot; : &lt;id&gt;}  &lt;&lt;-- future add</span>
+
+<span class="sd">        This should be able to verify any future card.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">desc</span><span class="p">,</span> <span class="n">dev_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">m2id</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># read the lspci data for secondary bus/M.2 card</span>
+            <span class="n">dev_lspci_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pciUtils</span><span class="o">.</span><span class="n">get_lnksta_lnkcap_port</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">dev_id</span>
+            <span class="p">)</span>
+            <span class="c1">#validate that we have lspci output</span>
+            <span class="c1"># no lspci output means the device is bad</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_condition</span><span class="p">(</span><span class="n">dev_lspci_out</span><span class="p">,</span>
+                <span class="s2">&quot;Verified </span><span class="si">{}</span><span class="s2"> info found at </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">port</span><span class="p">),</span>
+                <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../../havoc.autoval.tests.pcie_bifurcation_test.html#havoc.autoval.tests.pcie_bifurcation_test.pcie_bifurcation_test.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">PcieBifurcationTest</span><span class="p">()</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">lifecycle</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Copyright (c) 2016-present, Facebook, Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
